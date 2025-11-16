@@ -9773,6 +9773,711 @@ try {
                 <p>Для поддержки старых браузеров (IE) используйте <strong>XMLHttpRequest</strong> (глава 18) или <a href="https://github.com/github/fetch" target="_blank">polyfill для Fetch</a>.</p>
             </section>
 
+            <!-- ГЛАВА 20: Web Socket API и Server-Sent Events -->
+            <section class="chapter" id="ch20">
+                <h1>Глава 20. WebSocket API и Server-Sent Events</h1>
+                
+                <h2>Введение в коммуникацию реального времени</h2>
+                <p>Стандартные HTTP-запросы (AJAX, Fetch) работают по модели <strong>"запрос-ответ"</strong>: клиент отправляет запрос, сервер отвечает, и соединение закрывается. Для приложений реального времени (чаты, онлайн-игры, уведомления) нужны другие технологии.</p>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Технологии реального времени</div>
+                    <ul>
+                        <li><strong>WebSocket</strong> — двунаправленная коммуникация (клиент ⇄ сервер)</li>
+                        <li><strong>Server-Sent Events (SSE)</strong> — однонаправленная коммуникация (сервер → клиент)</li>
+                        <li><strong>Long Polling</strong> — устаревший подход (не рекомендуется)</li>
+                    </ul>
+                </div>
+
+                <h2>WebSocket API</h2>
+                <p><strong>WebSocket</strong> — это протокол полнодуплексной связи через единое TCP-соединение. Позволяет серверу и клиенту обмениваться данными в режиме реального времени.</p>
+
+                <h3>Преимущества WebSocket</h3>
+                <ul>
+                    <li><strong>Двунаправленная связь</strong> — сервер может отправлять данные без запроса клиента</li>
+                    <li><strong>Низкая задержка</strong> — постоянное соединение без overhead HTTP</li>
+                    <li><strong>Эффективность</strong> — меньше трафика, чем при polling</li>
+                    <li><strong>Real-time</strong> — идеально для чатов, игр, уведомлений</li>
+                </ul>
+
+                <h2>Создание WebSocket подключения</h2>
+
+                <div class="code-block"><code>// Создаём WebSocket соединение
+const socket = new WebSocket('ws://localhost:9000');
+
+// Для защищённого соединения используйте wss://
+const secureSocket = new WebSocket('wss://example.com/socket');</code></div>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Протоколы WebSocket</div>
+                    <ul>
+                        <li><code>ws://</code> — незащищённое соединение (аналог HTTP)</li>
+                        <li><code>wss://</code> — защищённое соединение через SSL/TLS (аналог HTTPS)</li>
+                        <li>В production всегда используйте <code>wss://</code></li>
+                    </ul>
+                </div>
+
+                <h2>События WebSocket</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Событие</th>
+                            <th>Когда происходит</th>
+                            <th>Свойство/Метод</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>open</code></td>
+                            <td>Соединение установлено</td>
+                            <td><code>onopen</code> / <code>addEventListener('open')</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>message</code></td>
+                            <td>Получено сообщение</td>
+                            <td><code>onmessage</code> / <code>addEventListener('message')</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>error</code></td>
+                            <td>Произошла ошибка</td>
+                            <td><code>onerror</code> / <code>addEventListener('error')</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>close</code></td>
+                            <td>Соединение закрыто</td>
+                            <td><code>onclose</code> / <code>addEventListener('close')</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2>Базовый пример WebSocket</h2>
+
+                <div class="code-block"><code>// Создаём соединение
+const socket = new WebSocket('ws://localhost:9000');
+
+// Соединение открыто
+socket.onopen = (event) => {
+    console.log('Соединение установлено');
+    // Отправляем сообщение серверу
+    socket.send('Hello Server!');
+};
+
+// Получено сообщение от сервера
+socket.onmessage = (event) => {
+    console.log('Сообщение от сервера:', event.data);
+};
+
+// Ошибка
+socket.onerror = (error) => {
+    console.error('WebSocket ошибка:', error);
+};
+
+// Соединение закрыто
+socket.onclose = (event) => {
+    console.log('Соединение закрыто');
+    console.log('Код:', event.code);
+    console.log('Причина:', event.reason);
+    console.log('Чистое закрытие:', event.wasClean);
+};</code></div>
+
+                <h2>Состояния WebSocket (readyState)</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Константа</th>
+                            <th>Значение</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>CONNECTING</code></td>
+                            <td>0</td>
+                            <td>Соединение устанавливается</td>
+                        </tr>
+                        <tr>
+                            <td><code>OPEN</code></td>
+                            <td>1</td>
+                            <td>Соединение открыто</td>
+                        </tr>
+                        <tr>
+                            <td><code>CLOSING</code></td>
+                            <td>2</td>
+                            <td>Соединение закрывается</td>
+                        </tr>
+                        <tr>
+                            <td><code>CLOSED</code></td>
+                            <td>3</td>
+                            <td>Соединение закрыто</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="code-block"><code>const socket = new WebSocket('ws://localhost:9000');
+
+// Проверяем состояние
+console.log(socket.readyState); // 0 (CONNECTING)
+
+socket.onopen = () => {
+    console.log(socket.readyState); // 1 (OPEN)
+    
+    // Проверка перед отправкой
+    if (socket.readyState === WebSocket.OPEN) {
+        socket.send('Сообщение');
+    }
+};</code></div>
+
+                <h2>Отправка данных</h2>
+
+                <h3>Отправка текста</h3>
+                <div class="code-block"><code>socket.send('Hello Server!');</code></div>
+
+                <h3>Отправка JSON</h3>
+                <div class="code-block"><code>const data = {
+    type: 'message',
+    text: 'Hello',
+    user: 'Alice'
+};
+
+socket.send(JSON.stringify(data));</code></div>
+
+                <h3>Отправка бинарных данных</h3>
+                <div class="code-block"><code>// ArrayBuffer
+const buffer = new ArrayBuffer(8);
+socket.send(buffer);
+
+// Blob
+const blob = new Blob(['Hello'], { type: 'text/plain' });
+socket.send(blob);</code></div>
+
+                <h2>Получение данных</h2>
+
+                <div class="code-block"><code>socket.onmessage = (event) => {
+    const data = event.data;
+    
+    // Если данные - строка
+    if (typeof data === 'string') {
+        console.log('Текст:', data);
+        
+        // Попытка распарсить JSON
+        try {
+            const json = JSON.parse(data);
+            console.log('JSON:', json);
+        } catch (e) {
+            console.log('Обычный текст');
+        }
+    }
+    // Если данные - Blob
+    else if (data instanceof Blob) {
+        console.log('Blob размером', data.size, 'байт');
+        
+        // Читаем Blob
+        const reader = new FileReader();
+        reader.onload = () => {
+            console.log('Содержимое:', reader.result);
+        };
+        reader.readAsText(data);
+    }
+    // Если данные - ArrayBuffer
+    else if (data instanceof ArrayBuffer) {
+        console.log('ArrayBuffer размером', data.byteLength, 'байт');
+    }
+};</code></div>
+
+                <h2>Закрытие соединения</h2>
+
+                <div class="code-block"><code>// Закрыть соединение
+socket.close();
+
+// С кодом и причиной
+socket.close(1000, 'Работа завершена');
+
+// Обработка закрытия
+socket.onclose = (event) => {
+    if (event.wasClean) {
+        console.log('Соединение закрыто чисто');
+    } else {
+        console.log('Обрыв соединения');
+    }
+    console.log('Код:', event.code);
+    console.log('Причина:', event.reason);
+};</code></div>
+
+                <h3>Коды закрытия WebSocket</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Код</th>
+                            <th>Название</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1000</td>
+                            <td>Normal Closure</td>
+                            <td>Нормальное закрытие</td>
+                        </tr>
+                        <tr>
+                            <td>1001</td>
+                            <td>Going Away</td>
+                            <td>Сервер/клиент уходит (закрытие страницы)</td>
+                        </tr>
+                        <tr>
+                            <td>1002</td>
+                            <td>Protocol Error</td>
+                            <td>Ошибка протокола</td>
+                        </tr>
+                        <tr>
+                            <td>1003</td>
+                            <td>Unsupported Data</td>
+                            <td>Неподдерживаемый тип данных</td>
+                        </tr>
+                        <tr>
+                            <td>1006</td>
+                            <td>Abnormal Closure</td>
+                            <td>Аварийное закрытие (обрыв)</td>
+                        </tr>
+                        <tr>
+                            <td>1009</td>
+                            <td>Message Too Big</td>
+                            <td>Сообщение слишком большое</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2>Переподключение при обрыве</h2>
+
+                <div class="code-block"><code>class ReconnectingWebSocket {
+    constructor(url, options = {}) {
+        this.url = url;
+        this.reconnectInterval = options.reconnectInterval || 5000;
+        this.maxReconnectAttempts = options.maxReconnectAttempts || 10;
+        this.reconnectAttempts = 0;
+        this.socket = null;
+        this.connect();
+    }
+    
+    connect() {
+        console.log('Подключение к', this.url);
+        this.socket = new WebSocket(this.url);
+        
+        this.socket.onopen = (event) => {
+            console.log('Соединение установлено');
+            this.reconnectAttempts = 0;
+            if (this.onopen) this.onopen(event);
+        };
+        
+        this.socket.onmessage = (event) => {
+            if (this.onmessage) this.onmessage(event);
+        };
+        
+        this.socket.onerror = (error) => {
+            console.error('WebSocket ошибка:', error);
+            if (this.onerror) this.onerror(error);
+        };
+        
+        this.socket.onclose = (event) => {
+            console.log('Соединение закрыто');
+            if (this.onclose) this.onclose(event);
+            
+            // Переподключаемся
+            if (this.reconnectAttempts &lt; this.maxReconnectAttempts) {
+                this.reconnectAttempts++;
+                console.log(`Переподключение (попытка ${this.reconnectAttempts})...`);
+                setTimeout(() => this.connect(), this.reconnectInterval);
+            } else {
+                console.error('Превышено максимальное количество попыток');
+            }
+        };
+    }
+    
+    send(data) {
+        if (this.socket.readyState === WebSocket.OPEN) {
+            this.socket.send(data);
+        } else {
+            console.error('WebSocket не подключен');
+        }
+    }
+    
+    close() {
+        this.maxReconnectAttempts = 0; // Отключаем переподключение
+        this.socket.close();
+    }
+}
+
+// Использование
+const ws = new ReconnectingWebSocket('ws://localhost:9000', {
+    reconnectInterval: 3000,
+    maxReconnectAttempts: 5
+});
+
+ws.onopen = () => console.log('Подключено!');
+ws.onmessage = (event) => console.log('Сообщение:', event.data);
+ws.send('Hello!');</code></div>
+
+                <h2>Практический пример: Чат</h2>
+
+                <div class="code-block"><code>&lt;div id="chat"&gt;
+    &lt;div id="messages"&gt;&lt;/div&gt;
+    &lt;input id="messageInput" placeholder="Введите сообщение" /&gt;
+    &lt;button id="sendBtn"&gt;Отправить&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+const socket = new WebSocket('ws://localhost:9000');
+const messagesDiv = document.getElementById('messages');
+const messageInput = document.getElementById('messageInput');
+const sendBtn = document.getElementById('sendBtn');
+
+// Соединение установлено
+socket.onopen = () => {
+    console.log('Подключено к чату');
+    addMessage('Система', 'Вы подключились к чату', 'system');
+};
+
+// Получено сообщение
+socket.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    addMessage(data.user, data.text, 'received');
+};
+
+// Отправка сообщения
+function sendMessage() {
+    const text = messageInput.value.trim();
+    if (!text) return;
+    
+    const message = {
+        user: 'Вы',
+        text: text,
+        timestamp: Date.now()
+    };
+    
+    // Отправляем на сервер
+    socket.send(JSON.stringify(message));
+    
+    // Отображаем у себя
+    addMessage('Вы', text, 'sent');
+    
+    messageInput.value = '';
+}
+
+// Добавление сообщения в чат
+function addMessage(user, text, type) {
+    const messageEl = document.createElement('div');
+    messageEl.className = `message ${type}`;
+    messageEl.innerHTML = `
+        &lt;strong&gt;${user}:&lt;/strong&gt; ${text}
+        &lt;small&gt;${new Date().toLocaleTimeString()}&lt;/small&gt;
+    `;
+    messagesDiv.appendChild(messageEl);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+// События кнопки и Enter
+sendBtn.addEventListener('click', sendMessage);
+messageInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+});
+
+// Закрытие соединения
+socket.onclose = () => {
+    addMessage('Система', 'Соединение потеряно', 'system');
+};
+&lt;/script&gt;</code></div>
+
+                <h2>Server-Sent Events (SSE)</h2>
+                <p><strong>Server-Sent Events (SSE)</strong> — это технология, позволяющая серверу отправлять обновления клиенту через HTTP. В отличие от WebSocket, коммуникация <strong>однонаправленная</strong>: только сервер → клиент.</p>
+
+                <h3>Когда использовать SSE</h3>
+                <ul>
+                    <li><strong>Уведомления</strong> — push-уведомления от сервера</li>
+                    <li><strong>Ленты новостей</strong> — обновления в реальном времени</li>
+                    <li><strong>Мониторинг</strong> — статусы, метрики, логи</li>
+                    <li><strong>Обновления данных</strong> — курсы валют, цены, счёт в игре</li>
+                </ul>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 SSE vs WebSocket</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Характеристика</th>
+                                <th>SSE</th>
+                                <th>WebSocket</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Направление</strong></td>
+                                <td>Сервер → Клиент</td>
+                                <td>Двунаправленное</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Протокол</strong></td>
+                                <td>HTTP</td>
+                                <td>WebSocket (ws://)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Переподключение</strong></td>
+                                <td>Автоматическое</td>
+                                <td>Вручную</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Формат данных</strong></td>
+                                <td>Только текст</td>
+                                <td>Текст и бинарные данные</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Поддержка браузеров</strong></td>
+                                <td>Все (кроме IE)</td>
+                                <td>Все современные</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Сложность</strong></td>
+                                <td>Проще</td>
+                                <td>Сложнее</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>Использование EventSource</h2>
+
+                <div class="code-block"><code>// Подключаемся к серверу
+const eventSource = new EventSource('/events');
+
+// Получение сообщений
+eventSource.onmessage = (event) => {
+    console.log('Новое сообщение:', event.data);
+};
+
+// Соединение открыто
+eventSource.onopen = () => {
+    console.log('SSE соединение установлено');
+};
+
+// Ошибка
+eventSource.onerror = (error) => {
+    console.error('SSE ошибка:', error);
+    if (eventSource.readyState === EventSource.CLOSED) {
+        console.log('Соединение закрыто');
+    }
+};</code></div>
+
+                <h2>Состояния EventSource (readyState)</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Константа</th>
+                            <th>Значение</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>CONNECTING</code></td>
+                            <td>0</td>
+                            <td>Соединение устанавливается или переподключение</td>
+                        </tr>
+                        <tr>
+                            <td><code>OPEN</code></td>
+                            <td>1</td>
+                            <td>Соединение открыто</td>
+                        </tr>
+                        <tr>
+                            <td><code>CLOSED</code></td>
+                            <td>2</td>
+                            <td>Соединение закрыто</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2>Пользовательские события SSE</h2>
+
+                <div class="code-block"><code>const eventSource = new EventSource('/events');
+
+// Стандартное событие (без типа)
+eventSource.onmessage = (event) => {
+    console.log('Сообщение:', event.data);
+};
+
+// Пользовательское событие
+eventSource.addEventListener('notification', (event) => {
+    const data = JSON.parse(event.data);
+    console.log('Уведомление:', data.title);
+    showNotification(data.title, data.message);
+});
+
+// Ещё одно пользовательское событие
+eventSource.addEventListener('update', (event) => {
+    const data = JSON.parse(event.data);
+    console.log('Обновление:', data);
+    updateUI(data);
+});</code></div>
+
+                <h2>Объект MessageEvent</h2>
+
+                <p>При получении сообщения передаётся объект <code>MessageEvent</code> со следующими свойствами:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Свойство</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>data</code></td>
+                            <td>Данные сообщения (строка)</td>
+                        </tr>
+                        <tr>
+                            <td><code>origin</code></td>
+                            <td>Адрес отправителя</td>
+                        </tr>
+                        <tr>
+                            <td><code>lastEventId</code></td>
+                            <td>ID последнего события</td>
+                        </tr>
+                        <tr>
+                            <td><code>type</code></td>
+                            <td>Тип события</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="code-block"><code>eventSource.onmessage = (event) => {
+    console.log('Данные:', event.data);
+    console.log('Источник:', event.origin);
+    console.log('ID события:', event.lastEventId);
+    console.log('Тип:', event.type);
+};</code></div>
+
+                <h2>Закрытие SSE соединения</h2>
+
+                <div class="code-block"><code>// Закрыть соединение
+eventSource.close();
+
+// Проверка состояния
+if (eventSource.readyState === EventSource.CLOSED) {
+    console.log('Соединение закрыто');
+}</code></div>
+
+                <h2>Практический пример: Лента уведомлений</h2>
+
+                <div class="code-block"><code>&lt;div id="notifications"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+const eventSource = new EventSource('/notifications');
+const notificationsDiv = document.getElementById('notifications');
+
+// Получение уведомлений
+eventSource.addEventListener('notification', (event) => {
+    const data = JSON.parse(event.data);
+    showNotification(data);
+});
+
+// Отображение уведомления
+function showNotification(data) {
+    const notif = document.createElement('div');
+    notif.className = 'notification';
+    notif.innerHTML = `
+        &lt;h4&gt;${data.title}&lt;/h4&gt;
+        &lt;p&gt;${data.message}&lt;/p&gt;
+        &lt;small&gt;${new Date(data.timestamp).toLocaleString()}&lt;/small&gt;
+    `;
+    
+    notificationsDiv.insertBefore(notif, notificationsDiv.firstChild);
+    
+    // Автоудаление через 5 секунд
+    setTimeout(() => notif.remove(), 5000);
+}
+
+// Обработка ошибок
+eventSource.onerror = () => {
+    console.log('Ошибка SSE, переподключение...');
+};
+
+// Закрытие при выгрузке страницы
+window.addEventListener('beforeunload', () => {
+    eventSource.close();
+});
+&lt;/script&gt;</code></div>
+
+                <h2>Формат данных SSE (для сервера)</h2>
+
+                <p>Сервер отправляет данные в текстовом формате:</p>
+
+                <div class="code-block"><code>// Простое сообщение
+data: Hello World\n\n
+
+// Многострочное сообщение
+data: Первая строка\n
+data: Вторая строка\n\n
+
+// С ID события
+id: 123\n
+data: Сообщение с ID\n\n
+
+// Пользовательский тип события
+event: notification\n
+data: {"title": "Привет", "message": "Новое уведомление"}\n\n
+
+// Установка retry (миллисекунды)
+retry: 10000\n\n</code></div>
+
+                <h2>Сравнение технологий</h2>
+
+                <div class="info-box success">
+                    <div class="info-box-title">✅ Выбор технологии</div>
+                    
+                    <h4>Используйте WebSocket когда:</h4>
+                    <ul>
+                        <li>Нужна двунаправленная коммуникация</li>
+                        <li>Высокая частота обмена сообщениями</li>
+                        <li>Низкая задержка критична (игры, трейдинг)</li>
+                        <li>Нужно отправлять бинарные данные</li>
+                        <li>Пример: чаты, многопользовательские игры, коллаборативное редактирование</li>
+                    </ul>
+                    
+                    <h4>Используйте SSE когда:</h4>
+                    <ul>
+                        <li>Нужна только передача сервер → клиент</li>
+                        <li>Достаточно текстовых данных</li>
+                        <li>Важна простота реализации</li>
+                        <li>Нужно автоматическое переподключение</li>
+                        <li>Пример: уведомления, ленты новостей, мониторинг</li>
+                    </ul>
+                    
+                    <h4>Используйте Long Polling когда:</h4>
+                    <ul>
+                        <li>WebSocket и SSE недоступны</li>
+                        <li>Поддержка старых браузеров (IE9)</li>
+                        <li>Редкие обновления (не критична задержка)</li>
+                    </ul>
+                </div>
+
+                <h2>Заключение</h2>
+
+                <div class="info-box note">
+                    <div class="info-box-title">📚 Основные выводы</div>
+                    <ul>
+                        <li><strong>WebSocket</strong> — двунаправленная связь через ws:// или wss://</li>
+                        <li><strong>События WebSocket</strong>: open, message, error, close</li>
+                        <li><strong>Состояния</strong>: CONNECTING (0), OPEN (1), CLOSING (2), CLOSED (3)</li>
+                        <li><strong>SSE (EventSource)</strong> — однонаправленная связь через HTTP</li>
+                        <li><strong>События SSE</strong>: message, open, error + пользовательские</li>
+                        <li><strong>SSE автоматически переподключается</strong>, WebSocket — нет</li>
+                        <li><strong>WebSocket поддерживает бинарные данные</strong>, SSE — только текст</li>
+                        <li><strong>Выбирайте технологию</strong> в зависимости от задачи</li>
+                    </ul>
+                </div>
+            </section>
+
             
 
             <section class="chapter" id="ch31">
