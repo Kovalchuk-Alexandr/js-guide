@@ -11898,6 +11898,389 @@ gameLoop();
                 </div>
             </section>
 
+            <!-- ГЛАВА 24: IndexedDB API -->
+            <section class="chapter" id="ch24">
+                <h1>Глава 24. IndexedDB API</h1>
+                
+                <h2>Введение в IndexedDB</h2>
+                <p><strong>IndexedDB</strong> — это встроенная в браузер NoSQL база данных для хранения больших объёмов структурированных данных. В отличие от localStorage, IndexedDB позволяет хранить сложные объекты, индексировать данные и выполнять транзакционные операции.</p>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Преимущества IndexedDB</div>
+                    <ul>
+                        <li><strong>Большой объём</strong> — сотни МБ (зависит от браузера)</li>
+                        <li><strong>Асинхронность</strong> — не блокирует UI</li>
+                        <li><strong>Транзакции</strong> — гарантия целостности данных</li>
+                        <li><strong>Индексы</strong> — быстрый поиск по полям</li>
+                        <li><strong>Ключи</strong> — уникальная идентификация записей</li>
+                        <li><strong>Типы данных</strong> — объекты, массивы, blob, файлы</li>
+                    </ul>
+                </div>
+
+                <h2>Основные концепции</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Термин</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>База данных (Database)</strong></td>
+                            <td>Контейнер для хранилищ данных</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Хранилище (Object Store)</strong></td>
+                            <td>Аналог таблицы в SQL (хранит объекты)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ключ (Key)</strong></td>
+                            <td>Уникальный идентификатор записи</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Индекс (Index)</strong></td>
+                            <td>Дополнительное поле для быстрого поиска</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Транзакция (Transaction)</strong></td>
+                            <td>Группа операций (все выполняются или нет)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Версия (Version)</strong></td>
+                            <td>Номер версии схемы БД</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2>Создание и открытие базы данных</h2>
+
+                <div class="code-block"><code>// Открываем или создаём БД
+const request = indexedDB.open('myDatabase', 1);
+
+// При создании/обновлении версии
+request.onupgradeneeded = (event) => {
+    const db = event.target.result;
+    console.log('База данных создана/обновлена');
+    
+    // Создаём хранилище (если не существует)
+    if (!db.objectStoreNames.contains('users')) {
+        const store = db.createObjectStore('users', { 
+            keyPath: 'id',      // Ключ
+            autoIncrement: true // Автоинкремент
+        });
+        console.log('Хранилище "users" создано');
+    }
+};
+
+// При успешном открытии
+request.onsuccess = (event) => {
+    const db = event.target.result;
+    console.log('База данных открыта');
+    console.log('Версия:', db.version);
+};
+
+// При ошибке
+request.onerror = (event) => {
+    console.error('Ошибка:', event.target.error);
+};</code></div>
+
+                <h2>Добавление данных</h2>
+
+                <div class="code-block"><code>const request = indexedDB.open('myDatabase', 1);
+
+request.onsuccess = (event) => {
+    const db = event.target.result;
+    
+    // Создаём транзакцию
+    const transaction = db.transaction(['users'], 'readwrite');
+    
+    // Получаем хранилище
+    const store = transaction.objectStore('users');
+    
+    // Добавляем данные
+    const addRequest = store.add({
+        name: 'Tom',
+        age: 37,
+        email: 'tom@example.com'
+    });
+    
+    addRequest.onsuccess = () => {
+        console.log('Данные добавлены');
+    };
+    
+    addRequest.onerror = () => {
+        console.error('Ошибка добавления');
+    };
+};</code></div>
+
+                <h2>Получение данных</h2>
+
+                <h3>Получение одного объекта</h3>
+                <div class="code-block"><code>const transaction = db.transaction(['users'], 'readonly');
+const store = transaction.objectStore('users');
+
+// Получаем по ключу
+const getRequest = store.get(1);
+
+getRequest.onsuccess = () => {
+    const user = getRequest.result;
+    if (user) {
+        console.log('Имя:', user.name);
+        console.log('Возраст:', user.age);
+    } else {
+        console.log('Пользователь не найден');
+    }
+};</code></div>
+
+                <h3>Получение всех объектов</h3>
+                <div class="code-block"><code>const transaction = db.transaction(['users'], 'readonly');
+const store = transaction.objectStore('users');
+
+const getAllRequest = store.getAll();
+
+getAllRequest.onsuccess = () => {
+    const users = getAllRequest.result;
+    console.log('Всего пользователей:', users.length);
+    users.forEach(user => {
+        console.log(user.name, user.age);
+    });
+};</code></div>
+
+                <h2>Обновление данных</h2>
+
+                <div class="code-block"><code>const transaction = db.transaction(['users'], 'readwrite');
+const store = transaction.objectStore('users');
+
+// Обновляем объект (по ключу)
+const updateRequest = store.put({
+    id: 1,
+    name: 'Tom',
+    age: 38,  // Изменили возраст
+    email: 'tom.updated@example.com'
+});
+
+updateRequest.onsuccess = () => {
+    console.log('Данные обновлены');
+};</code></div>
+
+                <h2>Удаление данных</h2>
+
+                <h3>Удаление одной записи</h3>
+                <div class="code-block"><code>const transaction = db.transaction(['users'], 'readwrite');
+const store = transaction.objectStore('users');
+
+// Удаляем по ключу
+const deleteRequest = store.delete(1);
+
+deleteRequest.onsuccess = () => {
+    console.log('Запись удалена');
+};</code></div>
+
+                <h3>Удаление всех записей</h3>
+                <div class="code-block"><code>const transaction = db.transaction(['users'], 'readwrite');
+const store = transaction.objectStore('users');
+
+// Очистка всего хранилища
+const clearRequest = store.clear();
+
+clearRequest.onsuccess = () => {
+    console.log('Все записи удалены');
+};</code></div>
+
+                <h2>Полный пример: Менеджер задач</h2>
+
+                <div class="code-block"><code>class TaskManager {
+    constructor() {
+        this.db = null;
+        this.init();
+    }
+    
+    async init() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open('TaskManager', 1);
+            
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                
+                if (!db.objectStoreNames.contains('tasks')) {
+                    const store = db.createObjectStore('tasks', {
+                        keyPath: 'id',
+                        autoIncrement: true
+                    });
+                    
+                    // Создаём индекс для поиска по статусу
+                    store.createIndex('status', 'status', { unique: false });
+                }
+            };
+            
+            request.onsuccess = (event) => {
+                this.db = event.target.result;
+                resolve(this.db);
+            };
+            
+            request.onerror = () => reject(request.error);
+        });
+    }
+    
+    async addTask(title, description) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(['tasks'], 'readwrite');
+            const store = transaction.objectStore('tasks');
+            
+            const task = {
+                title,
+                description,
+                status: 'pending',
+                created: new Date()
+            };
+            
+            const request = store.add(task);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+    
+    async getAllTasks() {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(['tasks'], 'readonly');
+            const store = transaction.objectStore('tasks');
+            
+            const request = store.getAll();
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+    
+    async updateTask(id, updates) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(['tasks'], 'readwrite');
+            const store = transaction.objectStore('tasks');
+            
+            const getRequest = store.get(id);
+            
+            getRequest.onsuccess = () => {
+                const task = getRequest.result;
+                Object.assign(task, updates);
+                
+                const updateRequest = store.put(task);
+                updateRequest.onsuccess = () => resolve();
+                updateRequest.onerror = () => reject(updateRequest.error);
+            };
+        });
+    }
+    
+    async deleteTask(id) {
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(['tasks'], 'readwrite');
+            const store = transaction.objectStore('tasks');
+            
+            const request = store.delete(id);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    }
+}
+
+// Использование
+(async () => {
+    const manager = new TaskManager();
+    await manager.init();
+    
+    // Добавить задачу
+    await manager.addTask('Купить молоко', 'В магазине на углу');
+    await manager.addTask('Написать код', 'Глава 24 про IndexedDB');
+    
+    // Получить все задачи
+    const tasks = await manager.getAllTasks();
+    console.log('Задачи:', tasks);
+    
+    // Обновить задачу
+    await manager.updateTask(1, { status: 'completed' });
+    
+    // Удалить задачу
+    await manager.deleteTask(2);
+})();</code></div>
+
+                <h2>Сравнение: localStorage vs IndexedDB</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Характеристика</th>
+                            <th>localStorage</th>
+                            <th>IndexedDB</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Объём</strong></td>
+                            <td>5-10 МБ</td>
+                            <td>Сотни МБ/ГБ</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Тип данных</strong></td>
+                            <td>Только строки</td>
+                            <td>Любые (объекты, массивы, blob)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>API</strong></td>
+                            <td>Синхронный</td>
+                            <td>Асинхронный</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Поиск</strong></td>
+                            <td>Только по ключу</td>
+                            <td>По ключу и индексам</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Транзакции</strong></td>
+                            <td>Нет</td>
+                            <td>Да</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Сложность</strong></td>
+                            <td>Простой</td>
+                            <td>Сложнее</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Применение</strong></td>
+                            <td>Настройки, токены</td>
+                            <td>Offline приложения, кэш</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2>Лучшие практики</h2>
+
+                <div class="info-box success">
+                    <div class="info-box-title">✅ Рекомендации</div>
+                    <ul>
+                        <li><strong>Версионирование</strong> — всегда указывайте версию БД</li>
+                        <li><strong>Транзакции</strong> — группируйте связанные операции</li>
+                        <li><strong>Обработка ошибок</strong> — всегда обрабатывайте onerror</li>
+                        <li><strong>Promise обёртки</strong> — создавайте для удобства работы</li>
+                        <li><strong>Индексы</strong> — создавайте для полей, по которым ищете</li>
+                        <li><strong>Закрытие соединений</strong> — db.close() когда закончили</li>
+                    </ul>
+                </div>
+
+                <h2>Заключение</h2>
+
+                <div class="info-box note">
+                    <div class="info-box-title">📚 Основные выводы</div>
+                    <ul>
+                        <li><strong>IndexedDB</strong> — мощная NoSQL база данных в браузере</li>
+                        <li><strong>Асинхронный API</strong> — не блокирует интерфейс</li>
+                        <li><strong>Транзакции</strong> — гарантия целостности данных</li>
+                        <li><strong>Основные операции</strong>: add(), get(), getAll(), put(), delete(), clear()</li>
+                        <li><strong>Хранилища</strong> — аналог таблиц в SQL</li>
+                        <li><strong>Применение</strong> — offline приложения, большие объёмы данных</li>
+                    </ul>
+                </div>
+            </section>
+
             <section class="chapter" id="ch31">
                 <h1>Глава 31. Best Practices</h1>
                 <p>Контент будет добавлен...</p>
