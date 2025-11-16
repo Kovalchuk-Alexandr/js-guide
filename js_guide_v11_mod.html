@@ -8489,25 +8489,25 @@ fetch("/api/users")
             </section>
 
             <!-- ГЛАВА 19: Fetch API -->
-<section class="chapter" id="ch19">
-    <h1>Глава 19. Fetch API</h1>
-    
-    <h2>Введение в Fetch API</h2>
-    <p><strong>Fetch API</strong> — это современный интерфейс для выполнения HTTP-запросов в JavaScript. Он предоставляет упрощённый и более мощный инструмент для работы с сетевыми ресурсами по сравнению со стандартным XMLHttpRequest.</p>
+            <section class="chapter" id="ch19">
+                <h1>Глава 19. Fetch API</h1>
+                
+                <h2>Введение в Fetch API</h2>
+                <p><strong>Fetch API</strong> — это современный интерфейс для выполнения HTTP-запросов в JavaScript. Он предоставляет упрощённый и более мощный инструмент для работы с сетевыми ресурсами по сравнению со стандартным XMLHttpRequest.</p>
 
-    <div class="info-box success">
-        <div class="info-box-title">✅ Преимущества Fetch API</div>
-        <ul>
-            <li><strong>Простой синтаксис</strong> — основан на Promise, легко читается</li>
-            <li><strong>Удобная работа с данными</strong> — встроенные методы для JSON, текста, blob</li>
-            <li><strong>Поддержка async/await</strong> — чистый асинхронный код</li>
-            <li><strong>Мощная настройка</strong> — заголовки, методы, CORS, credentials</li>
-            <li><strong>Современный стандарт</strong> — активно развивается, поддерживается всеми браузерами</li>
-        </ul>
-    </div>
+                <div class="info-box success">
+                    <div class="info-box-title">✅ Преимущества Fetch API</div>
+                    <ul>
+                        <li><strong>Простой синтаксис</strong> — основан на Promise, легко читается</li>
+                        <li><strong>Удобная работа с данными</strong> — встроенные методы для JSON, текста, blob</li>
+                        <li><strong>Поддержка async/await</strong> — чистый асинхронный код</li>
+                        <li><strong>Мощная настройка</strong> — заголовки, методы, CORS, credentials</li>
+                        <li><strong>Современный стандарт</strong> — активно развивается, поддерживается всеми браузерами</li>
+                    </ul>
+                </div>
 
-    <h2>Базовый синтаксис</h2>
-    <div class="code-block"><code>// Простейший GET-запрос
+                <h2>Базовый синтаксис</h2>
+                <div class="code-block"><code>// Простейший GET-запрос
 fetch(url)
     .then(response => response.json())
     .then(data => console.log(data))
@@ -8522,10 +8522,10 @@ fetch(url, {
     .then(response => response.json())
     .then(data => console.log(data));</code></div>
 
-    <h2>Простой GET-запрос</h2>
+                <h2>Простой GET-запрос</h2>
 
-    <h3>С Promise</h3>
-    <div class="code-block"><code>// Запрос к API
+                <h3>С Promise</h3>
+                <div class="code-block"><code>// Запрос к API
 fetch('/api/users')
     .then(response => {
         // Проверяем статус ответа
@@ -8544,8 +8544,8 @@ fetch('/api/users')
         console.error('Ошибка:', error);
     });</code></div>
 
-    <h3>С async/await (рекомендуется)</h3>
-    <div class="code-block"><code>async function getUsers() {
+                <h3>С async/await (рекомендуется)</h3>
+                <div class="code-block"><code>async function getUsers() {
     try {
         const response = await fetch('/api/users');
         
@@ -8564,59 +8564,59 @@ fetch('/api/users')
 
 getUsers();</code></div>
 
-    <div class="info-box warning">
-        <div class="info-box-title">⚠️ Важно про обработку ошибок</div>
-        <p>Fetch <strong>не отклоняет Promise при HTTP-ошибках</strong> (404, 500 и т.д.). Promise отклоняется только при <strong>сетевых ошибках</strong>. Всегда проверяйте <code>response.ok</code> или <code>response.status</code>!</p>
-    </div>
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Важно про обработку ошибок</div>
+                    <p>Fetch <strong>не отклоняет Promise при HTTP-ошибках</strong> (404, 500 и т.д.). Promise отклоняется только при <strong>сетевых ошибках</strong>. Всегда проверяйте <code>response.ok</code> или <code>response.status</code>!</p>
+                </div>
 
-    <h2>Объект Response</h2>
-    <p>Функция <code>fetch()</code> возвращает Promise, который разрешается в объект <strong>Response</strong>.</p>
+                <h2>Объект Response</h2>
+                <p>Функция <code>fetch()</code> возвращает Promise, который разрешается в объект <strong>Response</strong>.</p>
 
-    <h3>Основные свойства Response</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Свойство</th>
-                <th>Описание</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><code>ok</code></td>
-                <td>true если статус 200-299</td>
-            </tr>
-            <tr>
-                <td><code>status</code></td>
-                <td>HTTP код ответа (200, 404, 500...)</td>
-            </tr>
-            <tr>
-                <td><code>statusText</code></td>
-                <td>Текст статуса ("OK", "Not Found"...)</td>
-            </tr>
-            <tr>
-                <td><code>headers</code></td>
-                <td>Объект Headers с заголовками</td>
-            </tr>
-            <tr>
-                <td><code>url</code></td>
-                <td>URL запроса</td>
-            </tr>
-            <tr>
-                <td><code>redirected</code></td>
-                <td>Был ли редирект</td>
-            </tr>
-            <tr>
-                <td><code>type</code></td>
-                <td>Тип ответа ("basic", "cors"...)</td>
-            </tr>
-            <tr>
-                <td><code>bodyUsed</code></td>
-                <td>Было ли прочитано тело ответа</td>
-            </tr>
-        </tbody>
-    </table>
+                <h3>Основные свойства Response</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Свойство</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>ok</code></td>
+                            <td>true если статус 200-299</td>
+                        </tr>
+                        <tr>
+                            <td><code>status</code></td>
+                            <td>HTTP код ответа (200, 404, 500...)</td>
+                        </tr>
+                        <tr>
+                            <td><code>statusText</code></td>
+                            <td>Текст статуса ("OK", "Not Found"...)</td>
+                        </tr>
+                        <tr>
+                            <td><code>headers</code></td>
+                            <td>Объект Headers с заголовками</td>
+                        </tr>
+                        <tr>
+                            <td><code>url</code></td>
+                            <td>URL запроса</td>
+                        </tr>
+                        <tr>
+                            <td><code>redirected</code></td>
+                            <td>Был ли редирект</td>
+                        </tr>
+                        <tr>
+                            <td><code>type</code></td>
+                            <td>Тип ответа ("basic", "cors"...)</td>
+                        </tr>
+                        <tr>
+                            <td><code>bodyUsed</code></td>
+                            <td>Было ли прочитано тело ответа</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-    <div class="code-block"><code>async function checkResponse() {
+                <div class="code-block"><code>async function checkResponse() {
     const response = await fetch('/api/users');
     
     console.log('OK:', response.ok);           // true/false
@@ -8632,66 +8632,66 @@ getUsers();</code></div>
     }
 }</code></div>
 
-    <h2>Методы получения данных из Response</h2>
+                <h2>Методы получения данных из Response</h2>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Метод</th>
-                <th>Возвращает</th>
-                <th>Когда использовать</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><code>response.json()</code></td>
-                <td>Promise&lt;Object&gt;</td>
-                <td>JSON-данные</td>
-            </tr>
-            <tr>
-                <td><code>response.text()</code></td>
-                <td>Promise&lt;string&gt;</td>
-                <td>Текст, HTML</td>
-            </tr>
-            <tr>
-                <td><code>response.blob()</code></td>
-                <td>Promise&lt;Blob&gt;</td>
-                <td>Изображения, файлы</td>
-            </tr>
-            <tr>
-                <td><code>response.arrayBuffer()</code></td>
-                <td>Promise&lt;ArrayBuffer&gt;</td>
-                <td>Бинарные данные</td>
-            </tr>
-            <tr>
-                <td><code>response.formData()</code></td>
-                <td>Promise&lt;FormData&gt;</td>
-                <td>Данные формы</td>
-            </tr>
-        </tbody>
-    </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Метод</th>
+                            <th>Возвращает</th>
+                            <th>Когда использовать</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>response.json()</code></td>
+                            <td>Promise&lt;Object&gt;</td>
+                            <td>JSON-данные</td>
+                        </tr>
+                        <tr>
+                            <td><code>response.text()</code></td>
+                            <td>Promise&lt;string&gt;</td>
+                            <td>Текст, HTML</td>
+                        </tr>
+                        <tr>
+                            <td><code>response.blob()</code></td>
+                            <td>Promise&lt;Blob&gt;</td>
+                            <td>Изображения, файлы</td>
+                        </tr>
+                        <tr>
+                            <td><code>response.arrayBuffer()</code></td>
+                            <td>Promise&lt;ArrayBuffer&gt;</td>
+                            <td>Бинарные данные</td>
+                        </tr>
+                        <tr>
+                            <td><code>response.formData()</code></td>
+                            <td>Promise&lt;FormData&gt;</td>
+                            <td>Данные формы</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-    <div class="info-box warning">
-        <div class="info-box-title">⚠️ Тело можно прочитать только один раз!</div>
-        <p>После вызова любого метода чтения (json(), text() и т.д.), свойство <code>bodyUsed</code> становится true, и повторно прочитать тело уже нельзя.</p>
-    </div>
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Тело можно прочитать только один раз!</div>
+                    <p>После вызова любого метода чтения (json(), text() и т.д.), свойство <code>bodyUsed</code> становится true, и повторно прочитать тело уже нельзя.</p>
+                </div>
 
-    <h3>Получение JSON</h3>
-    <div class="code-block"><code>async function getUsers() {
+                <h3>Получение JSON</h3>
+                <div class="code-block"><code>async function getUsers() {
     const response = await fetch('/api/users');
     const users = await response.json();
     return users;
 }</code></div>
 
-    <h3>Получение текста/HTML</h3>
-    <div class="code-block"><code>async function getHTML() {
+                <h3>Получение текста/HTML</h3>
+                <div class="code-block"><code>async function getHTML() {
     const response = await fetch('/pages/about.html');
     const html = await response.text();
     document.getElementById('content').innerHTML = html;
 }</code></div>
 
-    <h3>Получение изображения (Blob)</h3>
-    <div class="code-block"><code>async function loadImage() {
+                <h3>Получение изображения (Blob)</h3>
+                <div class="code-block"><code>async function loadImage() {
     const response = await fetch('/images/photo.jpg');
     const blob = await response.blob();
     
@@ -8707,8 +8707,8 @@ getUsers();</code></div>
     img.onload = () => URL.revokeObjectURL(imageUrl);
 }</code></div>
 
-    <h3>Получение бинарных данных</h3>
-    <div class="code-block"><code>async function loadBinary() {
+                <h3>Получение бинарных данных</h3>
+                <div class="code-block"><code>async function loadBinary() {
     const response = await fetch('/data/file.bin');
     const buffer = await response.arrayBuffer();
     
@@ -8717,10 +8717,10 @@ getUsers();</code></div>
     console.log('Первый байт:', view[0]);
 }</code></div>
 
-    <h2>POST-запросы и отправка данных</h2>
+                <h2>POST-запросы и отправка данных</h2>
 
-    <h3>Отправка JSON</h3>
-    <div class="code-block"><code>async function createUser(userData) {
+                <h3>Отправка JSON</h3>
+                <div class="code-block"><code>async function createUser(userData) {
     try {
         const response = await fetch('/api/users', {
             method: 'POST',
@@ -8750,8 +8750,8 @@ createUser({
     email: 'tom@example.com'
 });</code></div>
 
-    <h3>Отправка FormData</h3>
-    <div class="code-block"><code>async function uploadForm() {
+                <h3>Отправка FormData</h3>
+                <div class="code-block"><code>async function uploadForm() {
     const formData = new FormData();
     formData.append('name', 'Tom');
     formData.append('age', 37);
@@ -8767,8 +8767,8 @@ createUser({
     console.log(result);
 }</code></div>
 
-    <h3>Отправка формы HTML</h3>
-    <div class="code-block"><code>&lt;form id="userForm"&gt;
+                <h3>Отправка формы HTML</h3>
+                <div class="code-block"><code>&lt;form id="userForm"&gt;
     &lt;input name="name" placeholder="Имя" /&gt;
     &lt;input name="age" type="number" placeholder="Возраст" /&gt;
     &lt;button type="submit"&gt;Отправить&lt;/button&gt;
@@ -8800,64 +8800,64 @@ form.addEventListener('submit', async (e) => {
 });
 &lt;/script&gt;</code></div>
 
-    <h2>Настройка запроса (параметр init)</h2>
+                <h2>Настройка запроса (параметр init)</h2>
 
-    <p>Второй параметр <code>fetch(url, init)</code> принимает объект с настройками:</p>
+                <p>Второй параметр <code>fetch(url, init)</code> принимает объект с настройками:</p>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Опция</th>
-                <th>Описание</th>
-                <th>Значения</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><code>method</code></td>
-                <td>HTTP-метод</td>
-                <td>"GET", "POST", "PUT", "DELETE", "PATCH"</td>
-            </tr>
-            <tr>
-                <td><code>headers</code></td>
-                <td>Заголовки запроса</td>
-                <td>Объект или Headers</td>
-            </tr>
-            <tr>
-                <td><code>body</code></td>
-                <td>Тело запроса</td>
-                <td>String, FormData, Blob, JSON</td>
-            </tr>
-            <tr>
-                <td><code>mode</code></td>
-                <td>Режим CORS</td>
-                <td>"cors", "no-cors", "same-origin"</td>
-            </tr>
-            <tr>
-                <td><code>credentials</code></td>
-                <td>Отправка cookies</td>
-                <td>"omit", "same-origin", "include"</td>
-            </tr>
-            <tr>
-                <td><code>cache</code></td>
-                <td>Режим кэширования</td>
-                <td>"default", "no-cache", "reload", "force-cache"</td>
-            </tr>
-            <tr>
-                <td><code>redirect</code></td>
-                <td>Обработка редиректов</td>
-                <td>"follow", "error", "manual"</td>
-            </tr>
-            <tr>
-                <td><code>signal</code></td>
-                <td>AbortSignal для отмены</td>
-                <td>controller.signal</td>
-            </tr>
-        </tbody>
-    </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Опция</th>
+                            <th>Описание</th>
+                            <th>Значения</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>method</code></td>
+                            <td>HTTP-метод</td>
+                            <td>"GET", "POST", "PUT", "DELETE", "PATCH"</td>
+                        </tr>
+                        <tr>
+                            <td><code>headers</code></td>
+                            <td>Заголовки запроса</td>
+                            <td>Объект или Headers</td>
+                        </tr>
+                        <tr>
+                            <td><code>body</code></td>
+                            <td>Тело запроса</td>
+                            <td>String, FormData, Blob, JSON</td>
+                        </tr>
+                        <tr>
+                            <td><code>mode</code></td>
+                            <td>Режим CORS</td>
+                            <td>"cors", "no-cors", "same-origin"</td>
+                        </tr>
+                        <tr>
+                            <td><code>credentials</code></td>
+                            <td>Отправка cookies</td>
+                            <td>"omit", "same-origin", "include"</td>
+                        </tr>
+                        <tr>
+                            <td><code>cache</code></td>
+                            <td>Режим кэширования</td>
+                            <td>"default", "no-cache", "reload", "force-cache"</td>
+                        </tr>
+                        <tr>
+                            <td><code>redirect</code></td>
+                            <td>Обработка редиректов</td>
+                            <td>"follow", "error", "manual"</td>
+                        </tr>
+                        <tr>
+                            <td><code>signal</code></td>
+                            <td>AbortSignal для отмены</td>
+                            <td>controller.signal</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-    <h3>Полный пример с настройками</h3>
-    <div class="code-block"><code>async function customRequest() {
+                <h3>Полный пример с настройками</h3>
+                <div class="code-block"><code>async function customRequest() {
     const response = await fetch('/api/users', {
         method: 'POST',
         headers: {
@@ -8875,10 +8875,10 @@ form.addEventListener('submit', async (e) => {
     return data;
 }</code></div>
 
-    <h2>Работа с заголовками</h2>
+                <h2>Работа с заголовками</h2>
 
-    <h3>Установка заголовков</h3>
-    <div class="code-block"><code>// Вариант 1: объект
+                <h3>Установка заголовков</h3>
+                <div class="code-block"><code>// Вариант 1: объект
 fetch('/api/users', {
     headers: {
         'Content-Type': 'application/json',
@@ -8893,8 +8893,8 @@ headers.append('Authorization', 'Bearer token');
 
 fetch('/api/users', { headers });</code></div>
 
-    <h3>Чтение заголовков ответа</h3>
-    <div class="code-block"><code>async function getHeaders() {
+                <h3>Чтение заголовков ответа</h3>
+                <div class="code-block"><code>async function getHeaders() {
     const response = await fetch('/api/users');
     
     // Получаем конкретный заголовок
@@ -8912,10 +8912,10 @@ fetch('/api/users', { headers });</code></div>
     }
 }</code></div>
 
-    <h2>Различные типы HTTP-запросов</h2>
+                <h2>Различные типы HTTP-запросов</h2>
 
-    <h3>GET — получение данных</h3>
-    <div class="code-block"><code>// Простой GET
+                <h3>GET — получение данных</h3>
+                <div class="code-block"><code>// Простой GET
 const users = await fetch('/api/users')
     .then(r => r.json());
 
@@ -8924,8 +8924,8 @@ const query = new URLSearchParams({ page: 1, limit: 10 });
 const data = await fetch(`/api/users?${query}`)
     .then(r => r.json());</code></div>
 
-    <h3>POST — создание ресурса</h3>
-    <div class="code-block"><code>const response = await fetch('/api/users', {
+                <h3>POST — создание ресурса</h3>
+                <div class="code-block"><code>const response = await fetch('/api/users', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name: 'Tom', age: 37 })
@@ -8933,8 +8933,8 @@ const data = await fetch(`/api/users?${query}`)
 
 const newUser = await response.json();</code></div>
 
-    <h3>PUT — полное обновление</h3>
-    <div class="code-block"><code>const response = await fetch('/api/users/1', {
+                <h3>PUT — полное обновление</h3>
+                <div class="code-block"><code>const response = await fetch('/api/users/1', {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name: 'Tom', age: 38, email: 'tom@example.com' })
@@ -8942,8 +8942,8 @@ const newUser = await response.json();</code></div>
 
 const updatedUser = await response.json();</code></div>
 
-    <h3>PATCH — частичное обновление</h3>
-    <div class="code-block"><code>const response = await fetch('/api/users/1', {
+                <h3>PATCH — частичное обновление</h3>
+                <div class="code-block"><code>const response = await fetch('/api/users/1', {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ age: 38 }) // Обновляем только возраст
@@ -8951,8 +8951,8 @@ const updatedUser = await response.json();</code></div>
 
 const updatedUser = await response.json();</code></div>
 
-    <h3>DELETE — удаление</h3>
-    <div class="code-block"><code>const response = await fetch('/api/users/1', {
+                <h3>DELETE — удаление</h3>
+                <div class="code-block"><code>const response = await fetch('/api/users/1', {
     method: 'DELETE'
 });
 
@@ -8960,9 +8960,9 @@ if (response.ok) {
     console.log('Пользователь удалён');
 }</code></div>
 
-    <h2>Отмена запроса (AbortController)</h2>
+                <h2>Отмена запроса (AbortController)</h2>
 
-    <div class="code-block"><code>// Создаём контроллер
+                <div class="code-block"><code>// Создаём контроллер
 const controller = new AbortController();
 const signal = controller.signal;
 
@@ -8981,8 +8981,8 @@ fetch('/api/slow-endpoint', { signal })
 // Отменяем запрос через 3 секунды
 setTimeout(() => controller.abort(), 3000);</code></div>
 
-    <h3>Отмена при размонтировании компонента (React)</h3>
-    <div class="code-block"><code>function UsersList() {
+                <h3>Отмена при размонтировании компонента (React)</h3>
+                <div class="code-block"><code>function UsersList() {
     const [users, setUsers] = useState([]);
     
     useEffect(() => {
@@ -9004,9 +9004,9 @@ setTimeout(() => controller.abort(), 3000);</code></div>
     return &lt;div&gt;{/* ... */}&lt;/div&gt;;
 }</code></div>
 
-    <h2>Обработка ошибок</h2>
+                <h2>Обработка ошибок</h2>
 
-    <div class="code-block"><code>async function fetchWithErrorHandling(url) {
+                <div class="code-block"><code>async function fetchWithErrorHandling(url) {
     try {
         const response = await fetch(url);
         
@@ -9034,8 +9034,8 @@ setTimeout(() => controller.abort(), 3000);</code></div>
     }
 }</code></div>
 
-    <h3>Обработка разных статусов</h3>
-    <div class="code-block"><code>async function handleResponse(response) {
+                <h3>Обработка разных статусов</h3>
+                <div class="code-block"><code>async function handleResponse(response) {
     if (response.ok) {
         return await response.json();
     }
@@ -9057,10 +9057,10 @@ setTimeout(() => controller.abort(), 3000);</code></div>
     }
 }</code></div>
 
-    <h2>Практические примеры</h2>
+                <h2>Практические примеры</h2>
 
-    <h3>Пример 1: CRUD для REST API</h3>
-    <div class="code-block"><code>const API_URL = '/api/users';
+                <h3>Пример 1: CRUD для REST API</h3>
+                <div class="code-block"><code>const API_URL = '/api/users';
 
 // Create (POST)
 async function createUser(userData) {
@@ -9101,8 +9101,8 @@ async function deleteUser(id) {
     return response.ok;
 }</code></div>
 
-    <h3>Пример 2: Загрузка файла с прогрессом</h3>
-    <div class="code-block"><code>async function uploadFile(file, onProgress) {
+                <h3>Пример 2: Загрузка файла с прогрессом</h3>
+                <div class="code-block"><code>async function uploadFile(file, onProgress) {
     const response = await fetch('/api/upload', {
         method: 'POST',
         body: file
@@ -9146,8 +9146,8 @@ uploadFile(file, (loaded, total) => {
     console.log(`Загружено: ${percent}%`);
 });</code></div>
 
-    <h3>Пример 3: Повторные попытки (Retry)</h3>
-    <div class="code-block"><code>async function fetchWithRetry(url, options = {}, retries = 3, delay = 1000) {
+                <h3>Пример 3: Повторные попытки (Retry)</h3>
+                <div class="code-block"><code>async function fetchWithRetry(url, options = {}, retries = 3, delay = 1000) {
     for (let i = 0; i &lt; retries; i++) {
         try {
             const response = await fetch(url, options);
@@ -9176,8 +9176,8 @@ uploadFile(file, (loaded, total) => {
 // Использование
 const response = await fetchWithRetry('/api/unstable', {}, 3, 1000);</code></div>
 
-    <h3>Пример 4: Параллельные запросы</h3>
-    <div class="code-block"><code>async function loadAllData() {
+                <h3>Пример 4: Параллельные запросы</h3>
+                <div class="code-block"><code>async function loadAllData() {
     try {
         // Запускаем все запросы параллельно
         const [users, posts, comments] = await Promise.all([
@@ -9193,8 +9193,8 @@ const response = await fetchWithRetry('/api/unstable', {}, 3, 1000);</code></div
     }
 }</code></div>
 
-    <h3>Пример 5: Кэширование запросов</h3>
-    <div class="code-block"><code>class FetchCache {
+                <h3>Пример 5: Кэширование запросов</h3>
+                <div class="code-block"><code>class FetchCache {
     constructor(ttl = 60000) { // TTL = 60 секунд
         this.cache = new Map();
         this.ttl = ttl;
@@ -9237,9 +9237,9 @@ const users1 = await response1.json();
 const response2 = await cache.fetch('/api/users');
 const users2 = await response2.json();</code></div>
 
-    <h2>Создание клиента для REST API</h2>
+                <h2>Создание клиента для REST API</h2>
 
-    <div class="code-block"><code>class ApiClient {
+                <div class="code-block"><code>class ApiClient {
     constructor(baseURL) {
         this.baseURL = baseURL;
         this.defaultHeaders = {
@@ -9310,10 +9310,10 @@ const newUser = await api.post('/users', { name: 'Tom', age: 37 });
 const updated = await api.put('/users/1', { age: 38 });
 await api.delete('/users/1');</code></div>
 
-    <h2>Сравнение: XMLHttpRequest vs Fetch</h2>
+                <h2>Сравнение: XMLHttpRequest vs Fetch</h2>
 
-    <h3>Одна и та же задача</h3>
-    <div class="code-block"><code>// XMLHttpRequest (старый способ)
+                <h3>Одна и та же задача</h3>
+                <div class="code-block"><code>// XMLHttpRequest (старый способ)
 const xhr = new XMLHttpRequest();
 xhr.open("GET", "/api/users");
 xhr.responseType = "json";
@@ -9348,61 +9348,61 @@ async function getUsers() {
     }
 }</code></div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Характеристика</th>
-                <th>XMLHttpRequest</th>
-                <th>Fetch API</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Синтаксис</strong></td>
-                <td>Многословный, callback-based</td>
-                <td>Простой, Promise-based</td>
-            </tr>
-            <tr>
-                <td><strong>Обработка ответа</strong></td>
-                <td>Разные свойства для разных типов</td>
-                <td>Унифицированные методы (.json(), .text())</td>
-            </tr>
-            <tr>
-                <td><strong>Обработка ошибок</strong></td>
-                <td>События onerror, ontimeout</td>
-                <td>.catch() или try/catch</td>
-            </tr>
-            <tr>
-                <td><strong>HTTP ошибки</strong></td>
-                <td>Обрабатываются через status</td>
-                <td>Нужно проверять response.ok</td>
-            </tr>
-            <tr>
-                <td><strong>Прогресс</strong></td>
-                <td>Встроенный (onprogress)</td>
-                <td>Сложнее (через ReadableStream)</td>
-            </tr>
-            <tr>
-                <td><strong>Отмена</strong></td>
-                <td>xhr.abort()</td>
-                <td>AbortController</td>
-            </tr>
-            <tr>
-                <td><strong>Поддержка браузеров</strong></td>
-                <td>Все (включая IE)</td>
-                <td>Современные (IE не поддерживает)</td>
-            </tr>
-        </tbody>
-    </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Характеристика</th>
+                            <th>XMLHttpRequest</th>
+                            <th>Fetch API</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Синтаксис</strong></td>
+                            <td>Многословный, callback-based</td>
+                            <td>Простой, Promise-based</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Обработка ответа</strong></td>
+                            <td>Разные свойства для разных типов</td>
+                            <td>Унифицированные методы (.json(), .text())</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Обработка ошибок</strong></td>
+                            <td>События onerror, ontimeout</td>
+                            <td>.catch() или try/catch</td>
+                        </tr>
+                        <tr>
+                            <td><strong>HTTP ошибки</strong></td>
+                            <td>Обрабатываются через status</td>
+                            <td>Нужно проверять response.ok</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Прогресс</strong></td>
+                            <td>Встроенный (onprogress)</td>
+                            <td>Сложнее (через ReadableStream)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Отмена</strong></td>
+                            <td>xhr.abort()</td>
+                            <td>AbortController</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Поддержка браузеров</strong></td>
+                            <td>Все (включая IE)</td>
+                            <td>Современные (IE не поддерживает)</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-    <h2>Обработка CORS</h2>
+                <h2>Обработка CORS</h2>
 
-    <div class="info-box note">
-        <div class="info-box-title">💡 CORS (Cross-Origin Resource Sharing)</div>
-        <p>По умолчанию браузеры блокируют запросы к другим доменам. Fetch автоматически отправляет CORS-запросы, но сервер должен разрешить их через заголовки.</p>
-    </div>
+                <div class="info-box note">
+                    <div class="info-box-title">💡 CORS (Cross-Origin Resource Sharing)</div>
+                    <p>По умолчанию браузеры блокируют запросы к другим доменам. Fetch автоматически отправляет CORS-запросы, но сервер должен разрешить их через заголовки.</p>
+                </div>
 
-    <div class="code-block"><code>// Простой CORS-запрос
+                <div class="code-block"><code>// Простой CORS-запрос
 fetch('https://api.example.com/users', {
     mode: 'cors' // По умолчанию
 })
@@ -9417,33 +9417,33 @@ fetch('https://api.example.com/users', {
     .then(response => response.json())
     .then(data => console.log(data));</code></div>
 
-    <h3>Режимы CORS</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Режим</th>
-                <th>Описание</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><code>cors</code></td>
-                <td>Стандартный CORS-запрос (по умолчанию)</td>
-            </tr>
-            <tr>
-                <td><code>no-cors</code></td>
-                <td>Запрос без CORS, ограниченный доступ к ответу</td>
-            </tr>
-            <tr>
-                <td><code>same-origin</code></td>
-                <td>Только запросы к своему домену</td>
-            </tr>
-        </tbody>
-    </table>
+                <h3>Режимы CORS</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Режим</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>cors</code></td>
+                            <td>Стандартный CORS-запрос (по умолчанию)</td>
+                        </tr>
+                        <tr>
+                            <td><code>no-cors</code></td>
+                            <td>Запрос без CORS, ограниченный доступ к ответу</td>
+                        </tr>
+                        <tr>
+                            <td><code>same-origin</code></td>
+                            <td>Только запросы к своему домену</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-    <h2>Credentials (cookies и авторизация)</h2>
+                <h2>Credentials (cookies и авторизация)</h2>
 
-    <div class="code-block"><code>// omit - не отправлять cookies (по умолчанию для кросс-доменных)
+                <div class="code-block"><code>// omit - не отправлять cookies (по умолчанию для кросс-доменных)
 fetch('/api/users', {
     credentials: 'omit'
 });
@@ -9458,11 +9458,11 @@ fetch('https://api.example.com/users', {
     credentials: 'include'
 });</code></div>
 
-    <h2>Timeout для Fetch</h2>
+                <h2>Timeout для Fetch</h2>
 
-    <p>Fetch не имеет встроенного timeout, но его можно реализовать через AbortController:</p>
+                <p>Fetch не имеет встроенного timeout, но его можно реализовать через AbortController:</p>
 
-    <div class="code-block"><code>function fetchWithTimeout(url, options = {}, timeout = 5000) {
+                <div class="code-block"><code>function fetchWithTimeout(url, options = {}, timeout = 5000) {
     return new Promise((resolve, reject) => {
         const controller = new AbortController();
         const signal = controller.signal;
@@ -9499,11 +9499,11 @@ try {
     console.error(error.message); // "Timeout"
 }</code></div>
 
-    <h2>Интерцепторы запросов</h2>
+                <h2>Интерцепторы запросов</h2>
 
-    <p>Создание обёртки с автоматической обработкой токенов и ошибок:</p>
+                <p>Создание обёртки с автоматической обработкой токенов и ошибок:</p>
 
-    <div class="code-block"><code>class FetchInterceptor {
+                <div class="code-block"><code>class FetchInterceptor {
     constructor() {
         this.requestInterceptors = [];
         this.responseInterceptors = [];
@@ -9566,9 +9566,9 @@ api.addResponseInterceptor(async (response) => {
 const response = await api.fetch('/api/users');
 const data = await response.json();</code></div>
 
-    <h2>Мониторинг состояния сети</h2>
+                <h2>Мониторинг состояния сети</h2>
 
-    <div class="code-block"><code>// Проверка соединения
+                <div class="code-block"><code>// Проверка соединения
 if (!navigator.onLine) {
     console.log('Нет соединения с интернетом');
 }
@@ -9583,9 +9583,9 @@ window.addEventListener('offline', () => {
     console.log('Соединение потеряно');
 });</code></div>
 
-    <h2>Service Worker и кэширование</h2>
+                <h2>Service Worker и кэширование</h2>
 
-    <div class="code-block"><code>// В Service Worker (sw.js)
+                <div class="code-block"><code>// В Service Worker (sw.js)
 self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request)
@@ -9596,24 +9596,24 @@ self.addEventListener('fetch', (event) => {
     );
 });</code></div>
 
-    <h2>Лучшие практики</h2>
+                <h2>Лучшие практики</h2>
 
-    <div class="info-box success">
-        <div class="info-box-title">✅ Рекомендации по использованию Fetch</div>
-        <ul>
-            <li><strong>Всегда проверяйте response.ok</strong> — Fetch не отклоняет Promise при HTTP-ошибках</li>
-            <li><strong>Используйте async/await</strong> — код получается чище и понятнее</li>
-            <li><strong>Обрабатывайте ошибки</strong> — используйте try/catch или .catch()</li>
-            <li><strong>Добавляйте timeout</strong> — через AbortController для защиты от зависших запросов</li>
-            <li><strong>Отменяйте запросы</strong> — при размонтировании компонентов</li>
-            <li><strong>Создавайте обёртки</strong> — для переиспользования логики (токены, обработка ошибок)</li>
-            <li><strong>Кэшируйте данные</strong> — для уменьшения количества запросов</li>
-            <li><strong>Используйте credentials осторожно</strong> — only when needed для безопасности</li>
-        </ul>
-    </div>
+                <div class="info-box success">
+                    <div class="info-box-title">✅ Рекомендации по использованию Fetch</div>
+                    <ul>
+                        <li><strong>Всегда проверяйте response.ok</strong> — Fetch не отклоняет Promise при HTTP-ошибках</li>
+                        <li><strong>Используйте async/await</strong> — код получается чище и понятнее</li>
+                        <li><strong>Обрабатывайте ошибки</strong> — используйте try/catch или .catch()</li>
+                        <li><strong>Добавляйте timeout</strong> — через AbortController для защиты от зависших запросов</li>
+                        <li><strong>Отменяйте запросы</strong> — при размонтировании компонентов</li>
+                        <li><strong>Создавайте обёртки</strong> — для переиспользования логики (токены, обработка ошибок)</li>
+                        <li><strong>Кэшируйте данные</strong> — для уменьшения количества запросов</li>
+                        <li><strong>Используйте credentials осторожно</strong> — only when needed для безопасности</li>
+                    </ul>
+                </div>
 
-    <h3>Универсальная функция для API-запросов</h3>
-    <div class="code-block"><code>async function apiRequest(endpoint, options = {}) {
+                <h3>Универсальная функция для API-запросов</h3>
+                <div class="code-block"><code>async function apiRequest(endpoint, options = {}) {
     const baseURL = 'https://api.example.com';
     const timeout = options.timeout || 10000;
     
@@ -9659,13 +9659,13 @@ try {
     console.error('Ошибка:', error.message);
 }</code></div>
 
-    <h2>Типичные ошибки и их решения</h2>
+                <h2>Типичные ошибки и их решения</h2>
 
-    <div class="info-box danger">
-        <div class="info-box-title">❌ Частые ошибки</div>
-        
-        <h4>1. Забыли проверить response.ok</h4>
-        <div class="code-block"><code>// ❌ НЕПРАВИЛЬНО
+                <div class="info-box danger">
+                    <div class="info-box-title">❌ Частые ошибки</div>
+                    
+                    <h4>1. Забыли проверить response.ok</h4>
+                    <div class="code-block"><code>// ❌ НЕПРАВИЛЬНО
 const data = await fetch('/api/users').then(r => r.json());
 
 // ✅ ПРАВИЛЬНО
@@ -9673,15 +9673,15 @@ const response = await fetch('/api/users');
 if (!response.ok) throw new Error(`HTTP ${response.status}`);
 const data = await response.json();</code></div>
 
-        <h4>2. Забыли await у response.json()</h4>
-        <div class="code-block"><code>// ❌ НЕПРАВИЛЬНО
+                    <h4>2. Забыли await у response.json()</h4>
+                    <div class="code-block"><code>// ❌ НЕПРАВИЛЬНО
 const data = response.json(); // Promise, а не данные!
 
 // ✅ ПРАВИЛЬНО
 const data = await response.json();</code></div>
 
-        <h4>3. Попытка прочитать body дважды</h4>
-        <div class="code-block"><code>// ❌ НЕПРАВИЛЬНО
+                    <h4>3. Попытка прочитать body дважды</h4>
+                    <div class="code-block"><code>// ❌ НЕПРАВИЛЬНО
 const text = await response.text();
 const json = await response.json(); // Ошибка!
 
@@ -9689,8 +9689,8 @@ const json = await response.json(); // Ошибка!
 const text = await response.clone().text();
 const json = await response.json();</code></div>
 
-        <h4>4. Неправильная отправка JSON</h4>
-        <div class="code-block"><code>// ❌ НЕПРАВИЛЬНО
+                    <h4>4. Неправильная отправка JSON</h4>
+                    <div class="code-block"><code>// ❌ НЕПРАВИЛЬНО
 fetch('/api/users', {
     method: 'POST',
     body: { name: 'Tom' } // Объект, а не строка!
@@ -9702,26 +9702,26 @@ fetch('/api/users', {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name: 'Tom' })
 });</code></div>
-    </div>
+                </div>
 
-    <h2>Заключение</h2>
+                <h2>Заключение</h2>
 
-    <div class="info-box note">
-        <div class="info-box-title">📚 Основные выводы</div>
-        <ul>
-            <li><strong>Fetch API</strong> — современный стандарт для HTTP-запросов</li>
-            <li><strong>Promise-based</strong> — отлично работает с async/await</li>
-            <li><strong>Проверяйте response.ok</strong> — Fetch не отклоняет Promise при HTTP-ошибках</li>
-            <li><strong>Методы чтения</strong>: .json(), .text(), .blob(), .arrayBuffer(), .formData()</li>
-            <li><strong>Отмена запросов</strong> через AbortController</li>
-            <li><strong>Настройка запроса</strong>: method, headers, body, mode, credentials</li>
-            <li><strong>CORS</strong> обрабатывается автоматически при mode: 'cors'</li>
-            <li><strong>Создавайте обёртки</strong> для удобства и переиспользования кода</li>
-        </ul>
-    </div>
+                <div class="info-box note">
+                    <div class="info-box-title">📚 Основные выводы</div>
+                    <ul>
+                        <li><strong>Fetch API</strong> — современный стандарт для HTTP-запросов</li>
+                        <li><strong>Promise-based</strong> — отлично работает с async/await</li>
+                        <li><strong>Проверяйте response.ok</strong> — Fetch не отклоняет Promise при HTTP-ошибках</li>
+                        <li><strong>Методы чтения</strong>: .json(), .text(), .blob(), .arrayBuffer(), .formData()</li>
+                        <li><strong>Отмена запросов</strong> через AbortController</li>
+                        <li><strong>Настройка запроса</strong>: method, headers, body, mode, credentials</li>
+                        <li><strong>CORS</strong> обрабатывается автоматически при mode: 'cors'</li>
+                        <li><strong>Создавайте обёртки</strong> для удобства и переиспользования кода</li>
+                    </ul>
+                </div>
 
-    <h3>Шпаргалка по Fetch</h3>
-    <div class="code-block"><code>// GET-запрос
+                <h3>Шпаргалка по Fetch</h3>
+                <div class="code-block"><code>// GET-запрос
 const data = await fetch('/api/users')
     .then(r => r.ok ? r.json() : Promise.reject(`HTTP ${r.status}`));
 
@@ -9759,24 +9759,21 @@ try {
     }
 }</code></div>
 
-    <div class="info-box success">
-        <div class="info-box-title">✅ Когда использовать Fetch API</div>
-        <ul>
-            <li>Все современные проекты (рекомендуется)</li>
-            <li>SPA приложения (React, Vue, Angular)</li>
-            <li>Работа с REST API</li>
-            <li>Когда важна простота и читаемость кода</li>
-            <li>Когда нужна поддержка современных браузеров</li>
-        </ul>
-    </div>
+                <div class="info-box success">
+                    <div class="info-box-title">✅ Когда использовать Fetch API</div>
+                    <ul>
+                        <li>Все современные проекты (рекомендуется)</li>
+                        <li>SPA приложения (React, Vue, Angular)</li>
+                        <li>Работа с REST API</li>
+                        <li>Когда важна простота и читаемость кода</li>
+                        <li>Когда нужна поддержка современных браузеров</li>
+                    </ul>
+                </div>
 
-    <p>Для поддержки старых браузеров (IE) используйте <strong>XMLHttpRequest</strong> (глава 18) или <a href="https://github.com/github/fetch" target="_blank">polyfill для Fetch</a>.</p>
-</section>
-
-            <section class="chapter" id="ch19">
-                <h1>Глава 19. Fetch API</h1>
-                <p>Контент будет добавлен...</p>
+                <p>Для поддержки старых браузеров (IE) используйте <strong>XMLHttpRequest</strong> (глава 18) или <a href="https://github.com/github/fetch" target="_blank">polyfill для Fetch</a>.</p>
             </section>
+
+            
 
             <section class="chapter" id="ch31">
                 <h1>Глава 31. Best Practices</h1>
