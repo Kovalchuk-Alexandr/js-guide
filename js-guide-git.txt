@@ -7,3 +7,4 @@ git remote add origin https://github.com/Kovalchuk-Alexandr/js-guide.git
 git push -u origin master
 
 https://kovalchuk-alexandr.github.io/js-guide/
+
