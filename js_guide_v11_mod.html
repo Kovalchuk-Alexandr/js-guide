@@ -10478,6 +10478,558 @@ retry: 10000\n\n</code></div>
                 </div>
             </section>
 
+            <!-- ГЛАВА 21: Локализация (Internationalization API) -->
+            <section class="chapter" id="ch21">
+                <h1>Глава 21. Локализация (Internationalization API)</h1>
+                
+                <h2>Введение в Internationalization API</h2>
+                <p><strong>Internationalization API (Intl)</strong> — это встроенный в JavaScript набор объектов для локализации чисел, дат, строк и других данных в соответствии с правилами разных языков и регионов.</p>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Зачем нужна локализация?</div>
+                    <ul>
+                        <li><strong>Форматы дат</strong> — в США: 12/31/2024, в России: 31.12.2024</li>
+                        <li><strong>Форматы чисел</strong> — разделители: 1,000.50 (US) vs 1 000,50 (RU)</li>
+                        <li><strong>Валюты</strong> — $100 (US) vs 100 $ (FR) vs 100 руб. (RU)</li>
+                        <li><strong>Названия</strong> — Germany (EN) vs Германия (RU) vs Deutschland (DE)</li>
+                        <li><strong>Сортировка</strong> — ё после е (RU), но не в алфавитном порядке (EN)</li>
+                    </ul>
+                </div>
+
+                <h2>Основные объекты Intl</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Объект</th>
+                            <th>Назначение</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>Intl.DateTimeFormat</code></td>
+                            <td>Форматирование дат и времени</td>
+                        </tr>
+                        <tr>
+                            <td><code>Intl.NumberFormat</code></td>
+                            <td>Форматирование чисел и валют</td>
+                        </tr>
+                        <tr>
+                            <td><code>Intl.ListFormat</code></td>
+                            <td>Форматирование списков</td>
+                        </tr>
+                        <tr>
+                            <td><code>Intl.DisplayNames</code></td>
+                            <td>Локализация названий (стран, языков, валют)</td>
+                        </tr>
+                        <tr>
+                            <td><code>Intl.Collator</code></td>
+                            <td>Сравнение и сортировка строк</td>
+                        </tr>
+                        <tr>
+                            <td><code>Intl.RelativeTimeFormat</code></td>
+                            <td>Относительное время ("2 дня назад")</td>
+                        </tr>
+                        <tr>
+                            <td><code>Intl.PluralRules</code></td>
+                            <td>Правила множественного числа</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2>Локали (Locales)</h2>
+                <p><strong>Локаль</strong> — это код языка и региона в формате BCP 47, например: <code>"en-US"</code>, <code>"ru-RU"</code>, <code>"de-DE"</code>.</p>
+
+                <h3>Формат локали</h3>
+                <div class="code-block"><code>// Формат: язык-РЕГИОН
+"en"       // Английский (без региона)
+"en-US"    // Английский (США)
+"en-GB"    // Английский (Великобритания)
+"ru"       // Русский (без региона)
+"ru-RU"    // Русский (Россия)
+"de-DE"    // Немецкий (Германия)
+"fr-FR"    // Французский (Франция)
+"zh-CN"    // Китайский (Китай)
+"ja-JP"    // Японский (Япония)</code></div>
+
+                <h3>Определение локали браузера</h3>
+                <div class="code-block"><code>// Локаль браузера
+console.log(navigator.language);       // "ru-RU"
+console.log(navigator.languages);      // ["ru-RU", "ru", "en-US", "en"]
+
+// Проверка поддержки Intl API
+if (window.Intl && typeof window.Intl === "object") {
+    console.log("Internationalization API поддерживается");
+} else {
+    console.log("Internationalization API не поддерживается");
+}</code></div>
+
+                <h3>Массив локалей (fallback)</h3>
+                <div class="code-block"><code>// Если первая локаль не поддерживается, используется следующая
+const locales = ["ru-RU", "en-US", "de-DE"];
+
+const formatter = new Intl.DateTimeFormat(locales);
+// Будет использована первая поддерживаемая локаль</code></div>
+
+                <h2>Intl.DateTimeFormat — Форматирование дат</h2>
+
+                <h3>Базовое использование</h3>
+                <div class="code-block"><code>const now = new Date();
+
+// Русский формат
+const ruDate = new Intl.DateTimeFormat("ru").format(now);
+console.log(ruDate); // 15.11.2025
+
+// Американский формат
+const usDate = new Intl.DateTimeFormat("en-US").format(now);
+console.log(usDate); // 11/15/2025
+
+// Немецкий формат
+const deDate = new Intl.DateTimeFormat("de-DE").format(now);
+console.log(deDate); // 15.11.2025</code></div>
+
+                <h3>Настройка формата даты</h3>
+                <div class="code-block"><code>const now = new Date();
+
+// Полная дата
+const fullDate = new Intl.DateTimeFormat("ru", {
+    dateStyle: "full"
+}).format(now);
+console.log(fullDate); // суббота, 15 ноября 2025 г.
+
+// Длинная дата
+const longDate = new Intl.DateTimeFormat("ru", {
+    dateStyle: "long"
+}).format(now);
+console.log(longDate); // 15 ноября 2025 г.
+
+// Средняя дата
+const mediumDate = new Intl.DateTimeFormat("ru", {
+    dateStyle: "medium"
+}).format(now);
+console.log(mediumDate); // 15 нояб. 2025 г.
+
+// Короткая дата
+const shortDate = new Intl.DateTimeFormat("ru", {
+    dateStyle: "short"
+}).format(now);
+console.log(shortDate); // 15.11.2025</code></div>
+
+                <h3>Форматирование времени</h3>
+                <div class="code-block"><code>const now = new Date();
+
+// Полное время
+const fullTime = new Intl.DateTimeFormat("ru", {
+    timeStyle: "full"
+}).format(now);
+console.log(fullTime); // 14:30:45 Москва, стандартное время
+
+// Длинное время
+const longTime = new Intl.DateTimeFormat("ru", {
+    timeStyle: "long"
+}).format(now);
+console.log(longTime); // 14:30:45 GMT+3
+
+// Среднее время
+const mediumTime = new Intl.DateTimeFormat("ru", {
+    timeStyle: "medium"
+}).format(now);
+console.log(mediumTime); // 14:30:45
+
+// Короткое время
+const shortTime = new Intl.DateTimeFormat("ru", {
+    timeStyle: "short"
+}).format(now);
+console.log(shortTime); // 14:30</code></div>
+
+                <h3>Комбинирование даты и времени</h3>
+                <div class="code-block"><code>const now = new Date();
+
+const dateTime = new Intl.DateTimeFormat("ru", {
+    dateStyle: "long",
+    timeStyle: "short"
+}).format(now);
+console.log(dateTime); // 15 ноября 2025 г., 14:30</code></div>
+
+                <h3>Детальная настройка</h3>
+                <div class="code-block"><code>const now = new Date();
+
+const customFormat = new Intl.DateTimeFormat("ru", {
+    weekday: "long",     // Полное название дня недели
+    year: "numeric",     // Год (2025)
+    month: "long",       // Полное название месяца
+    day: "numeric",      // День (15)
+    hour: "2-digit",     // Час с ведущим нулём (14)
+    minute: "2-digit",   // Минута с ведущим нулём (30)
+    second: "2-digit"    // Секунда с ведущим нулём (45)
+}).format(now);
+
+console.log(customFormat); 
+// суббота, 15 ноября 2025 г., 14:30:45</code></div>
+
+                <h3>Опции DateTimeFormat</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Опция</th>
+                            <th>Значения</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>weekday</code></td>
+                            <td>"narrow", "short", "long"</td>
+                            <td>День недели</td>
+                        </tr>
+                        <tr>
+                            <td><code>year</code></td>
+                            <td>"numeric", "2-digit"</td>
+                            <td>Год</td>
+                        </tr>
+                        <tr>
+                            <td><code>month</code></td>
+                            <td>"numeric", "2-digit", "narrow", "short", "long"</td>
+                            <td>Месяц</td>
+                        </tr>
+                        <tr>
+                            <td><code>day</code></td>
+                            <td>"numeric", "2-digit"</td>
+                            <td>День</td>
+                        </tr>
+                        <tr>
+                            <td><code>hour</code></td>
+                            <td>"numeric", "2-digit"</td>
+                            <td>Час</td>
+                        </tr>
+                        <tr>
+                            <td><code>minute</code></td>
+                            <td>"numeric", "2-digit"</td>
+                            <td>Минута</td>
+                        </tr>
+                        <tr>
+                            <td><code>second</code></td>
+                            <td>"numeric", "2-digit"</td>
+                            <td>Секунда</td>
+                        </tr>
+                        <tr>
+                            <td><code>timeZone</code></td>
+                            <td>"UTC", "Europe/Moscow", ...</td>
+                            <td>Часовой пояс</td>
+                        </tr>
+                        <tr>
+                            <td><code>hour12</code></td>
+                            <td>true, false</td>
+                            <td>12/24-часовой формат</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Альтернатива: методы Date</h3>
+                <div class="code-block"><code>const now = new Date();
+
+// Методы Date тоже поддерживают локализацию
+console.log(now.toLocaleString("ru"));      // 15.11.2025, 14:30:45
+console.log(now.toLocaleDateString("ru"));  // 15.11.2025
+console.log(now.toLocaleTimeString("ru"));  // 14:30:45
+
+console.log(now.toLocaleString("en-US"));   // 11/15/2025, 2:30:45 PM
+console.log(now.toLocaleDateString("en-US"));// 11/15/2025
+console.log(now.toLocaleTimeString("en-US"));// 2:30:45 PM</code></div>
+
+                <h2>Intl.NumberFormat — Форматирование чисел</h2>
+
+                <h3>Базовое использование</h3>
+                <div class="code-block"><code>const number = 1234567.89;
+
+// Русский формат (пробелы как разделители)
+const ruNumber = new Intl.NumberFormat("ru").format(number);
+console.log(ruNumber); // 1 234 567,89
+
+// Американский формат (запятые как разделители)
+const usNumber = new Intl.NumberFormat("en-US").format(number);
+console.log(usNumber); // 1,234,567.89
+
+// Немецкий формат (точки как разделители)
+const deNumber = new Intl.NumberFormat("de-DE").format(number);
+console.log(deNumber); // 1.234.567,89</code></div>
+
+                <h3>Форматирование валют</h3>
+                <div class="code-block"><code>const amount = 1234.56;
+
+// Рубли
+const rub = new Intl.NumberFormat("ru", {
+    style: "currency",
+    currency: "RUB"
+}).format(amount);
+console.log(rub); // 1 234,56 ₽
+
+// Доллары
+const usd = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD"
+}).format(amount);
+console.log(usd); // $1,234.56
+
+// Евро
+const eur = new Intl.NumberFormat("de-DE", {
+    style: "currency",
+    currency: "EUR"
+}).format(amount);
+console.log(eur); // 1.234,56 €</code></div>
+
+                <h3>Процентыи единицы измерения</h3>
+                <div class="code-block"><code>// Проценты
+const percent = new Intl.NumberFormat("ru", {
+    style: "percent"
+}).format(0.75);
+console.log(percent); // 75 %
+
+// Минимум/максимум знаков после запятой
+const precise = new Intl.NumberFormat("ru", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 4
+}).format(123.4);
+console.log(precise); // 123,40
+
+// Единицы измерения (ES2020+)
+const speed = new Intl.NumberFormat("ru", {
+    style: "unit",
+    unit: "kilometer-per-hour"
+}).format(120);
+console.log(speed); // 120 км/ч
+
+const storage = new Intl.NumberFormat("en", {
+    style: "unit",
+    unit: "gigabyte"
+}).format(256);
+console.log(storage); // 256 GB</code></div>
+
+                <h3>Опции NumberFormat</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Опция</th>
+                            <th>Значения</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>style</code></td>
+                            <td>"decimal", "currency", "percent", "unit"</td>
+                            <td>Стиль форматирования</td>
+                        </tr>
+                        <tr>
+                            <td><code>currency</code></td>
+                            <td>"USD", "EUR", "RUB", ...</td>
+                            <td>Код валюты (для style: "currency")</td>
+                        </tr>
+                        <tr>
+                            <td><code>unit</code></td>
+                            <td>"kilometer", "celsius", "byte", ...</td>
+                            <td>Единица измерения</td>
+                        </tr>
+                        <tr>
+                            <td><code>minimumFractionDigits</code></td>
+                            <td>число</td>
+                            <td>Минимум знаков после запятой</td>
+                        </tr>
+                        <tr>
+                            <td><code>maximumFractionDigits</code></td>
+                            <td>число</td>
+                            <td>Максимум знаков после запятой</td>
+                        </tr>
+                        <tr>
+                            <td><code>useGrouping</code></td>
+                            <td>true, false</td>
+                            <td>Разделители групп разрядов</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2>Intl.ListFormat — Форматирование списков</h2>
+
+                <div class="code-block"><code>const items = ["яблоки", "бананы", "апельсины"];
+
+// Русский (и)
+const ruList = new Intl.ListFormat("ru").format(items);
+console.log(ruList); // яблоки, бананы и апельсины
+
+// Английский (and)
+const enList = new Intl.ListFormat("en").format(items);
+console.log(enList); // яблоки, бананы, and апельсины
+
+// Разные стили
+const longList = new Intl.ListFormat("ru", {
+    style: "long",
+    type: "conjunction" // "и"
+}).format(items);
+console.log(longList); // яблоки, бананы и апельсины
+
+const orList = new Intl.ListFormat("ru", {
+    type: "disjunction" // "или"
+}).format(items);
+console.log(orList); // яблоки, бананы или апельсины</code></div>
+
+                <h2>Intl.DisplayNames — Локализация названий</h2>
+
+                <h3>Названия стран</h3>
+                <div class="code-block"><code>const regions = new Intl.DisplayNames(["ru"], { type: "region" });
+
+console.log(regions.of("US")); // США
+console.log(regions.of("DE")); // Германия
+console.log(regions.of("FR")); // Франция
+console.log(regions.of("CN")); // Китай
+
+// На английском
+const regionsEN = new Intl.DisplayNames(["en"], { type: "region" });
+console.log(regionsEN.of("RU")); // Russia</code></div>
+
+                <h3>Названия языков</h3>
+                <div class="code-block"><code>const languages = new Intl.DisplayNames(["ru"], { type: "language" });
+
+console.log(languages.of("en")); // английский
+console.log(languages.of("de")); // немецкий
+console.log(languages.of("fr")); // французский
+console.log(languages.of("ja")); // японский</code></div>
+
+                <h3>Названия валют</h3>
+                <div class="code-block"><code>const currencies = new Intl.DisplayNames(["ru"], { type: "currency" });
+
+console.log(currencies.of("USD")); // доллар США
+console.log(currencies.of("EUR")); // евро
+console.log(currencies.of("RUB")); // российский рубль
+console.log(currencies.of("GBP")); // фунт стерлингов</code></div>
+
+                <h2>Intl.Collator — Сравнение и сортировка строк</h2>
+
+                <h3>Проблема обычной сортировки</h3>
+                <div class="code-block"><code>const names = ["Яна", "Алексей", "Ёлка", "Борис", "Виктор"];
+
+// Обычная сортировка (неправильно для русского)
+console.log(names.sort());
+// ["Алексей", "Борис", "Виктор", "Яна", "Ёлка"] - Ё в конце!
+
+// С учётом локали (правильно)
+console.log(names.sort(new Intl.Collator("ru").compare));
+// ["Алексей", "Борис", "Виктор", "Ёлка", "Яна"] - Ё после Е!</code></div>
+
+                <h3>Сравнение строк</h3>
+                <div class="code-block"><code>const collator = new Intl.Collator("ru");
+
+// Сравнение (возвращает -1, 0 или 1)
+console.log(collator.compare("яблоко", "апельсин")); // 1 (я &gt; а)
+console.log(collator.compare("ёлка", "дом"));        // 1 (ё &gt; д)
+console.log(collator.compare("кот", "кот"));         // 0 (равны)
+
+// Сортировка массива
+const words = ["яблоко", "ёлка", "дом", "апельсин"];
+console.log(words.sort(collator.compare));
+// ["апельсин", "дом", "ёлка", "яблоко"]</code></div>
+
+                <h2>Intl.RelativeTimeFormat — Относительное время</h2>
+
+                <div class="code-block"><code>const rtf = new Intl.RelativeTimeFormat("ru", { numeric: "auto" });
+
+console.log(rtf.format(-1, "day"));    // вчера
+console.log(rtf.format(0, "day"));     // сегодня
+console.log(rtf.format(1, "day"));     // завтра
+console.log(rtf.format(2, "day"));     // через 2 дня
+console.log(rtf.format(-2, "hour"));   // 2 часа назад
+console.log(rtf.format(3, "week"));    // через 3 недели
+console.log(rtf.format(-1, "month"));  // в прошлом месяце
+
+// Английский
+const rtfEN = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+console.log(rtfEN.format(-1, "day"));  // yesterday
+console.log(rtfEN.format(1, "day"));   // tomorrow</code></div>
+
+                <h2>Практические примеры</h2>
+
+                <h3>Пример 1: Мультиязычный интерфейс</h3>
+                <div class="code-block"><code>class i18n {
+    constructor(locale) {
+        this.locale = locale;
+        this.dateFormatter = new Intl.DateTimeFormat(locale, {
+            dateStyle: "long"
+        });
+        this.numberFormatter = new Intl.NumberFormat(locale);
+        this.currencyFormatter = new Intl.NumberFormat(locale, {
+            style: "currency",
+            currency: locale === "ru" ? "RUB" : "USD"
+        });
+    }
+    
+    formatDate(date) {
+        return this.dateFormatter.format(date);
+    }
+    
+    formatNumber(number) {
+        return this.numberFormatter.format(number);
+    }
+    
+    formatCurrency(amount) {
+        return this.currencyFormatter.format(amount);
+    }
+}
+
+// Использование
+const ru = new i18n("ru");
+const en = new i18n("en-US");
+
+const now = new Date();
+console.log(ru.formatDate(now));        // 15 ноября 2025 г.
+console.log(en.formatDate(now));        // November 15, 2025
+
+console.log(ru.formatNumber(1234567));  // 1 234 567
+console.log(en.formatNumber(1234567));  // 1,234,567
+
+console.log(ru.formatCurrency(100));    // 100,00 ₽
+console.log(en.formatCurrency(100));    // $100.00</code></div>
+
+                <h3>Пример 2: Относительное время для постов</h3>
+                <div class="code-block"><code>function getRelativeTime(date, locale = "ru") {
+    const rtf = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+    const now = new Date();
+    const diff = date - now;
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    
+    if (Math.abs(days) &gt; 0) {
+        return rtf.format(days, "day");
+    } else if (Math.abs(hours) &gt; 0) {
+        return rtf.format(hours, "hour");
+    } else if (Math.abs(minutes) &gt; 0) {
+        return rtf.format(minutes, "minute");
+    } else {
+        return rtf.format(seconds, "second");
+    }
+}
+
+// Использование
+const postDate = new Date(Date.now() - 2 * 60 * 60 * 1000); // 2 часа назад
+console.log(getRelativeTime(postDate)); // 2 часа назад</code></div>
+
+                <h2>Заключение</h2>
+
+                <div class="info-box note">
+                    <div class="info-box-title">📚 Основные выводы</div>
+                    <ul>
+                        <li><strong>Intl API</strong> — встроенный инструмент для локализации</li>
+                        <li><strong>Локали</strong> в формате BCP 47: "ru-RU", "en-US", "de-DE"</li>
+                        <li><strong>DateTimeFormat</strong> — даты и время с учётом региона</li>
+                        <li><strong>NumberFormat</strong> — числа, валюты, проценты, единицы</li>
+                        <li><strong>ListFormat</strong> — списки ("и", "или", "and", "or")</li>
+                        <li><strong>DisplayNames</strong> — названия стран, языков, валют</li>
+                        <li><strong>Collator</strong> — правильная сортировка с учётом языка</li>
+                        <li><strong>RelativeTimeFormat</strong> — "вчера", "2 часа назад"</li>
+                    </ul>
+                </div>
+            </section>
+
             
 
             <section class="chapter" id="ch31">
