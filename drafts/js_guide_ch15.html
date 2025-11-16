@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript - Полный справочник (Offline)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg: #fff;
+            --bg2: #f8f9fa;
+            --text: #2c3e50;
+            --text2: #6c757d;
+            --border: #dee2e6;
+            --accent: #0066cc;
+            --code-bg: #f4f4f4;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--bg);
+        }
+        
+        .header {
+            background: var(--bg2);
+            border-bottom: 2px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: var(--bg2);
+            border-right: 1px solid var(--border);
+            height: calc(100vh - 70px);
+            overflow-y: auto;
+            position: sticky;
+            top: 70px;
+        }
+        
+        .sidebar-search {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--bg2);
+            z-index: 10;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .nav-section {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .nav-title {
+            padding: 0.5rem 1rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--text2);
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-list {
+            list-style: none;
+        }
+        
+        .nav-item {
+            padding: 0.6rem 1rem 0.6rem 2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-item:hover {
+            background: #e8f4f8;
+            border-left-color: var(--accent);
+        }
+        
+        .nav-item.active {
+            background: #e8f4f8;
+            border-left-color: var(--accent);
+            font-weight: 600;
+        }
+        
+        body.dark-theme .nav-item:hover {
+            background: #3d3d3d;
+            color: var(--text);
+        }
+        
+        body.dark-theme .nav-item.active {
+            background: #3d3d3d;
+            color: var(--text);
+        }
+        
+        body.dark-theme tr:hover {
+            background: #3d3d3d;
+        }
+        
+        .nav-item.new::after {
+            content: "🆕";
+            margin-left: 0.5rem;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 900px;
+        }
+        
+        .chapter {
+            margin-bottom: 4rem;
+            scroll-margin-top: 80px;
+        }
+        
+        .chapter h1 {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
+        
+        .chapter h2 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+        }
+        
+        .chapter h3 {
+            font-size: 1.4rem;
+            margin: 1.5rem 0 0.8rem;
+        }
+        
+        .chapter p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+        
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            white-space: pre;
+        }
+        
+        code {
+            background: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg2);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        th {
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: #e8f4f8;
+        }
+        
+        .info-box {
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            border-radius: 6px;
+            border-left: 4px solid;
+        }
+        
+        .info-box.note {
+            background: #e7f3ff;
+            border-color: var(--accent);
+        }
+        
+        .info-box.warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+        
+        .info-box.success {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .info-box.danger {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        
+        .info-box-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer {
+            background: var(--bg2);
+            border-top: 2px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        /* Dark theme */
+        body.dark-theme {
+            --bg: #1a1a1a;
+            --bg2: #2d2d2d;
+            --text: #e0e0e0;
+            --text2: #b0b0b0;
+            --border: #404040;
+            --code-bg: #3a3a3a;
+        }
+        
+        body.dark-theme .info-box.note {
+            background: #1e3a5f;
+        }
+        
+        body.dark-theme .info-box.warning {
+            background: #5f4c1e;
+        }
+        
+        body.dark-theme .info-box.success {
+            background: #1e4d2b;
+        }
+        
+        body.dark-theme .info-box.danger {
+            background: #5f1e1e;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                top: 0;
+            }
+            .main-content {
+                padding: 1rem;
+            }
+            .chapter h1 {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media print {
+            .header, .sidebar, .footer {
+                display: none;
+            }
+            .main-content {
+                padding: 0;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">📚 JavaScript Справочник</div>
+        <div>
+            <button class="btn" onclick="toggleTheme()">🌙 Тема</button>
+            <button class="btn" onclick="window.print()">🖨️ Печать</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-search">
+                <input type="text" class="search-input" placeholder="🔍 Поиск..." id="searchInput">
+            </div>
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-title">📖 Основы (Metanit)</div>
+                    <ul class="nav-list">
+                        <li class="nav-item" data-target="ch1">Глава 1. Введение</li>
+                        <li class="nav-item" data-target="ch2">Глава 2. Основы JS</li>
+                        <li class="nav-item" data-target="ch3">Глава 3. Функции</li>
+                        <li class="nav-item" data-target="ch4">Глава 4-5. ООП</li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-title">📊 Типы данных</div>
+                    <ul class="nav-list">
+                        <li class="nav-item" data-target="ch6">Глава 6. Массивы</li>
+                        <li class="nav-item" data-target="ch7">Глава 7. Строки и RegExp</li>
+                        <li class="nav-item" data-target="ch9">Глава 9. Date и Number</li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-title">🗂️ Форматы данных</div>
+                    <ul class="nav-list">
+                        <li class="nav-item new" data-target="ch15">Глава 15. JSON и XML</li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-title">🆕 Дополнения</div>
+                    <ul class="nav-list">
+                        <li class="nav-item new" data-target="ch31">Глава 31. Best Practices</li>
+                        <li class="nav-item new" data-target="ch32">Глава 32. Отладка</li>
+                        <li class="nav-item new" data-target="ch33">Глава 33. Ресурсы</li>
+                        <li class="nav-item new" data-target="ch36">Глава 36. Сниппеты</li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            
+            <!-- ГЛАВА 1: Введение -->
+            <section class="chapter" id="ch1">
+                <h1>Глава 1. Введение в JavaScript</h1>
+                
+                <h2>История создания JavaScript</h2>
+                <p>JavaScript был создан в 1995 году программистом <strong>Бренданом Эйком</strong> (Brendan Eich) всего за <strong>10 дней</strong>, когда он работал в компании Netscape Communications. Изначально язык назывался <strong>Mocha</strong>, затем был переименован в <strong>LiveScript</strong>, и наконец получил название <strong>JavaScript</strong> в рамках маркетинговой стратегии, чтобы воспользоваться популярностью Java (хотя это совершенно разные языки).</p>
+                
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Всегда используйте ===</div>
+                    <p>Рекомендуется всегда использовать строгое сравнение (<code>===</code> и <code>!==</code>), чтобы избежать неожиданных преобразований типов.</p>
+                </div>
+            </section>
+
+            <!-- ГЛАВА 15: JSON и XML -->
+            <section class="chapter" id="ch15">
+                <h1>Глава 15. Форматы JSON и XML</h1>
+                
+                <h2>Что такое JSON?</h2>
+                <p><strong>JSON (JavaScript Object Notation)</strong> представляет легковесный формат хранения данных. JSON описывает структуру и организацию данных JavaScript. Простота JSON привела к тому, что в настоящий момент он является наиболее популярным форматом передачи данных в среде web, вытеснив другой некогда популярный формат XML.</p>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 JSON vs JavaScript</div>
+                    <p>Объекты JSON очень похожи на объекты JavaScript, тем более что JSON является подмножеством JavaScript. В то же время важно их различать: JavaScript является языком программирования, а JSON является форматом данных.</p>
+                </div>
+
+                <h2>Типы данных в JSON</h2>
+                <p>JSON поддерживает три типа данных:</p>
+                <ul>
+                    <li><strong>Примитивные значения</strong> — стандартные строки, числа, значение null, логические значения true и false</li>
+                    <li><strong>Объекты</strong> — набор простейших данных, других объектов и массивов</li>
+                    <li><strong>Массивы</strong> — упорядоченные коллекции значений</li>
+                </ul>
+
+                <h3>Объекты JSON</h3>
+                <p>Типичный объект JSON:</p>
+                <div class="code-block"><code>{ "name": "Tom", "married": true, "age": 30 }</code></div>
+
+                <p>В JavaScript этому объекту соответствовал бы следующий:</p>
+                <div class="code-block"><code>const user = { name: "Tom", married: true, age: 30 }</code></div>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Отличия JSON от объектов JavaScript</div>
+                    <ul>
+                        <li>В JSON названия свойств заключаются в <strong>двойные кавычки</strong>, как обычные строки</li>
+                        <li>Объекты JSON <strong>не могут хранить функции</strong> и переменные, как объекты JavaScript</li>
+                        <li>JSON использует только двойные кавычки (<code>"</code>), одинарные (<code>'</code>) недопустимы</li>
+                    </ul>
+                </div>
+
+                <h3>Сложные объекты JSON</h3>
+                <p>Объекты могут быть вложенными:</p>
+                <div class="code-block"><code>{
+    "name": "Tom",
+    "married": true,
+    "age": 30,
+    "company": {
+        "name": "Microsoft",
+        "address": "USA, Redmond"
+    }
+}</code></div>
+
+                <h3>Массивы в JSON</h3>
+                <p>Массивы в JSON похожи на массивы JavaScript и также могут хранить простейшие данные или объекты:</p>
+                
+                <div class="code-block"><code>// Простой массив
+["Tom", true, 30]
+
+// Массив объектов
+[
+    { "name": "Tom", "married": true, "age": 30 },
+    { "name": "Alice", "married": false, "age": 23 }
+]</code></div>
+
+                <h2>Работа с JSON в JavaScript</h2>
+                <p>Для работы с форматом JSON в языке JavaScript предназначен объект <strong>JSON</strong>. Он позволяет преобразовать объект JavaScript в формат JSON и наоборот.</p>
+
+                <h3>JSON.stringify() - Сериализация</h3>
+                <p>Для сериализации объекта JavaScript в JSON применяется функция <code>JSON.stringify()</code>:</p>
+                
+                <div class="code-block"><code>// Объект JavaScript
+const user = {
+    name: "Tom",
+    married: false,
+    age: 39
+};
+
+// Преобразование в JSON (сериализация)
+const serializedUser = JSON.stringify(user);
+console.log(serializedUser);
+// Результат: {"name":"Tom","married":false,"age":39}</code></div>
+
+                <h3>JSON.parse() - Десериализация</h3>
+                <p>Для обратной операции — десериализации или парсинга JSON-объекта в JavaScript — применяется метод <code>JSON.parse()</code>:</p>
+                
+                <div class="code-block"><code>const user = {
+    name: "Tom",
+    married: false,
+    age: 39
+};
+
+// Сериализация
+const serializedUser = JSON.stringify(user);
+
+// Десериализация (парсинг)
+const tomUser = JSON.parse(serializedUser);
+console.log(tomUser.name);    // Tom
+console.log(tomUser.age);     // 39
+console.log(tomUser.married); // false</code></div>
+
+                <h3>Полный пример работы с JSON</h3>
+                <div class="code-block"><code>// 1. Создаём сложный объект
+const company = {
+    name: "TechCorp",
+    employees: [
+        { name: "Alice", position: "Developer", salary: 80000 },
+        { name: "Bob", position: "Designer", salary: 65000 },
+        { name: "Charlie", position: "Manager", salary: 90000 }
+    ],
+    founded: 2010,
+    active: true
+};
+
+// 2. Преобразуем в JSON-строку
+const jsonString = JSON.stringify(company);
+console.log(jsonString);
+
+// 3. Можно сохранить в localStorage или отправить на сервер
+localStorage.setItem('company', jsonString);
+
+// 4. Позже получаем из localStorage
+const storedJson = localStorage.getItem('company');
+
+// 5. Преобразуем обратно в объект JavaScript
+const restoredCompany = JSON.parse(storedJson);
+console.log(restoredCompany.name);              // "TechCorp"
+console.log(restoredCompany.employees[0].name); // "Alice"</code></div>
+
+                <div class="info-box success">
+                    <div class="info-box-title">✅ Применение JSON</div>
+                    <ul>
+                        <li><strong>AJAX-запросы</strong> — передача данных между клиентом и сервером</li>
+                        <li><strong>localStorage/sessionStorage</strong> — сохранение данных в браузере</li>
+                        <li><strong>API</strong> — большинство современных API используют JSON</li>
+                        <li><strong>Конфигурационные файлы</strong> — package.json, tsconfig.json и т.д.</li>
+                    </ul>
+                </div>
+
+                <h3>Форматированный вывод JSON</h3>
+                <p>Метод <code>JSON.stringify()</code> может принимать дополнительные параметры для красивого форматирования:</p>
+                
+                <div class="code-block"><code>const user = {
+    name: "Tom",
+    age: 39,
+    skills: ["JavaScript", "Python", "SQL"]
+};
+
+// Третий параметр — количество пробелов для отступа
+const formatted = JSON.stringify(user, null, 2);
+console.log(formatted);
+
+/* Результат:
+{
+  "name": "Tom",
+  "age": 39,
+  "skills": [
+    "JavaScript",
+    "Python",
+    "SQL"
+  ]
+}
+*/</code></div>
+
+                <h2>Работа с XML</h2>
+                <p><strong>XML (eXtensible Markup Language)</strong> — один из популярных форматов описания данных. Язык JavaScript предоставляет инструментарий для работы с XML.</p>
+
+                <h3>DOMParser - Парсинг XML</h3>
+                <p>Для создания XML-объектов на основе строки, которая содержит данные в формате XML, применяется объект <code>DOMParser</code>.</p>
+
+                <div class="code-block"><code>// XML-строка
+const xmlString = `<?xml version="1.0" encoding="UTF-8" ?>
+<users>
+    <user name="Tom" age="39">
+        <company>
+            <title>Microsoft</title>
+        </company>
+    </user>
+    <user name="Bob" age="43">
+        <company>
+            <title>Google</title>
+        </company>
+    </user>
+</users>`;
+
+// Создаём парсер
+const domParser = new DOMParser();
+
+// Парсим XML-строку
+const xmlDOM = domParser.parseFromString(xmlString, "text/xml");
+
+// Обращаемся к первому элементу user
+const firstUser = xmlDOM.querySelector("user");
+console.log(firstUser.getAttribute("name"));  // Tom
+console.log(firstUser.getAttribute("age"));   // 39
+console.log(firstUser.querySelector("title").textContent); // Microsoft</code></div>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Как работает DOMParser</div>
+                    <p>Метод <code>parseFromString()</code> принимает два параметра:</p>
+                    <ul>
+                        <li><strong>Первый</strong> — строка с XML-данными</li>
+                        <li><strong>Второй</strong> — тип MIME (обычно <code>"text/xml"</code>)</li>
+                    </ul>
+                    <p>Если строка содержит корректный XML, метод возвратит объект типа <code>Document</code>, из которого можно выбирать данные стандартными методами DOM (<code>querySelector</code>, <code>getElementById</code> и т.д.).</p>
+                </div>
+
+                <h3>Получение всех элементов</h3>
+                <div class="code-block"><code>const xmlString = `<?xml version="1.0" encoding="UTF-8" ?>
+<users>
+    <user name="Tom" age="39">
+        <company>
+            <title>Microsoft</title>
+        </company>
+    </user>
+    <user name="Bob" age="43">
+        <company>
+            <title>Google</title>
+        </company>
+    </user>
+</users>`;
+
+const domParser = new DOMParser();
+const xmlDOM = domParser.parseFromString(xmlString, "text/xml");
+
+// Получаем все элементы user
+const users = xmlDOM.querySelectorAll("user");
+
+// Перебираем всех пользователей
+users.forEach(user => {
+    const name = user.getAttribute("name");
+    const age = user.getAttribute("age");
+    const company = user.querySelector("title").textContent;
+    console.log(`${name}, ${age} лет, работает в ${company}`);
+});
+
+// Вывод:
+// Tom, 39 лет, работает в Microsoft
+// Bob, 43 лет, работает в Google</code></div>
+
+                <h3>XMLSerializer - Сериализация XML</h3>
+                <p>Для обратного преобразования — из XML-документа в строку — применяется объект <code>XMLSerializer</code>. Этот объект предоставляет метод <code>serializeToString()</code>, который получает объект XML и возвращает его в форме строки.</p>
+
+                <div class="code-block"><code>const xmlString = `<?xml version="1.0" encoding="UTF-8" ?>
+<users>
+    <user name="Tom" age="39">
+        <company>
+            <title>Microsoft</title>
+        </company>
+    </user>
+    <user name="Bob" age="43">
+        <company>
+            <title>Google</title>
+        </company>
+    </user>
+</users>`;
+
+// Преобразуем строку в XML
+const domParser = new DOMParser();
+const xmlDOM = domParser.parseFromString(xmlString, "text/xml");
+
+// Преобразуем обратно из XML в строку
+const xmlSerializer = new XMLSerializer();
+const xmlString2 = xmlSerializer.serializeToString(xmlDOM);
+console.log(xmlString2);
+
+// В итоге получим обратно изначальную строку xmlString</code></div>
+
+                <h3>Сериализация HTML</h3>
+                <p>Поскольку документ HTML по сути также является документом XML, мы можем сериализовать в строку и HTML-страницу или её часть:</p>
+
+                <div class="code-block"><code>// Преобразуем в строку текущую веб-страницу
+const xmlSerializer = new XMLSerializer();
+const htmlString = xmlSerializer.serializeToString(document);
+console.log(htmlString);
+
+// Или сериализуем конкретный элемент
+const header = document.querySelector('header');
+const headerString = xmlSerializer.serializeToString(header);
+console.log(headerString);</code></div>
+
+                <h2>JSON vs XML: Сравнение</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Характеристика</th>
+                            <th>JSON</th>
+                            <th>XML</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Читаемость</strong></td>
+                            <td>Более компактный и простой</td>
+                            <td>Более многословный</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Размер данных</strong></td>
+                            <td>Меньше (легковесный)</td>
+                            <td>Больше (много тегов)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Парсинг</strong></td>
+                            <td>Быстрее (встроенный JSON.parse())</td>
+                            <td>Медленнее (требует DOMParser)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Поддержка типов</strong></td>
+                            <td>Ограниченная (числа, строки, boolean, null)</td>
+                            <td>Всё хранится как текст</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Массивы</strong></td>
+                            <td>Нативная поддержка</td>
+                            <td>Требует дополнительной разметки</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Комментарии</strong></td>
+                            <td>Не поддерживаются</td>
+                            <td>Поддерживаются (&lt;!-- --&gt;)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Метаданные</strong></td>
+                            <td>Нет</td>
+                            <td>Есть (атрибуты, пространства имён)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Популярность в Web</strong></td>
+                            <td>Стандарт де-факто для API</td>
+                            <td>Используется реже, в legacy-системах</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Пример: те же данные в JSON и XML</h3>
+                
+                <div class="code-block"><code>// JSON
+{
+    "users": [
+        {
+            "name": "Tom",
+            "age": 39,
+            "company": "Microsoft"
+        },
+        {
+            "name": "Bob",
+            "age": 43,
+            "company": "Google"
+        }
+    ]
+}
+
+// XML
+<?xml version="1.0" encoding="UTF-8" ?>
+<users>
+    <user>
+        <name>Tom</name>
+        <age>39</age>
+        <company>Microsoft</company>
+    </user>
+    <user>
+        <name>Bob</name>
+        <age>43</age>
+        <company>Google</company>
+    </user>
+</users></code></div>
+
+                <div class="info-box success">
+                    <div class="info-box-title">✅ Когда использовать JSON?</div>
+                    <ul>
+                        <li>REST API и веб-сервисы</li>
+                        <li>Обмен данными между клиентом и сервером</li>
+                        <li>Конфигурационные файлы</li>
+                        <li>Хранение данных в localStorage</li>
+                        <li>Когда нужна скорость и компактность</li>
+                    </ul>
+                </div>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Когда использовать XML?</div>
+                    <ul>
+                        <li>Legacy-системы, требующие XML</li>
+                        <li>Сложные документы с метаданными</li>
+                        <li>SOAP веб-сервисы</li>
+                        <li>RSS/Atom фиды</li>
+                        <li>SVG (графика) и другие XML-based форматы</li>
+                    </ul>
+                </div>
+
+                <h2>Практические примеры</h2>
+
+                <h3>Пример 1: Загрузка данных с сервера (JSON)</h3>
+                <div class="code-block"><code>// Получаем данные с API
+fetch('https://api.example.com/users')
+    .then(response => response.json())  // Парсим JSON
+    .then(users => {
+        users.forEach(user => {
+            console.log(`${user.name}: ${user.email}`);
+        });
+    })
+    .catch(error => console.error('Ошибка:', error));</code></div>
+
+                <h3>Пример 2: Сохранение настроек пользователя (JSON)</h3>
+                <div class="code-block"><code>// Объект с настройками
+const userSettings = {
+    theme: 'dark',
+    language: 'ru',
+    notifications: true,
+    volume: 75
+};
+
+// Сохраняем в localStorage
+localStorage.setItem('settings', JSON.stringify(userSettings));
+
+// Позже загружаем настройки
+const savedSettings = JSON.parse(localStorage.getItem('settings'));
+console.log(savedSettings.theme);  // 'dark'</code></div>
+
+                <h3>Пример 3: Работа с RSS (XML)</h3>
+                <div class="code-block"><code>// RSS-лента (XML)
+const rssXml = `<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+    <channel>
+        <title>Новости технологий</title>
+        <item>
+            <title>JavaScript ES2024</title>
+            <link>https://example.com/news1</link>
+            <description>Новые возможности</description>
+        </item>
+        <item>
+            <title>React 19 выпущен</title>
+            <link>https://example.com/news2</link>
+            <description>Обзор изменений</description>
+        </item>
+    </channel>
+</rss>`;
+
+const parser = new DOMParser();
+const rssDoc = parser.parseFromString(rssXml, "text/xml");
+
+// Получаем все новости
+const items = rssDoc.querySelectorAll("item");
+items.forEach(item => {
+    const title = item.querySelector("title").textContent;
+    const link = item.querySelector("link").textContent;
+    const desc = item.querySelector("description").textContent;
+    console.log(`${title}: ${desc} - ${link}`);
+});</code></div>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Обработка ошибок при парсинге</div>
+                    <p>Всегда оборачивайте парсинг JSON в try-catch для обработки невалидных данных:</p>
+                    <div class="code-block"><code>try {
+    const data = JSON.parse(jsonString);
+    console.log(data);
+} catch (error) {
+    console.error('Ошибка парсинга JSON:', error.message);
+}</code></div>
+                </div>
+            </section>
+
+            <section class="chapter" id="ch6">
+                <h1>Глава 6. Массивы</h1>
+                <p>Контент будет добавлен...</p>
+            </section>
+
+            <section class="chapter" id="ch7">
+                <h1>Глава 7. Строки и RegExp</h1>
+                <p>Контент будет добавлен...</p>
+            </section>
+
+            <section class="chapter" id="ch9">
+                <h1>Глава 9. Date и Number</h1>
+                <p>Контент будет добавлен...</p>
+            </section>
+
+            <section class="chapter" id="ch31">
+                <h1>Глава 31. Best Practices</h1>
+                <p>Контент будет добавлен...</p>
+            </section>
+
+            <section class="chapter" id="ch32">
+                <h1>Глава 32. Отладка</h1>
+                <p>Контент будет добавлен...</p>
+            </section>
+
+            <section class="chapter" id="ch33">
+                <h1>Глава 33. Ресурсы</h1>
+                <p>Контент будет добавлен...</p>
+            </section>
+
+            <section class="chapter" id="ch36">
+                <h1>Глава 36. Сниппеты</h1>
+                <p>Контент будет добавлен...</p>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p><strong>📚 JavaScript - Полный справочник (Offline версия)</strong></p>
+        <p>На основе Metanit.com и книги "JavaScript и jQuery" Д. Макфарланда</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text2);">
+            Версия 4.0 • 2025
+        </p>
+    </footer>
+
+    <script>
+        // ============== TOGGLE THEME ==============
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const isDark = document.body.classList.contains('dark-theme');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // ============== LOAD SAVED THEME ==============
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+            }
+        });
+
+        // ============== NAVIGATION (SCROLL TO CHAPTER) ==============
+        const navItems = document.querySelectorAll('.nav-item');
+        
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    // Плавный скролл к главе
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    // Обновляем активное состояние
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // ============== SEARCH FUNCTIONALITY ==============
+        const searchInput = document.getElementById('searchInput');
+        
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            
+            navItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                
+                if (text.includes(query)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Если поиск пустой - показываем все
+            if (query === '') {
+                navItems.forEach(item => {
+                    item.style.display = 'block';
+                });
+            }
+        });
+
+        // ============== ACTIVE SECTION ON SCROLL ==============
+        window.addEventListener('scroll', () => {
+            const chapters = document.querySelectorAll('.chapter');
+            let currentChapter = '';
+            
+            chapters.forEach(chapter => {
+                const rect = chapter.getBoundingClientRect();
+                // Если глава в верхней части экрана
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    currentChapter = chapter.id;
+                }
+            });
+            
+            // Обновляем активный пункт меню
+            if (currentChapter) {
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('data-target') === currentChapter) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>    <div class="info-box-title">💡 Цель создания</div>
+                    <p>JavaScript был разработан для того, чтобы сделать веб-страницы интерактивными и динамичными. До его появления HTML-страницы были статичными и не могли реагировать на действия пользователя без перезагрузки.</p>
+                </div>
+
+                <p><strong>Основные этапы развития:</strong></p>
+                <ul>
+                    <li><strong>1995</strong> – Создание Бренданом Эйком</li>
+                    <li><strong>1997</strong> – Стандартизация ECMA (ECMAScript)</li>
+                    <li><strong>2009</strong> – ES5: добавлены JSON, strict mode</li>
+                    <li><strong>2015</strong> – ES6 (ES2015): революция (let/const, классы, стрелочные функции, промисы)</li>
+                    <li><strong>2016-2024</strong> – Ежегодные обновления (async/await, optional chaining, и др.)</li>
+                </ul>
+                
+                <h2>Что такое JavaScript?</h2>
+                <p>JavaScript (JS) – интерпретируемый язык программирования, выполняющийся в браузере. Позволяет создавать интерактивные веб-страницы.</p>
+                
+                <div class="info-box note">
+                    <div class="info-box-title">💡 JavaScript используется для:</div>
+                    <ul>
+                        <li>Изменения содержимого и стилей страницы</li>
+                        <li>Реакции на действия пользователя (клики, ввод)</li>
+                        <li>Отправки запросов на сервер (AJAX)</li>
+                        <li>Создания анимаций и интерактивных элементов</li>
+                        <li>Валидации форм</li>
+                    </ul>
+                </div>
+
+                <h2>Типы данных в JavaScript</h2>
+                <p>В JavaScript существует <strong>8 типов данных</strong>: 7 примитивных и 1 сложный (Object).</p>
+                
+                <h3>Примитивные типы (7 типов)</h3>
+                <div class="code-block"><code>// 1. Number (числа)
+let integer = 42;
+let float = 3.14;
+let negative = -10;
+
+// 2. String (строки)
+let str1 = "Hello";
+let str2 = 'World';
+let str3 = `Hello ${name}`; // template literal (ES6)
+
+// 3. Boolean (логический)
+let isTrue = true;
+let isFalse = false;
+
+// 4. Undefined (неопределённое значение)
+let notDefined;
+console.log(notDefined); // undefined
+
+// 5. Null (намеренное отсутствие значения)
+let empty = null;
+
+// 6. Symbol (уникальный идентификатор) - ES6
+let id = Symbol('id');
+
+// 7. BigInt (большие целые числа) - ES2020
+let bigNumber = 1234567890123456789012345678901234567890n;</code></div>
+
+                <h3>8-й тип: Object (Объекты)</h3>
+                <p>Тип <strong>Object</strong> – это сложный тип данных, который включает в себя три основных подтипа:</p>
+                
+                <div class="code-block"><code>// 1. Object (объект) - коллекция пар ключ-значение
+let user = {
+    name: 'Alice',
+    age: 25,
+    isAdmin: false
+};
+
+// 2. Array (массив) - упорядоченная коллекция элементов
+let numbers = [1, 2, 3, 4, 5];
+let mixed = [1, 'text', true, null];
+
+// 3. Date (дата и время) - работа с датами
+let now = new Date();
+let specificDate = new Date('2024-01-01');</code></div>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Важно понимать</div>
+                    <ul>
+                        <li><strong>Array</strong> и <strong>Date</strong> технически являются объектами, но имеют специальное поведение</li>
+                        <li><code>typeof []</code> вернёт "object"</li>
+                        <li><code>typeof new Date()</code> вернёт "object"</li>
+                        <li>Для проверки массива используйте: <code>Array.isArray([])</code> → true</li>
+                        <li>Для проверки даты: <code>now instanceof Date</code> → true</li>
+                    </ul>
+                </div>
+
+                <h3>Проверка типа</h3>
+                <div class="code-block"><code>console.log(typeof 42);        // "number"
+console.log(typeof "Hello");   // "string"
+console.log(typeof true);      // "boolean"
+console.log(typeof undefined); // "undefined"
+console.log(typeof null);      // "object" (баг JS!)
+console.log(typeof []);        // "object"
+console.log(typeof {});        // "object"
+console.log(typeof new Date());// "object"
+
+// Правильная проверка массива
+console.log(Array.isArray([])); // true
+
+// Правильная проверка даты
+let now = new Date();
+console.log(now instanceof Date); // true</code></div>
+
+                <h2>Первая программа</h2>
+                <div class="code-block"><code>// Вывод в консоль
+console.log('Hello, World!');
+
+// Окно с сообщением
+alert('Привет, JavaScript!');
+
+// Запрос у пользователя
+let name = prompt('Как тебя зовут?');
+console.log('Привет, ' + name);</code></div>
+
+                <h2>Способы подключения JavaScript</h2>
+                
+                <h3>1. Внутри HTML (inline)</h3>
+                <div class="code-block"><code>&lt;script&gt;
+    alert('Привет!');
+&lt;/script&gt;</code></div>
+
+                <h3>2. Внешний файл (рекомендуется)</h3>
+                <div class="code-block"><code>&lt;!-- В конце body --&gt;
+&lt;script src="script.js"&gt;&lt;/script&gt;
+
+&lt;!-- С defer (выполнится после загрузки HTML) --&gt;
+&lt;script src="script.js" defer&gt;&lt;/script&gt;
+
+&lt;!-- С async (параллельная загрузка) --&gt;
+&lt;script src="script.js" async&gt;&lt;/script&gt;</code></div>
+
+                <h2>Консоль браузера</h2>
+                <p>Консоль – главный инструмент разработчика для отладки.</p>
+                
+                <div class="info-box success">
+                    <div class="info-box-title">✅ Как открыть консоль:</div>
+                    <ul>
+                        <li><strong>Windows:</strong> F12 или Ctrl+Shift+I</li>
+                        <li><strong>Mac:</strong> ⌘+⌥+I</li>
+                        <li>Или: ПКМ на странице → "Inspect" → вкладка "Console"</li>
+                    </ul>
+                </div>
+
+                <h3>Методы console</h3>
+                <div class="code-block"><code>// Обычное сообщение
+console.log('Сообщение');
+
+// Ошибка (красным)
+console.error('Ошибка!');
+
+// Предупреждение (желтым)
+console.warn('Внимание!');
+
+// Таблица
+console.table([
+    {name: 'Alice', age: 25},
+    {name: 'Bob', age: 30}
+]);
+
+// Замер времени
+console.time('myTimer');
+// ... код ...
+console.timeEnd('myTimer'); // "myTimer: 123ms"</code></div>
+            </section>
+
+            <!-- ГЛАВА 2: Основы -->
+            <section class="chapter" id="ch2">
+                <h1>Глава 2. Основы JavaScript</h1>
+                
+                <h2>Переменные и константы</h2>
+                <div class="code-block"><code>// let - изменяемая переменная (ES6+)
+let age = 25;
+age = 26; // OK
+
+// const - константа (нельзя изменить)
+const PI = 3.14159;
+// PI = 3; // Ошибка!
+
+// var - старый способ (не рекомендуется)
+var name = 'Alice';</code></div>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Правила именования переменных:</div>
+                    <ul>
+                        <li>Начинаются с буквы, $ или _</li>
+                        <li>Не могут начинаться с цифры</li>
+                        <li>Чувствительны к регистру (age ≠ Age)</li>
+                        <li>Не используйте зарезервированные слова (let, const, if, for...)</li>
+                    </ul>
+                </div>
+
+                <h2>Арифметические операции</h2>
+                <div class="code-block"><code>let a = 10;
+let b = 3;
+
+console.log(a + b);  // 13 (сложение)
+console.log(a - b);  // 7  (вычитание)
+console.log(a * b);  // 30 (умножение)
+console.log(a / b);  // 3.333... (деление)
+console.log(a % b);  // 1  (остаток от деления)
+console.log(a ** b); // 1000 (возведение в степень)
+
+// Инкремент/декремент
+let x = 5;
+x++;  // x = 6 (постфиксный инкремент)
+++x;  // x = 7 (префиксный инкремент)
+x--;  // x = 6 (декремент)</code></div>
+
+                <h2>Условные конструкции</h2>
+                
+                <h3>if-else</h3>
+                <div class="code-block"><code>let age = 20;
+
+if (age >= 18) {
+    console.log('Совершеннолетний');
+} else {
+    console.log('Несовершеннолетний');
+}
+
+// else if
+let score = 85;
+
+if (score >= 90) {
+    console.log('Отлично');
+} else if (score >= 70) {
+    console.log('Хорошо');
+} else if (score >= 50) {
+    console.log('Удовлетворительно');
+} else {
+    console.log('Неудовлетворительно');
+}</code></div>
+
+                <h3>Тернарный оператор</h3>
+                <div class="code-block"><code>// условие ? значение_если_true : значение_если_false
+let age = 20;
+let status = age >= 18 ? 'adult' : 'minor';
+
+// Можно вкладывать
+let grade = score >= 90 ? 'A' :
+            score >= 80 ? 'B' :
+            score >= 70 ? 'C' : 'D';</code></div>
+
+                <h3>switch</h3>
+                <div class="code-block"><code>let day = 'Monday';
+
+switch(day) {
+    case 'Monday':
+        console.log('Понедельник');
+        break;
+    case 'Tuesday':
+        console.log('Вторник');
+        break;
+    case 'Wednesday':
+        console.log('Среда');
+        break;
+    case 'Thursday':
+        console.log('Четверг');
+        break;
+    case 'Friday':
+        console.log('Пятница');
+        break;
+    case 'Saturday':
+    case 'Sunday':
+        console.log('Выходной!');
+        break;
+    default:
+        console.log('Неизвестный день');
+}</code></div>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Не забывайте break!</div>
+                    <p>Без <code>break</code> выполнение "проваливается" в следующий case (fall-through). Это может быть полезно (как в примере с Saturday/Sunday), но чаще всего это ошибка.</p>
+                </div>
+
+                <h2>Циклы</h2>
+                
+                <h3>for</h3>
+                <div class="code-block"><code>// Классический for
+for (let i = 0; i < 5; i++) {
+    console.log(i); // 0, 1, 2, 3, 4
+}
+
+// for...of (для массивов)
+let fruits = ['apple', 'banana', 'orange'];
+for (let fruit of fruits) {
+    console.log(fruit);
+}
+
+// for...in (для объектов)
+let user = {name: 'Alice', age: 25};
+for (let key in user) {
+    console.log(key + ': ' + user[key]);
+}</code></div>
+
+                <h3>while</h3>
+                <div class="code-block"><code>let i = 0;
+while (i < 5) {
+    console.log(i);
+    i++;
+}
+
+// do...while (выполнится хотя бы 1 раз)
+let j = 0;
+do {
+    console.log(j);
+    j++;
+} while (j < 5);</code></div>
+
+                <h3>break и continue</h3>
+                <div class="code-block"><code>// break - выход из цикла
+for (let i = 0; i < 10; i++) {
+    if (i === 5) break; // остановка на 5
+    console.log(i); // 0, 1, 2, 3, 4
+}
+
+// continue - пропуск итерации
+for (let i = 0; i < 5; i++) {
+    if (i === 2) continue; // пропускаем 2
+    console.log(i); // 0, 1, 3, 4
+}</code></div>
+
+                <h2>Логические операторы</h2>
+                <div class="code-block"><code>// && (И) - все условия должны быть true
+let age = 25;
+let hasLicense = true;
+
+if (age >= 18 && hasLicense) {
+    console.log('Можно водить');
+}
+
+// || (ИЛИ) - хотя бы одно условие true
+let isWeekend = true;
+let isHoliday = false;
+
+if (isWeekend || isHoliday) {
+    console.log('Выходной!');
+}
+
+// ! (НЕ) - инверсия
+let isRaining = false;
+if (!isRaining) {
+    console.log('Можно идти гулять');
+}</code></div>
+
+                <h2>Операторы сравнения</h2>
+                <div class="code-block"><code>// == (нестрогое равенство - приводит типы)
+console.log(5 == '5');   // true
+console.log(0 == false); // true
+
+// === (строгое равенство - сравнивает и тип)
+console.log(5 === '5');   // false
+console.log(0 === false); // false
+
+// != и !== (неравенство)
+console.log(5 != '5');   // false
+console.log(5 !== '5');  // true
+
+// Больше, меньше
+console.log(5 > 3);   // true
+console.log(5 < 3);   // false
+console.log(5 >= 5);  // true
+console.log(5 <= 4);  // false</code></div>
+
+                <div class="info-box note">
+                

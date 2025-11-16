@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript - Полное руководство</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --bg-hover: #e8f4f8;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --border-color: #ddd;
+            --accent-color: #0066cc;
+            --accent-hover: #0052a3;
+            --code-bg: #f4f4f4;
+            --sidebar-width: 280px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .theme-toggle {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent-hover);
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+            position: sticky;
+            top: 60px;
+        }
+
+        .sidebar-search {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-search input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .nav-section {
+            padding: 1rem 0;
+        }
+
+        .nav-title {
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+        }
+
+        .nav-list {
+            list-style: none;
+        }
+
+        .nav-item {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-hover);
+        }
+
+        .nav-item.new::after {
+            content: "🆕";
+            margin-left: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .nav-item a {
+            color: var(--text-primary);
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            min-height: calc(100vh - 60px);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .card ul li {
+            padding: 0.3rem 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .card ul li::before {
+            content: "→ ";
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        /* Dark Theme */
+        body.dark-theme {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --bg-hover: #3d3d3d;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --border-color: #404040;
+            --code-bg: #2d2d2d;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                top: 0;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">📚 JavaScript Справочник</div>
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 Темная тема</button>
+    </header>
+
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-search">
+                <input type="text" placeholder="🔍 Поиск по справочнику..." id="searchInput">
+            </div>
+
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-title">Основы</div>
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="#intro">Глава 1. Введение в JavaScript</a></li>
+                        <li class="nav-item"><a href="#basics">Глава 2. Основы JavaScript</a></li>
+                        <li class="nav-item"><a href="#functions">Глава 3. Функции</a></li>
+                        <li class="nav-item"><a href="#oop">Глава 4-5. ООП и Классы</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-title">Типы данных</div>
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="#arrays">Глава 6. Массивы</a></li>
+                        <li class="nav-item"><a href="#strings">Глава 7. Строки и RegExp</a></li>
+                        <li class="nav-item"><a href="#errors">Глава 8. Обработка ошибок</a></li>
+                        <li class="nav-item"><a href="#objects">Глава 9. Встроенные объекты</a></li>
+                        <li class="nav-item"><a href="#collections">Глава 10. Коллекции</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-title">DOM и события</div>
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="#dom">Глава 11. Работа с DOM</a></li>
+                        <li class="nav-item"><a href="#events">Глава 12. События</a></li>
+                        <li class="nav-item"><a href="#forms">Глава 13. Работа с формами</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-title">Браузер и API</div>
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="#bom">Глава 14. BOM</a></li>
+                        <li class="nav-item"><a href="#json">Глава 15. JSON и XML</a></li>
+                        <li class="nav-item"><a href="#storage">Глава 16. Хранение данных</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-title">Асинхронность</div>
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="#async">Глава 17. Promise и async/await</a></li>
+                        <li class="nav-item"><a href="#ajax">Глава 18. AJAX и XMLHttpRequest</a></li>
+                        <li class="nav-item"><a href="#fetch">Глава 19. Fetch API</a></li>
+                        <li class="nav-item"><a href="#websocket">Глава 20. WebSocket</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-title">Продвинутое</div>
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="#i18n">Глава 21. Локализация</a></li>
+                        <li class="nav-item"><a href="#modules">Глава 22. Модули</a></li>
+                        <li class="nav-item"><a href="#canvas">Глава 23. Canvas API</a></li>
+                        <li class="nav-item"><a href="#indexdb">Глава 24. IndexedDB</a></li>
+                        <li class="nav-item"><a href="#dragdrop">Глава 25. Drag & Drop</a></li>
+                        <li class="nav-item"><a href="#file">Глава 26. File API</a></li>
+                        <li class="nav-item"><a href="#worker">Глава 27. Web Workers</a></li>
+                        <li class="nav-item"><a href="#webapi">Глава 28. Web API</a></li>
+                        <li class="nav-item"><a href="#patterns">Глава 29. Паттерны</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-title">🆕 Дополнительно</div>
+                    <ul class="nav-list">
+                        <li class="nav-item new"><a href="#jquery">Глава 30. jQuery</a></li>
+                        <li class="nav-item new"><a href="#best-practices">Глава 31. Best Practices</a></li>
+                        <li class="nav-item new"><a href="#debugging">Глава 32. Отладка</a></li>
+                        <li class="nav-item new"><a href="#resources">Глава 33. Полезные ресурсы</a></li>
+                        <li class="nav-item new"><a href="#css-solutions">Глава 34. CSS решения</a></li>
+                        <li class="nav-item new"><a href="#js-solutions">Глава 35. JS решения</a></li>
+                        <li class="nav-item new"><a href="#snippets">Глава 36. Сниппеты</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-title">📖 Приложения</div>
+                    <ul class="nav-list">
+                        <li class="nav-item new"><a href="#cheatsheets">Шпаргалки</a></li>
+                        <li class="nav-item new"><a href="#links">Полезные ссылки</a></li>
+                        <li class="nav-item new"><a href="#roadmap">Roadmap разработчика</a></li>
+                        <li class="nav-item new"><a href="#interview">Вопросы на собеседование</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="hero">
+                <h1>📚 JavaScript - Полное руководство</h1>
+                <p>Исчерпывающий справочник по JavaScript с примерами, best practices и полезными ресурсами</p>
+            </div>
+
+            <section class="section">
+                <h2>🎯 Основные разделы</h2>
+                <div class="cards">
+                    <div class="card">
+                        <div class="card-icon">🚀</div>
+                        <h3>Основы JavaScript</h3>
+                        <p>Переменные, типы данных, операторы, условия, циклы</p>
+                        <ul>
+                            <li>Введение в JavaScript</li>
+                            <li>Типы данных</li>
+                            <li>Условные конструкции</li>
+                            <li>Циклы и итерации</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">📝</div>
+                        <h3>Строки и RegExp <span class="badge">NEW</span></h3>
+                        <p>Работа со строками, регулярные выражения с таблицами</p>
+                        <ul>
+                            <li>Методы строк</li>
+                            <li>Таблица символов RegExp</li>
+                            <li>Готовые выражения</li>
+                            <li>Интерактивный тестер</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">📅</div>
+                        <h3>Даты и числа <span class="badge">NEW</span></h3>
+                        <p>Полные таблицы методов Date и Number</p>
+                        <ul>
+                            <li>Методы Date</li>
+                            <li>Форматирование</li>
+                            <li>Часовые пояса</li>
+                            <li>Работа с числами</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🎨</div>
+                        <h3>DOM и события</h3>
+                        <p>Манипуляция элементами, обработка событий</p>
+                        <ul>
+                            <li>Поиск элементов</li>
+                            <li>Изменение DOM</li>
+                            <li>События мыши и клавиатуры</li>
+                            <li>Делегирование событий</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">⚡</div>
+                        <h3>Async и Promise</h3>
+                        <p>Асинхронное программирование</p>
+                        <ul>
+                            <li>Callbacks</li>
+                            <li>Promises</li>
+                            <li>Async/Await</li>
+                            <li>Fetch API</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">💾</div>
+                        <h3>jQuery <span class="badge">NEW</span></h3>
+                        <p>Библиотека jQuery и jQuery UI</p>
+                        <ul>
+                            <li>Селекторы jQuery</li>
+                            <li>Манипуляции с DOM</li>
+                            <li>События и эффекты</li>
+                            <li>jQuery UI виджеты</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🔧</div>
+                        <h3>Best Practices <span class="badge">NEW</span></h3>
+                        <p>Лучшие практики и оптимизация</p>
+                        <ul>
+                            <li>Оптимизация кода</li>
+                            <li>Минификация</li>
+                            <li>Тернарные операторы</li>
+                            <li>Switch vs if-else</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🐛</div>
+                        <h3>Отладка <span class="badge">NEW</span></h3>
+                        <p>Диагностика и исправление ошибок</p>
+                        <ul>
+                            <li>Console.log()</li>
+                            <li>Breakpoints</li>
+                            <li>Типы ошибок</li>
+                            <li>Распространённые ошибки</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🔗</div>
+                        <h3>Полезные ресурсы <span class="badge">NEW</span></h3>
+                        <p>Ссылки на инструменты и ресурсы</p>
+                        <ul>
+                            <li>MDN, JavaScript.info</li>
+                            <li>Редакторы и IDE</li>
+                            <li>Генераторы кода</li>
+                            <li>Библиотеки изображений</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🎯</div>
+                        <h3>CSS решения <span class="badge">NEW</span></h3>
+                        <p>Практические CSS примеры</p>
+                        <ul>
+                            <li>Работа с изображениями</li>
+                            <li>Flexbox и Grid</li>
+                            <li>Эффекты и анимации</li>
+                            <li>Адаптивность</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">💡</div>
+                        <h3>JS решения <span class="badge">NEW</span></h3>
+                        <p>Готовые JavaScript решения</p>
+                        <ul>
+                            <li>Работа с датами</li>
+                            <li>Формы и валидация</li>
+                            <li>Модальные окна</li>
+                            <li>AJAX примеры</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">📋</div>
+                        <h3>Сниппеты <span class="badge">NEW</span></h3>
+                        <p>Готовые фрагменты кода</p>
+                        <ul>
+                            <li>HTML сниппеты</li>
+                            <li>CSS чит-коды</li>
+                            <li>JavaScript примеры</li>
+                            <li>Gulp и сборка</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>📖 Дополнительные материалы</h2>
+                <div class="cards">
+                    <div class="card">
+                        <h3>🗺️ Roadmap разработчика</h3>
+                        <p>Путь развития JavaScript-разработчика от Junior до Senior</p>
+                    </div>
+                    <div class="card">
+                        <h3>💼 Вопросы на собеседование</h3>
+                        <p>Частые вопросы и ответы для собеседований</p>
+                    </div>
+                    <div class="card">
+                        <h3>📝 Шпаргалки</h3>
+                        <p>Быстрые справочники по массивам, строкам, Date, RegExp</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>📚 JavaScript Справочник • На основе Metanit.com и книги Макфарланда</p>
+        <p>
+            <a href="https://developer.mozilla.org/ru/" target="_blank">MDN</a> •
+            <a href="https://learn.javascript.ru/" target="_blank">JavaScript.info</a> •
+            <a href="https://metanit.com/web/javascript/" target="_blank">Metanit</a>
+        </p>
+    </footer>
+
+    <script>
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const btn = document.querySelector('.theme-toggle');
+            if (document.body.classList.contains('dark-theme')) {
+                btn.textContent = '☀️ Светлая тема';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                btn.textContent = '🌙 Темная тема';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Load saved theme
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+                document.querySelector('.theme-toggle').textContent = '☀️ Светлая тема';
+            }
+        });
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            navItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
