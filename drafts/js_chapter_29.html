@@ -1,0 +1,437 @@
+<!-- ГЛАВА 29: Дополнительные паттерны и техники -->
+<section class="chapter" id="ch29">
+    <h1>Глава 29. Дополнительные паттерны и техники</h1>
+    
+    <h2>Введение</h2>
+    <p>В этой главе рассмотрим несколько дополнительных паттернов и техник JavaScript, которые помогают организовывать код, избегать конфликтов имен и создавать более структурированные приложения.</p>
+
+    <h2>1. Паттерн "Пространство имен" (Namespace Pattern)</h2>
+    
+    <h3>Проблема конфликта имен</h3>
+    <p>Если на веб-страницу подключается множество скриптов, то может возникнуть проблема <strong>конфликта имен</strong>, если разные скрипты определяют переменные/константы и функции с одним и тем же именем.</p>
+
+    <p>В ряде языков программирования можно сгруппировать функционал в отдельные блоки — "пространства имен" (как в C#) или пакеты (как в Java). Разные пакеты/пространства имен могут определять переменные и функции с одинаковыми именами, но конфликта имен не будет.</p>
+
+    <div class="info-box warning">
+        <div class="info-box-title">⚠️ Ограничение JavaScript</div>
+        <p>В JavaScript не существует ни пакетов, ни пространств имен, но есть возможность эмулировать пространства имен с помощью специальной техники, которую еще называют паттерном "пространство имен".</p>
+    </div>
+
+    <h3>Реализация паттерна</h3>
+    <p>Паттерн "пространство имен" использует объекты в качестве контейнеров для группировки связанного функционала:</p>
+    
+    <div class="code-block"><code>// Определяем объект-пространство имен
+var MathLib = MathLib || {};
+
+// Определяем переменную внутри пространства имен
+MathLib.MAX = 1234;
+
+// Определяем функцию внутри пространства имен
+MathLib.sum = function(a, b) {
+    return a + b;
+};
+
+console.log(MathLib.sum(4, 5)); // 9
+console.log(MathLib.MAX);        // 1234
+
+MathLib.MAX = 5678;
+console.log(MathLib.MAX);        // 5678</code></div>
+
+    <div class="info-box note">
+        <div class="info-box-title">💡 Объяснение кода</div>
+        <p>Выражение <code>var MathLib = MathLib || {}</code> предотвращает перезапись объекта MathLib, если он уже существует. Если MathLib не определен, создается новый пустой объект.</p>
+    </div>
+
+    <h3>Определение содержимого сразу</h3>
+    <div class="code-block"><code>var MathLib = MathLib || {
+    MAX: 1234,
+    sum: function(a, b) {
+        return a + b;
+    }
+};</code></div>
+
+    <h3>Избежание конфликтов имен</h3>
+    <p>Таким образом, мы можем определять переменные и функции с одинаковыми именами внутри разных объектов-пространств имен, и у нас не возникнет конфликта имен:</p>
+    
+    <div class="code-block"><code>var MathLib = MathLib || {
+    sum: function(a, b) {
+        return a + b;
+    }
+};
+
+var OtherMathLib = OtherMathLib || {
+    sum: function(nums) {
+        let result = 0;
+        for (n of nums) result += n;
+        return result;
+    }
+};
+
+console.log(MathLib.sum(4, 5));          // 9
+console.log(OtherMathLib.sum([4, 5, 6])); // 15</code></div>
+
+    <p>В данном случае два объекта-пространства имен определяют функцию с одним и тем же именем <code>sum</code>, но разным функционалом. И пока такие объекты-контейнеры имеют глобально уникальное имя, такой подход не приводит к каким-либо конфликтам имен.</p>
+
+    <div class="info-box success">
+        <div class="info-box-title">✅ Преимущества</div>
+        <ul>
+            <li>Разгрузка глобальной области видимости</li>
+            <li>Избежание конфликтов имен</li>
+            <li>Логическая группировка функционала</li>
+            <li>Простота реализации</li>
+        </ul>
+    </div>
+
+    <h2>2. Паттерн "Модуль" (Module Pattern)</h2>
+    
+    <h3>Основная идея</h3>
+    <p>Паттерн "Модуль" базируется на <strong>замыканиях</strong> и состоит из двух компонентов:</p>
+    <ul>
+        <li><strong>Внешняя функция</strong>, которая определяет лексическое окружение</li>
+        <li><strong>Возвращаемый набор внутренних функций</strong>, которые имеют доступ к этому окружению</li>
+    </ul>
+
+    <h3>Простейший модуль</h3>
+    <div class="code-block"><code>const printer = (function() {
+    const messages = {greeting: "hello"};
+    
+    return {
+        print: function() {
+            console.log(messages.greeting);
+        }
+    };
+})();
+
+printer.print(); // "hello"</code></div>
+
+    <p>Здесь определена константа <code>printer</code>, которая представляет результат анонимной функции (IIFE). Внутри подобной функции определен объект <code>messages</code> с некоторыми данными. Этот объект является приватным — к нему нельзя обратиться извне. Доступ к данным предоставляется только через публичный метод <code>print</code>.</p>
+
+    <h3>Практический пример: калькулятор</h3>
+    <div class="code-block"><code>const calculator = (function() {
+    // Приватные данные
+    const data = {
+        result: 0
+    };
+    
+    // Публичные методы
+    return {
+        sum: function(a, b) {
+            data.result = a + b;
+            return this;
+        },
+        
+        subtract: function(a, b) {
+            data.result = a - b;
+            return this;
+        },
+        
+        print: function() {
+            console.log(data.result);
+            return this;
+        },
+        
+        getResult: function() {
+            return data.result;
+        }
+    };
+})();
+
+// Использование
+calculator.sum(10, 5).print();      // 15
+calculator.subtract(20, 8).print(); // 12
+console.log(calculator.getResult()); // 12
+
+// Попытка прямого доступа к приватным данным
+console.log(calculator.data); // undefined</code></div>
+
+    <p>Данный модуль представляет примитивный калькулятор, который выполняет три операции: сложение, вычитание и вывод результата. Все данные инкапсулированы в объекте <code>data</code>, который хранит результат операции. Извне к этому объекту нет доступа — он приватный.</p>
+
+    <div class="info-box note">
+        <div class="info-box-title">💡 Инкапсуляция</div>
+        <p>Паттерн "Модуль" позволяет эмулировать приватные переменные и методы в JavaScript, которые недоступны извне, но доступны публичным методам через замыкание.</p>
+    </div>
+
+    <h3>Расширение модуля</h3>
+    <p>Модули можно расширять, добавляя новые методы:</p>
+    
+    <div class="code-block"><code>const calculator = (function(calc) {
+    // Добавляем новый метод
+    calc.multiply = function(a, b) {
+        this.result = a * b;
+        return this;
+    };
+    
+    return calc;
+})(calculator || {});</code></div>
+
+    <div class="info-box success">
+        <div class="info-box-title">✅ Преимущества паттерна "Модуль"</div>
+        <ul>
+            <li>Инкапсуляция данных</li>
+            <li>Приватные переменные и методы</li>
+            <li>Защита от несанкционированного вмешательства</li>
+            <li>Чистая глобальная область видимости</li>
+            <li>Возможность создания публичного API</li>
+        </ul>
+    </div>
+
+    <h2>3. JavaScript в CSS</h2>
+    
+    <h3>Использование CSS переменных для хранения JS-кода</h3>
+    <p>CSS-переменные (Custom Properties) могут использоваться для хранения JavaScript-кода, который затем выполняется с помощью функции <code>eval()</code> или <code>Function()</code>.</p>
+
+    <div class="code-block"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;title&gt;JavaScript в CSS&lt;/title&gt;
+    &lt;style&gt;
+        :root {
+            --script: console.log('Hello from CSS!');
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;script&gt;
+        // Получаем стили документа
+        const style = getComputedStyle(document.documentElement);
+        
+        // Получаем значение CSS-переменной
+        const script = style.getPropertyValue("--script");
+        
+        // Выполняем код
+        eval(script); // "Hello from CSS!"
+        
+        // Альтернативный способ
+        const fn = new Function(script);
+        fn();
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></div>
+
+    <h3>Практический пример: логирование ширины экрана</h3>
+    <div class="code-block"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;title&gt;Media Query Logging&lt;/title&gt;
+    &lt;style&gt;
+        :root {
+            --log: localStorage["minwidth"] = 0;
+        }
+        
+        @media (min-width: 500px) {
+            :root {
+                --log: localStorage["minwidth"] = 500;
+            }
+        }
+        
+        @media (min-width: 800px) {
+            :root {
+                --log: localStorage["minwidth"] = 800;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            :root {
+                --log: localStorage["minwidth"] = 1200;
+            }
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;script&gt;
+        window.onload = window.onresize = () =&gt; {
+            const log = getComputedStyle(document.documentElement)
+                .getPropertyValue("--log");
+            eval(log);
+            console.log("Минимальная ширина:", localStorage["minwidth"]);
+        };
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></div>
+
+    <p>Здесь в <code>localStorage</code> записывается элемент с ключом "minwidth", значение которого зависит от значений media-query.</p>
+
+    <div class="info-box warning">
+        <div class="info-box-title">⚠️ Безопасность</div>
+        <p>Использование <code>eval()</code> может представлять угрозу безопасности, так как выполняет произвольный код. Используйте эту технику только с контролируемым кодом.</p>
+    </div>
+
+    <h2>4. Определение мобильного устройства в JavaScript</h2>
+    
+    <h3>Метод 1: Проверка User Agent</h3>
+    <div class="code-block"><code>function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+        .test(navigator.userAgent);
+}
+
+if (isMobileDevice()) {
+    console.log("Мобильное устройство");
+} else {
+    console.log("Десктоп");
+}</code></div>
+
+    <h3>Метод 2: Проверка сенсорных событий</h3>
+    <div class="code-block"><code>// Проверка поддержки touch-событий
+function isTouchDevice() {
+    return ('ontouchstart' in window) || 
+           (navigator.maxTouchPoints &gt; 0) ||
+           (navigator.msMaxTouchPoints &gt; 0);
+}
+
+if (isTouchDevice()) {
+    console.log("Устройство поддерживает сенсорный ввод");
+}</code></div>
+
+    <h3>Метод 3: Проверка maxTouchPoints (современный способ)</h3>
+    <div class="code-block"><code>function isMobile() {
+    return navigator.maxTouchPoints &gt; 0;
+}
+
+console.log("Максимальное количество точек касания:", navigator.maxTouchPoints);</code></div>
+
+    <p>Свойство <code>maxTouchPoints</code> возвращает максимальное количество одновременных точек касания, поддерживаемых текущим устройством.</p>
+
+    <h3>Метод 4: window.matchMedia</h3>
+    <div class="code-block"><code>function isMobileScreen() {
+    return window.matchMedia("(max-width: 768px)").matches;
+}
+
+if (isMobileScreen()) {
+    console.log("Экран мобильного размера");
+}</code></div>
+
+    <h3>Метод 5: Анализ плотности пикселей (devicePixelRatio)</h3>
+    <div class="code-block"><code>function isHighDensityDisplay() {
+    return window.devicePixelRatio &gt;= 2;
+}
+
+if (isHighDensityDisplay()) {
+    console.log("Устройство с высоким DPI (скорее всего, мобильное)");
+} else {
+    console.log("Обычный экран (возможно, десктоп)");
+}
+
+// Определение типа устройства по DPR
+const dpr = window.devicePixelRatio;
+
+if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    console.log(`Apple устройство с DPR = ${dpr}`);
+} else if (/Android/i.test(navigator.userAgent)) {
+    console.log(`Android устройство с DPR = ${dpr}`);
+}</code></div>
+
+    <div class="info-box note">
+        <div class="info-box-title">💡 Device Pixel Ratio (DPR)</div>
+        <p><strong>DPR</strong> — это отношение физических пикселей к логическим (CSS) пикселям:</p>
+        <p><code>DPR = Физические пиксели / Логические (CSS) пиксели</code></p>
+        <ul>
+            <li>iPhone Retina: DPR = 2 или 3</li>
+            <li>Android: DPR = 2.5, 3.5 и выше</li>
+            <li>Десктоп: DPR = 1 или 1.25</li>
+        </ul>
+    </div>
+
+    <h3>Комплексная проверка</h3>
+    <div class="code-block"><code>function detectDevice() {
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isMobileUA = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i
+        .test(userAgent);
+    const isTouch = navigator.maxTouchPoints &gt; 0;
+    const isSmallScreen = window.matchMedia("(max-width: 768px)").matches;
+    const isHighDPI = window.devicePixelRatio &gt;= 2;
+    
+    return {
+        isMobile: isMobileUA || (isTouch &amp;&amp; isSmallScreen),
+        isTouch: isTouch,
+        isSmallScreen: isSmallScreen,
+        isHighDPI: isHighDPI,
+        deviceType: isMobileUA ? 'mobile' : 'desktop',
+        touchPoints: navigator.maxTouchPoints,
+        dpr: window.devicePixelRatio
+    };
+}
+
+const device = detectDevice();
+console.log(device);
+
+// Пример использования
+if (device.isMobile) {
+    document.body.classList.add('mobile');
+} else {
+    document.body.classList.add('desktop');
+}</code></div>
+
+    <div class="info-box warning">
+        <div class="info-box-title">⚠️ Ограничения</div>
+        <ul>
+            <li><strong>User Agent</strong> можно подделать</li>
+            <li><strong>Touch события</strong> поддерживаются некоторыми десктопными браузерами</li>
+            <li><strong>Размер экрана</strong> не всегда определяет тип устройства (планшеты)</li>
+            <li>Рекомендуется использовать комбинацию методов</li>
+        </ul>
+    </div>
+
+    <h2>Сравнение паттернов</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Паттерн</th>
+                <th>Преимущества</th>
+                <th>Недостатки</th>
+                <th>Когда использовать</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Пространство имен</strong></td>
+                <td>Простота, избежание конфликтов имен</td>
+                <td>Все данные публичные</td>
+                <td>Группировка функционала, разделение кода</td>
+            </tr>
+            <tr>
+                <td><strong>Модуль</strong></td>
+                <td>Инкапсуляция, приватные данные</td>
+                <td>Сложнее в реализации</td>
+                <td>Когда нужна защита данных</td>
+            </tr>
+            <tr>
+                <td><strong>ES6 Modules</strong></td>
+                <td>Нативная поддержка, import/export</td>
+                <td>Требует сборщик для старых браузеров</td>
+                <td>Современные приложения</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Резюме</h2>
+    <p>В этой главе мы рассмотрели:</p>
+    <ul>
+        <li>✅ <strong>Паттерн "Пространство имен"</strong> — избежание конфликтов имен через объекты-контейнеры</li>
+        <li>✅ <strong>Паттерн "Модуль"</strong> — инкапсуляция данных с помощью замыканий</li>
+        <li>✅ <strong>JavaScript в CSS</strong> — хранение и выполнение JS-кода через CSS-переменные</li>
+        <li>✅ <strong>Определение мобильных устройств</strong> — 5 методов:
+            <ul>
+                <li>User Agent</li>
+                <li>Сенсорные события (ontouchstart)</li>
+                <li>navigator.maxTouchPoints</li>
+                <li>window.matchMedia</li>
+                <li>window.devicePixelRatio</li>
+            </ul>
+        </li>
+        <li>✅ Комплексный подход к определению устройств</li>
+        <li>✅ Сравнение различных паттернов организации кода</li>
+    </ul>
+
+    <div class="info-box success">
+        <div class="info-box-title">✅ Рекомендации</div>
+        <ul>
+            <li>Для новых проектов используйте ES6 модули (import/export)</li>
+            <li>Для определения устройств комбинируйте несколько методов</li>
+            <li>Избегайте <code>eval()</code> в production-коде</li>
+            <li>Используйте паттерны для организации кода и избежания конфликтов</li>
+        </ul>
+    </div>
+</section>

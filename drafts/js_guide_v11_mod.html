@@ -14357,6 +14357,608 @@ function fibonacci(n) {
                 </ul>
             </section>
 
+            <!-- ГЛАВА 28: Web Speech API -->
+            <section class="chapter" id="ch28">
+                <h1>Глава 28. Web Speech API</h1>
+                
+                <h2>Введение в Web Speech API</h2>
+                <p><strong>Web Speech API</strong> позволяет веб-разработчикам программно генерировать и распознавать речь на веб-странице. Для этого Web Speech API определяет два интерфейса:</p>
+                
+                <ul>
+                    <li><strong>SpeechSynthesis</strong> — для синтеза речи (преобразование текста в речь, Text-to-Speech)</li>
+                    <li><strong>SpeechRecognition</strong> — для распознавания речи (Speech-to-Text)</li>
+                </ul>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Статус стандарта</div>
+                    <p>Данный API (на момент написания этой главы) еще не является официальным стандартом W3C, и его поддержка в различных браузерах может отличаться.</p>
+                </div>
+
+                <h2>Часть 1: Синтез речи (Speech Synthesis)</h2>
+                <p>Синтез речи (Text-to-Speech, TTS) — это процесс преобразования текста в речь, которая воспроизводится через динамик устройства.</p>
+
+                <h3>Проверка поддержки</h3>
+                <p>На уровне браузера синтез речи доступен через свойство <code>speechSynthesis</code> объекта <code>window</code>, которое представляет <code>SpeechSynthesis</code> и через которое можно проверить поддержку браузером синтеза речи:</p>
+                
+                <div class="code-block"><code>if (window.speechSynthesis) {
+    console.log("Синтез речи поддерживается");
+} else {
+    console.log("Синтез речи НЕ поддерживается");
+}
+
+// Альтернативный способ проверки
+if ("speechSynthesis" in window) {
+    console.log("Синтез речи поддерживается");
+} else {
+    console.log("Синтез речи НЕ поддерживается");
+}</code></div>
+
+                <h3>Объект SpeechSynthesisUtterance</h3>
+                <p>Для синтеза речи применяется объект типа <code>SpeechSynthesisUtterance</code>, который представляет собой отдельное высказывание и который позволяет определить конфигурацию синтеза с помощью ряда свойств:</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Свойство</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>text</code></td>
+                            <td>Получает и задает текст, который будет синтезироваться при произнесении</td>
+                        </tr>
+                        <tr>
+                            <td><code>lang</code></td>
+                            <td>Получает и устанавливает язык высказывания (например, "ru", "en-US")</td>
+                        </tr>
+                        <tr>
+                            <td><code>voice</code></td>
+                            <td>Получает и задает голос для произнесения высказывания</td>
+                        </tr>
+                        <tr>
+                            <td><code>volume</code></td>
+                            <td>Получает и задает громкость (от 0 до 1)</td>
+                        </tr>
+                        <tr>
+                            <td><code>rate</code></td>
+                            <td>Получает и задает скорость произнесения (от 0.1 до 10)</td>
+                        </tr>
+                        <tr>
+                            <td><code>pitch</code></td>
+                            <td>Получает и задает высоту звука (от 0 до 2)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>В общем случае нам достаточно установить свойство <code>text</code>:</p>
+                
+                <div class="code-block"><code>const utterance = new SpeechSynthesisUtterance();
+utterance.text = "Hello World";</code></div>
+
+                <h3>Методы SpeechSynthesis</h3>
+                <p>Непосредственно для синтеза речи и ее управлением вызывается один из методов типа <code>SpeechSynthesis</code>:</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Метод</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>speak(utterance)</code></td>
+                            <td>Добавляет высказывание в очередь для последующего произнесения</td>
+                        </tr>
+                        <tr>
+                            <td><code>pause()</code></td>
+                            <td>Приостанавливает синтез речи</td>
+                        </tr>
+                        <tr>
+                            <td><code>resume()</code></td>
+                            <td>Возобновляет синтез речи (если он ранее был приостановлен)</td>
+                        </tr>
+                        <tr>
+                            <td><code>cancel()</code></td>
+                            <td>Удаляет все высказывания из очереди</td>
+                        </tr>
+                        <tr>
+                            <td><code>getVoices()</code></td>
+                            <td>Возвращает список доступных голосов на текущем устройстве</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Простой пример синтеза речи</h3>
+                <div class="code-block"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;title&gt;Speech Synthesis Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;input id="text" value="Hello World" /&gt;
+    &lt;button id="btn"&gt;Speak&lt;/button&gt;
+    
+    &lt;script&gt;
+        document.getElementById("btn").addEventListener("click", speak);
+        
+        function speak() {
+            if (window.speechSynthesis) {
+                const utterance = new SpeechSynthesisUtterance();
+                utterance.text = document.getElementById("text").value;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                console.log("Feature not supported");
+            }
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></div>
+
+                <p>В данном случае по нажатию на кнопку будет синтезироваться речь для текста, который введен в текстовое поле.</p>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Важно: активация пользователем</div>
+                    <p>В браузерах могут действовать ограничения на запуск синтеза. Например, в Google Chrome требуется, чтобы пользователь активировал действие. Именно поэтому в примере синтез выполняется по нажатию на кнопку, а не сразу при загрузке страницы.</p>
+                </div>
+
+                <h3>Настройка параметров речи</h3>
+                <div class="code-block"><code>document.getElementById("btn").addEventListener("click", speak);
+
+function speak() {
+    if (window.speechSynthesis) {
+        const utterance = new SpeechSynthesisUtterance();
+        utterance.text = "Привет";
+        utterance.lang = "ru";      // аббревиатура языка
+        utterance.volume = 0.5;     // громкость (0-1)
+        utterance.rate = 0.5;       // скорость (0.1-10)
+        utterance.pitch = 0.5;      // высота (0-2)
+        
+        window.speechSynthesis.speak(utterance);
+    }
+}</code></div>
+
+                <h3>Выбор голоса</h3>
+                <p>Если браузер поддерживает несколько голосов, то их можно выбрать с помощью метода <code>getVoices()</code> объекта <code>SpeechSynthesis</code>. Каждый голос имеет разные свойства, включая имя и связанное с ним сокращение страны или языка.</p>
+                
+                <div class="code-block"><code>// Получаем список доступных голосов
+            const voices = window.speechSynthesis.getVoices();
+
+            voices.forEach(function(voice) {
+                console.log(voice.name);     // имя голоса
+                console.log(voice.lang);     // язык
+                console.log(voice.default);  // является ли голос по умолчанию
+            });</code></div>
+
+                <p>Выбрав нужный голос, его можно установить с помощью свойства <code>voice</code> объекта <code>SpeechSynthesisUtterance</code>:</p>
+                
+                <div class="code-block"><code>document.getElementById("btn").addEventListener("click", speak);
+
+function speak() {
+    if (window.speechSynthesis) {
+        const utterance = new SpeechSynthesisUtterance();
+        utterance.text = "Привет";
+        
+        const voices = window.speechSynthesis.getVoices();
+        const selectedVoice = voices[0]; // выбираем первый голос
+        utterance.voice = selectedVoice;
+        
+        window.speechSynthesis.speak(utterance);
+    }
+}</code></div>
+
+                <h3>События синтеза речи</h3>
+                <p>В процессе синтеза речи могут возникать различные события (на объекте <code>SpeechSynthesisUtterance</code>):</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Событие</th>
+                            <th>Описание</th>
+                            <th>Обработчик</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>start</code></td>
+                            <td>Возникает при начале речи</td>
+                            <td><code>onstart</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>end</code></td>
+                            <td>Возникает при завершении речи</td>
+                            <td><code>onend</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>pause</code></td>
+                            <td>Возникает, когда речь приостановлена</td>
+                            <td><code>onpause</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>resume</code></td>
+                            <td>Возникает, когда речь возобновлена</td>
+                            <td><code>onresume</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>error</code></td>
+                            <td>Возникает при возникновении ошибки</td>
+                            <td><code>onerror</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>boundary</code></td>
+                            <td>Возникает при достижении границы слова или фразы</td>
+                            <td><code>onboundary</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>mark</code></td>
+                            <td>Возникает при достижении именованного тега "метки" SSML</td>
+                            <td><code>onmark</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Пример обработки событий</h3>
+                <div class="code-block"><code>document.getElementById("btn").addEventListener("click", speak);
+
+function speak() {
+    if (window.speechSynthesis) {
+        const utterance = new SpeechSynthesisUtterance();
+        
+        utterance.onstart = () =&gt; console.log("Начало речи");
+        utterance.onend = () =&gt; console.log("Конец речи");
+        utterance.onerror = (e) =&gt; console.log("Ошибка:", e.error);
+        utterance.onpause = () =&gt; console.log("Речь приостановлена");
+        utterance.onresume = () =&gt; console.log("Речь возобновлена");
+        
+        utterance.text = "Привет";
+        
+        window.speechSynthesis.speak(utterance);
+    }
+}</code></div>
+
+                <h2>Часть 2: Распознавание речи (Speech Recognition)</h2>
+                <p>Распознавание речи (Speech-to-Text) — это процесс преобразования речи пользователя в текст.</p>
+
+                <h3>Проверка поддержки</h3>
+                <p>Распознавание речи управляется объектом <code>SpeechRecognition</code>. Для его получения применяется свойство <code>webkitSpeechRecognition</code> глобального объекта <code>window</code>:</p>
+                
+                <div class="code-block"><code>if (window.webkitSpeechRecognition) {
+    console.log("Распознавание речи поддерживается");
+} else {
+    console.log("Распознавание речи НЕ поддерживается");
+}
+
+// Альтернативный способ проверки
+if ("webkitSpeechRecognition" in window) {
+    console.log("Распознавание речи поддерживается");
+} else {
+    console.log("Распознавание речи НЕ поддерживается");
+}</code></div>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Префикс webkit</div>
+                    <p>Префикс <code>webkit</code> в названии свойства намекает, что это свойство поддерживается только в браузерах на движке WebKit. Соответственно, в реальности в браузерах на движке WebKit распознавание будет осуществляться с помощью объекта <code>webkitSpeechRecognition</code>, а не <code>SpeechRecognition</code>.</p>
+                </div>
+
+                <h3>Свойства SpeechRecognition</h3>
+                <p>Интерфейс <code>SpeechRecognition</code> предоставляет ряд свойств для настройки распознавания:</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Свойство</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>lang</code></td>
+                            <td>Возвращает и устанавливает язык распознавания (например, "ru", "en-US")</td>
+                        </tr>
+                        <tr>
+                            <td><code>continuous</code></td>
+                            <td>Определяет, возвращаются ли непрерывные результаты (true) или только один результат (false)</td>
+                        </tr>
+                        <tr>
+                            <td><code>interimResults</code></td>
+                            <td>Определяет, следует ли возвращать промежуточные результаты (true) или нет (false)</td>
+                        </tr>
+                        <tr>
+                            <td><code>maxAlternatives</code></td>
+                            <td>Устанавливает максимальное количество вариантов распознавания. По умолчанию — 1</td>
+                        </tr>
+                        <tr>
+                            <td><code>grammars</code></td>
+                            <td>Возвращает и устанавливает коллекцию объектов SpeechGrammar (используемые грамматики)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Методы SpeechRecognition</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Метод</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>start()</code></td>
+                            <td>Запускает распознавание речи</td>
+                        </tr>
+                        <tr>
+                            <td><code>stop()</code></td>
+                            <td>Останавливает распознавание и пытается вернуть результат, используя записанный звук</td>
+                        </tr>
+                        <tr>
+                            <td><code>abort()</code></td>
+                            <td>Прерывает распознавание, не пытаясь вернуть результат</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>События SpeechRecognition</h3>
+                <p>После запуска распознавания речи методом <code>start()</code> в процессе распознавания могут возникать различные события:</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Событие</th>
+                            <th>Описание</th>
+                            <th>Обработчик</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>start</code></td>
+                            <td>Служба начала прослушивать звук</td>
+                            <td><code>onstart</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>audiostart</code></td>
+                            <td>Начался захват звука</td>
+                            <td><code>onaudiostart</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>soundstart</code></td>
+                            <td>Обнаружен звук (речь или шум)</td>
+                            <td><code>onsoundstart</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>speechstart</code></td>
+                            <td>Обнаружена речь</td>
+                            <td><code>onspeechstart</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>result</code></td>
+                            <td>Служба возвращает результат — слово или фразу</td>
+                            <td><code>onresult</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>speechend</code></td>
+                            <td>Завершено обнаружение речи</td>
+                            <td><code>onspeechend</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>soundend</code></td>
+                            <td>Завершено обнаружение звука</td>
+                            <td><code>onsoundend</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>audioend</code></td>
+                            <td>Завершен захват звука</td>
+                            <td><code>onaudioend</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>end</code></td>
+                            <td>Служба распознавания отключилась</td>
+                            <td><code>onend</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>error</code></td>
+                            <td>Возникла ошибка</td>
+                            <td><code>onerror</code></td>
+                        </tr>
+                        <tr>
+                            <td><code>nomatch</code></td>
+                            <td>Распознавание не удалось</td>
+                            <td><code>onnomatch</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Получение результатов распознавания</h3>
+                <p>Чтобы получить доступ к результату распознавания речи, регистрируется обработчик события <code>result</code>:</p>
+                
+                <div class="code-block"><code>const recognition = new webkitSpeechRecognition();
+
+recognition.onresult = function(event) {
+    const results = event.results; // получаем результат распознавания
+    console.log(results); // список SpeechRecognitionResultList
+};</code></div>
+
+                <p>Параметр функции-обработчика представляет тип <code>SpeechRecognitionEvent</code>, у которого через свойство <code>results</code> можно получить результаты распознавания в виде списка <code>SpeechRecognitionResultList</code>.</p>
+
+                <p>Каждая запись в этом списке представляет объект <code>SpeechRecognitionResult</code> и содержит один или несколько вариантов распознавания речи (объектов <code>SpeechRecognitionAlternative</code>).</p>
+
+                <div class="code-block"><code>const recognition = new webkitSpeechRecognition();
+
+recognition.onresult = function(event) {
+    const results = event.results;            // получаем список результатов
+    const firstResult = results[0];           // получаем первый результат
+    const firstAlternative = firstResult[0];  // получаем первый вариант
+    
+    const transcript = firstAlternative.transcript;  // распознанный текст
+    const confidence = firstAlternative.confidence;  // уровень уверенности (0-1)
+    
+    console.log(transcript);
+    console.log(confidence);
+};</code></div>
+
+                <h3>Полный пример распознавания речи</h3>
+                <div class="code-block"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;title&gt;Speech Recognition Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;button id="startBtn"&gt;Start&lt;/button&gt;
+    &lt;button id="stopBtn"&gt;Stop&lt;/button&gt;
+    &lt;div id="output"&gt;&lt;/div&gt;
+    
+    &lt;script&gt;
+        const recognition = new webkitSpeechRecognition();
+        let index = 0;
+        
+        recognition.onresult = function(event) {
+            const results = event.results;
+            const firstResult = results[index++];
+            const firstAlternative = firstResult[0];
+            const transcript = firstAlternative.transcript;
+            const confidence = firstAlternative.confidence;
+            
+            console.log(transcript);
+            console.log(confidence);
+            
+            document.getElementById("output").innerHTML += 
+                `&lt;p&gt;${transcript} (уверенность: ${(confidence * 100).toFixed(2)}%)&lt;/p&gt;`;
+        };
+        
+        // по нажатию на кнопку Start запускаем распознавание
+        document.getElementById("startBtn").addEventListener("click", () =&gt; {
+            if (window.webkitSpeechRecognition) {
+                recognition.continuous = true;
+                recognition.lang = "ru";  // распознавание на русском
+                recognition.start();
+            } else {
+                console.log("Распознавание речи НЕ поддерживается");
+            }
+        });
+        
+        // по нажатию на кнопку Stop останавливаем распознавание
+        document.getElementById("stopBtn").addEventListener("click", () =&gt; {
+            recognition.stop();
+            index = 0;
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></div>
+
+                <p>В данном случае по нажатию на кнопку Start запускаем распознавание речи на русском языке. Результаты распознавания выводятся на консоль и на страницу. При нажатии на кнопку Stop останавливаем распознавание.</p>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Важно: разрешение на микрофон</div>
+                    <p>При запуске распознавания браузер предложит пользователю дать разрешение на использование микрофона. Если пользователь хочет использовать распознавание речи, то он должен разрешить браузеру доступ к микрофону.</p>
+                </div>
+
+                <h3>Переменная index для непрерывного распознавания</h3>
+                <p>Для получения результата определяем переменную <code>index</code>. При каждом срабатывании события <code>result</code> в список распознаваний будет добавляться новый результат. Инкрементируя переменную <code>index</code>, мы сможем при последующем срабатывании события <code>result</code> получить распознанный результат по этому индексу.</p>
+
+                <h2>Практические примеры</h2>
+                
+                <h3>Голосовой помощник</h3>
+                <div class="code-block"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;title&gt;Voice Assistant&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Голосовой помощник&lt;/h1&gt;
+    &lt;button id="voiceBtn"&gt;🎤 Нажмите и говорите&lt;/button&gt;
+    &lt;p id="result"&gt;&lt;/p&gt;
+    
+    &lt;script&gt;
+        const recognition = new webkitSpeechRecognition();
+        recognition.lang = "ru";
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        
+        const synth = window.speechSynthesis;
+        
+        document.getElementById("voiceBtn").addEventListener("click", () =&gt; {
+            recognition.start();
+        });
+        
+        recognition.onresult = (event) =&gt; {
+            const transcript = event.results[0][0].transcript.toLowerCase();
+            document.getElementById("result").textContent = `Вы сказали: ${transcript}`;
+            
+            // Простой обработчик команд
+            let response = "";
+            
+            if (transcript.includes("привет")) {
+                response = "Привет! Как дела?";
+            } else if (transcript.includes("как дела")) {
+                response = "У меня всё отлично!";
+            } else if (transcript.includes("который час")) {
+                response = `Сейчас ${new Date().toLocaleTimeString()}`;
+            } else {
+                response = "Я вас не понял";
+            }
+            
+            // Синтезируем ответ
+            const utterance = new SpeechSynthesisUtterance(response);
+            utterance.lang = "ru";
+            synth.speak(utterance);
+        };
+        
+        recognition.onerror = (event) =&gt; {
+            console.error("Ошибка:", event.error);
+        };
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></div>
+
+                <h2>Поддержка браузерами</h2>
+                
+                <h3>Синтез речи (Speech Synthesis)</h3>
+                <ul>
+                    <li>✅ Chrome/Edge: полная поддержка</li>
+                    <li>✅ Firefox: полная поддержка</li>
+                    <li>✅ Safari: полная поддержка</li>
+                    <li>✅ Opera: полная поддержка</li>
+                </ul>
+
+                <h3>Распознавание речи (Speech Recognition)</h3>
+                <ul>
+                    <li>✅ Chrome/Edge: полная поддержка (с префиксом webkit)</li>
+                    <li>✅ Opera: полная поддержка (с префиксом webkit)</li>
+                    <li>❌ Firefox: не поддерживается</li>
+                    <li>❌ Safari: не поддерживается на iOS</li>
+                </ul>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Ограничения</div>
+                    <ul>
+                        <li>Распознавание речи имеет гораздо более ограниченную поддержку браузеров</li>
+                        <li>В Chrome распознавание речи работает через серверы Google (требуется интернет)</li>
+                        <li>На мобильных устройствах поддержка может отличаться</li>
+                    </ul>
+                </div>
+
+                <h2>Резюме</h2>
+                <p>В этой главе мы рассмотрели:</p>
+                <ul>
+                    <li>✅ Введение в Web Speech API и его два интерфейса</li>
+                    <li>✅ <strong>Синтез речи</strong>: объект SpeechSynthesisUtterance, методы speak/pause/resume/cancel</li>
+                    <li>✅ Настройку параметров речи: lang, volume, rate, pitch, voice</li>
+                    <li>✅ Выбор голоса с помощью getVoices()</li>
+                    <li>✅ События синтеза: start, end, pause, resume, error, boundary</li>
+                    <li>✅ <strong>Распознавание речи</strong>: объект webkitSpeechRecognition</li>
+                    <li>✅ Свойства распознавания: lang, continuous, interimResults, maxAlternatives</li>
+                    <li>✅ Методы: start(), stop(), abort()</li>
+                    <li>✅ События распознавания: result, start, end, error, nomatch</li>
+                    <li>✅ Получение результатов: SpeechRecognitionResultList и SpeechRecognitionAlternative</li>
+                    <li>✅ Практический пример: голосовой помощник</li>
+                    <li>✅ Поддержку браузерами и ограничения</li>
+                </ul>
+            </section>
+
             <section class="chapter" id="ch31">
                 <h1>Глава 31. Best Practices</h1>
                 <p>Контент будет добавлен...</p>

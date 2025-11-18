@@ -1,0 +1,313 @@
+            <!-- Глава 32: Отладка -->
+            <section class="chapter" id="ch32">
+                <h1>Глава 32. Отладка и диагностика</h1>
+
+                <h2>Типы ошибок</h2>
+
+                <div class="info-box danger">
+                    <div class="info-box-title">🔴 Синтаксические ошибки</div>
+                    <p>Грамматические ошибки в коде. Скрипт не запустится.</p>
+                    <div class="code-block"><code>// Ошибка: пропущена закрывающая скобка
+if (x > 0 {
+    console.log('positive');
+}</code></div>
+                </div>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">🟡 Ошибки выполнения (Runtime)</div>
+                    <p>Возникают во время работы программы.</p>
+                    <div class="code-block"><code>// Ошибка: переменная не определена
+console.log(unknownVariable); // ReferenceError</code></div>
+                </div>
+
+                <div class="info-box note">
+                    <div class="info-box-title">🔵 Логические ошибки</div>
+                    <p>Код работает, но результат не тот, что ожидался.</p>
+                    <div class="code-block"><code>// Ошибка: неправильный оператор
+if (x = 5) {  // должно быть x === 5
+    console.log('x равно 5');
+}</code></div>
+                </div>
+
+                <h2>Консоль разработчика</h2>
+
+                <h3>console.log() и другие методы</h3>
+                <div class="code-block"><code>// Простой вывод
+console.log('Привет');
+
+// Несколько значений
+console.log('x =', x, 'y =', y);
+
+// Объекты (развёрнутый вид)
+console.log({name: 'Alice', age: 25});
+
+// console.table() - таблица
+console.table([{name: 'Alice'}, {name: 'Bob'}]);
+
+// console.error() - ошибка (красным)
+console.error('Произошла ошибка!');
+
+// console.warn() - предупреждение (жёлтым)
+console.warn('Это предупреждение');
+
+// console.time() / console.timeEnd() - замер времени
+console.time('myTimer');
+// ... код ...
+console.timeEnd('myTimer'); // myTimer: 123ms</code></div>
+
+                <h2>Отладчик (Debugger)</h2>
+
+                <h3>Точки останова (Breakpoints)</h3>
+                <div class="code-block"><code>function calculate(a, b) {
+    debugger; // программа остановится здесь
+    const sum = a + b;
+    return sum;
+}</code></div>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Как использовать отладчик</div>
+                    <ol>
+                        <li>Откройте DevTools (F12)</li>
+                        <li>Перейдите на вкладку Sources</li>
+                        <li>Кликните на номер строки, чтобы поставить breakpoint</li>
+                        <li>Используйте кнопки:
+                            <ul>
+                                <li><strong>Step Over</strong> (F10) - выполнить строку</li>
+                                <li><strong>Step Into</strong> (F11) - войти в функцию</li>
+                                <li><strong>Step Out</strong> (Shift+F11) - выйти из функции</li>
+                                <li><strong>Continue</strong> (F8) - продолжить до следующего breakpoint</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+
+                <h2>Распространённые ошибки</h2>
+
+                <h3>1. Незакрытые скобки</h3>
+                <div class="code-block"><code>// ❌ Ошибка
+function test() {
+    console.log('Hello';
+} // пропущена )
+
+// ✅ Правильно
+function test() {
+    console.log('Hello');
+}</code></div>
+
+                <h3>2. Проблемы с кавычками</h3>
+                <div class="code-block"><code>// ❌ Ошибка
+const name = "It's a string'; // смешаны ' и "
+
+// ✅ Правильно
+const name = "It's a string";
+// или
+const name = 'It\'s a string'; // экранирование</code></div>
+
+                <h3>3. Чувствительность к регистру</h3>
+                <div class="code-block"><code>// ❌ Ошибка
+const myVariable = 10;
+console.log(myvariable); // ReferenceError
+
+// ✅ Правильно
+console.log(myVariable);</code></div>
+
+                <h3>4. Область видимости</h3>
+                <div class="code-block"><code>// ❌ Ошибка
+function test() {
+    const x = 10;
+}
+console.log(x); // ReferenceError: x не определена
+
+// ✅ Правильно
+const x = 10; // глобальная переменная
+function test() {
+    console.log(x); // доступна внутри функции
+}</code></div>
+
+                <h3>5. Асинхронные операции</h3>
+                <div class="code-block"><code>// ❌ Ошибка
+let data;
+fetch('https://api.example.com/data')
+    .then(response => response.json())
+    .then(json => data = json);
+console.log(data); // undefined (ещё не загрузилось)
+
+// ✅ Правильно
+async function getData() {
+    const response = await fetch('https://api.example.com/data');
+    const data = await response.json();
+    console.log(data); // теперь данные есть
+}</code></div>
+
+            </section>
+
+            <!-- Глава 31: Best Practices -->
+            <section class="chapter" id="ch31">
+                <h1>Глава 31. Best Practices и оптимизация</h1>
+
+                <h2>Оптимизация кода</h2>
+
+                <h3>1. Сохранение параметров в переменных</h3>
+                <div class="code-block"><code>// ❌ Плохо: повторяющиеся значения
+document.querySelector('.box').style.color = '#FF0000';
+document.querySelector('.box').style.fontSize = '16px';
+document.querySelector('.box').style.padding = '10px';
+
+// ✅ Хорошо: сохранили в переменную
+const box = document.querySelector('.box');
+box.style.color = '#FF0000';
+box.style.fontSize = '16px';
+box.style.padding = '10px';</code></div>
+
+                <h3>2. Сохранение параметров в объектах</h3>
+                <div class="code-block"><code>// ✅ Группируем настройки
+const config = {
+    colors: {
+        primary: '#0066cc',
+        secondary: '#6c757d',
+        success: '#28a745'
+    },
+    delays: {
+        animation: 300,
+        tooltip: 200
+    },
+    apiUrl: 'https://api.example.com'
+};
+
+// Использование
+element.style.color = config.colors.primary;
+setTimeout(showTooltip, config.delays.tooltip);</code></div>
+
+                <h3>3. Тернарный оператор</h3>
+                <div class="code-block"><code>// ❌ Длинный if-else
+let status;
+if (isLoggedIn) {
+    status = 'Авторизован';
+} else {
+    status = 'Гость';
+}
+
+// ✅ Тернарный оператор
+const status = isLoggedIn ? 'Авторизован' : 'Гость';</code></div>
+
+                <h3>4. Switch вместо множественных if-else</h3>
+                <div class="code-block"><code>// ❌ Множественные if-else
+if (day === 'Monday') {
+    console.log('Начало недели');
+} else if (day === 'Friday') {
+    console.log('Конец недели');
+} else if (day === 'Saturday' || day === 'Sunday') {
+    console.log('Выходные');
+}
+
+// ✅ Switch
+switch(day) {
+    case 'Monday':
+        console.log('Начало недели');
+        break;
+    case 'Friday':
+        console.log('Конец недели');
+        break;
+    case 'Saturday':
+    case 'Sunday':
+        console.log('Выходные');
+        break;
+}</code></div>
+
+                <h3>5. Деструктуризация</h3>
+                <div class="code-block"><code>// ❌ Старый способ
+const firstName = user.firstName;
+const lastName = user.lastName;
+const age = user.age;
+
+// ✅ Деструктуризация
+const {firstName, lastName, age} = user;
+
+// Для массивов
+const [first, second] = [1, 2, 3];
+console.log(first); // 1</code></div>
+
+                <h3>6. Spread оператор</h3>
+                <div class="code-block"><code>// Копирование массива
+const arr1 = [1, 2, 3];
+const arr2 = [...arr1]; // [1, 2, 3]
+
+// Объединение массивов
+const combined = [...arr1, ...arr2];
+
+// Копирование объекта
+const user = {name: 'Alice', age: 25};
+const userCopy = {...user};
+
+// Добавление свойств
+const userWithEmail = {...user, email: 'alice@example.com'};</code></div>
+
+                <h3>7. Template literals</h3>
+                <div class="code-block"><code>// ❌ Конкатенация строк
+const greeting = 'Привет, ' + name + '! Тебе ' + age + ' лет.';
+
+// ✅ Template literals
+const greeting = `Привет, ${name}! Тебе ${age} лет.`;
+
+// Многострочные строки
+const html = `
+    <div>
+        <h1>${title}</h1>
+        <p>${text}</p>
+    </div>
+`;</code></div>
+
+                <h3>8. Стрелочные функции</h3>
+                <div class="code-block"><code>// ❌ Обычная функция
+const numbers = [1, 2, 3];
+const doubled = numbers.map(function(n) {
+    return n * 2;
+});
+
+// ✅ Стрелочная функция
+const doubled = numbers.map(n => n * 2);
+
+// С несколькими параметрами
+const sum = (a, b) => a + b;
+
+// С телом функции
+const process = (data) => {
+    const result = data * 2;
+    return result + 10;
+};</code></div>
+
+                <h2>Минификация и сжатие</h2>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Минификация кода</div>
+                    <p>Минификация удаляет пробелы, комментарии и сокращает имена переменных.</p>
+                    <p><strong>Инструменты:</strong></p>
+                    <ul>
+                        <li><a href="https://javascript-minifier.com/" target="_blank">JavaScript Minifier</a></li>
+                        <li><a href="https://www.npmjs.com/package/terser" target="_blank">Terser (NPM)</a></li>
+                        <li><a href="https://www.npmjs.com/package/uglify-js" target="_blank">UglifyJS</a></li>
+                    </ul>
+                </div>
+
+                <h2>Ускорение загрузки</h2>
+
+                <h3>1. Defer и Async</h3>
+                <div class="code-block"><code>&lt;!-- defer: загрузка параллельно, выполнение после HTML --&gt;
+&lt;script src="script.js" defer&gt;&lt;/script&gt;
+
+&lt;!-- async: загрузка и выполнение параллельно --&gt;
+&lt;script src="script.js" async&gt;&lt;/script&gt;</code></div>
+
+                <h3>2. Размещение скриптов</h3>
+                <div class="code-block"><code>&lt;!-- ❌ Плохо: в &lt;head&gt; блокирует рендеринг --&gt;
+&lt;head&gt;
+    &lt;script src="large-script.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;!-- ✅ Хорошо: перед &lt;/body&gt; или с defer --&gt;
+&lt;body&gt;
+    &lt;!-- контент --&gt;
+    &lt;script src="script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;</code></div>
+
+            </section>
