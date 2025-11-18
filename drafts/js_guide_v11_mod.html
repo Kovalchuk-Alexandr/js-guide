@@ -15397,6 +15397,1117 @@ if (device.isMobile) {
                 </div>
             </section>
 
+            <!-- ГЛАВА 30: jQuery -->
+            <section class="chapter" id="ch30">
+                <h1>Глава 30. jQuery</h1>
+                
+                <h2>Введение в jQuery</h2>
+                <p><strong>jQuery</strong> — это быстрая, легкая и многофункциональная JavaScript-библиотека, которая упрощает работу с HTML-документами, обработку событий, анимацию и AJAX-взаимодействие для быстрой веб-разработки.</p>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Основные преимущества jQuery</div>
+                    <ul>
+                        <li>Простой и понятный синтаксис</li>
+                        <li>Кроссбраузерная совместимость</li>
+                        <li>Мощные селекторы (как в CSS)</li>
+                        <li>Удобная работа с DOM</li>
+                        <li>Встроенная анимация</li>
+                        <li>Поддержка AJAX</li>
+                        <li>Огромное сообщество и множество плагинов</li>
+                    </ul>
+                </div>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Современное состояние</div>
+                    <p>В современной веб-разработке jQuery используется реже из-за появления нативных API (querySelector, fetch) и фреймворков (React, Vue, Angular). Однако jQuery все еще активно используется в legacy-проектах и для быстрого прототипирования.</p>
+                </div>
+
+                <h2>Подключение библиотеки</h2>
+                <p>Работа с jQuery всегда начинается с подключения библиотеки. Есть два основных способа:</p>
+
+                <h3>1. Локальное подключение</h3>
+                <div class="code-block"><code>&lt;body&gt;
+    &lt;!-- Ваш контент --&gt;
+    
+    &lt;script src="js/jquery.js"&gt;&lt;/script&gt;
+    &lt;script src="js/script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;</code></div>
+
+                <h3>2. Подключение через CDN (рекомендуется)</h3>
+                <div class="code-block"><code>&lt;body&gt;
+    &lt;!-- Ваш контент --&gt;
+    
+    &lt;!-- jQuery 3.7.1 (последняя версия) --&gt;
+    &lt;script src="https://code.jquery.com/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+    
+    &lt;!-- Альтернативно: Google CDN --&gt;
+    &lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"&gt;&lt;/script&gt;
+    
+    &lt;script src="js/script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;</code></div>
+
+                <div class="info-box success">
+                    <div class="info-box-title">✅ Преимущества CDN</div>
+                    <ul>
+                        <li>Быстрая загрузка (серверы по всему миру)</li>
+                        <li>Кэширование браузером (библиотека может быть уже загружена с другого сайта)</li>
+                        <li>Экономия трафика вашего сервера</li>
+                    </ul>
+                </div>
+
+                <h2>Запуск кода</h2>
+                <p>Для выбора элемента на странице в jQuery используется функция <code>$()</code> или <code>jQuery()</code>:</p>
+
+                <div class="code-block"><code>&lt;script&gt;
+    jQuery("h2").css("color", "red");
+    // или
+    $("h2").css("color", "red");
+&lt;/script&gt;
+
+&lt;body&gt;
+    &lt;h2&gt;Заголовок&lt;/h2&gt;
+    &lt;p&gt;Много текста в одну строку.&lt;/p&gt;
+&lt;/body&gt;</code></div>
+
+                <p><strong>Вопрос:</strong> Будет ли изменен цвет заголовка?</p>
+                <p><strong>Ответ:</strong> Нет! Скрипт выполнится раньше, чем браузер создаст элемент &lt;h2&gt; в DOM.</p>
+
+                <h2>Ожидание загрузки документа</h2>
+                <p>Для того, чтобы код сработал верно, мы должны:</p>
+                <ul>
+                    <li>Поместить скрипт после искомого элемента</li>
+                    <li>Поместить скрипт в самый низ страницы (перед закрывающим &lt;/body&gt;)</li>
+                    <li>Использовать метод <code>.ready()</code></li>
+                </ul>
+
+                <h3>Полная запись</h3>
+                <div class="code-block"><code>&lt;script&gt;
+    jQuery(document).ready(function() {
+        jQuery("h2").css("color", "red");
+    });
+&lt;/script&gt;</code></div>
+
+                <h3>Сокращенная запись (рекомендуется)</h3>
+                <div class="code-block"><code>&lt;script&gt;
+    $(function() {
+        $("h2").css("color", "red");
+    });
+&lt;/script&gt;</code></div>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Best Practice</div>
+                    <p>Сокращенную запись стоит причислить к «best practices», ведь в jQuery 3.0 метод <code>.ready()</code> уже помечен как deprecated.</p>
+                </div>
+
+                <h2>Решение конфликта с другими библиотеками</h2>
+                <p>Чтобы у вас не возникало конфликтов с другими библиотеками за использование символа <code>$</code>, оборачивайте код в анонимную функцию:</p>
+
+                <div class="code-block"><code>&lt;script&gt;
+    ;(function($, undefined) {
+        $("h2").css("color", "red");
+    })(jQuery);
+&lt;/script&gt;</code></div>
+
+                <h2>Выбор элементов на странице</h2>
+                <p>Все простые выборки на странице можно сделать с помощью CSS-селекторов:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Селектор</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>$("#content")</code></td>
+                            <td>Выбираем элемент с id="content"</td>
+                        </tr>
+                        <tr>
+                            <td><code>$("section#content")</code></td>
+                            <td>Выбираем &lt;section&gt; с id="content"</td>
+                        </tr>
+                        <tr>
+                            <td><code>$(".intro")</code></td>
+                            <td>Выбираем элементы с class="intro"</td>
+                        </tr>
+                        <tr>
+                            <td><code>$("p.intro")</code></td>
+                            <td>Выбираем все &lt;p&gt; с class="intro"</td>
+                        </tr>
+                        <tr>
+                            <td><code>$(".intro.pinned")</code></td>
+                            <td>Выбираем элементы с классами "intro" И "pinned"</td>
+                        </tr>
+                        <tr>
+                            <td><code>$("h3")</code></td>
+                            <td>Выбираем все теги &lt;h3&gt;</td>
+                        </tr>
+                        <tr>
+                            <td><code>$("h1, h2")</code></td>
+                            <td>Выбираем все теги &lt;h1&gt; и &lt;h2&gt;</td>
+                        </tr>
+                        <tr>
+                            <td><code>$("a[class]")</code></td>
+                            <td>Выбираем все теги &lt;a&gt; с атрибутом class</td>
+                        </tr>
+                        <tr>
+                            <td><code>$("a[href^='http']")</code></td>
+                            <td>Ссылки, начинающиеся с "http"</td>
+                        </tr>
+                        <tr>
+                            <td><code>$("input[type='text']")</code></td>
+                            <td>Текстовые input-поля</td>
+                        </tr>
+                        <tr>
+                            <td><code>$(":checked")</code></td>
+                            <td>Все отмеченные checkbox и radio</td>
+                        </tr>
+                        <tr>
+                            <td><code>$("li:first")</code></td>
+                            <td>Первый элемент &lt;li&gt;</td>
+                        </tr>
+                        <tr>
+                            <td><code>$("li:last")</code></td>
+                            <td>Последний элемент &lt;li&gt;</td>
+                        </tr>
+                        <tr>
+                            <td><code>$("li:even")</code></td>
+                            <td>Четные элементы &lt;li&gt; (0, 2, 4...)</td>
+                        </tr>
+                        <tr>
+                            <td><code>$("li:odd")</code></td>
+                            <td>Нечетные элементы &lt;li&gt; (1, 3, 5...)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2>Функции выборки элементов</h2>
+                <p>jQuery предоставляет дополнительные методы для навигации по DOM:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Метод</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>.find(selector)</code></td>
+                            <td>Поиск потомков элемента</td>
+                        </tr>
+                        <tr>
+                            <td><code>.children()</code></td>
+                            <td>Выбор прямых дочерних элементов</td>
+                        </tr>
+                        <tr>
+                            <td><code>.parent()</code></td>
+                            <td>Выбор прямого родителя</td>
+                        </tr>
+                        <tr>
+                            <td><code>.parents(selector)</code></td>
+                            <td>Выбор всех предков</td>
+                        </tr>
+                        <tr>
+                            <td><code>.closest(selector)</code></td>
+                            <td>Выбор первого подходящего предка</td>
+                        </tr>
+                        <tr>
+                            <td><code>.next()</code></td>
+                            <td>Следующий соседний элемент</td>
+                        </tr>
+                        <tr>
+                            <td><code>.prev()</code></td>
+                            <td>Предыдущий соседний элемент</td>
+                        </tr>
+                        <tr>
+                            <td><code>.siblings()</code></td>
+                            <td>Все соседние элементы</td>
+                        </tr>
+                        <tr>
+                            <td><code>.first()</code></td>
+                            <td>Первый элемент в выборке</td>
+                        </tr>
+                        <tr>
+                            <td><code>.last()</code></td>
+                            <td>Последний элемент в выборке</td>
+                        </tr>
+                        <tr>
+                            <td><code>.eq(index)</code></td>
+                            <td>Элемент по индексу</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Примеры</h3>
+                <div class="code-block"><code>$("section").find("article").find("h3"); // поиск h3 внутри article внутри section
+$("#post").next();                        // следующий элемент после #post
+$("article").children();                  // дочерние элементы article
+$("p").parent();                          // прямые родители всех &lt;p&gt;
+$("p").parents("section");                // все предки &lt;section&gt; для &lt;p&gt;
+$("p").closest("section");                // первый предок &lt;section&gt; для &lt;p&gt;</code></div>
+
+                <h2>Работа с CSS-стилями</h2>
+                <p>Для работы со стилями предназначен метод <code>.css()</code>:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Синтаксис</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>css(property)</code></td>
+                            <td>Получение значения CSS-свойства</td>
+                        </tr>
+                        <tr>
+                            <td><code>css(property, value)</code></td>
+                            <td>Установка значения CSS-свойства</td>
+                        </tr>
+                        <tr>
+                            <td><code>css({prop: val, prop: val})</code></td>
+                            <td>Установка нескольких значений</td>
+                        </tr>
+                        <tr>
+                            <td><code>css(prop, function(i, val){})</code></td>
+                            <td>Установка через callback-функцию</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Примеры</h3>
+                <div class="code-block"><code>// Установка одного свойства
+$("#my").css("color", "red");
+$("#my").css("background-color", "yellow");
+
+// Установка нескольких свойств (строковые ключи)
+$("#my").css({
+    "color": "red",
+    "font-size": "18px",
+    "background-color": "white"
+});
+
+// Установка нескольких свойств (camelCase)
+$("#my").css({
+    color: "black",
+    fontSize: "12px",
+    backgroundColor: "transparent"
+});
+
+// Использование callback-функции
+$("#my").css("font-size", function(i, value) {
+    return parseFloat(value) * 1.5; // увеличиваем размер шрифта в 1.5 раза
+});</code></div>
+
+                <h2>Работа с CSS-классами</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Метод</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>addClass(className)</code></td>
+                            <td>Добавление класса элементу</td>
+                        </tr>
+                        <tr>
+                            <td><code>removeClass(className)</code></td>
+                            <td>Удаление класса</td>
+                        </tr>
+                        <tr>
+                            <td><code>toggleClass(className)</code></td>
+                            <td>Переключение класса (добавить/удалить)</td>
+                        </tr>
+                        <tr>
+                            <td><code>hasClass(className)</code></td>
+                            <td>Проверка на причастность к классу</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Примеры</h3>
+                <div class="code-block"><code>$("p").addClass("highlight");           // добавить класс
+$("p").removeClass("highlight");        // удалить класс
+$("p").toggleClass("highlight");        // переключить класс
+if ($("p").hasClass("highlight")) {     // проверка класса
+    console.log("Параграф выделен");
+}</code></div>
+
+                <h2>Работа с атрибутами</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Метод</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>attr(attrName)</code></td>
+                            <td>Получение значения атрибута</td>
+                        </tr>
+                        <tr>
+                            <td><code>attr(attrName, attrValue)</code></td>
+                            <td>Установка значения атрибута</td>
+                        </tr>
+                        <tr>
+                            <td><code>attr({name: val, name: val})</code></td>
+                            <td>Установка нескольких атрибутов</td>
+                        </tr>
+                        <tr>
+                            <td><code>removeAttr(attrName)</code></td>
+                            <td>Удаление атрибута</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Примеры</h3>
+                <div class="code-block"><code>// Получение адреса ссылки
+$("a").attr("href");
+
+// Изменение адреса и заголовка ссылки
+$("a").attr({
+    "href": "https://example.com",
+    "title": "Example Website"
+});
+
+// Получение альтернативного текста картинки
+$("img").attr("alt");
+
+// Изменение адреса картинки
+$("img").attr("src", "/images/default.png");</code></div>
+
+                <h2>Работа со свойствами</h2>
+                <p>Для работы со свойствами используем методы из семейства <code>.prop()</code>:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Метод</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>prop(propName)</code></td>
+                            <td>Получение значения свойства</td>
+                        </tr>
+                        <tr>
+                            <td><code>prop(propName, propValue)</code></td>
+                            <td>Установка значения свойства</td>
+                        </tr>
+                        <tr>
+                            <td><code>removeProp(propName)</code></td>
+                            <td>Удаление свойства</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 attr() vs prop()</div>
+                    <p><strong>attr()</strong> — работает с HTML-атрибутами (то, что в разметке)</p>
+                    <p><strong>prop()</strong> — работает со свойствами DOM-объекта (реальное состояние)</p>
+                    <p>Для checkbox, radio, selected используйте <code>prop()</code>!</p>
+                </div>
+
+                <h3>Примеры</h3>
+                <div class="code-block"><code>// Получение состояния checkbox
+$("#checkbox").prop("checked");          // true или false
+
+// Снятие галочки
+$("#checkbox").prop("checked", false);
+
+// Установка галочки
+$("#checkbox").prop("checked", true);
+
+// Для select
+$("option").prop("selected", true);</code></div>
+
+                <h2>События</h2>
+                <p>jQuery работает практически со всеми событиями в JavaScript. Список самых востребованных:</p>
+
+                <h3>События мыши</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Событие</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>click</code></td>
+                            <td>Клик по элементу (mousedown → mouseup → click)</td>
+                        </tr>
+                        <tr>
+                            <td><code>dblclick</code></td>
+                            <td>Двойной щелчок мышкой</td>
+                        </tr>
+                        <tr>
+                            <td><code>mousedown</code></td>
+                            <td>Нажатие клавиши мыши</td>
+                        </tr>
+                        <tr>
+                            <td><code>mouseup</code></td>
+                            <td>Отжатие клавиши мыши</td>
+                        </tr>
+                        <tr>
+                            <td><code>mousemove</code></td>
+                            <td>Движение курсора</td>
+                        </tr>
+                        <tr>
+                            <td><code>mouseenter</code></td>
+                            <td>Наведение на элемент (не всплывает)</td>
+                        </tr>
+                        <tr>
+                            <td><code>mouseleave</code></td>
+                            <td>Вывод курсора из элемента (не всплывает)</td>
+                        </tr>
+                        <tr>
+                            <td><code>mouseover</code></td>
+                            <td>Наведение на элемент (всплывает)</td>
+                        </tr>
+                        <tr>
+                            <td><code>mouseout</code></td>
+                            <td>Вывод курсора из элемента (всплывает)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>События формы</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Событие</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>focus</code></td>
+                            <td>Получение фокуса на элементе</td>
+                        </tr>
+                        <tr>
+                            <td><code>blur</code></td>
+                            <td>Фокус ушел с элемента</td>
+                        </tr>
+                        <tr>
+                            <td><code>focusin</code></td>
+                            <td>Фокус на элементе (всплывает)</td>
+                        </tr>
+                        <tr>
+                            <td><code>focusout</code></td>
+                            <td>Фокус ушел (всплывает)</td>
+                        </tr>
+                        <tr>
+                            <td><code>change</code></td>
+                            <td>Изменение значения элемента</td>
+                        </tr>
+                        <tr>
+                            <td><code>keydown</code></td>
+                            <td>Нажатие клавиши на клавиатуре</td>
+                        </tr>
+                        <tr>
+                            <td><code>keypress</code></td>
+                            <td>Удержание клавиши (только буквы и цифры)</td>
+                        </tr>
+                        <tr>
+                            <td><code>keyup</code></td>
+                            <td>Отжатие клавиши</td>
+                        </tr>
+                        <tr>
+                            <td><code>select</code></td>
+                            <td>Выбор текста в input или textarea</td>
+                        </tr>
+                        <tr>
+                            <td><code>submit</code></td>
+                            <td>Отправка формы</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2>Работа с событиями</h2>
+                <p>Для работы с событиями существует три основных метода:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Метод</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>on(event, handler)</code></td>
+                            <td>Добавление обработчика события</td>
+                        </tr>
+                        <tr>
+                            <td><code>trigger(event)</code></td>
+                            <td>Инициация события из скрипта</td>
+                        </tr>
+                        <tr>
+                            <td><code>off(event)</code></td>
+                            <td>Отключение обработчика событий</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Примеры</h3>
+                <div class="code-block"><code>// Вешаем обработчик
+$("p").on("click", function() {
+    alert("Click!");
+});
+
+// Инициируем событие программно
+$("p").trigger("click");
+
+// Отключаем обработчик
+$("p").off("click");</code></div>
+
+                <h3>Использование this</h3>
+                <p>Внутри обработчика вы можете получить доступ к DOM-элементу используя ключевое слово <code>this</code>. Если нужно использовать jQuery-инструменты, используйте конструкцию <code>$(this)</code>:</p>
+
+                <div class="code-block"><code>$("p").on("click", function() {
+    $(this).css("color", "red");  // изменяем цвет кликнутого параграфа
+});</code></div>
+
+                <h3>Делегирование событий</h3>
+                <div class="code-block"><code>// Обработчик для элементов, добавленных динамически
+$("ul").on("click", "li", function() {
+    $(this).toggleClass("selected");
+});</code></div>
+
+                <h2>Анимация</h2>
+                <p>jQuery позволяет очень легко анимировать элементы на странице. При такой анимации происходит изменение атрибутов width, height, opacity и т.д.</p>
+
+                <h3>Показать/Скрыть</h3>
+                <div class="code-block"><code>$('img').hide();              // скрыть все картинки
+$('img').show();              // показать все картинки
+$('img').toggle();            // переключить (hide ↔ show)
+
+$('img').hide('slow');        // slow == 600ms, fast == 200ms
+$('img').show(400);           // показать за 400ms
+
+$('img').hide('slow', function() {
+    alert("Images was hidden"); // callback после завершения
+});</code></div>
+
+                <h3>Slide (вертикальная анимация)</h3>
+                <div class="code-block"><code>$('img').slideUp();           // скрыть с анимацией вверх
+$('img').slideDown();         // показать с анимацией вниз
+$('img').slideToggle();       // переключить</code></div>
+
+                <h3>Fade (изменение прозрачности)</h3>
+                <div class="code-block"><code>$('img').fadeIn();            // проявление (opacity: 0 → 1)
+$('img').fadeOut();           // затухание (opacity: 1 → 0)
+$('img').fadeToggle();        // переключение
+$('img').fadeTo("slow", 0.5); // изменение до указанного значения</code></div>
+
+                <h3>Произвольная анимация</h3>
+                <p>Метод <code>animate()</code> позволяет анимировать любые CSS-свойства:</p>
+
+                <div class="code-block"><code>$('img').animate({
+    'opacity': 0.5,
+    'height': '100px',
+    'width': '100px'
+}, 4000);  // за 4 секунды
+
+// С callback
+$('div').animate({
+    left: '250px',
+    opacity: '0.5',
+    height: '150px',
+    width: '150px'
+}, {
+    duration: 1000,
+    complete: function() {
+        console.log("Анимация завершена!");
+    }
+});</code></div>
+
+                <h2>Создание элементов</h2>
+                <p>Рассмотрим создание элемента с атрибутами id и class:</p>
+
+                <div class="code-block"><code>// Самый быстрый способ
+var myDiv = $('&lt;div&gt;').attr({'id':'my', 'class':'some'});
+
+// Немного медленнее
+var myDiv = $('&lt;div&gt;', {'id':'my', 'class':'some'});
+
+// Самый медленный
+var myDiv = $('&lt;div id="my" class="some"&gt;&lt;/div&gt;');</code></div>
+
+                <h2>Манипуляция с элементами</h2>
+
+                <h3>Вставка после/перед (after/before)</h3>
+                <div class="code-block"><code>// after(content) — вставляет контент ПОСЛЕ каждого элемента
+$("p").after("&lt;hr/&gt;");  // после каждого &lt;p&gt; будет добавлена линия
+
+// insertAfter(element) — вставляет элемент ПОСЛЕ указанного
+$("&lt;hr/&gt;").insertAfter("p");
+
+// before(content) — вставляет контент ПЕРЕД каждым элементом
+$("p").before("&lt;hr/&gt;");
+
+// insertBefore(element) — вставляет элемент ПЕРЕД указанным
+$("&lt;hr/&gt;").insertBefore("p");</code></div>
+
+                <h3>Вставка внутрь (append/prepend)</h3>
+                <div class="code-block"><code>// append(content) — вставляет контент В КОНЕЦ элемента
+$("p").append("&lt;hr/&gt;");
+
+// appendTo(element) — вставляет выбранный контент в конец
+$("&lt;hr/&gt;").appendTo("p");
+
+// prepend(content) — вставляет контент В НАЧАЛО элемента
+$("p").prepend("&lt;hr/&gt;");
+
+// prependTo(element) — вставляет выбранный контент в начало
+$("&lt;hr/&gt;").prependTo("p");</code></div>
+
+                <h3>Замена элементов</h3>
+                <div class="code-block"><code>// replaceWith(content) — заменяет найденные элементы новым
+$("p").replaceWith("&lt;hr/&gt;");
+
+// replaceAll(target) — вставляет контент взамен найденному
+$("&lt;hr/&gt;").replaceAll("h3");</code></div>
+
+                <h3>Клонирование и удаление</h3>
+                <div class="code-block"><code>// clone(withDataAndEvents) — клонирует элементы
+var copy = $("p").clone();      // без событий
+var copy = $("p").clone(true);  // с событиями
+
+// empty() — удаляет текст и дочерние элементы
+$("div").empty();
+
+// remove() — удаляет элемент из DOM
+$("div").remove();</code></div>
+
+                <h2>Работа с содержимым</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Метод</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>html()</code></td>
+                            <td>Возвращает HTML заданного элемента</td>
+                        </tr>
+                        <tr>
+                            <td><code>html(newHtml)</code></td>
+                            <td>Заменяет HTML в заданном элементе</td>
+                        </tr>
+                        <tr>
+                            <td><code>text()</code></td>
+                            <td>Возвращает текст заданного элемента</td>
+                        </tr>
+                        <tr>
+                            <td><code>text(newText)</code></td>
+                            <td>Заменяет текст (HTML экранируется)</td>
+                        </tr>
+                        <tr>
+                            <td><code>val()</code></td>
+                            <td>Получает значение input, select, textarea</td>
+                        </tr>
+                        <tr>
+                            <td><code>val(newValue)</code></td>
+                            <td>Устанавливает значение</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Примеры</h3>
+                <div class="code-block"><code>// Получение/установка HTML
+$("div").html();                    // получить HTML
+$("div").html("&lt;p&gt;Новый контент&lt;/p&gt;");  // установить HTML
+
+// Получение/установка текста
+$("div").text();                    // получить текст
+$("section").text("Some &lt;strong&gt;text&lt;/strong&gt;");
+// Результат: Some &amp;lt;strong&amp;gt;text&amp;lt;/strong&amp;gt;
+
+// Работа с полями форм
+$("#name").val();                   // получить значение
+$("#name").val("John Doe");         // установить значение</code></div>
+
+                <h2>Размеры элементов</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Метод</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>height()</code></td>
+                            <td>Высота элемента (без padding, border)</td>
+                        </tr>
+                        <tr>
+                            <td><code>height(value)</code></td>
+                            <td>Установка высоты</td>
+                        </tr>
+                        <tr>
+                            <td><code>width()</code></td>
+                            <td>Ширина элемента (без padding, border)</td>
+                        </tr>
+                        <tr>
+                            <td><code>width(value)</code></td>
+                            <td>Установка ширины</td>
+                        </tr>
+                        <tr>
+                            <td><code>innerHeight()</code></td>
+                            <td>Высота + padding</td>
+                        </tr>
+                        <tr>
+                            <td><code>innerWidth()</code></td>
+                            <td>Ширина + padding</td>
+                        </tr>
+                        <tr>
+                            <td><code>outerHeight()</code></td>
+                            <td>Высота + padding + border</td>
+                        </tr>
+                        <tr>
+                            <td><code>outerWidth()</code></td>
+                            <td>Ширина + padding + border</td>
+                        </tr>
+                        <tr>
+                            <td><code>outerHeight(true)</code></td>
+                            <td>Высота + padding + border + margin</td>
+                        </tr>
+                        <tr>
+                            <td><code>outerWidth(true)</code></td>
+                            <td>Ширина + padding + border + margin</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Примеры</h3>
+                <div class="code-block"><code>// Получение размеров
+var h = $("div").height();           // высота контента
+var w = $("div").width();            // ширина контента
+var ih = $("div").innerHeight();     // с padding
+var oh = $("div").outerHeight();     // с padding и border
+var ohm = $("div").outerHeight(true); // с padding, border и margin
+
+// Установка размеров
+$("div").height(200);                // установить 200px
+$("div").width("50%");               // установить 50%</code></div>
+
+                <h2>AJAX запросы</h2>
+                <p>jQuery значительно упрощает работу с AJAX-запросами:</p>
+
+                <h3>Метод $.ajax()</h3>
+                <div class="code-block"><code>$.ajax({
+    url: "/api/data",
+    method: "GET",
+    dataType: "json",
+    success: function(data) {
+        console.log("Успех:", data);
+    },
+    error: function(xhr, status, error) {
+        console.log("Ошибка:", error);
+    }
+});</code></div>
+
+                <h3>Сокращенные методы</h3>
+                <div class="code-block"><code>// GET-запрос
+$.get("/api/users", function(data) {
+    console.log(data);
+});
+
+// POST-запрос
+$.post("/api/users", {name: "John", age: 30}, function(data) {
+    console.log("Создан:", data);
+});
+
+// Загрузка JSON
+$.getJSON("/api/users.json", function(data) {
+    console.log("JSON:", data);
+});
+
+// Загрузка HTML
+$("#content").load("/page.html");</code></div>
+
+                <h3>Современный синтаксис с промисами</h3>
+                <div class="code-block"><code>$.ajax({
+    url: "/api/data",
+    method: "GET"
+})
+.done(function(data) {
+    console.log("Успех:", data);
+})
+.fail(function(xhr, status, error) {
+    console.log("Ошибка:", error);
+})
+.always(function() {
+    console.log("Завершено");
+});</code></div>
+
+                <h2>Цепочки методов (Method Chaining)</h2>
+                <p>Одна из мощных возможностей jQuery — цепочки методов. Большинство методов возвращают объект jQuery, что позволяет вызывать методы последовательно:</p>
+
+                <div class="code-block"><code>$("p")
+    .addClass("highlight")
+    .css("font-size", "16px")
+    .fadeIn(500)
+    .html("Новый текст");
+
+// То же самое, но без цепочки:
+$("p").addClass("highlight");
+$("p").css("font-size", "16px");
+$("p").fadeIn(500);
+$("p").html("Новый текст");</code></div>
+
+                <h2>Утилиты jQuery</h2>
+                
+                <h3>$.each() — перебор массивов и объектов</h3>
+                <div class="code-block"><code>// Перебор массива
+var arr = [1, 2, 3, 4, 5];
+$.each(arr, function(index, value) {
+    console.log(index + ": " + value);
+});
+
+// Перебор объекта
+var obj = {name: "John", age: 30};
+$.each(obj, function(key, value) {
+    console.log(key + ": " + value);
+});</code></div>
+
+                <h3>$.map() — преобразование массивов</h3>
+                <div class="code-block"><code>var arr = [1, 2, 3, 4, 5];
+var doubled = $.map(arr, function(value, index) {
+    return value * 2;
+});
+console.log(doubled); // [2, 4, 6, 8, 10]</code></div>
+
+                <h3>$.grep() — фильтрация массивов</h3>
+                <div class="code-block"><code>var arr = [1, 2, 3, 4, 5];
+var filtered = $.grep(arr, function(value) {
+    return value &gt; 2;
+});
+console.log(filtered); // [3, 4, 5]</code></div>
+
+                <h3>$.extend() — объединение объектов</h3>
+                <div class="code-block"><code>var obj1 = {a: 1, b: 2};
+var obj2 = {b: 3, c: 4};
+var result = $.extend({}, obj1, obj2);
+console.log(result); // {a: 1, b: 3, c: 4}</code></div>
+
+                <h3>$.trim() — удаление пробелов</h3>
+                <div class="code-block"><code>var str = "  hello world  ";
+var trimmed = $.trim(str);
+console.log(trimmed); // "hello world"</code></div>
+
+                <h2>Практический пример: Todo-список</h2>
+                <div class="code-block"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;jQuery Todo List&lt;/title&gt;
+    &lt;style&gt;
+        .completed { text-decoration: line-through; color: #999; }
+        li { cursor: pointer; padding: 5px; }
+        li:hover { background: #f0f0f0; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Todo List&lt;/h1&gt;
+    &lt;input type="text" id="newTask" placeholder="Новая задача"&gt;
+    &lt;button id="addBtn"&gt;Добавить&lt;/button&gt;
+    &lt;ul id="taskList"&gt;&lt;/ul&gt;
+
+    &lt;script src="https://code.jquery.com/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        $(function() {
+            // Добавление новой задачи
+            $("#addBtn").on("click", function() {
+                var task = $("#newTask").val().trim();
+                
+                if (task) {
+                    var li = $("&lt;li&gt;")
+                        .text(task)
+                        .append(' &lt;button class="delete"&gt;✕&lt;/button&gt;');
+                    
+                    $("#taskList").append(li);
+                    $("#newTask").val("").focus();
+                }
+            });
+            
+            // Добавление по Enter
+            $("#newTask").on("keypress", function(e) {
+                if (e.which === 13) {
+                    $("#addBtn").click();
+                }
+            });
+            
+            // Переключение выполнения задачи
+            $("#taskList").on("click", "li", function(e) {
+                if (!$(e.target).hasClass("delete")) {
+                    $(this).toggleClass("completed");
+                }
+            });
+            
+            // Удаление задачи
+            $("#taskList").on("click", ".delete", function(e) {
+                e.stopPropagation();
+                $(this).parent().fadeOut(300, function() {
+                    $(this).remove();
+                });
+            });
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></div>
+
+                <h2>Сравнение jQuery и нативного JavaScript</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Задача</th>
+                            <th>jQuery</th>
+                            <th>Нативный JS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Выбор элемента</td>
+                            <td><code>$("#id")</code></td>
+                            <td><code>document.getElementById("id")</code></td>
+                        </tr>
+                        <tr>
+                            <td>Выбор по классу</td>
+                            <td><code>$(".class")</code></td>
+                            <td><code>document.querySelectorAll(".class")</code></td>
+                        </tr>
+                        <tr>
+                            <td>Добавить класс</td>
+                            <td><code>$("p").addClass("active")</code></td>
+                            <td><code>el.classList.add("active")</code></td>
+                        </tr>
+                        <tr>
+                            <td>Изменить CSS</td>
+                            <td><code>$("p").css("color", "red")</code></td>
+                            <td><code>el.style.color = "red"</code></td>
+                        </tr>
+                        <tr>
+                            <td>Событие клик</td>
+                            <td><code>$("p").on("click", fn)</code></td>
+                            <td><code>el.addEventListener("click", fn)</code></td>
+                        </tr>
+                        <tr>
+                            <td>AJAX GET</td>
+                            <td><code>$.get(url, fn)</code></td>
+                            <td><code>fetch(url).then(r =&gt; r.json())</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2>Плагины jQuery</h2>
+                <p>jQuery имеет огромную экосистему плагинов. Вот некоторые популярные:</p>
+
+                <ul>
+                    <li><strong>jQuery UI</strong> — компоненты интерфейса (datepicker, dialog, tabs)</li>
+                    <li><strong>Slick</strong> — карусели и слайдеры</li>
+                    <li><strong>Select2</strong> — расширенные select-боксы</li>
+                    <li><strong>DataTables</strong> — таблицы с сортировкой, поиском, пагинацией</li>
+                    <li><strong>Magnific Popup</strong> — модальные окна и галереи</li>
+                    <li><strong>jQuery Validation</strong> — валидация форм</li>
+                </ul>
+
+                <h3>Создание собственного плагина</h3>
+                <div class="code-block"><code>(function($) {
+    $.fn.highlight = function(options) {
+        var settings = $.extend({
+            color: "yellow",
+            duration: 500
+        }, options);
+        
+        return this.each(function() {
+            $(this).css("background-color", settings.color)
+                   .delay(settings.duration)
+                   .queue(function(next) {
+                       $(this).css("background-color", "transparent");
+                       next();
+                   });
+        });
+    };
+})(jQuery);
+
+// Использование
+$("p").highlight({color: "lightblue", duration: 1000});</code></div>
+
+                <h2>Когда использовать jQuery?</h2>
+                
+                <div class="info-box success">
+                    <div class="info-box-title">✅ Плюсы jQuery</div>
+                    <ul>
+                        <li>Простой и понятный синтаксис</li>
+                        <li>Кроссбраузерная совместимость (актуально для старых браузеров)</li>
+                        <li>Быстрое прототипирование</li>
+                        <li>Огромное количество плагинов</li>
+                        <li>Отличная документация</li>
+                    </ul>
+                </div>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Минусы jQuery</div>
+                    <ul>
+                        <li>Дополнительная зависимость (~30 КБ минимизированного кода)</li>
+                        <li>Медленнее нативного JavaScript</li>
+                        <li>Современные браузеры имеют аналогичные нативные API</li>
+                        <li>Фреймворки (React, Vue) предоставляют лучшие паттерны для сложных приложений</li>
+                    </ul>
+                </div>
+
+                <h2>Миграция с jQuery на нативный JS</h2>
+                <p>Если вы решили отказаться от jQuery, вот полезные ресурсы:</p>
+                <ul>
+                    <li><strong>You Might Not Need jQuery</strong> — сайт с примерами замены jQuery на нативный JS</li>
+                    <li><strong>querySelector/querySelectorAll</strong> — заменяют большинство селекторов jQuery</li>
+                    <li><strong>fetch API</strong> — современная замена $.ajax()</li>
+                    <li><strong>classList API</strong> — работа с классами</li>
+                    <li><strong>addEventListener</strong> — обработка событий</li>
+                </ul>
+
+                <h2>Резюме</h2>
+                <p>В этой главе мы рассмотрели:</p>
+                <ul>
+                    <li>✅ Подключение jQuery (локально и через CDN)</li>
+                    <li>✅ Ожидание загрузки документа с <code>$(function(){})</code></li>
+                    <li>✅ Выбор элементов (CSS-селекторы и методы навигации)</li>
+                    <li>✅ Работу с CSS-стилями и классами</li>
+                    <li>✅ Работу с атрибутами (<code>attr</code>) и свойствами (<code>prop</code>)</li>
+                    <li>✅ Обработку событий (<code>on</code>, <code>trigger</code>, <code>off</code>)</li>
+                    <li>✅ Анимацию (hide/show, slide, fade, animate)</li>
+                    <li>✅ Создание и манипуляцию элементами</li>
+                    <li>✅ Работу с содержимым (html, text, val)</li>
+                    <li>✅ Работу с размерами элементов</li>
+                    <li>✅ AJAX-запросы</li>
+                    <li>✅ Цепочки методов (method chaining)</li>
+                    <li>✅ Утилиты jQuery (each, map, grep, extend)</li>
+                    <li>✅ Практический пример: Todo-список</li>
+                    <li>✅ Сравнение с нативным JavaScript</li>
+                    <li>✅ Создание плагинов</li>
+                </ul>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Заключение</div>
+                    <p>jQuery остается отличной библиотекой для быстрого прототипирования и поддержки старых проектов. Однако для новых проектов рекомендуется рассмотреть нативные возможности JavaScript или современные фреймворки.</p>
+                </div>
+            </section>
+
             <section class="chapter" id="ch31">
                 <h1>Глава 31. Best Practices</h1>
                 <p>Контент будет добавлен...</p>
