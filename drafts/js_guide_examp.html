@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript - Полный справочник (Offline)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg: #fff;
+            --bg2: #f8f9fa;
+            --text: #2c3e50;
+            --text2: #6c757d;
+            --border: #dee2e6;
+            --accent: #0066cc;
+            --code-bg: #f4f4f4;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        .none {display: none;}
+        
+        .header {
+            background: var(--bg2);
+            border-bottom: 2px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: var(--bg2);
+            border-right: 1px solid var(--border);
+            height: calc(100vh - 70px);
+            overflow-y: auto;
+            position: sticky;
+            top: 70px;
+        }
+        
+        .sidebar-search {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--bg2);
+            z-index: 10;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .nav-section {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .nav-title {
+            padding: 0.5rem 1rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--text2);
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-list {
+            list-style: none;
+        }
+        
+        .nav-item {
+            padding: 0.6rem 1rem 0.6rem 2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-item:hover {
+            background: #e8f4f8;
+            border-left-color: var(--accent);
+        }
+        
+        .nav-item.active {
+            background: #e8f4f8;
+            border-left-color: var(--accent);
+            font-weight: 600;
+        }
+        
+        body.dark-theme .nav-item:hover {
+            background: #3d3d3d;
+            color: var(--text);
+        }
+        
+        body.dark-theme .nav-item.active {
+            background: #3d3d3d;
+            color: var(--text);
+        }
+        
+        body.dark-theme tr:hover {
+            background: #3d3d3d;
+        }
+        
+        .nav-item.new::after {
+            content: "🆕";
+            margin-left: 0.5rem;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 900px;
+        }
+        
+        .chapter {
+            margin-bottom: 4rem;
+            scroll-margin-top: 80px;
+        }
+        
+        .chapter h1 {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
+        
+        .chapter h2 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+        }
+        
+        .chapter h3 {
+            font-size: 1.4rem;
+            margin: 1.5rem 0 0.8rem;
+        }
+        
+        .chapter p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+        
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            white-space: pre;
+        }
+        
+        code {
+            background: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            /* margin: 1.5rem 0; */
+        }
+
+        body.dark-theme .table-wrapper {
+            background: var(--bg2);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg2);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        th {
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: #e8f4f8;
+        }
+        
+        .info-box {
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            border-radius: 6px;
+            border-left: 4px solid;
+        }
+        
+        .info-box.note {
+            background: #e7f3ff;
+            border-color: var(--accent);
+        }
+        
+        .info-box.warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+        
+        .info-box.success {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .info-box.danger {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        
+        .info-box-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer {
+            background: var(--bg2);
+            border-top: 2px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        /* Dark theme */
+        body.dark-theme {
+            --bg: #1a1a1a;
+            --bg2: #2d2d2d;
+            --text: #e0e0e0;
+            --text2: #b0b0b0;
+            --border: #404040;
+            --code-bg: #3a3a3a;
+        }
+        
+        body.dark-theme .info-box.note {
+            background: #1e3a5f;
+        }
+        
+        body.dark-theme .info-box.warning {
+            background: #5f4c1e;
+        }
+        
+        body.dark-theme .info-box.success {
+            background: #1e4d2b;
+        }
+        
+        body.dark-theme .info-box.danger {
+            background: #5f1e1e;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                top: 0;
+            }
+            .main-content {
+                padding: 1rem;
+            }
+            .chapter h1 {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media print {
+            .header, .sidebar, .footer {
+                display: none;
+            }
+            .main-content {
+                padding: 0;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">📚 JavaScript Справочник</div>
+        <div>
+            <button class="btn" onclick="toggleTheme()">🌙 Тема</button>
+            <button class="btn" onclick="window.print()">🖨️ Печать</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-search">
+                <input type="text" class="search-input" placeholder="🔍 Поиск..." id="searchInput">
+            </div>
+            <nav>
+                <!-- Основы (Metanit) -->
+                <div class="nav-section">
+                    <div class="nav-title">📖 Основы (Metanit)</div>
+                    <ul class="nav-list">
+                        <li class="nav-item" data-target="ch1">Глава 1. Введение</li>
+                        <li class="nav-item" data-target="ch2">Глава 2. Основы JS</li>
+                        <li class="nav-item" data-target="ch3">Глава 3. Функции</li>
+                        <li class="nav-item" data-target="ch4">Глава 4-5. ООП</li>
+                    </ul>
+                </div>
+
+                <!-- Типы данных -->
+                <div class="nav-section">
+                    <div class="nav-title">📊 Типы данных</div>
+                    <ul class="nav-list">
+                        <li class="nav-item" data-target="ch6">Глава 6. Массивы</li>
+                        <li class="nav-item" data-target="ch7">Глава 7. Строки и RegExp</li>
+                        <li class="nav-item" data-target="ch8">Глава 8. Обработка ошибок</li>
+                        <li class="nav-item" data-target="ch9">Глава 9. Date и Number</li>
+                        <li class="nav-item" data-target="ch10">Глава 10. Map и Set</li>
+                    </ul>
+                </div>
+
+                <!-- DOM и события -->
+                <div class="nav-section">
+                    <div class="nav-title">🎨 DOM и события</div>
+                    <ul class="nav-list">
+                        <li class="nav-item" data-target="ch11">Глава 11. DOM</li>
+                        <li class="nav-item" data-target="ch12">Глава 12. События</li>
+                        <li class="nav-item" data-target="ch13">Глава 13. Формы</li>
+                    </ul>
+                </div>
+
+                <!-- Браузер и API -->
+                <div class="nav-section">
+                    <div class="nav-title">Браузер и API</div>
+                    <ul class="nav-list">
+                        <li class="nav-item" data-target="ch14">Глава 14. BOM</li>
+                        <li class="nav-item" data-target="ch15">Глава 15. JSON и XML</li>
+                        <li class="nav-item" data-target="ch16">Глава 16. Хранение данных</li>
+                    </ul>
+                </div>
+
+                <!-- Асинхронность -->
+                <div class="nav-section">
+                    <div class="nav-title">⚡ Асинхронность</div>
+                    <ul class="nav-list">
+                        <li class="nav-item" data-target="ch17">Глава 17. Promise и async/await</li>
+                        <li class="nav-item" data-target="ch18">Глава 18. AJAX</li>
+                        <li class="nav-item" data-target="ch19">Глава 19. Fetch API</li>
+                        <li class="nav-item" data-target="ch20">Глава 20. WebSocket</li>
+                    </ul>
+                </div>
+
+                <!-- Продвинутое -->
+                <div class="nav-section">
+                    <div class="nav-title">Продвинутое</div>
+                    <ul class="nav-list">
+                        <li class="nav-item" data-target="ch21">Глава 21. Локализация</li>
+                        <li class="nav-item" data-target="ch22">Глава 22. Модули</li>
+                        <li class="nav-item" data-target="ch23">Глава 23. Canvas API</li>
+                        <li class="nav-item" data-target="ch24">Глава 24. IndexedDB</li>
+                        <li class="nav-item" data-target="ch25">Глава 25. Drag & Drop</li>
+                        <li class="nav-item" data-target="ch26">Глава 26. File API</li>
+                        <li class="nav-item" data-target="ch27">Глава 27. Web Workers</li>
+                        <li class="nav-item" data-target="ch28">Глава 28. Web API</li>
+                        <li class="nav-item" data-target="ch29">Глава 29. Паттерны</li>
+                    </ul>
+                </div>
+
+                <!-- Дополнительно -->
+                <div class="nav-section">
+                    <div class="nav-title">🆕 Дополнительно</div>
+                    <ul class="nav-list">
+                        <li class="nav-item new" data-target="ch30">Глава 30. jQuery</li>
+                        <li class="nav-item new" data-target="ch31">Глава 31. Best Practices</li>
+                        <li class="nav-item new" data-target="ch32">Глава 32. Отладка</li>
+                        <li class="nav-item new" data-target="ch33">Глава 33. Полезные ресурсы</li>
+                        <li class="nav-item new" data-target="ch34">Глава 34. CSS решения</li>
+                        <li class="nav-item new" data-target="ch35">Глава 35. JS решения</li>
+                        <li class="nav-item new" data-target="ch36">Глава 36. Сниппеты</li>
+                    </ul>
+                </div>
+
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            
+            <!-- ГЛАВА 1: Введение -->
+            <section class="chapter" id="ch1">
+                <h1>Глава 1. Введение в JavaScript</h1>
+                
+                <h2>История создания JavaScript</h2>
+                <p>JavaScript был создан в 1995 году программистом <strong>Бренданом Айком</strong> (Brendan Eich) всего за <strong>10 дней</strong>, когда он работал в компании Netscape Communications. Изначально язык назывался <strong>Mocha</strong>, затем был переименован в <strong>LiveScript</strong>, и наконец получил название <strong>JavaScript</strong> в рамках маркетинговой стратегии, чтобы воспользоваться популярностью Java (хотя это совершенно разные языки).</p>
+                
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Цель создания</div>
+                    <p>JavaScript был разработан для того, чтобы сделать веб-страницы интерактивными и динамичными. До его появления HTML-страницы были статичными и не могли реагировать на действия пользователя без перезагрузки.</p>
+                </div>
+
+                <p><strong>Основные этапы развития:</strong></p>
+                <ul>
+                    <li><strong>1995</strong> — Создание Бренданом Айком</li>
+                    <li><strong>1997</strong> — Стандартизация ECMA (ECMAScript)</li>
+                    <li><strong>2009</strong> — ES5: добавлены JSON, strict mode</li>
+                    <li><strong>2015</strong> — ES6 (ES2015): революция (let/const, классы, стрелочные функции, промисы)</li>
+                    <li><strong>2016-2024</strong> — Ежегодные обновления (async/await, optional chaining, и др.)</li>
+                </ul>
+                
+                <h2>Что такое JavaScript?</h2>
+                <p>JavaScript (JS) — интерпретируемый язык программирования, выполняющийся в браузере. Позволяет создавать интерактивные веб-страницы.</p>
+                
+                <div class="info-box note">
+                    <div class="info-box-title">💡 JavaScript используется для:</div>
+                    <ul>
+                        <li>Изменения содержимого и стилей страницы</li>
+                        <li>Реакции на действия пользователя (клики, ввод)</li>
+                        <li>Отправки запросов на сервер (AJAX)</li>
+                        <li>Создания анимаций и интерактивных элементов</li>
+                        <li>Валидации форм</li>
+                    </ul>
+                </div>
+
+                <h2>Типы данных в JavaScript</h2>
+                <p>В JavaScript существует <strong>8 типов данных</strong>: 7 примитивных и 1 сложный (Object).</p>
+                
+                <h3>Примитивные типы (7 типов)</h3>
+                <div class="code-block"><code>// 1. Number (числа)
+let integer = 42;
+let float = 3.14;
+let negative = -10;
+
+// 2. String (строки)
+let str1 = "Hello";
+let str2 = 'World';
+let str3 = `Hello ${name}`; // template literal (ES6)
+
+// 3. Boolean (логический)
+let isTrue = true;
+let isFalse = false;
+
+// 4. Undefined (неопределённое значение)
+let notDefined;
+console.log(notDefined); // undefined
+
+// 5. Null (намеренное отсутствие значения)
+let empty = null;
+
+// 6. Symbol (уникальный идентификатор) - ES6
+let id = Symbol('id');
+
+// 7. BigInt (большие целые числа) - ES2020
+let bigNumber = 1234567890123456789012345678901234567890n;</code></div>
+
+                <h3>8-й тип: Object (Объекты)</h3>
+                <p>Тип <strong>Object</strong> — это сложный тип данных, который включает в себя три основных подтипа:</p>
+                
+                <div class="code-block"><code>// 1. Object (объект) - коллекция пар ключ-значение
+let user = {
+    name: 'Alice',
+    age: 25,
+    isAdmin: false
+};
+
+// 2. Array (массив) - упорядоченная коллекция элементов
+let numbers = [1, 2, 3, 4, 5];
+let mixed = [1, 'text', true, null];
+
+// 3. Date (дата и время) - работа с датами
+let now = new Date();
+let specificDate = new Date('2024-01-01');</code></div>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Важно понимать</div>
+                    <ul>
+                        <li><strong>Array</strong> и <strong>Date</strong> технически являются объектами, но имеют специальное поведение</li>
+                        <li><code>typeof []</code> вернёт "object"</li>
+                        <li><code>typeof new Date()</code> вернёт "object"</li>
+                        <li>Для проверки массива используйте: <code>Array.isArray([])</code> → true</li>
+                        <li>Для проверки даты: <code>now instanceof Date</code> → true</li>
+                    </ul>
+                </div>
+
+                <h3>Проверка типа</h3>
+                <div class="code-block"><code>console.log(typeof 42);        // "number"
+console.log(typeof "Hello");   // "string"
+console.log(typeof true);      // "boolean"
+console.log(typeof undefined); // "undefined"
+console.log(typeof null);      // "object" (баг JS!)
+console.log(typeof []);        // "object"
+console.log(typeof {});        // "object"
+console.log(typeof new Date());// "object"
+
+// Правильная проверка массива
+console.log(Array.isArray([])); // true
+
+// Правильная проверка даты
+let now = new Date();
+console.log(now instanceof Date); // true</code></div>
+
+                <h2>Первая программа</h2>
+                <div class="code-block"><code>// Вывод в консоль
+console.log('Hello, World!');
+
+// Окно с сообщением
+alert('Привет, JavaScript!');
+
+// Запрос у пользователя
+let name = prompt('Как тебя зовут?');
+console.log('Привет, ' + name);</code></div>
+
+                <h2>Способы подключения JavaScript</h2>
+                
+                <h3>1. Внутри HTML (inline)</h3>
+                <div class="code-block"><code>&lt;script&gt;
+    alert('Привет!');
+&lt;/script&gt;</code></div>
+
+                <h3>2. Внешний файл (рекомендуется)</h3>
+                <div class="code-block"><code>&lt;!-- В конце body --&gt;
+&lt;script src="script.js"&gt;&lt;/script&gt;
+
+&lt;!-- С defer (выполнится после загрузки HTML) --&gt;
+&lt;script src="script.js" defer&gt;&lt;/script&gt;
+
+&lt;!-- С async (параллельная загрузка) --&gt;
+&lt;script src="script.js" async&gt;&lt;/script&gt;</code></div>
+
+                <h2>Консоль браузера</h2>
+                <p>Консоль — главный инструмент разработчика для отладки.</p>
+                
+                <div class="info-box success">
+                    <div class="info-box-title">✅ Как открыть консоль:</div>
+                    <ul>
+                        <li><strong>Windows:</strong> F12 или Ctrl+Shift+I</li>
+                        <li><strong>Mac:</strong> ⌘+⌥+I</li>
+                        <li>Или: ПКМ на странице → "Inspect" → вкладка "Console"</li>
+                    </ul>
+                </div>
+
+                <h3>Методы console</h3>
+                <div class="code-block"><code>// Обычное сообщение
+console.log('Сообщение');
+
+// Ошибка (красным)
+console.error('Ошибка!');
+
+// Предупреждение (желтым)
+console.warn('Внимание!');
+
+// Таблица
+console.table([
+    {name: 'Alice', age: 25},
+    {name: 'Bob', age: 30}
+]);
+
+// Замер времени
+console.time('myTimer');
+// ... код ...
+console.timeEnd('myTimer'); // "myTimer: 123ms"</code></div>
+            </section>
+
+             <!-- ГЛАВА 33: Ресурсы для изучения -->
+<section class="chapter" id="ch33">
+    <h1>Глава 33. Ресурсы для изучения JavaScript</h1>
+    
+    <h2>Введение</h2>
+    <p>В этой главе собраны лучшие ресурсы для изучения и совершенствования навыков JavaScript — от официальной документации до интерактивных платформ и книг.</p>
+
+    <h2>1. Официальная документация</h2>
+
+    <h3>1.1. MDN Web Docs (Mozilla Developer Network)</h3>
+    <div class="info-box success">
+        <div class="info-box-title">✅ Главный источник информации</div>
+        <p><strong>URL:</strong> <a href="https://developer.mozilla.org/ru/docs/Web/JavaScript" target="_blank">developer.mozilla.org</a></p>
+        <p><strong>Описание:</strong> Самая полная и достоверная документация по JavaScript, HTML, CSS и Web API. Содержит примеры, совместимость с браузерами и лучшие практики.</p>
+        <p><strong>Разделы:</strong></p>
+        <ul>
+            <li>JavaScript Guide (Руководство)</li>
+            <li>JavaScript Reference (Справочник)</li>
+            <li>Web APIs</li>
+            <li>Примеры и туториалы</li>
+        </ul>
+    </div>
+
+    <h3>1.2. ECMAScript спецификация</h3>
+    <div class="info-box note">
+        <div class="info-box-title">💡 Для продвинутых</div>
+        <p><strong>URL:</strong> <a href="https://tc39.es/ecma262/" target="_blank">tc39.es/ecma262</a></p>
+        <p><strong>Описание:</strong> Официальная спецификация языка JavaScript (ECMAScript). Технически сложна, но содержит точные определения всех возможностей языка.</p>
+    </div>
+
+    <h3>1.3. Can I Use</h3>
+    <div class="info-box note">
+        <div class="info-box-title">💡 Проверка совместимости</div>
+        <p><strong>URL:</strong> <a href="https://caniuse.com/" target="_blank">caniuse.com</a></p>
+        <p><strong>Описание:</strong> База данных совместимости браузеров с различными JavaScript/CSS/HTML функциями. Показывает, какие браузеры поддерживают ту или иную возможность.</p>
+    </div>
+
+    <h2>2. Обучающие платформы</h2>
+
+    <h3>2.1. JavaScript.ru (Learn JavaScript)</h3>
+    <div class="info-box success">
+        <div class="info-box-title">✅ Лучший русскоязычный учебник</div>
+        <p><strong>URL:</strong> <a href="https://learn.javascript.ru/" target="_blank">learn.javascript.ru</a></p>
+        <p><strong>Автор:</strong> Илья Кантор</p>
+        <p><strong>Описание:</strong> Полный и современный учебник JavaScript от основ до продвинутых тем. Отличные объяснения, много примеров и задач.</p>
+        <p><strong>Темы:</strong></p>
+        <ul>
+            <li>Основы JavaScript</li>
+            <li>Качество кода</li>
+            <li>Объекты, прототипы, классы</li>
+            <li>Промисы, async/await</li>
+            <li>DOM, события, формы</li>
+            <li>Анимация, Web компоненты</li>
+        </ul>
+    </div>
+
+    <h3>2.2. Metanit.com</h3>
+    <div class="info-box success">
+        <div class="info-box-title">✅ Русскоязычные учебники</div>
+        <p><strong>URL:</strong> <a href="https://metanit.com/web/javascript/" target="_blank">metanit.com/web/javascript</a></p>
+        <p><strong>Описание:</strong> Подробные уроки по JavaScript и многим другим языкам программирования. Систематизированное изложение материала.</p>
+    </div>
+
+    <h3>2.3. freeCodeCamp</h3>
+    <div class="info-box note">
+        <div class="info-box-title">💡 Интерактивное обучение (EN)</div>
+        <p><strong>URL:</strong> <a href="https://www.freecodecamp.org/" target="_blank">freecodecamp.org</a></p>
+        <p><strong>Описание:</strong> Бесплатная платформа с интерактивными уроками. Практика прямо в браузере, сертификаты после прохождения курсов.</p>
+        <p><strong>Курсы:</strong></p>
+        <ul>
+            <li>JavaScript Algorithms and Data Structures</li>
+            <li>Front End Development Libraries</li>
+            <li>APIs and Microservices</li>
+        </ul>
+    </div>
+
+    <h3>2.4. Codecademy</h3>
+    <div class="info-box note">
+        <div class="info-box-title">💡 Интерактивные курсы (EN)</div>
+        <p><strong>URL:</strong> <a href="https://www.codecademy.com/learn/introduction-to-javascript" target="_blank">codecademy.com</a></p>
+        <p><strong>Описание:</strong> Интерактивное обучение программированию. Базовые курсы бесплатны, продвинутые — по подписке.</p>
+    </div>
+
+    <h3>2.5. JavaScript30</h3>
+    <div class="info-box note">
+        <div class="info-box-title">💡 30 проектов за 30 дней (EN)</div>
+        <p><strong>URL:</strong> <a href="https://javascript30.com/" target="_blank">javascript30.com</a></p>
+        <p><strong>Автор:</strong> Wes Bos</p>
+        <p><strong>Описание:</strong> Бесплатный курс из 30 практических проектов. Каждый день — новый проект на чистом JavaScript (без фреймворков).</p>
+    </div>
+
+    <h2>3. Книги</h2>
+
+    <h3>3.1. "JavaScript. Подробное руководство" (Дэвид Флэнаган)</h3>
+    <div class="info-box note">
+        <div class="info-box-title">📚 JavaScript: The Definitive Guide</div>
+        <p><strong>Автор:</strong> David Flanagan</p>
+        <p><strong>Описание:</strong> Энциклопедический справочник по JavaScript. Охватывает все аспекты языка от основ до продвинутых тем.</p>
+        <p><strong>Рекомендуется для:</strong> Опытных разработчиков, справочник</p>
+    </div>
+
+    <h3>3.2. "Вы не знаете JS" (You Don't Know JS)</h3>
+    <div class="info-box note">
+        <div class="info-box-title">📚 Серия книг YDKJS</div>
+        <p><strong>Автор:</strong> Kyle Simpson</p>
+        <p><strong>URL:</strong> <a href="https://github.com/azat-io/you-dont-know-js-ru" target="_blank">GitHub (русский перевод)</a></p>
+        <p><strong>Описание:</strong> Глубокое погружение в механизмы работы JavaScript. 6 книг, покрывающих все аспекты языка.</p>
+        <p><strong>Темы:</strong></p>
+        <ul>
+            <li>Область видимости и замыкания</li>
+            <li>this и прототипы объектов</li>
+            <li>Типы и грамматика</li>
+            <li>Асинхронность и производительность</li>
+            <li>ES6 и beyond</li>
+        </ul>
+    </div>
+
+    <h3>3.3. "JavaScript и jQuery" (Дэвид Макфарланд)</h3>
+    <div class="info-box note">
+        <div class="info-box-title">📚 Для начинающих</div>
+        <p><strong>Автор:</strong> David Sawyer McFarland</p>
+        <p><strong>Описание:</strong> Отличная книга для начинающих. Много примеров, иллюстраций и практических задач.</p>
+    </div>
+
+    <h3>3.4. "Eloquent JavaScript" (Выразительный JavaScript)</h3>
+    <div class="info-box note">
+        <div class="info-box-title">📚 Бесплатная онлайн-книга</div>
+        <p><strong>Автор:</strong> Marijn Haverbeke</p>
+        <p><strong>URL:</strong> <a href="https://eloquentjavascript.net/" target="_blank">eloquentjavascript.net</a></p>
+        <p><strong>Описание:</strong> Современная книга о JavaScript с акцентом на программирование. Доступна бесплатно онлайн.</p>
+    </div>
+
+    <h2>4. Видеокурсы и YouTube каналы</h2>
+
+    <h3>4.1. Русскоязычные каналы</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Канал</th>
+                <th>Описание</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Vladilen Minin</strong></td>
+                <td>Курсы по JavaScript, React, Vue, Node.js. Четкое объяснение, много практики.</td>
+            </tr>
+            <tr>
+                <td><strong>Фрилансер по жизни</strong></td>
+                <td>Уроки по веб-разработке, JavaScript, фреймворкам.</td>
+            </tr>
+            <tr>
+                <td><strong>ulbi TV</strong></td>
+                <td>Подробные курсы по JavaScript, React, TypeScript.</td>
+            </tr>
+            <tr>
+                <td><strong>WebDev с нуля</strong></td>
+                <td>Курсы для начинающих веб-разработчиков.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>4.2. Англоязычные каналы</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Канал</th>
+                <th>Описание</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Traversy Media</strong></td>
+                <td>Один из лучших каналов. Проекты, туториалы, курсы по всем технологиям.</td>
+            </tr>
+            <tr>
+                <td><strong>The Net Ninja</strong></td>
+                <td>Плейлисты по JavaScript, фреймворкам, Node.js. Понятные объяснения.</td>
+            </tr>
+            <tr>
+                <td><strong>Fireship</strong></td>
+                <td>Короткие, емкие видео. Отлично для быстрого изучения новых технологий.</td>
+            </tr>
+            <tr>
+                <td><strong>Web Dev Simplified</strong></td>
+                <td>Упрощенные объяснения сложных концепций JavaScript.</td>
+            </tr>
+            <tr>
+                <td><strong>JavaScript Mastery</strong></td>
+                <td>Полные проекты на JavaScript, React, Next.js.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>5. Практика и задачи</h2>
+
+    <h3>5.1. Codewars</h3>
+    <div class="info-box success">
+        <div class="info-box-title">✅ Задачи по программированию</div>
+        <p><strong>URL:</strong> <a href="https://www.codewars.com/" target="_blank">codewars.com</a></p>
+        <p><strong>Описание:</strong> Тысячи задач (kata) разной сложности. Система рейтингов, обсуждение решений.</p>
+        <p><strong>Уровни:</strong> 8 kyu (новичок) → 1 kyu (мастер)</p>
+    </div>
+
+    <h3>5.2. LeetCode</h3>
+    <div class="info-box note">
+        <div class="info-box-title">💡 Подготовка к собеседованиям</div>
+        <p><strong>URL:</strong> <a href="https://leetcode.com/" target="_blank">leetcode.com</a></p>
+        <p><strong>Описание:</strong> Задачи по алгоритмам и структурам данных. Часто используется для подготовки к техническим интервью.</p>
+    </div>
+
+    <h3>5.3. HackerRank</h3>
+    <div class="info-box note">
+        <div class="info-box-title">💡 Соревнования и сертификаты</div>
+        <p><strong>URL:</strong> <a href="https://www.hackerrank.com/" target="_blank">hackerrank.com</a></p>
+        <p><strong>Описание:</strong> Задачи, соревнования, тесты на знание JavaScript. Можно получить сертификаты.</p>
+    </div>
+
+    <h3>5.4. Exercism</h3>
+    <div class="info-box note">
+        <div class="info-box-title">💡 Менторство и обратная связь</div>
+        <p><strong>URL:</strong> <a href="https://exercism.org/tracks/javascript" target="_blank">exercism.org</a></p>
+        <p><strong>Описание:</strong> Бесплатная платформа с задачами и менторской поддержкой. Получайте отзывы от опытных разработчиков.</p>
+    </div>
+
+    <h2>6. Инструменты разработчика</h2>
+
+    <h3>6.1. Онлайн-редакторы кода</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Инструмент</th>
+                <th>URL</th>
+                <th>Описание</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>CodePen</strong></td>
+                <td><a href="https://codepen.io/" target="_blank">codepen.io</a></td>
+                <td>Лучший онлайн-редактор для фронтенда. HTML, CSS, JS в одном месте.</td>
+            </tr>
+            <tr>
+                <td><strong>JSFiddle</strong></td>
+                <td><a href="https://jsfiddle.net/" target="_blank">jsfiddle.net</a></td>
+                <td>Быстрое создание и тестирование JS-кода.</td>
+            </tr>
+            <tr>
+                <td><strong>StackBlitz</strong></td>
+                <td><a href="https://stackblitz.com/" target="_blank">stackblitz.com</a></td>
+                <td>Онлайн IDE с поддержкой npm, фреймворков (React, Angular, Vue).</td>
+            </tr>
+            <tr>
+                <td><strong>CodeSandbox</strong></td>
+                <td><a href="https://codesandbox.io/" target="_blank">codesandbox.io</a></td>
+                <td>Полноценная среда разработки онлайн. Отлично для React-проектов.</td>
+            </tr>
+            <tr>
+                <td><strong>Replit</strong></td>
+                <td><a href="https://replit.com/" target="_blank">replit.com</a></td>
+                <td>Онлайн IDE для множества языков, включая JavaScript/Node.js.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>6.2. Редакторы кода</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Редактор</th>
+                <th>Описание</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Visual Studio Code</strong></td>
+                <td>Самый популярный редактор для веб-разработки. Бесплатный, множество расширений.</td>
+            </tr>
+            <tr>
+                <td><strong>WebStorm</strong></td>
+                <td>Мощная IDE от JetBrains. Платная, но с множеством встроенных функций.</td>
+            </tr>
+            <tr>
+                <td><strong>Sublime Text</strong></td>
+                <td>Быстрый и легкий редактор. Платный, но с бесплатным trial.</td>
+            </tr>
+            <tr>
+                <td><strong>Atom</strong></td>
+                <td>Бесплатный редактор от GitHub. Настраиваемый, но медленнее VSCode.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>7. Блоги и новости</h2>
+
+    <h3>7.1. Dev.to</h3>
+    <div class="info-box note">
+        <div class="info-box-title">💡 Сообщество разработчиков</div>
+        <p><strong>URL:</strong> <a href="https://dev.to/t/javascript" target="_blank">dev.to/t/javascript</a></p>
+        <p><strong>Описание:</strong> Статьи от разработчиков для разработчиков. Туториалы, мнения, обсуждения.</p>
+    </div>
+
+    <h3>7.2. CSS-Tricks</h3>
+    <div class="info-box note">
+        <div class="info-box-title">💡 Не только CSS</div>
+        <p><strong>URL:</strong> <a href="https://css-tricks.com/" target="_blank">css-tricks.com</a></p>
+        <p><strong>Описание:</strong> Много статей по JavaScript, особенно в контексте веб-разработки.</p>
+    </div>
+
+    <h3>7.3. JavaScript Weekly</h3>
+    <div class="info-box note">
+        <div class="info-box-title">💡 Еженедельная рассылка</div>
+        <p><strong>URL:</strong> <a href="https://javascriptweekly.com/" target="_blank">javascriptweekly.com</a></p>
+        <p><strong>Описание:</strong> Еженедельный дайджест новостей, статей и инструментов JavaScript.</p>
+    </div>
+
+    <h2>8. Сообщества</h2>
+
+    <h3>8.1. Stack Overflow</h3>
+    <div class="info-box success">
+        <div class="info-box-title">✅ Главный Q&A ресурс</div>
+        <p><strong>URL:</strong> <a href="https://stackoverflow.com/questions/tagged/javascript" target="_blank">stackoverflow.com</a></p>
+        <p><strong>Описание:</strong> Вопросы и ответы по программированию. Миллионы решений проблем.</p>
+    </div>
+
+    <h3>8.2. Reddit</h3>
+    <ul>
+        <li><strong>r/javascript</strong> — новости, обсуждения</li>
+        <li><strong>r/learnjavascript</strong> — для начинающих, вопросы и помощь</li>
+        <li><strong>r/webdev</strong> — общее сообщество веб-разработчиков</li>
+    </ul>
+
+    <h3>8.3. Discord серверы</h3>
+    <ul>
+        <li><strong>The Programmer's Hangout</strong></li>
+        <li><strong>Reactiflux</strong> (React, но много общего JS)</li>
+        <li><strong>freeCodeCamp</strong></li>
+    </ul>
+
+    <h2>9. Подкасты</h2>
+
+    <h3>9.1. Русскоязычные</h3>
+    <ul>
+        <li><strong>Веб-стандарты</strong> — новости фронтенда</li>
+        <li><strong>RadioJS</strong> — подкаст о JavaScript</li>
+    </ul>
+
+    <h3>9.2. Англоязычные</h3>
+    <ul>
+        <li><strong>JavaScript Jabber</strong> — обсуждения с экспертами</li>
+        <li><strong>Syntax.fm</strong> — Wes Bos и Scott Tolinski о веб-разработке</li>
+        <li><strong>JS Party</strong> — новости и обсуждения JavaScript-сообщества</li>
+    </ul>
+
+    <h2>10. Справочники и шпаргалки</h2>
+
+    <h3>10.1. Cheat Sheets</h3>
+    <ul>
+        <li><strong>JavaScript Cheat Sheet (MDN)</strong> — <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide" target="_blank">developer.mozilla.org</a></li>
+        <li><strong>ES6 Cheat Sheet</strong> — <a href="https://devhints.io/es6" target="_blank">devhints.io/es6</a></li>
+        <li><strong>Modern JS Cheat Sheet</strong> — <a href="https://mbeaudru.github.io/modern-js-cheatsheet/" target="_blank">GitHub</a></li>
+    </ul>
+
+    <h3>10.2. Roadmaps</h3>
+    <div class="info-box success">
+        <div class="info-box-title">✅ Дорожная карта разработчика</div>
+        <p><strong>URL:</strong> <a href="https://roadmap.sh/javascript" target="_blank">roadmap.sh/javascript</a></p>
+        <p><strong>Описание:</strong> Визуальная карта того, что нужно изучить JavaScript/Frontend/Backend разработчику.</p>
+    </div>
+
+    <h2>11. GitHub репозитории</h2>
+
+    <h3>11.1. Awesome JavaScript</h3>
+    <div class="info-box note">
+        <div class="info-box-title">💡 Коллекция ресурсов</div>
+        <p><strong>URL:</strong> <a href="https://github.com/sorrycc/awesome-javascript" target="_blank">github.com/sorrycc/awesome-javascript</a></p>
+        <p><strong>Описание:</strong> Огромная коллекция JavaScript-библиотек, фреймворков, инструментов.</p>
+    </div>
+
+    <h3>11.2. 30 Seconds of Code</h3>
+    <div class="info-box note">
+        <div class="info-box-title">💡 Короткие сниппеты</div>
+        <p><strong>URL:</strong> <a href="https://www.30secondsofcode.org/js/p/1" target="_blank">30secondsofcode.org</a></p>
+        <p><strong>Описание:</strong> Коллекция полезных JavaScript-сниппетов, которые можно понять за 30 секунд.</p>
+    </div>
+
+    <h3>11.3. JavaScript Algorithms</h3>
+    <div class="info-box note">
+        <div class="info-box-title">💡 Алгоритмы и структуры данных</div>
+        <p><strong>URL:</strong> <a href="https://github.com/trekhleb/javascript-algorithms" target="_blank">github.com/trekhleb/javascript-algorithms</a></p>
+        <p><strong>Описание:</strong> Реализации популярных алгоритмов и структур данных на JavaScript.</p>
+    </div>
+
+    <h2>12. Конференции</h2>
+
+    <h3>12.1. Международные</h3>
+    <ul>
+        <li><strong>JSConf</strong> — серия конференций по JavaScript по всему миру</li>
+        <li><strong>React Conf</strong> — официальная конференция от Facebook</li>
+        <li><strong>Node.js Interactive</strong> — для Node.js разработчиков</li>
+    </ul>
+
+    <h3>12.2. Русскоязычные</h3>
+    <ul>
+        <li><strong>HolyJS</strong> — крупнейшая JS-конференция в России</li>
+        <li><strong>Я ❤ Фронтенд</strong> — конференция по фронтенд-разработке</li>
+        <li><strong>FrontendConf</strong> — конференция Mail.ru Group</li>
+    </ul>
+
+    <h2>13. Полезные инструменты</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Инструмент</th>
+                <th>Назначение</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Babel</strong></td>
+                <td>Транспайлер ES6+ → ES5</td>
+            </tr>
+            <tr>
+                <td><strong>Webpack</strong></td>
+                <td>Сборщик модулей</td>
+            </tr>
+            <tr>
+                <td><strong>Vite</strong></td>
+                <td>Современный быстрый сборщик</td>
+            </tr>
+            <tr>
+                <td><strong>ESLint</strong></td>
+                <td>Линтер для поиска ошибок</td>
+            </tr>
+            <tr>
+                <td><strong>Prettier</strong></td>
+                <td>Форматирование кода</td>
+            </tr>
+            <tr>
+                <td><strong>npm/yarn/pnpm</strong></td>
+                <td>Менеджеры пакетов</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Рекомендации по обучению</h2>
+
+    <div class="info-box success">
+        <div class="info-box-title">✅ План изучения JavaScript</div>
+        <ol>
+            <li><strong>Изучите основы</strong> — переменные, типы данных, операторы, функции</li>
+            <li><strong>Практикуйтесь ежедневно</strong> — решайте задачи на Codewars/LeetCode</li>
+            <li><strong>Создавайте проекты</strong> — делайте реальные приложения (to-do, калькулятор, игры)</li>
+            <li><strong>Читайте чужой код</strong> — изучайте open source проекты на GitHub</li>
+            <li><strong>Углубляйтесь в сложные темы</strong> — замыкания, прототипы, async/await</li>
+            <li><strong>Изучите фреймворк</strong> — React, Vue или Angular</li>
+            <li><strong>Изучите бэкенд</strong> — Node.js, Express, базы данных</li>
+            <li><strong>Следите за новостями</strong> — подпишитесь на JavaScript Weekly</li>
+            <li><strong>Участвуйте в сообществах</strong> — Stack Overflow, Reddit, Discord</li>
+            <li><strong>Никогда не останавливайтесь</strong> — JavaScript постоянно развивается!</li>
+        </ol>
+    </div>
+
+    <h2>Резюме</h2>
+    <p>В этой главе мы собрали:</p>
+    <ul>
+        <li>✅ Официальную документацию (MDN, ECMAScript)</li>
+        <li>✅ Обучающие платформы (JavaScript.ru, freeCodeCamp, Codecademy)</li>
+        <li>✅ Книги (Флэнаган, YDKJS, Eloquent JavaScript)</li>
+        <li>✅ Видеокурсы и YouTube каналы (русские и английские)</li>
+        <li>✅ Платформы для практики (Codewars, LeetCode, HackerRank)</li>
+        <li>✅ Инструменты разработчика (онлайн-редакторы, IDE)</li>
+        <li>✅ Блоги, новости и подкасты</li>
+        <li>✅ Сообщества (Stack Overflow, Reddit, Discord)</li>
+        <>✅
+    </ul>
+
+</section>
+
+            <section class="chapter" id="ch33a">
+                <h1>Глава 33. Ресурсы</h1>
+                <p>Контент будет добавлен...</p>
+            </section>
+
+            <section class="chapter" id="ch36">
+                <h1>Глава 36. Сниппеты</h1>
+                <p>Контент будет добавлен...</p>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p><strong>📚 JavaScript - Полный справочник (Offline версия)</strong></p>
+        <p>На основе Metanit.com и книги "JavaScript и jQuery" Д. Макфарланда</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text2);">
+            Версия 4.0 • 2025
+        </p>
+    </footer>
+
+    <script>
+        // ============== TOGGLE THEME ==============
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const isDark = document.body.classList.contains('dark-theme');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // ============== LOAD SAVED THEME ==============
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+            }
+        });
+
+        // ============== NAVIGATION (SCROLL TO CHAPTER) ==============
+        const navItems = document.querySelectorAll('.nav-item');
+        
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    // Плавный скролл к главе
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    // Обновляем активное состояние
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // ============== SEARCH FUNCTIONALITY ==============
+        const searchInput = document.getElementById('searchInput');
+        
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            
+            navItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                
+                if (text.includes(query)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Если поиск пустой - показываем все
+            if (query === '') {
+                navItems.forEach(item => {
+                    item.style.display = 'block';
+                });
+            }
+        });
+
+        // ============== ACTIVE SECTION ON SCROLL ==============
+        window.addEventListener('scroll', () => {
+            const chapters = document.querySelectorAll('.chapter');
+            let currentChapter = '';
+            
+            chapters.forEach(chapter => {
+                const rect = chapter.getBoundingClientRect();
+                // Если глава в верхней части экрана
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    currentChapter = chapter.id;
+                }
+            });
+            
+            // Обновляем активный пункт меню
+            if (currentChapter) {
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('data-target') === currentChapter) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

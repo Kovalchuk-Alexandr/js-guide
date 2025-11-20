@@ -1,0 +1,655 @@
+            <section class="chapter" id="ch12">
+                <h1>Глава 12. События в JavaScript</h1>
+
+                <h2>Что такое события?</h2>
+                <p>События — это действия, которые происходят в браузере: клики мышью, нажатия клавиш, загрузка страницы и т.д. JavaScript позволяет реагировать на эти события и выполнять код в ответ на действия пользователя.</p>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Основные типы событий</div>
+                    <ul>
+                        <li><strong>События мыши:</strong> click, dblclick, mouseover, mouseout, mousemove</li>
+                        <li><strong>События клавиатуры:</strong> keydown, keyup, keypress</li>
+                        <li><strong>События форм:</strong> submit, change, focus, blur, input</li>
+                        <li><strong>События документа:</strong> DOMContentLoaded, load, scroll, resize</li>
+                    </ul>
+                </div>
+
+                <h2>Способы назначения обработчиков событий</h2>
+
+                <h3>1. HTML-атрибуты (не рекомендуется)</h3>
+                <div class="code-block"><code>&lt;button onclick="alert('Clicked!')"&gt;Нажми меня&lt;/button&gt;
+
+&lt;button onclick="handleClick()"&gt;Кнопка&lt;/button&gt;
+&lt;script&gt;
+function handleClick() {
+    alert('Обработчик вызван!');
+}
+&lt;/script&gt;</code></div>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Почему не рекомендуется?</div>
+                    <p>Смешивание HTML и JavaScript делает код трудным для поддержки. Современный подход — разделять структуру (HTML) и поведение (JavaScript).</p>
+                </div>
+
+                <h3>2. DOM-свойства</h3>
+                <div class="code-block"><code>const button = document.querySelector('button');
+
+// Назначить обработчик
+button.onclick = function() {
+    alert('Кнопка нажата!');
+};
+
+// Можно использовать именованную функцию
+function handleClick() {
+    alert('Клик!');
+}
+
+button.onclick = handleClick;
+
+// Удалить обработчик
+button.onclick = null;</code></div>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Ограничение</div>
+                    <p>К одному событию можно привязать только ОДНУ функцию. При повторном присваивании предыдущая функция перезаписывается.</p>
+                </div>
+
+                <h3>3. addEventListener (рекомендуется)</h3>
+                <div class="code-block"><code>const button = document.querySelector('button');
+
+// Добавить обработчик
+button.addEventListener('click', function() {
+    alert('Первый обработчик');
+});
+
+// Можно добавить несколько обработчиков
+button.addEventListener('click', function() {
+    alert('Второй обработчик');
+});
+
+// С именованной функцией
+function handleClick() {
+    console.log('Клик обработан');
+}
+
+button.addEventListener('click', handleClick);
+
+// Удалить обработчик (нужна ссылка на функцию)
+button.removeEventListener('click', handleClick);</code></div>
+
+                <div class="info-box success">
+                    <div class="info-box-title">✅ Преимущества addEventListener</div>
+                    <ul>
+                        <li>Можно назначить несколько обработчиков на одно событие</li>
+                        <li>Можно удалять обработчики</li>
+                        <li>Поддержка фазы захвата (capture)</li>
+                        <li>Работает с любыми событиями</li>
+                    </ul>
+                </div>
+
+                <h2>Объект события (Event)</h2>
+                <div class="code-block"><code>button.addEventListener('click', function(event) {
+    // event (или e) - объект события
+    
+    console.log(event.type);        // "click"
+    console.log(event.target);      // Элемент, который вызвал событие
+    console.log(event.currentTarget); // Элемент, к которому привязан обработчик
+    
+    console.log(event.clientX);     // X-координата мыши
+    console.log(event.clientY);     // Y-координата мыши
+    
+    console.log(event.timeStamp);   // Время события
+});</code></div>
+
+                <h3>Свойства объекта события</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Свойство</th>
+                                <th>Описание</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>type</code></td>
+                                <td>Тип события ("click", "keydown" и т.д.)</td>
+                            </tr>
+                            <tr>
+                                <td><code>target</code></td>
+                                <td>Элемент, на котором произошло событие</td>
+                            </tr>
+                            <tr>
+                                <td><code>currentTarget</code></td>
+                                <td>Элемент, к которому привязан обработчик</td>
+                            </tr>
+                            <tr>
+                                <td><code>clientX, clientY</code></td>
+                                <td>Координаты мыши относительно окна</td>
+                            </tr>
+                            <tr>
+                                <td><code>pageX, pageY</code></td>
+                                <td>Координаты мыши относительно документа</td>
+                            </tr>
+                            <tr>
+                                <td><code>timeStamp</code></td>
+                                <td>Время возникновения события</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>События мыши</h2>
+                <div class="code-block"><code>const box = document.querySelector('.box');
+
+// click - одиночный клик
+box.addEventListener('click', (e) => {
+    console.log('Клик!');
+});
+
+// dblclick - двойной клик
+box.addEventListener('dblclick', (e) => {
+    console.log('Двойной клик!');
+});
+
+// mouseover - курсор заходит на элемент
+box.addEventListener('mouseover', (e) => {
+    box.style.backgroundColor = 'lightblue';
+});
+
+// mouseout - курсор уходит с элемента
+box.addEventListener('mouseout', (e) => {
+    box.style.backgroundColor = '';
+});
+
+// mousemove - движение мыши над элементом
+box.addEventListener('mousemove', (e) => {
+    console.log(`X: ${e.clientX}, Y: ${e.clientY}`);
+});
+
+// mousedown - кнопка мыши нажата
+box.addEventListener('mousedown', (e) => {
+    console.log('Кнопка нажата');
+});
+
+// mouseup - кнопка мыши отпущена
+box.addEventListener('mouseup', (e) => {
+    console.log('Кнопка отпущена');
+});
+
+// contextmenu - правый клик (контекстное меню)
+box.addEventListener('contextmenu', (e) => {
+    e.preventDefault(); // Отменить стандартное меню
+    console.log('Правый клик');
+});</code></div>
+
+                <h3>Определение кнопки мыши</h3>
+                <div class="code-block"><code>element.addEventListener('mousedown', (e) => {
+    if (e.button === 0) {
+        console.log('Левая кнопка');
+    } else if (e.button === 1) {
+        console.log('Средняя кнопка (колесо)');
+    } else if (e.button === 2) {
+        console.log('Правая кнопка');
+    }
+});</code></div>
+
+                <h2>События клавиатуры</h2>
+                <div class="code-block"><code>const input = document.querySelector('input');
+
+// keydown - клавиша нажата
+input.addEventListener('keydown', (e) => {
+    console.log('Нажата:', e.key);      // Символ клавиши
+    console.log('Код:', e.code);        // Физическая клавиша
+    console.log('KeyCode:', e.keyCode); // Устаревший код
+});
+
+// keyup - клавиша отпущена
+input.addEventListener('keyup', (e) => {
+    console.log('Отпущена:', e.key);
+});
+
+// keypress - клавиша нажата (устарел, не использовать)
+
+// Проверка модификаторов
+document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey) console.log('Ctrl зажат');
+    if (e.shiftKey) console.log('Shift зажат');
+    if (e.altKey) console.log('Alt зажат');
+    if (e.metaKey) console.log('Meta/Cmd зажат');
+    
+    // Комбинация Ctrl+S
+    if (e.ctrlKey && e.key === 's') {
+        e.preventDefault();
+        console.log('Сохранение...');
+    }
+});</code></div>
+
+                <h3>Полезные клавиши</h3>
+                <div class="code-block"><code>document.addEventListener('keydown', (e) => {
+    switch(e.key) {
+        case 'Enter':
+            console.log('Enter нажат');
+            break;
+        case 'Escape':
+            console.log('Escape нажат');
+            break;
+        case 'ArrowUp':
+            console.log('Стрелка вверх');
+            break;
+        case 'ArrowDown':
+            console.log('Стрелка вниз');
+            break;
+        case ' ':
+            console.log('Пробел');
+            break;
+    }
+});</code></div>
+
+                <h2>События форм</h2>
+                <div class="code-block"><code>const form = document.querySelector('form');
+const input = document.querySelector('input');
+
+// submit - отправка формы
+form.addEventListener('submit', (e) => {
+    e.preventDefault(); // Отменить стандартную отправку
+    console.log('Форма отправлена');
+    
+    // Собрать данные формы
+    const formData = new FormData(form);
+    console.log(Object.fromEntries(formData));
+});
+
+// focus - элемент получил фокус
+input.addEventListener('focus', (e) => {
+    e.target.style.borderColor = 'blue';
+});
+
+// blur - элемент потерял фокус
+input.addEventListener('blur', (e) => {
+    e.target.style.borderColor = '';
+});
+
+// input - значение изменилось (в реальном времени)
+input.addEventListener('input', (e) => {
+    console.log('Текущее значение:', e.target.value);
+});
+
+// change - значение изменилось (после потери фокуса)
+input.addEventListener('change', (e) => {
+    console.log('Финальное значение:', e.target.value);
+});
+
+// select для <select>
+const select = document.querySelector('select');
+select.addEventListener('change', (e) => {
+    console.log('Выбрано:', e.target.value);
+});</code></div>
+
+                <h2>События документа и окна</h2>
+                <div class="code-block"><code>// DOMContentLoaded - DOM загружен (без стилей/картинок)
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM готов!');
+});
+
+// load - всё загружено (включая стили/картинки)
+window.addEventListener('load', () => {
+    console.log('Страница полностью загружена');
+});
+
+// beforeunload - перед закрытием/перезагрузкой
+window.addEventListener('beforeunload', (e) => {
+    e.preventDefault();
+    e.returnValue = ''; // Показать диалог "Покинуть страницу?"
+});
+
+// resize - изменение размера окна
+window.addEventListener('resize', () => {
+    console.log(`Ширина: ${window.innerWidth}px`);
+});
+
+// scroll - прокрутка страницы
+window.addEventListener('scroll', () => {
+    console.log(`Прокручено: ${window.scrollY}px`);
+});</code></div>
+
+                <h2>Всплытие и погружение событий</h2>
+                <p>События в DOM проходят три фазы:</p>
+                <ol>
+                    <li><strong>Фаза захвата (capturing)</strong> — от window к целевому элементу</li>
+                    <li><strong>Фаза цели (target)</strong> — на самом элементе</li>
+                    <li><strong>Фаза всплытия (bubbling)</strong> — от целевого элемента к window</li>
+                </ol>
+
+                <div class="code-block"><code>&lt;div class="outer"&gt;
+    &lt;div class="inner"&gt;
+        &lt;button&gt;Кликни&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+const outer = document.querySelector('.outer');
+const inner = document.querySelector('.inner');
+const button = document.querySelector('button');
+
+// Всплытие (по умолчанию)
+outer.addEventListener('click', () => {
+    console.log('1. Outer (всплытие)');
+});
+
+inner.addEventListener('click', () => {
+    console.log('2. Inner (всплытие)');
+});
+
+button.addEventListener('click', () => {
+    console.log('3. Button (цель)');
+});
+
+// При клике на button:
+// 3. Button (цель)
+// 2. Inner (всплытие)
+// 1. Outer (всплытие)
+
+// Захват (capture: true)
+outer.addEventListener('click', () => {
+    console.log('Outer (захват)');
+}, true);
+
+// При клике на button:
+// Outer (захват)
+// 3. Button (цель)
+// 2. Inner (всплытие)
+// 1. Outer (всплытие)
+&lt;/script&gt;</code></div>
+
+                <h3>event.target vs event.currentTarget</h3>
+                <div class="code-block"><code>outer.addEventListener('click', (e) => {
+    console.log('target:', e.target);         // Элемент, на котором произошел клик
+    console.log('currentTarget:', e.currentTarget); // Элемент с обработчиком
+});
+
+// Если кликнуть на button:
+// target: button (на чём кликнули)
+// currentTarget: outer (где висит обработчик)</code></div>
+
+                <h2>Остановка всплытия</h2>
+                <div class="code-block"><code>button.addEventListener('click', (e) => {
+    e.stopPropagation(); // Остановить всплытие
+    console.log('Button clicked');
+    // Обработчики на inner и outer НЕ сработают
+});
+
+// stopImmediatePropagation - остановить все обработчики
+button.addEventListener('click', (e) => {
+    e.stopImmediatePropagation();
+    console.log('Первый обработчик');
+});
+
+button.addEventListener('click', (e) => {
+    console.log('Второй обработчик'); // НЕ выполнится
+});</code></div>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Когда НЕ нужно останавливать всплытие</div>
+                    <p>Остановка всплытия может сломать аналитику, модальные окна и другие системы, которые слушают события на document. Используйте только когда точно понимаете, что делаете.</p>
+                </div>
+
+                <h2>Отмена действия по умолчанию</h2>
+                <div class="code-block"><code>// Отменить переход по ссылке
+const link = document.querySelector('a');
+link.addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log('Переход отменён');
+});
+
+// Отменить отправку формы
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    console.log('Отправка отменена');
+});
+
+// Отменить контекстное меню
+document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+});
+
+// Проверка, можно ли отменить событие
+element.addEventListener('click', (e) => {
+    if (e.cancelable) {
+        e.preventDefault();
+    }
+});</code></div>
+
+                <h2>Делегирование событий</h2>
+                <p>Вместо назначения обработчика каждому элементу, назначаем один обработчик родителю и используем <code>event.target</code>.</p>
+
+                <div class="code-block"><code>&lt;ul id="menu"&gt;
+    &lt;li&gt;Пункт 1&lt;/li&gt;
+    &lt;li&gt;Пункт 2&lt;/li&gt;
+    &lt;li&gt;Пункт 3&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script&gt;
+// Плохо: обработчик на каждый элемент
+const items = document.querySelectorAll('li');
+items.forEach(item => {
+    item.addEventListener('click', () => {
+        console.log('Клик на:', item.textContent);
+    });
+});
+
+// Хорошо: один обработчик на родителе
+const menu = document.querySelector('#menu');
+menu.addEventListener('click', (e) => {
+    if (e.target.tagName === 'LI') {
+        console.log('Клик на:', e.target.textContent);
+    }
+});
+&lt;/script&gt;</code></div>
+
+                <div class="info-box success">
+                    <div class="info-box-title">✅ Преимущества делегирования</div>
+                    <ul>
+                        <li>Меньше обработчиков = меньше памяти</li>
+                        <li>Работает с динамически добавленными элементами</li>
+                        <li>Упрощает код</li>
+                    </ul>
+                </div>
+
+                <h3>Делегирование с классами</h3>
+                <div class="code-block"><code>&lt;div id="container"&gt;
+    &lt;button class="delete-btn"&gt;Удалить 1&lt;/button&gt;
+    &lt;button class="edit-btn"&gt;Редактировать&lt;/button&gt;
+    &lt;button class="delete-btn"&gt;Удалить 2&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+const container = document.querySelector('#container');
+
+container.addEventListener('click', (e) => {
+    // Проверка класса
+    if (e.target.classList.contains('delete-btn')) {
+        console.log('Удаление');
+    }
+    
+    if (e.target.classList.contains('edit-btn')) {
+        console.log('Редактирование');
+    }
+    
+    // Или через matches (поддерживает CSS-селекторы)
+    if (e.target.matches('.delete-btn')) {
+        console.log('Удаление через matches');
+    }
+});
+&lt;/script&gt;</code></div>
+
+                <h2>Пользовательские события</h2>
+                <div class="code-block"><code>// Создать пользовательское событие
+const myEvent = new CustomEvent('myevent', {
+    detail: { message: 'Привет!', data: 123 },
+    bubbles: true,
+    cancelable: true
+});
+
+// Подписаться на событие
+element.addEventListener('myevent', (e) => {
+    console.log('Событие получено:', e.detail);
+});
+
+// Вызвать событие
+element.dispatchEvent(myEvent);</code></div>
+
+                <h3>Практический пример</h3>
+                <div class="code-block"><code>// Создаём событие "покупка товара"
+class ShoppingCart {
+    constructor() {
+        this.items = [];
+    }
+    
+    addItem(item) {
+        this.items.push(item);
+        
+        // Генерируем событие
+        const event = new CustomEvent('itemAdded', {
+            detail: { item, total: this.items.length }
+        });
+        
+        document.dispatchEvent(event);
+    }
+}
+
+// Слушаем событие
+document.addEventListener('itemAdded', (e) => {
+    console.log(`Добавлен: ${e.detail.item}`);
+    console.log(`Всего товаров: ${e.detail.total}`);
+});
+
+// Использование
+const cart = new ShoppingCart();
+cart.addItem('Ноутбук');  // Событие сработает
+cart.addItem('Мышь');     // Событие сработает</code></div>
+
+                <h2>Практические примеры</h2>
+
+                <h3>Модальное окно</h3>
+                <div class="code-block"><code>const modal = document.querySelector('.modal');
+const openBtn = document.querySelector('.open-modal');
+const closeBtn = document.querySelector('.close-modal');
+
+// Открыть модалку
+openBtn.addEventListener('click', () => {
+    modal.classList.add('active');
+});
+
+// Закрыть по кнопке
+closeBtn.addEventListener('click', () => {
+    modal.classList.remove('active');
+});
+
+// Закрыть по клику вне модалки
+modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.classList.remove('active');
+    }
+});
+
+// Закрыть по Escape
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('active')) {
+        modal.classList.remove('active');
+    }
+});</code></div>
+
+                <h3>Табы</h3>
+                <div class="code-block"><code>const tabs = document.querySelectorAll('.tab');
+const contents = document.querySelectorAll('.tab-content');
+
+tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => {
+        // Убрать активные классы
+        tabs.forEach(t => t.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+        
+        // Добавить активные классы
+        tab.classList.add('active');
+        contents[index].classList.add('active');
+    });
+});</code></div>
+
+                <h3>Бесконечная прокрутка</h3>
+                <div class="code-block"><code>let page = 1;
+let loading = false;
+
+window.addEventListener('scroll', () => {
+    // Если почти долистали до конца
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+        if (!loading) {
+            loading = true;
+            loadMoreContent();
+        }
+    }
+});
+
+async function loadMoreContent() {
+    console.log('Загрузка страницы', page);
+    
+    // Загрузить данные
+    const data = await fetch(`/api/posts?page=${page}`);
+    const posts = await data.json();
+    
+    // Добавить на страницу
+    posts.forEach(post => {
+        const div = document.createElement('div');
+        div.textContent = post.title;
+        document.body.appendChild(div);
+    });
+    
+    page++;
+    loading = false;
+}</code></div>
+
+                <h2>Оптимизация обработчиков</h2>
+
+                <h3>Debounce (задержка)</h3>
+                <div class="code-block"><code>// Функция будет вызвана только через 300мс после последнего события
+function debounce(func, delay) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), delay);
+    };
+}
+
+// Использование
+const input = document.querySelector('input');
+
+input.addEventListener('input', debounce((e) => {
+    console.log('Поиск:', e.target.value);
+}, 300));</code></div>
+
+                <h3>Throttle (ограничение частоты)</h3>
+                <div class="code-block"><code>// Функция будет вызываться не чаще, чем раз в delay мс
+function throttle(func, delay) {
+    let lastCall = 0;
+    return function(...args) {
+        const now = Date.now();
+        if (now - lastCall >= delay) {
+            lastCall = now;
+            func.apply(this, args);
+        }
+    };
+}
+
+// Использование
+window.addEventListener('scroll', throttle(() => {
+    console.log('Прокрутка');
+}, 100));</code></div>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Когда использовать?</div>
+                    <ul>
+                        <li><strong>Debounce:</strong> поиск при вводе, изменение размера окна</li>
+                        <li><strong>Throttle:</strong> прокрутка, движение мыши, анимации</li>
+                    </ul>
+                </div>
+            </section>
