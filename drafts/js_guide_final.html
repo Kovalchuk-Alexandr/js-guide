@@ -212,6 +212,10 @@
             font-size: 0.9em;
         }
 
+        .b, .bb, strong {
+            font-weight: bold;
+        }
+
         .table-wrapper {
             overflow-x: auto;
             /* margin: 1.5rem 0; */
@@ -3192,6 +3196,16 @@ console.log(difference); // Set(2) {1, 2}</code></div>
 
                 <h2>Поиск элементов</h2>
 
+                <ul>
+                    <li><p><span class="b">getElementById(value)</span>: выбирает элемент, у которого атрибут <code>id</code> равен value</p>. Если элемента с таким идентификатором нет, то возвращается null</li>
+                    <li><p><span class="b">getElementsByTagName(value)</span>: выбирает все элементы, у которых тег равен value. Возвращает список элементов (список типа 
+                    <code>NodeList</code>), который аналогичен массиву.</p></li>
+                    <li><p><span class="b">getElementsByClassName(value)</span>: выбирает все элементы, которые имеют класс value. Возвращает список NodeList</p></li>
+                    <li><p><span class="b">getElementsByName(value)</span>: выбирает все элементы, которые называются value. Возвращает список NodeList</p></li>
+                    <li><p><span class="b">querySelector(value)</span>: выбирает первый элемент, который соответствует css-селектору value</p></li>
+                    <li><p><span class="b">querySelectorAll(value)</span>: выбирает все элементы, которые соответствуют css-селектору value. Возвращает список NodeList</p></li>
+                </ul>
+
                 <h3>getElementById</h3>
                 <div class="code-block"><code>// Находит элемент по ID (возвращает один элемент или null)
 const header = document.getElementById('header');
@@ -3232,6 +3246,79 @@ const itemsArray = [...items];
 // или
 const itemsArray2 = Array.from(items);</code></div>
 
+                <h3>Поиск во вложенных элементах</h3>
+                <p>Подобным образом мы можем искать элементы не только во всем документе, но и в отдельных элементах на веб-странице. Например:</p>
+                <div class="code-block"><code>&lt;body&gt;
+    &lt;div id="article">
+        &lt;h1 id="header">Home Page&lt;/h1>
+        &lt;p class="text">Page Text 1&lt;/p>
+        &lt;p class="text">Page Text 2&lt;/p>
+    &lt;/div>
+    &lt;div id="footer">
+        &lt;p class="text">Footer Text&lt;/p>
+    &lt;/div>
+    &lt;script>
+    // получаем элемент с id="article"
+    const article = document.getElementById("article");
+    // в этом элементе получаем все элементы с class="text"
+    const articleContent = article.getElementsByClassName("text");
+    for(p of articleContent){
+        console.log(p);
+    }
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>В данном случае мы сначала получаем элемент с id="article", затем внутри этого элемента ищем все элементы с class="text". В результате консоль выведет 
+                два элемента:</p>
+                
+                
+                <div class="code-block"><code>&lt;p class="text"&gt;Page Text 1&lt;/p&gt;
+ &lt;p class="text"&gt;Page Text 2&lt;/p&gt;</code></div>
+                    
+                <h3>Селекторы CSS</h3>
+                <p>Список базовых CSS-селекторов, которые мы можем применять для поиска элементов:</p>
+
+                <ul>
+                    <li><p><code>*</code>: выбирает все элементы</p></li>
+                    <li><p><code>E</code>: выбирает все элементы типа E</p></li>
+                    <li><p><code>[a]</code>: выбирает все элементы с атрибутом a</p></li>
+                    <li><p><code>[a="b"]</code>: выбирает все элементы, в которых атрибут a имеет значение b</p></li>
+                    <li><p><code>[a~="b"]</code>: выбирает все элементы, в которых атрибут a имеет список значений, и одно из этих значений равно b</p></li>
+                    <li><p><code>[a^="b"]</code>: выбирает все элементы, в которых значение атрибута a начинается на b</p></li>
+                    <li><p><code>[a$="b"]</code>: выбирает все элементы, в которых значение атрибута a завершается на b</p></li>
+                    <li><p><code>[a*="b"]</code>: выбирает все элементы, в которых значение атрибута a содержит подстроку b</p></li>
+                    <li><p><code>[a|="b"]</code>: выбирает все элементы, в которых значение атрибута a представляет ряд значений, разделенных дефисами, и первое из этих значений равно b</p></li>
+                    <li><p><code>:root</code>: выбирает корневой элемент документа</p></li>
+                    <li><p><code>:nth-child(n)</code>: выбирает n-ый вложенный элемент (отсчет идет с начала)</p></li>
+                    <li><p><code>:nth-last-child(n)</code>: выбирает n-ый вложенный элемент (отсчет идет с конца)</p></li>
+                    <li><p><code>:nth-of-type(n)</code>: выбирает n-ый сестринский элемент типа type (отсчет идет с начала)</p></li>
+                    <li><p><code>:nth-last-of-type(n)</code>: выбирает n-ый сестринский элемент типа type (отсчет идет с конца)</p></li>
+                    <li><p><code>:first-child</code>: выбирает первый вложенный элемент</p></li>
+                    <li><p><code>:last-child</code>: выбирает последний вложенный элемент</p></li>
+                    <li><p><code>:first-of-type</code>: выбирает первый сестринский элемент типа type</p></li>
+                    <li><p><code>:last-of-type</code>: выбирает последний сестринский элемент типа type</p></li>
+                    <li><p><code>:only-child</code>: выбирает все элементы, которые имеют только один вложенный элемент</p></li>
+                    <li><p><code>:only-of-type</code>: выбирает все сестринские элементы типа type</p></li>
+                    <li><p><code>:empty</code>: выбирает все элементы, которые не имеют вложенных элементов</p></li>
+                    <li><p><code>:link</code>: выбирает все ссылки, которые еще не были нажаты</p></li>
+                    <li><p><code>:visited</code>: выбирает все ссылки, которые уже были нажаты</p></li>
+                    <li><p><code>:active</code>: выбирает все ссылки, которые в текущий момент активны (нажимаются)</p></li>
+                    <li><p><code>:hover</code>: выбирает все ссылки, над которыми в текущий момент находится курсор</p></li>
+                    <li><p><code>:focus</code>: выбирает все элементы, которые в текущий момент получили фокус</p></li>
+                    <li><p><code>:target</code>: выбирает все элементы, к которым можно обратиться с помощью адресов url внутри страницы</p></li>
+                    <li><p><code>:lang(en)</code>: выбирает все элементы, в которых атрибут <code>lang</code> имеет значение "en"</p></li>
+                    <li><p><code>:enabled</code>: выбирает все элементы форм, которые доступны для взаимодействия</p></li>
+                    <li><p><code>:disabled</code>: выбирает все элементы форм, которые НЕ доступны для взаимодействия</p></li>
+                    <li><p><code>:checked</code>: выбирает все флажки (чекбоксы) и радиокнопки, которые отмечены</p></li>
+                    <li><p><code>.class</code>: выбирает все элементы с классом class</p></li>
+                    <li><p><code>#id</code>: выбирает все элементы с идентификтором id</p></li>
+                    <li><p><code>:not(s)</code>: выбирает все элементы, которые не соответствуют селектору s</p></li>
+                    <li><p><code>E F</code>: выбирает все элементы типа F, которые встречаются в элементах типа E</p></li>
+                    <li><p><code>E &gt; F</code>: выбирает все элементы типа F, которые являются вложенными в элементы типа E</p></li>
+                    <li><p><code>E + F</code>: выбирает все элементы типа F, которые располагаются сразу после элементов типа E</p></li>
+                    <li><p><code>E ~ F</code>: ввыбирает все элементы типа F, которые являются сестринскими по отношению к элементам типа E</p></li>
+                </ul>
+
                 <div class="info-box success">
                     <div class="info-box-title">✅ querySelector vs getElementById</div>
                     <ul>
@@ -3239,6 +3326,18 @@ const itemsArray2 = Array.from(items);</code></div>
                         <li><code>getElementById</code> — быстрее, но только для ID</li>
                         <li>Для современной разработки рекомендуется <code>querySelector/querySelectorAll</code></li>
                     </ul>
+                </div>
+
+                <div class="info-box success">
+                    <div class="info-box-title">✅ Дополнительные замечания</div>
+                    <p>Стоит отметить, что из всех этих способов выбор по id обычно самый быстрый. При всех прочих условиях лучше выбирать метод <span class="b">getElementById()</span></p>
+                    <p>Также для оптимизации работы с DOM для того, чтобы избежать повторной выборки одних и тех же элементов, 
+при первой выборке их лучше сохранять в константы/переменные.</p>
+                    <p>Ряд методов - <code>getElementsByTagName()</code>, <code>getElementsByClassName()</code>, <code>getElementsByName()</code>, <code>querySelectorAll()</code> 
+возвращает список элементов в виде объекта <code>NodeList</code>, который аналогичен массиву и который мы можем перебрать и получить каждый отдельный элемент из этого набора. 
+Однако метод <span class="b">querySelectorAll()</span> возвращает статический список NodeList, тогда как остальные методы возвращают нестатический список. В чем разница? 
+При изменении элементов нестатического списка все изменения сразу же применяются к веб-странице. При изменении элементов из статического списка изменения 
+могут не сразу изменяться.</p>
                 </div>
 
                 <h2>Изменение содержимого</h2>
