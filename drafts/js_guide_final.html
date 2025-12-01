@@ -3492,9 +3492,102 @@ console.log(styles.width);           // Вычисленная ширина
 const beforeStyles = getComputedStyle(div, '::before');
 console.log(beforeStyles.content);</code></div>
 
-                <h2>Навигация по DOM</h2>
+                <h2>Объект Node. Навигация по DOM</h2>
+
+                <p>Каждый отдельный узел, будь то html-элемент, его атрибут или текст, в структуре DOM представлен объектом <span class="b">Node</span>. 
+                    Может возникнуть вопрос: как связаны элементы веб-страницы и узлы веб-страницы? И тут надо отметить, что любой элемент веб-страницы является узлом, но не любой узел является 
+                    элементом (например, атрибуты и текст элементов также являются отдельными узлами).
+                </p>
+                <p>Объект <span class="b">Node</span> предоставляет ряд свойств, с помощью которых мы можем получить информацию о данном узле:</p>
+
+                <ul>
+                    <li><p><span class="b">childNodes</span>: содержит коллекцию дочерних узлов</p></li>
+                    <li><p><span class="b">children</span>: содержит коллекцию дочерних узлов, которые являются элементами</p></li>
+                    <li><p><span class="b">firstChild</span>: возвращает первый дочерний узел текущего узла</p></li>
+                    <li><p><span class="b">firstElementChild</span>: возвращает первый дочерний узел, который является элементом</p></li>
+                    <li><p><span class="b">lastChild</span>: возвращает последний дочерний узел текущего узла</p></li>
+                    <li><p><span class="b">lastElementChild</span>: возвращает последний дочерний узел, который является элементом</p></li>
+                    <li><p><span class="b">previousSibling</span>: возвращает предыдущий узел, который находится на одном уровне с текущим</p></li>
+                    <li><p><span class="b">nextSibling</span>: возвращает следующий узел, который находится на одном уровне с текущим</p></li>
+                    <li><p><span class="b">previousElementSibling</span>: возвращает предыдущий узел, который является элементом и который находится на одном уровне с текущим</p></li>
+                    <li><p><span class="b">nextElementSibling</span>: возвращает следующий узел, который является элементом и который находится на одном уровне с текущим</p></li>
+                    <li><p><span class="b">ownerDocument</span>: возвращает корневой узел документа</p></li>
+                    <li><p><span class="b">parentNode</span>: возвращает родительский узел для текущего узла</p></li>
+                    <li><p><span class="b">parentElement</span>: возвращает родительский узел, который является элементом</p></li>
+                    <li><p><span class="b">nodeName</span>: возвращает имя узла</p></li>
+                    <li><p><span class="b">nodeType</span>: возвращает тип узла в виде числа</p></li>
+                    <li><p><span class="b">nodeValue</span>: возвращает текст текстового узла</p></li>
+                </ul>
+
+                <p>Прежде всего мы можем использовать свойства <span class="b">nodeName</span> и <span class="b">nodeType</span>, чтобы узнать тип узла:</p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;div id="article">
+        &lt;h1 id="header">Home Page&lt;/h1>
+        &lt;p>Page Text&lt;/p>
+    &lt;/div>
+    &lt;script>
+        const article = document.getElementById("article");
+        console.log(article.nodeName);  // DIV
+        console.log(article.nodeType);  // 1
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    Здесь получаем информацию по элементу с id="header". В частности, свойство <code>nodeName</code> возвратит имя тега элемента -  <span class="b">div</span>, 
+                    а свойство <code>nodeType</code> число 1.  Каждому типу узлов соответствует определенное число:
+                </p>
+
+                <div class="table-wrapper">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>nodeType</th>
+                            <th>Тип узла</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><p>1</p></td><td><p>элемент</p></td></tr>
+                        <tr><td><p>2</p></td><td><p>атрибут</p></td></tr>
+                        <tr><td><p>3</p></td><td><p>текст</p></td></tr>
+                    </tbody>
+                </table>
+                </div>
 
                 <h3>Родители и потомки</h3>
+                <p>
+                    Для получения родительского элемента применяются свойства <span class="b">parentNode</span> и <span class="b">parentElement</span>. Например:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;div id="article">
+        &lt;h1 id="header">Home Page&lt;/h1>
+        &lt;p>Page Text&lt;/p>
+    &lt;/div>
+    &lt;script>
+        // выбираем все элемент c id="header"
+        const header = document.getElementById("header");
+        // получаем родительский элемента
+        const headerParent = header?.parentElement;
+        // можно так
+        // const headerParent = header?.parentNode;
+        console.log(headerParent);    // выводим родительский элемент на консоль
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>Здесь выводим на консоль элемент, в который помещен элемент с id="header".</p>
+                <p>
+                    Стоит отметить, что хотя оба метода в принципе возвращают один и тот же элемент, однако есть исключение - элемент <code>&lt;html&gt;</code>. Для него родительским 
+                    узлом будет объект document, а вот родительского элемента у него не будет (будет значение null):
+                </p>
+
+                <div class="code-block"><code>const htmlEl = document.getElementsByTagName("html")[0];
+const parentElem = htmlEl.parentElement;
+const parentNode = htmlEl.parentNode;
+console.log(parentElem);    // null
+console.log(parentNode);    // объект document</code></div>
+
                 <div class="code-block"><code>const element = document.querySelector('.child');
 
 // Родитель
@@ -3511,6 +3604,87 @@ console.log(element.childElementCount);
 
 // Все узлы (включая текстовые)
 const childNodes = element.childNodes; // NodeList (всё)</code></div>
+
+                <h3>Получение дочерних элементов</h3>
+                <p>
+                    Метод <span class="b">hasChildNodes()</span> возвращает <code>true</code>, если элемент содержит вложенные узлы:
+                </p>
+
+                <div class="code-block"><code>const article = document.querySelector("div");
+if(article.hasChildNodes()){
+    console.log("There are child nodes");
+}
+else{
+    console.log("No child nodes");
+}</code></div>
+
+                <p>Для получения дочерних элементов можно использовать свойство <span class="b">children</span>:</p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;div id="article">
+        &lt;h1 id="header">Home Page&lt;/h1>
+        &lt;p>Page Text&lt;/p>
+    &lt;/div>
+    &lt;script>
+        // выбираем элемент c id="article"
+        const article = document.getElementById("article");
+        
+        for(elem of article.children){
+            console.log(elem);
+        }
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    Здесь получаем элемент с id="article" и в цикле проходим по всем его дочерним элементам. А это два элемента:
+                </p>
+
+                <div class="code-block"><code>&lt;h1 id="header">Home Page&lt;/h1>
+ &lt;p>Page Text&lt;/p></code></div>
+
+                <p>
+                    Если же нам надо выбрать вообще все дочерние узлы (не только элементы, но и атрибуты и текст), то применяется метод <span class="b">childNodes</span>:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;div id="article">
+        &lt;h1 id="header">Home Page&lt;/h1>
+        &lt;p>Page Text&lt;/p>
+    &lt;/div>
+&lt;script>
+    // выбираем элемент c id="article"
+    const article = document.getElementById("article");
+    
+    for(node of article.childNodes){
+        let type = "";
+        if(node.nodeType===1) type="элемент";
+        else if(node.nodeType===2) type="атрибут";
+        else if(node.nodeType===3) type="текст";
+            
+        console.log(node.nodeName, ": ", type);
+    }
+&lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    Здесь мы выбираем тот же элемент, но теперь перебираем его узлы. выбираем элемент div с классом article и пробегаемся по его дочерним 
+                    узлам. И в цикле выводим имя узла и его тип с помощью свойств nodeName и nodeType.
+                </p>
+                <p>И несмотря на то, что в блоке div#article только два элемента: заголовок h1 и параграф, консоль отобразит нам пять узлов.</p>
+
+                <div class="code-block"><code>#text :  текст
+H1 :  элемент
+#text :  текст
+P :  элемент
+#text :  текст</code></div>
+
+                <p>
+                    Дело в том, что пробелы между узлами также считаются за отдельные текстовые узлы. Если бы пробелов не было:
+                </p>
+
+                <div class="code-block"><code>&lt;div id="article">&lt;h1 id="header">Home Page&lt;/h1>&lt;p>Page Text&lt;/p>&lt;/div>
+</code></div>
+                <p>то при переборе мы бы обнаружили только два дочерних узла, как и ожидалось.</p>
 
                 <h3>Соседи</h3>
                 <div class="code-block"><code>const element = document.querySelector('.item');
