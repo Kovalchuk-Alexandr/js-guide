@@ -4011,11 +4011,11 @@ console.log(header);  // &lt;h1>Hello World&lt;/h1></code></div>
     &lt;p>Text 1&lt;/p>
     &lt;p>Text 2&lt;/p>
     &lt;script>
-        const header = document.createElement("h1");    // создаем заголовок &lt;h1>
-        header.textContent = "Page Header"; // определяем текст элемента
-        // получаем первый параграф
+        const header = document.createElement("h1");    <code class="comment">// создаем заголовок &lt;h1></code>
+        header.textContent = "Page Header"; <code class="comment">// определяем текст элемента</code>
+        <code class="comment">// получаем первый параграф</code>
         const firstP = document.body.firstElementChild;
-        // добавляем элемент h1 перед параграфом firstP
+        <code class="comment">// добавляем элемент h1 перед параграфом firstP</code>
         document.body.insertBefore(header, firstP); 
     &lt;/script>
 &lt;/body></code></div>
@@ -4023,6 +4023,22 @@ console.log(header);  // &lt;h1>Hello World&lt;/h1></code></div>
                 <p> Если нам надо вставить новый узел на второе, третье или любое другое место, то нам надо найти узел, перед которым надо вставлять, 
                     с помощью комбинаций свойств firstElementChild/lastElementChild и nextSibling/previousSibling.
                 </p>
+
+                <h3>insertAdjacentHTML</h3>
+                <div class="code-block"><code>const div = document.querySelector('div');
+
+<code class="comment">// beforebegin - перед элементом</code>
+div.insertAdjacentHTML('beforebegin', '&lt;p&gt;До элемента&lt;/p&gt;');
+
+<code class="comment">// afterbegin - в начало элемента</code>
+div.insertAdjacentHTML('afterbegin', '&lt;p&gt;В начало&lt;/p&gt;');
+
+<code class="comment">// beforeend - в конец элемента</code>
+div.insertAdjacentHTML('beforeend', '&lt;p&gt;В конец&lt;/p&gt;');
+
+<code class="comment">// afterend - после элемента</code>
+div.insertAdjacentHTML('afterend', '&lt;p&gt;После элемента&lt;/p&gt;');</code></div>
+
 
                 <h3>Копирование элемента</h3>
 
@@ -4147,35 +4163,20 @@ container.after(newDiv);
 // insertBefore - вставить перед определённым потомком
 container.insertBefore(newDiv, container.firstChild);</code></div>
 
-                <h3>insertAdjacentHTML</h3>
-                <div class="code-block"><code>const div = document.querySelector('div');
-
-// beforebegin - перед элементом
-div.insertAdjacentHTML('beforebegin', '&lt;p&gt;До элемента&lt;/p&gt;');
-
-// afterbegin - в начало элемента
-div.insertAdjacentHTML('afterbegin', '&lt;p&gt;В начало&lt;/p&gt;');
-
-// beforeend - в конец элемента
-div.insertAdjacentHTML('beforeend', '&lt;p&gt;В конец&lt;/p&gt;');
-
-// afterend - после элемента
-div.insertAdjacentHTML('afterend', '&lt;p&gt;После элемента&lt;/p&gt;');</code></div>
-
-                <h2>Удаление элементов</h2>
+                <h3>Удаление элементов</h3>
                 <div class="code-block"><code>const element = document.querySelector('.item');
 
-// remove() - удалить элемент
+<code class="comment">// remove() - удалить элемент</code>
 element.remove();
 
-// removeChild() - удалить потомка
+<code class="comment">// removeChild() - удалить потомка</code>
 const parent = document.querySelector('.container');
 const child = parent.querySelector('.item');
 parent.removeChild(child);
 
-// Очистить содержимое
+<code class="comment">// Очистить содержимое</code>
 parent.innerHTML = '';
-// или
+<code class="comment">// или</code>
 while (parent.firstChild) {
     parent.removeChild(parent.firstChild);
 }</code></div>
@@ -4183,37 +4184,37 @@ while (parent.firstChild) {
                 <h2>Клонирование элементов</h2>
                 <div class="code-block"><code>const original = document.querySelector('.item');
 
-// Поверхностное клонирование (без потомков)
+<code class="comment">// Поверхностное клонирование (без потомков)</code>
 const clone1 = original.cloneNode(false);
 
-// Глубокое клонирование (с потомками)
+<code class="comment">// Глубокое клонирование (с потомками)</code>
 const clone2 = original.cloneNode(true);
 
-// Вставить клон
+<code class="comment">// Вставить клон</code>
 document.body.appendChild(clone2);</code></div>
 
                 <h2>Размеры и позиция элемента</h2>
                 <div class="code-block"><code>const div = document.querySelector('div');
 
-// Размеры (включая padding, но без border)
+<code class="comment">// Размеры (включая padding, но без border)</code>
 console.log(div.clientWidth);
 console.log(div.clientHeight);
 
-// Размеры (включая padding и border)
+<code class="comment">// Размеры (включая padding и border)</code>
 console.log(div.offsetWidth);
 console.log(div.offsetHeight);
 
-// Позиция относительно offsetParent
+<code class="comment">// Позиция относительно offsetParent</code>
 console.log(div.offsetLeft);
 console.log(div.offsetTop);
 
-// Прокрутка
+<code class="comment">// Прокрутка</code>
 console.log(div.scrollTop);    // Сколько прокручено сверху
 console.log(div.scrollLeft);   // Сколько прокручено слева
 console.log(div.scrollHeight); // Полная высота с прокруткой
 console.log(div.scrollWidth);  // Полная ширина с прокруткой
 
-// Координаты относительно окна
+<code class="comment">// Координаты относительно окна</code>
 const rect = div.getBoundingClientRect();
 console.log(rect.top);    // Расстояние от верха окна
 console.log(rect.left);   // Расстояние от левого края окна
