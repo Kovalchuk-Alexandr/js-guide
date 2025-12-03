@@ -19,7 +19,11 @@
             --border: #dee2e6;
             --accent: #0066cc;
             --code-bg: #f4f4f4;
+            --code-font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+            --code-comment: #008200;
         }
+
+        .comment {color: var(--code-comment);}
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
@@ -199,12 +203,14 @@
         
         .code-block code {
             font-family: 'Courier New', monospace;
+            font-family: var(--code-font-family);
             font-size: 0.9rem;
             line-height: 1.6;
             white-space: pre;
         }
         
         code {
+            /* color: #000; */
             background: var(--code-bg);
             padding: 0.2rem 0.4rem;
             border-radius: 3px;
@@ -3702,9 +3708,235 @@ const prev = element.previousElementSibling;</code></div>
 const form = button.closest('form');
 const container = button.closest('.container');</code></div>
 
-                <h2>Создание и вставка элементов</h2>
+                <h2>Элементы</h2>
 
-                <h3>createElement</h3>
+                <p>
+                    Для работы с элементами на веб-странице мы можем использовать как функциональность типа Node, который представляет любой узел веб-страницы, 
+                    так и функциональность типа <span class="b">HTMLElement</span>, который собственно представляет элемент. То есть объекты HTMLElement - это фактически те же самые узлы - объекты Node, у которых тип узла (свойство nodeType) равно 1.
+                </p>
+                <p>
+                    Каждый элемент веб-страницы соответствует определенному типу в JavaScript. Но все эти типы являются пол типами типа <span class="b">HTMLElement</span>, 
+                    который определяет базовую функциональность элементов.<br>
+                    Актуальные типы элементов:
+                </p>
+
+                <ul>
+                    <li><code>&lt;a&gt;</code>: тип <code>HTMLAnchorElement</code></li>
+                    <li><code>&lt;abbr&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;address&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;area&gt;</code>: тип <code>HTMLAreaElement</code></li>
+                    <li><code>&lt;audio&gt;</code>: тип <code>HTMLAudioElement</code></li>
+                    <li><code>&lt;b&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;base&gt;</code>: тип <code>HTMLBaseElement</code></li>
+                    <li><code>&lt;bdo&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;blockquote&gt;</code>: тип <code>HTMLQuoteElement</code></li>
+                    <li><code>&lt;body&gt;</code>: тип <code>HTMLBodyElement</code></li>
+                    <li><code>&lt;br&gt;</code>: тип <code>HTMLBRElement</code></li>
+                    <li><code>&lt;button&gt;</code>: тип <code>HTMLButtonElement</code></li>
+                    <li><code>&lt;caption&gt;</code>: тип <code>HTMLTableCaptionElement</code></li>
+                    <li><code>&lt;canvas&gt;</code>: тип <code>HTMLCanvasElement</code></li>
+                    <li><code>&lt;cite&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;code&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;col&gt;, &lt;colgroup&gt;</code>: тип <code>HTMLTableColElement</code></li>
+                    <li><code>&lt;data&gt;</code>: тип <code>HTMLDataElement</code></li>
+                    <li><code>&lt;datalist&gt;</code>: тип <code>HTMLDataListElement</code></li>
+                    <li><code>&lt;dd&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;del&gt;</code>: тип <code>HTMLModElement</code></li>
+                    <li><code>&lt;dfn&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;div&gt;</code>: тип <code>HTMLDivElement</code></li>
+                    <li><code>&lt;dl&gt;</code>: тип <code>HTMLDListElement</code></li>
+                    <li><code>&lt;dt&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;em&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;embed&gt;</code>: тип <code>HTMLEmbedElement</code></li>
+                    <li><code>&lt;fieldset&gt;</code>: тип <code>HTMLFieldSetElement</code></li>
+                    <li><code>&lt;form&gt;</code>: тип <code>HTMLFormElement</code></li>
+                    <li><code>&lt;h1&gt;, &lt;h2&gt;, &lt;h3&gt;, &lt;h4&gt;, &lt;h5&gt;, &lt;h6&gt;</code>: тип <code>HTMLHeadingElement</code></li>
+                    <li><code>&lt;head&gt;</code>: тип <code>HTMLHeadElement</code></li>
+                    <li><code>&lt;hr&gt;</code>: тип <code>HTMLHRElement</code></li>
+                    <li><code>&lt;html&gt;</code>: тип <code>HTMLHtmlElement</code></li>
+                    <li><code>&lt;i&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;iframe&gt;</code>: тип <code>HTMLIFrameElement</code></li>
+                    <li><code>&lt;img&gt;</code>: тип <code>HTMLImageElement</code></li>
+                    <li><code>&lt;input&gt;</code>: тип <code>HTMLInputElement</code></li>
+                    <li><code>&lt;ins&gt;</code>: тип <code>HTMLModElement</code></li>
+                    <li><code>&lt;kbd&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;keygen&gt;</code>: тип <code>HTMLKeygenElement</code></li>
+                    <li><code>&lt;label&gt;</code>: тип <code>HTMLLabelElement</code></li>
+                    <li><code>&lt;legend&gt;</code>: тип <code>HTMLLegendElement</code></li>
+                    <li><code>&lt;li&gt;</code>: тип <code>HTMLLIElement</code></li>
+                    <li><code>&lt;link&gt;</code>: тип <code>HTMLLinkElement</code></li>
+                    <li><code>&lt;map&gt;</code>: тип <code>HTMLMapElement</code></li>
+                    <li><code>&lt;media&gt;</code>: тип <code>HTMLMediaElement</code></li>
+                    <li><code>&lt;meta&gt;</code>: тип <code>HTMLMetaElement</code></li>
+                    <li><code>&lt;meter&gt;</code>: тип <code>HTMLMeterElement</code></li>
+                    <li><code>&lt;noscript&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;object&gt;</code>: тип <code>HTMLObjectElement</code></li>
+                    <li><code>&lt;ol&gt;</code>: тип <code>HTMLOListElement</code></li>
+                    <li><code>&lt;optgroup&gt;</code>: тип <code>HTMLOptGroupElement</code></li>
+                    <li><code>&lt;option&gt;</code>: тип <code>HTMLOptionElement</code></li>
+                    <li><code>&lt;output&gt;</code>: тип <code>HTMLOutputElement</code></li>
+                    <li><code>&lt;p&gt;</code>: тип <code>HTMLParagraphElement</code></li>
+                    <li><code>&lt;param&gt;</code>: тип <code>HTMLParamElement</code></li>
+                    <li><code>&lt;pre&gt;</code>: тип <code>HTMLPreElement</code></li>
+                    <li><code>&lt;progress&gt;</code>: тип <code>HTMLProgressElement</code></li>
+                    <li><code>&lt;q&gt;</code>: тип <code>HTMLQuoteElement</code></li>
+                    <li><code>&lt;s&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;samp&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;script&gt;</code>: тип <code>HTMLScriptElement</code></li>
+                    <li><code>&lt;select&gt;</code>: тип <code>HTMLSelectElement</code></li>
+                    <li><code>&lt;small&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;source&gt;</code>: тип <code>HTMLSourceElement</code></li>
+                    <li><code>&lt;span&gt;</code>: тип <code>HTMLSpanElement</code></li>
+                    <li><code>&lt;strong&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;style&gt;</code>: тип <code>HTMLStyleElement</code></li>
+                    <li><code>&lt;sub&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;sup&gt;</code>: тип <code>HTMLElement</code></li>
+                    <li><code>&lt;table&gt;</code>: тип <code>HTMLTableElement</code></li>
+                    <li><code>&lt;tbody&gt;</code>: тип <code>HTMLTableSectionElement</code></li>
+                    <li><code>&lt;td&gt;</code>: тип <code>HTMLTableCellElement</code></li>
+                    <li><code>&lt;textarea&gt;</code>: тип <code>HTMLTextAreaElement</code></li>
+                    <li><code>&lt;tfoot&gt;</code>: тип <code>HTMLTableSectionElement</code></li>
+                    <li><code>&lt;th&gt;</code>: тип <code>HTMLTableHeaderCellElement</code></li>
+                    <li><code>&lt;thead&gt;</code>: тип <code>HTMLTableSectionElement</code></li>
+                    <li><code>&lt;time&gt;</code>: тип <code>HTMLTimeElement</code></li>
+                    <li><code>&lt;title&gt;</code>: тип <code>HTMLTitleElement</code></li>
+                    <li><code>&lt;tr&gt;</code>: тип <code>HTMLTableRowElement</code></li>
+                    <li><code>&lt;track&gt;</code>: тип <code>HTMLTrackElement</code></li>
+                    <li><code>&lt;ul&gt;</code>: тип <code>HTMLUListElement</code></li>
+                    <li><code>&lt;var&gt;</code>: тип <code>HTMLElement / HTMLUnknownElement</code></li>
+                    <li><code>&lt;video&gt;</code>: тип <code>HTMLVideoElement</code></li>
+                </ul>
+
+                <p>
+                    Мы можем получить конкретный тип элемента с помощью метода <span class="b">Object.getPrototypeOf()</span>:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;h1 id="header">Home Page&lt;/h1>
+    &lt;script>
+        const header = document.getElementById("header");
+        console.log(Object.getPrototypeOf(header)); // HTMLHeadingElement
+    &lt;/script>
+&lt;/body></code></div>
+
+                <h3>Свойства элементов</h3>
+
+                <p>Тип Element предоставляет ряд свойств, которые хранят информацию об элементе:</p>
+                
+                <ul>
+                    <li><span class="b">tagName</span>: возвращает тег элемента</li>
+                    <li><span class="b">textContent</span>: представляет текстовое содержимое элемента</li>
+                    <li><span class="b">innerText</span>: представляет текстовое содержимое элемента (аналогично textContent)</li>
+                    <li><span class="b">innerHTML</span>: представляет html-код элемента</li>
+                </ul>
+
+                <p>
+                    Одним из ключевых свойств объекта Element является свойство <span class="b">tagName</span>, которое возвращает тег элемента:
+                </p>
+                
+                <div class="code-block"><code>&lt;body>
+    &lt;h1 id="header">Home Page&lt;/h1>
+    &lt;script>
+        const header = document.getElementById("header");
+        console.log(header.tagName);  // H1
+    &lt;/script>
+&lt;/body></code></div>
+
+                <h3>Управление текстом элемента</h3>
+
+                <p>
+                    Свойство <span class="b">textContent</span> позволяет получить или изменить текстовое содержимое элемента:
+                </p>
+
+
+                <div class="code-block"><code>&lt;body>
+    &lt;h1 id="header">Home Page&lt;/h1>
+    &lt;script>
+        const header = document.getElementById("header");
+        // получаем текст элемента
+        console.log(header.textContent);  // Home Page
+        // изменяем текст элемента
+        header.textContent = "Hello World";
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    Аналогично можно использовать другое свойство для управление текстом - <span class="b">innerText</span>:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;h1 id="header">Home Page&lt;/h1>
+    &lt;script>
+        const header = document.getElementById("header");
+        // получаем текст элемента
+        console.log(header.innerText);  // Home Page
+        // изменяем текст элемента
+        header.innerText = "Hello World2";
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    Тем не менее между <span class="b">textContent</span> и <span class="b">innerText</span> есть некоторые различия:
+                </p>
+
+                <ul>
+                    <li><span class="b">textContent</span> получает содержимое всех элементов, включая <code>&lt;script&gt;</code> и <code>&lt;style</code>, тогда как 
+                    <span class="b">innerText</span> этого не делает</li>
+                    <li><span class="b">innerText</span> умеет считывать стили и не возвращает содержимое скрытых элементов, тогда как <span class="b">textContent</span> этого не делает.</li>
+                    <li><span class="b">innerText</span> позволяет получить CSS, а <span class="b">textContent</span> — нет.</li>
+                </ul>
+
+                <h3>Управление кодом HTML</h3>
+
+                <p>
+                    Ни <span class="b">textContent</span>, ни <span class="b">innerText</span> не позволяют ни получить, ни изменить код html элемента. Например:
+                </p>
+
+                <div class="code-block"><code>header.innerText = "&lt;span style='color:navy;'>Hello World&lt;/span>";</code></div>
+
+                <p>
+                    Это изменит только текст, но не html код. Для управления html применяется свойство <span class="b">innerHTML</span>:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;h1 id="header">Home Page&lt;/h1>
+    &lt;script>
+        const header = document.getElementById("header");
+        // получаем html-код элемента
+        console.log(header.innerHTML);  // Home Page
+        // изменяем html-код элемента
+        header.innerHTML = "&lt;span style='color:navy;'>Hello World&lt;/span>";
+    &lt;/script>
+&lt;/body></code></div>
+
+                <h2>Создание, добавление, замена и удаление элементов</h2>
+
+                <p>
+                    JavaScript предоставляет ряд методов для управления элементами на веб-страницы. В частности, мы можем создавать и добавлять новые элементы 
+                    или заменять и удалять уже имеющиеся. Рассмотрим эти методы.
+                </p>
+
+                <h3>Создание элементов (createElement)</h3>
+
+                <p>Для создания элементов объект document имеет следующие методы:</p>
+
+                <ul>
+                    <li><span class="b">createElement(elementName)</span>: создает элемент html, тег которого передается в качестве параметра. Возвращает созданный элемент</li>
+                    <li><span class="b">createTextNode(text)</span>: создает и возвращает текстовый узел. В качестве параметра передается текст узла.</li>
+                </ul>
+
+                <p>Создадим элемент с помощью <span class="b">createElement</span>:</p>
+
+                <div class="code-block"><code>const header = document.createElement("h1");      // создаем заголовок &lt;h1>
+ console.log(header);  // &lt;h1>&lt;/h1></code></div>
+
+                <p>Таким образом, переменная <code>header</code> будет хранить ссылку на элемент <code>h1</code>.</p>
+
+                <p>Создадим текстовый узел с помощью <span class="b">createTextNode</span>:</p>
+
+                <div class="code-block"><code>const  headerText = document.createTextNode("Hello World"); // создаем текстовый узел
+ console.log( headerText);  // "Hello World"</code></div>
+
                 <div class="code-block"><code>// Создать новый элемент
 const div = document.createElement('div');
 div.textContent = 'Новый блок';
@@ -3713,7 +3945,187 @@ div.className = 'box';
 const p = document.createElement('p');
 p.innerHTML = 'Новый &lt;b&gt;параграф&lt;/b&gt;';</code></div>
 
-                <h3>Вставка элементов</h3>
+                <h3>Добавление элементов</h3>
+
+                <p>Однако одного создания элементов недостаточно, их еще надо добавить на веб-страницу.</p>
+                <p>Для добавления элементов мы можем использовать один из методов объекта Node:</p>
+
+                <ul>
+                    <li><span class="b">appendChild(newNode)</span>: добавляет новый узел newNode в конец коллекции дочерних узлов</li>
+                    <li><span class="b">insertBefore(newNode, referenceNode)</span>:  добавляет новый узел newNode перед узлом referenceNode</li>
+                </ul>
+
+                <h3>appendChild</h3>
+
+                <p>Используем метод <span class="b">appendChild()</span>:</p>
+                <div class="code-block"><code>const header = document.createElement("h1");        // создаем заголовок &lt;h1>
+const  headerText = document.createTextNode("Hello World"); // создаем текстовый узел
+header.appendChild( headerText); // добавляем в элемент h1 текстовый узел
+console.log(header);  // &lt;h1>Hello World&lt;/h1></code></div>
+
+                <p>
+                    И чтобы добавить созданный элемент на страницу, его надо добавить в уже имеющийся на странице элемент:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+&lt;script>
+    constheader = document.createElement("h1");     // создаем заголовок &lt;h1>
+    const headerText = document.createTextNode("Hello World");  // создаем текстовый узел
+    header.appendChild(headerText); // добавляем в элемент h1 текстовый узел
+    document.body.appendChild(header);  // добавляем элемент h1 на страницу в элемент body
+&lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    Сначала создаем обычный элемент заголовка h2 и текстовый узел. Затем текстовый узел добавляем в элемент заголовка. Затем заголовок добавляем в 
+                    элемент  <span class="b">body</span>:
+                </p>
+
+                <p>
+                    Стоит отметить, что нам необязательно для определения текста внутри элемента создавать дополнительный текстовый узел, так как мы можем 
+                    воспользоваться свойством <span class="b">textContent</span> и напрямую ему присвоить текст:
+                </p>
+
+                <div class="code-block"><code>const header = document.createElement("h1");      // создаем заголовок &lt;h1>
+ header.textContent = "Hello World";     // определяем текст элемента</code></div>
+
+                <p>В этом случае текстовый узел будет создан неявно при установке текста.</p>
+
+                <h3>insertBefore</h3>
+
+                <p>
+                    Метод <code>appendChild()</code> добавляет элемент в конец контейнера. Чтобы более конкретизировать место для добавления, можно использовать другой 
+                    метод - <span class="b">insertBefore()</span>, который добавляет один элемент перед другим элементом. Например, у нас есть следующая страница:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;p>Text 1&lt;/p>
+    &lt;p>Text 2&lt;/p>
+&lt;/body></code></div>
+
+                <p>
+                    Допустим, нам надо добавить в элемент body перед первым параграфом заголовок. Мы можем сделать это так:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;p>Text 1&lt;/p>
+    &lt;p>Text 2&lt;/p>
+    &lt;script>
+        const header = document.createElement("h1");    // создаем заголовок &lt;h1>
+        header.textContent = "Page Header"; // определяем текст элемента
+        // получаем первый параграф
+        const firstP = document.body.firstElementChild;
+        // добавляем элемент h1 перед параграфом firstP
+        document.body.insertBefore(header, firstP); 
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p> Если нам надо вставить новый узел на второе, третье или любое другое место, то нам надо найти узел, перед которым надо вставлять, 
+                    с помощью комбинаций свойств firstElementChild/lastElementChild и nextSibling/previousSibling.
+                </p>
+
+                <h3>Копирование элемента</h3>
+
+                <p>
+                    Иногда элементы бывают довольно сложными по составу, и гораздо проще их скопировать, чем с помощью отдельных вызовов создавать их содержимое. 
+                    Для копирования уже имеющихся узлов у объекта Node можно использовать метод <span class="b">cloneNode()</span>:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;div id="article">
+        &lt;h1>Home Page&lt;/h1>
+        &lt;p>Text 1&lt;/p>
+        &lt;p>Text 2&lt;/p>
+    &lt;/div>
+    &lt;script>
+        const article = document.getElementById("article");
+        // получаем последний параграф
+        const lastP = article.lastElementChild;
+        // клонируем элемент lastP
+        const newLastP = lastP.cloneNode(true);
+        // изменяем текст
+        newLastP.textContent = "Publication Date: 28/10/2023";
+        // добавляем в конец элемента article
+        article.appendChild(newLastP);
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    В метод <code>cloneNode()</code> в качестве параметра передается логическое значение: если передается true, то элемент будет копироваться со 
+                    всеми дочерними узлами; если передается false - то копируется без дочерних узлов. То есть в данном случае мы копируем узел со всем его 
+                    содержимым и потом добавляем в конец элемента c id="article".
+                </p>
+
+                <h3>Замена элемента</h3>
+
+                <p>
+                    Для замены элемента применяется метод <span class="b">replaceChild(newNode, oldNode)</span> объекта Node. Этот метод 
+                    в качестве первого параметра принимает новый элемент, который заменяет старый элемент oldNode, передаваемый в качестве второго параметра.
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;div id="article">
+        &lt;p>Home Page&lt;/p>
+        &lt;p>Text 1&lt;/p>
+        &lt;p>Text 2&lt;/p>
+    &lt;/div>
+    &lt;script>
+        const article = document.getElementById("article");
+        <code class="comment">// находим узел, который будем заменять</code>
+        <code class="comment">// пусть это будет первый элемент</code>
+        const oldNode = article.firstElementChild;
+        <code class="comment">// создаем новый элемен</code>т
+        const newNode = document.createElement("h2");
+        <code class="comment">// определяем для него текст</code>
+        newNode.textContent = "Hello World";
+        <code class="comment">// заменяем старый узел новым</code>
+        article.replaceChild(newNode, oldNode);
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>В данном случае заменяем первый элемент - первый параграф заголовком h2:</p>
+
+                <h3>Удаление элемента</h3>
+
+                <p>
+                    Для удаления элемента вызывается метод <span class="b">removeChild()</span> объекта Node. Этот метод удаляет один из дочерних узлов:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;div id="article">
+        &lt;h1>Home Page&lt;/h1>
+        &lt;p>Text 1&lt;/p>
+        &lt;p>Text 2&lt;/p>
+    &lt;/div>
+    &lt;script>
+        const article = document.getElementById("article");
+        <code class="comment">// находим узел, который будем удалять - последний параграф</code>
+        const lastP = article.lastElementChild;
+        <code class="comment">// удаляем узел</code>
+        article.removeChild(lastP);
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>В данном случае удаляется первый параграф из блока div</p>
+
+                <h4>Удаление всех элементов</h4>
+
+                <p>
+                    Иногда возникает необходимость удалить все элементы. Для этого перебираем все элементы контейнера и удаляем их:
+                </p>
+
+                <div class="code-block"><code>&lt;div id="article">
+    &lt;h1>Home Page&lt;/h1>
+    &lt;p>Text 1&lt;/p>
+    &lt;p>Text 2&lt;/p>
+&lt;/div>
+&lt;script>
+    const article = document.getElementById("article");
+    while(article.firstChild){
+        article.removeChild(article.firstChild);
+    }
+&lt;/script></code></div>
+
                 <div class="code-block"><code>const container = document.querySelector('.container');
 const newDiv = document.createElement('div');
 
