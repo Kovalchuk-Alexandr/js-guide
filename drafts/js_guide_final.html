@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JavaScript - Полный справочник (Offline)</title>
+
+    <link rel="shortcut icon" sizes="128x133" type="image/x-icon" href="../favicon/favicon.png">
+    <link rel="apple-touch-icon" sizes="256x256" href="../favicon/apple-touch-icon.png">
+
     <style>
+        /* <link rel="icon" sizes="55x49" type="image/x-icon" href="./img/favicon/favicon.png">
+	    <link rel="apple-touch-icon" sizes="55x49" href="./img/favicon/apple-touch-icon.png"> */
         * {
             margin: 0;
             padding: 0;
@@ -4220,6 +4226,263 @@ console.log(rect.top);    // Расстояние от верха окна
 console.log(rect.left);   // Расстояние от левого края окна
 console.log(rect.width);  // Ширина
 console.log(rect.height); // Высота</code></div>
+
+                <h2>Управление атрибутами элементов</h2>
+
+                <p>Для управления атрибутами элементов JavaScript предоставляет ряд методов:</p>
+
+                <ul>
+                    <li><span class="b">getAttribute(attr)</span>: возвращает значение атрибута attr</li>
+                    <li><span class="b">createAttribute(attr)</span>: создает атрибут attr</li>
+                    <li><span class="b">setAttribute(attr, value)</span>: устанавливает для атрибута attr значение value. Если атрибута нет, то он добавляется</li>
+                    <li><span class="b">removeAttribute(attr)</span>: удаляет атрибут attr и его значение</li>
+                </ul>
+
+                <h3>Получение атрибута</h3>
+
+                <p>
+                    Для получения атрибута у элемента вызывается метод <span class="b">getAttribute()</span>, в который передается имя атрибута. Например, пусть у нас на странице есть следующий 
+                    элемент, который представляет ссылку:
+                </p>
+
+                <div class="code-block"><code>&lt;a id="home" class="link" href="index.html">Home&lt;/a></code></div>
+
+                <p>Получим атрибуты этого элемента:</p>
+
+                <div class="code-block"><code><code class="comment">// получаем элемент</code>
+const element = document.getElementById("home");
+<code class="comment">// получаем атрибуты элемента</code>
+console.log(element.getAttribute("id"));    <code class="comment">// home</code>
+console.log(element.getAttribute("class")); <code class="comment">// link</code>
+console.log(element.getAttribute("href"));  <code class="comment">// index.html</code></code></div>
+
+                <p>
+                    Стоит отметить, что атрибуты элементы также доступны через его свойства, которые называются аналогично атрибутам (за редким исключением):
+                </p>
+
+
+                <div class="code-block"><code><code class="comment">// получаем элемент</code>
+const element = document.getElementById("home");
+<code class="comment">// получаем атрибуты элемента</code>
+console.log(element.id);<code class="comment">        // home</code>
+console.log(element.className);<code class="comment"> // link</code>
+console.log(element.href);<code class="comment">      // file:///Users/eugene/Documents/app/index.html</code></code></div>
+
+                <p>
+                    Исключение касается в частности атрибута "class", который доступен через свойство <span class="b">className</span>.
+                </p>
+                <p>
+                    Также свойства могут возвращать немного отличающиеся значения. Например, свойство <code>href</code> возвращает полную ссылку, а метод <code>getAttribute("href")</code> - непосредственное значение атрибута.
+                </p>
+                <p>То же самое касается и атрибута <span class="b">style</span>:</p>
+
+                <div class="code-block"><code>&lt;a id="home" style="color:red;" href="index.html">Home&lt;/a>
+&lt;script>
+    <code class="comment">// получаем элемент</code>
+    const element = document.getElementById("home");
+    <code class="comment">// получаем атрибуты элемента</code>
+    console.log(element.style);<code class="comment">    // CSSStyleDeclaration</code>
+    console.log(element.getAttribute("style"));<code class="comment"> // color:red;</code>
+&lt;/script></code></div>
+
+                <p>
+                    Метод <code>getAttribute("style")</code> возвращает стиль в виде текста, а свойство <code>style</code> - объект CSSStyleDeclaration, с помощью свойств которого 
+                    можно получить отдельные аспекты стиля.
+                </p>
+
+                <h3>Установка атрибутов</h3>
+
+                <p>
+                    Для установки значения атрибутов применяется метод <span class="b">setAttribute(attr, value)</span>, первый параметр которого - устанавливаемый атрибут, 
+                    а второй - его значение:
+                </p>
+
+                <div class="code-block"><code>&lt;a id="home" href="index.html">Home&lt;/a>
+&lt;script>
+    <code class="comment">// получаем элемент</code>
+    const element = document.getElementById("home");
+    <code class="comment">// устанавливаем атрибут href</code>
+    element.setAttribute("href", "https://metanit.com");
+    <code class="comment">// устанавливаем атрибут style</code>
+    element.setAttribute("style", "color:navy;");
+&lt;/script></code></div>
+
+                <p>
+                    Здесь изменяем атрибут "href" и устанавливаем атрибут "style". Поскольку атрибут "style" изначально отсутствует, то он будет добавлен. Но стоит отметить, что в реальности 
+                    это приведет к тому, что будет создан узел Node, который представляет атрибут. У этого узла будет установлено соответствующее значение, и затем узел атрибута добавляется в коллекцию дочерних узлов 
+                    элемента. То есть фактически это будет выглядеть следующим образом:
+                </p>
+
+                <div class="code-block"><code>&lt;a id="home" href="https://metanit.com">Home&lt;/a>
+&lt;script>
+<code class="comment">// получаем элемент</code>
+const element = document.getElementById("home");
+<code class="comment">// создаем узел-атрибут style</code>
+const attribute = document.createAttribute("style");
+<code class="comment">// устанавливаем значение узла-атрибута</code>
+attribute.value = "color:navy;";
+<code class="comment">// устанавливаем узел атрибута</code>
+element.setAttributeNode(attribute);
+&lt;/script></code></div>
+
+                <h3>Удаление атрибута</h3>
+
+                <p>
+                    Для удаления атрибута применяется метод <span class="b">removeAttribute()</span>, в который передается удаляемый атрибут:
+                </p>
+
+                <div class="code-block"><code>&lt;a id="home" href="https://metanit.com" style="color:navy;">Home&lt;/a>
+&lt;script>
+    <code class="comment">// получаем элемент</code>
+    const element = document.getElementById("home");
+    <code class="comment">// удаляем атрибут style</code>
+    element.removeAttribute("style");
+&lt;/script></code></div>
+
+                <h2>Изменение стиля элементов</h2>
+
+                <p>
+                    Для работы со стилевыми свойствами элементов в JavaScript применяются, главным образом, два подхода:
+                </p>
+                <ul>
+                    <li>Изменение свойства <span class="b">style</span></li>
+                    <li>Изменение значения атрибута <span class="b">class</span></li>
+                </ul>
+
+                <h3>Свойство style</h3>
+
+                <p>
+                    Свойство <span class="b">style</span> представляет сложный объект <span class="b">CSSStyleDeclaration</span> и напрямую сопоставляется с атрибутом style html-элемента. 
+                    Этот объект содержит набор свойств CSS, к которым можно обратиться следующим образом:
+                </p>
+
+                <div class="code-block"><code>element.style.свойствоCSS</code></div>
+
+                <p>Например, установим цвет шрифта заголовка:</p>
+                <div class="code-block"><code>&lt;body>
+    &lt;h1 id="header">Home Page&lt;/h1>
+    &lt;script>
+        const header = document.getElementById("header");
+        <code class="comment">// получаем значение свойства color</code>
+        console.log(header.style.color);    // пустая строка
+        <code class="comment">// изменяем значение свойства color</code>
+        header.style.color = "navy";
+        <code class="comment">// повторно получаем значение свойства color</code>
+        console.log(header.style.color);<code class="comment">    // navy</code>
+    &lt;/script>
+&lt;/body></code></div>
+                <p>
+                    Здесь для заголовка в качестве цвета устанавливаем синий цвет navy. В данном случае название свойства color совпадает со свойством css. 
+                    Аналогично мы могли бы установить цвет с помощью css:
+                </p>
+
+                <div class="code-block"><code>#header{
+    color:navy;
+}</code></div>
+
+                <p>
+                    Однако ряд свойств css в названиях имеют дефис, например, <code>font-family</code>. В JavaScript для этих свойств дефис не употребляется. 
+                    Только первая буква, которая идет после дефиса, переводится в верхний регистр:
+                </p>
+                <div class="code-block"><code>const header = document.getElementById("header");
+ header.style.fontFamily = "Verdana";</code></div>
+
+                <h3>Свойство className</h3>
+
+                <p>
+                    С помощью свойства <span class="b">className</span> можно получить или установить значение атрибута <code>class</code> элемента html. Например:
+                </p>
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>JS Guide&lt;/title>
+    &lt;style>
+        .header-color {color:navy;}
+        .header-font {font-family: Verdana;}
+    &lt;/style>
+&lt;/head>
+&lt;body>
+    &lt;h1 id="header" class="header-font">Home Page&lt;/h1>
+    &lt;script>
+        const header = document.getElementById("header");
+        <code class="comment">// получаем текущий класс</code>
+        console.log(header.className);  // header-font
+        <code class="comment">// устанавливаем класс элемента</code>
+        header.className = "header-color";  
+        <code class="comment">// получаем текущий класс</code>
+        console.log(header.className);<code class="comment">  // header-color</code> 
+    &lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>
+                    Здесь получаем текущий класс заголовка и затем изменяем его на новый класс - "header-color". Благодаря использованию классов не придется настраивать каждое отдельное свойство css с помощью свойства <code>style</code>.
+                </p>
+                <p>
+                    Но при этом надо учитывать, что прежнее значение атрибута <code>class</code> удаляется. Поэтому, если нам надо добавить класс, надо объединить его 
+                    название со старым классом:
+                </p>
+
+                <div class="code-block"><code>header.className = header.className + " header-color";</code></div>
+
+                <p>И если надо вовсе удалить все классы, то можно присвоить свойству пустую строку:</p>
+                <div class="code-block"><code>header.className = "";</code></div>
+
+                <h3>Свойство classList</h3>
+
+                <p>
+                    Выше было рассмотрено, как добавлять классы к элементу, однако для управления множеством классов гораздо удобнее использовать свойство 
+                    <span class="b">classList</span>. Это свойство представляет объект, реализующий следующие методы:
+                </p>
+
+                <ul>
+                    <li><span class="b">add(className)</span>: добавляет класс className</li>
+                    <li><span class="b">remove(className)</span>: удаляет класс className</li>
+                    <li><span class="b">toggle(className)</span>: переключает у элемента класс на className. Если класса нет, то он добавляется, если есть, то удаляется</li>
+                </ul>
+
+                <p>Например:</p>
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>JS Guide&lt;/title>
+    &lt;style>
+        .header-color {color:navy;}
+        .header-font {font-family: Verdana;}
+        .header-size {font-size: 22px;}
+    &lt;/style>
+&lt;/head>
+&lt;body>
+    &lt;h1 id="header" class="header-size">Home Page&lt;/h1>
+    &lt;script>
+    const header = document.getElementById("header");
+    header.classList.remove("header-size");<code class="comment">     //  удаляем класс header-size</code>
+    header.classList.add("header-font");<code class="comment">        // добавляем класс header-font</code>
+    header.classList.toggle("header-color");<code class="comment">    // переключаем класс header-color</code>
+    &lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>
+                    Стоит отметить, что метод <code>toggle()</code> дополнительно может принимать условие в качестве второго параметра - если это условие верно (возвращает <code>true</code>), то класс переключается:
+                </p>
+
+                <div class="code-block"><code>const i = 5;
+const condition = i > 0;<code class="comment"> // условие</code>
+const header = document.getElementById("header");
+header.classList.toggle("header-color", condition);<code class="comment"> // переключаем класс header-color по условию</code>
+</code></div>
+
+                <p>
+                    При необходимости мы можем перебрать все классы из списка classList или получить отдельные классы по индексу:
+                </p>
+                <div class="code-block"><code><code class="comment">// перебор списка классов</code>
+for(headerClass of header.classList){
+    console.log(headerClass);
+}
+console.log(header.classList[0]);<code class="comment">   // первый установленный класс</code></code></div>
             </section>
 
             <!-- ГЛАВА 12: События в JavaScript -->
