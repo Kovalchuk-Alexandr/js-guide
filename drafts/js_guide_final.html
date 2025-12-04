@@ -4483,6 +4483,317 @@ for(headerClass of header.classList){
     console.log(headerClass);
 }
 console.log(header.classList[0]);<code class="comment">   // первый установленный класс</code></code></div>
+
+                <h2>Создание своего элемента HTML</h2>
+
+                <p>
+                    По умолчанию HTML предоставляет ряд встроенных элементов, из которых мы можем составить структуру веб-страницы. Однако мы не ограничены 
+                    встроенными html-элементами  и можем сами создать и использовать свои элементы html.
+                </p>
+                <p>
+                    В JavaScript HTML-элемент представлен интерфейсом <span class="b">HTMLElement</span>. Соответственно, реализуя данный интерфейс в JavaScript, мы можем 
+                    создать свои классы, которые будут представлять элементы html, и потом их использовать. Что-то наподобие следующего:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;hello-metanit>&lt;/hello-metanit>
+    &lt;script>
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    В данном случае в коде странице определен элемент <code>&lt;hello-metanit&gt;</code>, и в реальности такого элемента конечно же не существует. 
+                    Но сейчас мы его создадим.
+                </p>
+                <p>
+                    Итак, чтобы определить класс, который будет представлять html-элемент, нам достаточно создать класс, который реализует интерфейс <span class="b">HTMLElement</span>:
+                </p>
+                <div class="code-block"><code>class HelloMetanit extends HTMLElement {
+ 
+}</code></div>
+
+                <p>
+                    Второй важный момент - нам надо зарегистрировать наш кастомный html-элемент, чтобы браузер знал, что есть такой элемент. 
+                    Для этого применяется встроенная функция
+                </p>
+                <div class="code-block"><code>customElements.define(name, constructor, options);</code></div>
+
+                <p>Она принимает три параметра:</p>
+
+                <ul>
+                    <li><code>name</code>: имя кастомного элемента html, который будет представлять класс JavaScript. Важно: имя должно содержать дефис.</li>
+                    <li><code>constructor</code>: конструктор (по сути класс JavaScript), который представляет кастомный элемент html.</li>
+                    <li><code>options</code>: необязательный параметр - объект, который настраивает кастомный html-элемент. В настоящий момент он поддерживает 
+                    один параметр - <code>extends</code>. Он определяет название встроенного html-элемента, который применяется для создания кастомного элемента html.</li>
+                </ul>
+
+                <p>Например, в нашем случае мы могли бы вызвать эту функцию так:</p>
+
+                <div class="code-block"><code>customElements.define("hello-metanit", HelloMetanit);</code></div>
+
+                <p>То есть в общем это будет выглядеть следующим образом:</p>
+
+                <div class="code-block"><code>&lt;body>
+ 
+&lt;hello-metanit>&lt;/hello-metanit>
+ 
+&lt;script>
+    class HelloMetanit extends HTMLElement {
+        
+    }
+    customElements.define("hello-metanit", HelloMetanit);
+&lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    Но пока кастомный элемент "hello-metanit" ничего не делает. Добавим ему какую-нибудь примитивную задачу. Пусть он выводит некоторое приветствие.
+                </p>
+                <p>
+                    Как правило, классы кастомных элементов применяют конструктор. Причем в самом начале конструктора должен идти вызов функции 
+                    <span class="b">super()</span>, который гарантирует, что наш класс унаследовал все методы, атрибуты и свойства интерфейса 
+                    <code>HTMlElement</code>.
+                </p>
+                <div class="code-block"><code>class HelloMetanit extends HTMLElement {
+    constructor() {
+        super();
+    }
+}</code></div>
+
+                <p>
+                    Но кроме того, в конструкторе мы можем определить некоторую базовую логику нашего элемента. Например:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+ 
+&lt;hello-metanit>&lt;/hello-metanit>
+ 
+&lt;script>
+class HelloMetanit extends HTMLElement {
+    constructor() {
+        super();
+         
+        let welcome = "Доброе утро";
+        const hour = new Date().getHours();
+        if (hour > 17) {
+            welcome = "Добрый вечер";
+        } else if (hour > 12) {
+            welcome = "Добрый день";
+        }
+         
+        this.innerText= welcome;
+        <code class="comment">// либо так</code>
+        <code class="comment">// this.textContent = welcome;</code>
+    }
+}
+ 
+customElements.define("hello-metanit", HelloMetanit);
+&lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    В конструкторе мы получаем текущее время и в зависимости от текущего часа определяем текст приветствия. Поскольку наш класс применяет интерфейс 
+                    HTMLElement, то соответственно мы можем в нем использовать стандартные для html-элементов свойства. В частности, в данном случае 
+                    для установки текста элемента применяется свойство <code>innerText</code> (также можно было бы использовать свойство <code>textContent</code>).
+                </p>
+
+                <h3>Добавление методов</h3>
+
+                <p>
+                    Как и в обычных классах, мы можем определять в классах элементов методы и затем вызывать их. Например, определим простейший метод, который возвращает текущее время:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+ 
+&lt;hello-metanit id="hello">&lt;/hello-metanit>
+&lt;script>
+class HelloMetanit extends HTMLElement {
+     
+    constructor() {
+        super();
+         
+        let welcome = "Доброе утро";
+        const hour = new Date().getHours();
+        if (hour > 17) {
+            welcome = "Добрый вечер";
+        } else if (hour > 12) {
+            welcome = "Добрый день";
+        }
+        this.style="cursor:pointer;"
+        this.innerText= welcome;
+    }
+     
+    showTime(){
+        console.log(new Date().toTimeString());
+    }
+}
+ 
+customElements.define("hello-metanit", HelloMetanit);
+ 
+<code class="comment">// получаем элемент</code>
+const hello = document.getElementById("hello");
+<code class="comment">// по нажатию вызываем его метод showTime</code>
+hello.addEventListener("click", ()=> hello.showTime());
+&lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    Для примера в классе элемента определен метод showTime, который просто выводит на консоль текущее время. В коде javascript мы получаем по 
+                    id данный элемент, прикрепляем к нему обработчик нажатия, в котором вызываем вышеопределенный метод <code>showTime()</code>. 
+                    В итоге по нажатию в консоли мы увидим текущее время:
+                </p>
+
+                <h3>События жизненного цикла</h3>
+
+                <p>Кастомный элемент html имеет свой жизненный цикл, который описывается следующими методами:</p>
+                <ul>
+                    <li><span class="b">connectedCallback</span>: вызывается каждый раз, когда кастомный элемент html добавляется в DOM.</li>
+                    <li><span class="b">disconnectedCallback</span>: вызывается каждый раз, когда кастомный элемент html удаляется из DOM.</li>
+                    <li><span class="b">adoptedCallback</span>: вызывается каждый раз, когда кастомный элемент html перемещается в новый элемент.</li>
+                    <li><span class="b">attributeChangedCallback</span>: вызывается при каждом изменении (добавлении, изменении значения или удаления) 
+                    атрибута кастомного элемента html.</li>
+                </ul>
+
+                <p>Например, применим метод <code>connectedCallback()</code>:</p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;hello-metanit id="hello">&lt;/hello-metanit>
+&lt;script>
+class HelloMetanit extends HTMLElement {
+     
+    constructor() {
+        super();
+         
+        let welcome = "Доброе утро";
+        const hour = new Date().getHours();
+        if (hour > 17) {
+            welcome = "Добрый вечер";
+        } else if (hour > 12) {
+            welcome = "Добрый день";
+        }
+        this.style.cursor="pointer"
+        this.innerText= welcome;
+    }
+    connectedCallback() {
+      this.style.color = "red";
+    }
+    showTime(){
+        console.log(new Date().toTimeString());
+    }
+}
+ 
+customElements.define("hello-metanit", HelloMetanit);
+&lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    В данном случае в методе <code>connectedCallback()</code> просто устанавливаем цвет шрифта - в данном случае красный цвет:
+                </p>
+
+                <div class="code-block"><code>this.style.color = "red";</code></div>
+
+                <h3>Добавление атрибутов</h3>
+
+                <p>
+                    Также мы можем определить у элемента свои атрибуты и затем использовать их. Например, выше при добавлении элемента на страницу у него устанавливается 
+                    красный цвет текста. Зададим установку цвета с помощью атрибута:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+ 
+    &lt;hello-metanit hellocolor="#2980b9">&lt;/hello-metanit>
+    &lt;br/>
+    &lt;hello-metanit>&lt;/hello-metanit>
+&lt;script>
+class HelloMetanit extends HTMLElement {
+     
+    constructor() {
+        super();
+         
+        let welcome = "Доброе утро";
+        const hour = new Date().getHours();
+        if (hour > 17) {
+            welcome = "Добрый вечер";
+        } else if (hour > 12) {
+            welcome = "Добрый день";
+        }
+        this.style.cursor="pointer"
+        this.innerText= welcome;
+    }
+    connectedCallback() {
+        this.style.color = "red";
+        if (this.hasAttribute("hellocolor")) {
+            this.style.color = this.getAttribute("hellocolor");
+        }
+    }
+    showTime(){
+        console.log(new Date().toTimeString());
+    }
+}
+ 
+customElements.define("hello-metanit", HelloMetanit);
+&lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    В данном случае элемент принимает атрибут <code>hellocolor</code>, который задает цвет текста элемента. Если этот атрибут определен, то по нему устанавливаем 
+                    цвет текста. Если не определен, то применяется цвет по умолчанию - красный:
+                </p>
+
+                <div class="code-block"><code>this.style.color = "red";
+if (this.hasAttribute("hellocolor")) {
+    this.style.color = this.getAttribute("hellocolor");
+}</code></div>
+
+                <h3>Стилизация CSS</h3>
+
+                <p>Стилизация элемента через CSS производится также, как и стилизация любого другого элемента:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;title>JS Guide&lt;/title>
+    &lt;meta charset="utf-8">
+    &lt;style>
+        hello-metanit{
+            font-family: Verdana;
+            font-size:22px;
+        }
+    &lt;/style>
+&lt;/head>
+&lt;body>
+    &lt;hello-metanit hellocolor="#2980b9">&lt;/hello-metanit>
+&lt;script>
+class HelloMetanit extends HTMLElement {
+     
+    constructor() {
+        super();
+         
+        let welcome = "Доброе утро";
+        const hour = new Date().getHours();
+        if (hour > 17) {
+            welcome = "Добрый вечер";
+        } else if (hour > 12) {
+            welcome = "Добрый день";
+        }
+        this.style.cursor="pointer"
+        this.innerText= welcome;
+    }
+    connectedCallback() {
+        this.style.color = "red";
+        if (this.hasAttribute("hellocolor")) {
+            this.style.color = this.getAttribute("hellocolor");
+        }
+    }
+    showTime(){
+        console.log(new Date().toTimeString());
+    }
+}
+ 
+customElements.define("hello-metanit", HelloMetanit);
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
             </section>
 
             <!-- ГЛАВА 12: События в JavaScript -->
