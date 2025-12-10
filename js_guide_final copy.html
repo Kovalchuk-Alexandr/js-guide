@@ -156,48 +156,14 @@
             font-weight: 600;
         }
 
-        /* Подразделы */
-        .nav-sublist {
-            list-style: none;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-        }
         
-        .nav-sublist.expanded {
-            max-height: 1180px;
-        }
         
-        .nav-subitem {
-            padding: 0.5rem 1rem 0.5rem 3rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.85rem;
-            border-left: 3px solid transparent;
-            color: var(--text2);
-        }
-        
-        .nav-subitem:hover {
-            background: #e8f4f8;
-            border-left-color: var(--accent);
-            color: var(--text);
-        }
-        
-        .nav-subitem.active {
-            background: #e8f4f8;
-            border-left-color: var(--accent);
-            font-weight: 600;
-            color: var(--text);
-        }
-        
-        body.dark-theme .nav-item:hover,
-        body.dark-theme .nav-subitem:hover {
+        body.dark-theme .nav-item:hover {
             background: #3d3d3d;
             color: var(--text);
         }
         
-        body.dark-theme .nav-item.active,
-        body.dark-theme .nav-subitem.active {
+        body.dark-theme .nav-item.active {
             background: #3d3d3d;
             color: var(--text);
         }
@@ -463,27 +429,7 @@
                 <div class="nav-section">
                     <div class="nav-title">🎨 DOM и события</div>
                     <ul class="nav-list">
-                        <li class="nav-item has-subitems" data-target="ch11">Глава 11. DOM
-                            <ul class="nav-sublist">
-                                <li class="nav-subitem" data-target="ch11-intro">Что такое DOM?</li>
-                                <li class="nav-subitem" data-target="ch11-search">Поиск элементов</li>
-                                <li class="nav-subitem" data-target="ch11-content">Изменение содержимого</li>
-                                <li class="nav-subitem" data-target="ch11-attributes">Работа с атрибутами</li>
-                                <li class="nav-subitem" data-target="ch11-classes">Работа с классами</li>
-                                <li class="nav-subitem" data-target="ch11-styles">Работа со стилями</li>
-                                <li class="nav-subitem" data-target="ch11-navigation">Навигация по DOM</li>
-                                <li class="nav-subitem" data-target="ch11-elements">Элементы</li>
-                                <li class="nav-subitem" data-target="ch11-create">Создание элементов</li>
-                                <li class="nav-subitem" data-target="ch11-copy">Копирование элемента</li>
-                                <li class="nav-subitem" data-target="ch11-replace">Замена элемента</li>
-                                <li class="nav-subitem" data-target="ch11-remove">Удаление элемента</li>
-                                <li class="nav-subitem" data-target="ch11-clone">Клонирование элемента</li>
-                                <li class="nav-subitem" data-target="ch11-sizes">Размеры и позиция</li>
-                                <li class="nav-subitem" data-target="ch11-attr-manage">Управление атрибутами</li>
-                                <li class="nav-subitem" data-target="ch11-style-manage">Изменение стиля</li>
-                                <li class="nav-subitem" data-target="ch11-custom">Создание своего элемента</li>
-                            </ul>
-                        </li>
+                        <li class="nav-item" data-target="ch11">Глава 11. DOM</li>
                         <li class="nav-item" data-target="ch12">Глава 12. События</li>
                         <li class="nav-item" data-target="ch13">Глава 13. Формы</li>
                     </ul>
@@ -3265,7 +3211,7 @@ console.log(difference); // Set(2) {1, 2}</code></div>
             <section class="chapter" id="ch11">
                 <h1>Глава 11. DOM (Document Object Model)</h1>
 
-                <h2 id="ch11-intro">Что такое DOM?</h2>
+                <h2>Что такое DOM?</h2>
                 <p>DOM (Document Object Model) — это программный интерфейс для HTML и XML документов. Он представляет структуру документа в виде дерева объектов, которыми можно манипулировать с помощью JavaScript.</p>
 
                 <div class="info-box note">
@@ -3273,7 +3219,7 @@ console.log(difference); // Set(2) {1, 2}</code></div>
                     <p>Каждый HTML-элемент в DOM представлен объектом (узлом). Документ имеет иерархическую структуру: родители, потомки, соседние элементы.</p>
                 </div>
 
-                <h2 id="ch11-search">Поиск элементов</h2>
+                <h2>Поиск элементов</h2>
 
                 <ul>
                     <li><p><span class="b">getElementById(value)</span>: выбирает элемент, у которого атрибут <code>id</code> равен value</p>. Если элемента с таким идентификатором нет, то возвращается null</li>
@@ -3419,7 +3365,7 @@ const itemsArray2 = Array.from(items);</code></div>
 могут не сразу изменяться.</p>
                 </div>
 
-                <h2 id="ch11-content">Изменение содержимого</h2>
+                <h2>Изменение содержимого</h2>
 
                 <h3>textContent</h3>
                 <div class="code-block"><code>const div = document.querySelector('#content');
@@ -3457,7 +3403,7 @@ console.log(div.outerHTML); // &lt;div id="content"&gt;...&lt;/div&gt;
 // Заменить элемент полностью
 div.outerHTML = '&lt;section&gt;Новый элемент&lt;/section&gt;';</code></div>
 
-                <h2 id="ch11-attributes">Работа с атрибутами</h2>
+                <h2>Работа с атрибутами</h2>
 
                 <h3>getAttribute / setAttribute</h3>
                 <div class="code-block"><code>const link = document.querySelector('a');
@@ -3503,7 +3449,7 @@ console.log(div.dataset.role);   // "admin"
 div.dataset.status = 'active';
 // HTML станет: data-status="active"</code></div>
 
-                <h2 id="ch11-classes">Работа с классами</h2>
+                <h2>Работа с классами</h2>
 
                 <h3>className</h3>
                 <div class="code-block"><code>const div = document.querySelector('div');
@@ -3538,7 +3484,7 @@ if (div.classList.contains('active')) {
 // Заменить класс
 div.classList.replace('old-class', 'new-class');</code></div>
 
-                <h2 id="ch11-styles">Работа со стилями</h2>
+                <h2>Работа со стилями</h2>
 
                 <h3>Инлайн-стили (style)</h3>
                 <div class="code-block"><code>const div = document.querySelector('div');
@@ -3571,7 +3517,7 @@ console.log(styles.width);           // Вычисленная ширина
 const beforeStyles = getComputedStyle(div, '::before');
 console.log(beforeStyles.content);</code></div>
 
-                <h2 id="ch11-navigation">Объект Node. Навигация по DOM</h2>
+                <h2>Объект Node. Навигация по DOM</h2>
 
                 <p>Каждый отдельный узел, будь то html-элемент, его атрибут или текст, в структуре DOM представлен объектом <span class="b">Node</span>. 
                     Может возникнуть вопрос: как связаны элементы веб-страницы и узлы веб-страницы? И тут надо отметить, что любой элемент веб-страницы является узлом, но не любой узел является 
@@ -3781,7 +3727,7 @@ const prev = element.previousElementSibling;</code></div>
 const form = button.closest('form');
 const container = button.closest('.container');</code></div>
 
-                <h2 id="ch11-elements">Элементы</h2>
+                <h2>Элементы</h2>
 
                 <p>
                     Для работы с элементами на веб-странице мы можем использовать как функциональность типа Node, который представляет любой узел веб-страницы, 
@@ -3982,7 +3928,7 @@ const container = button.closest('.container');</code></div>
     &lt;/script>
 &lt;/body></code></div>
 
-                <h2 id="ch11-create">Создание, добавление, замена и удаление элементов</h2>
+                <h2>Создание, добавление, замена и удаление элементов</h2>
 
                 <p>
                     JavaScript предоставляет ряд методов для управления элементами на веб-страницы. В частности, мы можем создавать и добавлять новые элементы 
@@ -4113,7 +4059,7 @@ div.insertAdjacentHTML('beforeend', '&lt;p&gt;В конец&lt;/p&gt;');
 div.insertAdjacentHTML('afterend', '&lt;p&gt;После элемента&lt;/p&gt;');</code></div>
 
 
-                <h2 id="ch11-copy">Копирование элемента</h2>
+                <h3>Копирование элемента</h3>
 
                 <p>
                     Иногда элементы бывают довольно сложными по составу, и гораздо проще их скопировать, чем с помощью отдельных вызовов создавать их содержимое. 
@@ -4145,7 +4091,7 @@ div.insertAdjacentHTML('afterend', '&lt;p&gt;После элемента&lt;/p&g
                     содержимым и потом добавляем в конец элемента c id="article".
                 </p>
 
-                <h2 id="ch11-replace">Замена элемента</h2>
+                <h3>Замена элемента</h3>
 
                 <p>
                     Для замены элемента применяется метод <span class="b">replaceChild(newNode, oldNode)</span> объекта Node. Этот метод 
@@ -4236,7 +4182,7 @@ container.after(newDiv);
 // insertBefore - вставить перед определённым потомком
 container.insertBefore(newDiv, container.firstChild);</code></div>
 
-                <h2 id="ch11-remove">Удаление элементов</h2>
+                <h3>Удаление элементов</h3>
                 <div class="code-block"><code>const element = document.querySelector('.item');
 
 <code class="comment">// remove() - удалить элемент</code>
@@ -4254,7 +4200,7 @@ while (parent.firstChild) {
     parent.removeChild(parent.firstChild);
 }</code></div>
 
-                <h2 id="ch11-clone">Клонирование элементов</h2>
+                <h2>Клонирование элементов</h2>
                 <div class="code-block"><code>const original = document.querySelector('.item');
 
 <code class="comment">// Поверхностное клонирование (без потомков)</code>
@@ -4266,7 +4212,7 @@ const clone2 = original.cloneNode(true);
 <code class="comment">// Вставить клон</code>
 document.body.appendChild(clone2);</code></div>
 
-                <h2 id="ch11-sizes">Размеры и позиция элемента</h2>
+                <h2>Размеры и позиция элемента</h2>
                 <div class="code-block"><code>const div = document.querySelector('div');
 
 <code class="comment">// Размеры (включая padding, но без border)</code>
@@ -4294,7 +4240,7 @@ console.log(rect.left);   // Расстояние от левого края о�
 console.log(rect.width);  // Ширина
 console.log(rect.height); // Высота</code></div>
 
-                <h2 id="ch11-attr-manage">Управление атрибутами элементов</h2>
+                <h2>Управление атрибутами элементов</h2>
 
                 <p>Для управления атрибутами элементов JavaScript предоставляет ряд методов:</p>
 
@@ -4406,7 +4352,7 @@ element.setAttributeNode(attribute);
     element.removeAttribute("style");
 &lt;/script></code></div>
 
-                <h2 id="ch11-style-manage">Изменение стиля элементов</h2>
+                <h2>Изменение стиля элементов</h2>
 
                 <p>
                     Для работы со стилевыми свойствами элементов в JavaScript применяются, главным образом, два подхода:
@@ -4551,7 +4497,7 @@ for(headerClass of header.classList){
 }
 console.log(header.classList[0]);<code class="comment">   // первый установленный класс</code></code></div>
 
-                <h2 id="ch11-custom">Создание своего элемента HTML</h2>
+                <h2>Создание своего элемента HTML</h2>
 
                 <p>
                     По умолчанию HTML предоставляет ряд встроенных элементов, из которых мы можем составить структуру веб-страницы. Однако мы не ограничены 
@@ -22177,135 +22123,26 @@ setInterval(() =&gt; showSlide(currentSlide + 1), 3000);</code></div>
             }
         });
 
-        // ============== EXPANDABLE NAVIGATION (SCROLL TO CHAPTER) ==============
+        // ============== NAVIGATION (SCROLL TO CHAPTER) ==============
         const navItems = document.querySelectorAll('.nav-item');
-        const navSubitems = document.querySelectorAll('.nav-subitem');
-
-        // Функция удаления класса "active"
-        function removeActive() {
-            const navItems = document.querySelectorAll('.nav-item');
-            const navSubitems = document.querySelectorAll('.nav-subitem');
-            // Убираем active со всех пунктов
-            navItems.forEach(nav => nav.classList.remove('active'));
-            navSubitems.forEach(nav => nav.classList.remove('active'));
-        }
-
-        // Toggle подразделов при клике на главу
+        
         navItems.forEach(item => {
-            if (item.classList.contains('has-subitems')) {
-                item.addEventListener('click', function(e) {
-                    // Предотвращаем скролл при клике на главу
-                    if (e.target === this) {
-                        const sublist = this.querySelector('.nav-sublist');
-                        if (sublist) {
-                            this.classList.toggle('expanded');
-                            sublist.classList.toggle('expanded');
-                        }
-                    }
-                });
-            } else {
-                // Обычная навигация для глав без подразделов
-                item.addEventListener('click', function() {
-                    // Убираем active со всех пунктов
-                    removeActive();
-
-                    // Добавляем active текущему
-                    this.classList.add('active');
-
-                    const targetId = this.getAttribute('data-target');
-                    scrollToSection(targetId);
-                });
-            }
-        });
-        
-        // Навигация при клике на подраздел
-        navSubitems.forEach(subitem => {
-            subitem.addEventListener('click', function(e) {
-                e.stopPropagation(); // Предотвращаем всплытие к родителю
-
-                // Убираем active со всех пунктов
-                removeActive();
-                
-                // Добавляем active текущему подразделу
-                this.classList.add('active');
-
+            item.addEventListener('click', function() {
                 const targetId = this.getAttribute('data-target');
-                scrollToSection(targetId);
-            });
-        });
-        
-        // Функция плавного скролла к секции
-        function scrollToSection(targetId) {
-            const targetElement = document.getElementById(targetId);
-            if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        }
-        
-        // ============== AUTO-HIGHLIGHT НА СКРОЛЛЕ ==============
-        let isScrolling = false;
-        
-        window.addEventListener('scroll', () => {
-            if (isScrolling) return;
-            isScrolling = true;
-            
-            setTimeout(() => {
-                updateActiveSection();
-                isScrolling = false;
-            }, 50);
-        });
-        
-        function updateActiveSection() {
-            // Получаем все секции (h2 и h3)
-            const sections = document.querySelectorAll('[id^="ch"]');
-            let currentSection = '';
-            
-            sections.forEach(section => {
-                const rect = section.getBoundingClientRect();
-                // Если секция в верхней части экрана (с учетом header)
-                if (rect.top <= 100 && rect.bottom >= 100) {
-                    currentSection = section.id;
-                }
-            });
-            
-            if (currentSection) {
-                // Убираем активность со всех
-                // navItems.forEach(item => item.classList.remove('active'));
-                // navSubitems.forEach(item => item.classList.remove('active'));
-                removeActive();
-
+                const targetElement = document.getElementById(targetId);
                 
-                // Добавляем активность нужному подразделу
-                const activeSubitem = document.querySelector(`.nav-subitem[data-target="${currentSection}"]`);
-                if (activeSubitem) {
-                    activeSubitem.classList.add('active');
+                if (targetElement) {
+                    // Плавный скролл к главе
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                     
-                    // Автоматически раскрываем родительскую главу
-                    const parentList = activeSubitem.closest('.nav-sublist');
-                    const parentItem = parentList ? parentList.previousElementSibling : null;
-                    
-                    if (parentItem && parentItem.classList.contains('has-subitems')) {
-                        if (!parentList.classList.contains('expanded')) {
-                            parentItem.classList.add('expanded');
-                            parentList.classList.add('expanded');
-                        }
-                    }
-                } else {
-                    // Если это глава без подразделов
-                    const activeItem = document.querySelector(`.nav-item[data-target="${currentSection}"]`);
-                    if (activeItem && !activeItem.classList.contains('has-subitems')) {
-                        activeItem.classList.add('active');
-                    }
+                    // Обновляем активное состояние
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
                 }
-            }
-        }
-        
-        // Инициализация при загрузке
-        window.addEventListener('DOMContentLoaded', () => {
-            updateActiveSection();
+            });
         });
 
         // ============== SEARCH FUNCTIONALITY ==============
@@ -22332,6 +22169,29 @@ setInterval(() =&gt; showSlide(currentSlide + 1), 3000);</code></div>
             }
         });
 
+        // ============== ACTIVE SECTION ON SCROLL ==============
+        window.addEventListener('scroll', () => {
+            const chapters = document.querySelectorAll('.chapter');
+            let currentChapter = '';
+            
+            chapters.forEach(chapter => {
+                const rect = chapter.getBoundingClientRect();
+                // Если глава в верхней части экрана
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    currentChapter = chapter.id;
+                }
+            });
+            
+            // Обновляем активный пункт меню
+            if (currentChapter) {
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('data-target') === currentChapter) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>

@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript - Полный справочник (Offline)</title>
+
+    <link rel="shortcut icon" sizes="128x133" type="image/x-icon" href="./favicon/favicon.png">
+    <link rel="apple-touch-icon" sizes="256x256" href="./favicon/apple-touch-icon.png">
+    //3198
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg: #fff;
+            --bg2: #f8f9fa;
+            --text: #2c3e50;
+            --text2: #6c757d;
+            --border: #dee2e6;
+            --accent: #0066cc;
+            --code-bg: #f4f4f4;
+            --code-font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+            --code-comment: #008200;
+        }
+
+        .comment {color: var(--code-comment);}
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        .none {display: none;}
+        
+        .header {
+            background: var(--bg2);
+            border-bottom: 2px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: var(--bg2);
+            border-right: 1px solid var(--border);
+            height: calc(100vh - 70px);
+            overflow-y: auto;
+            position: sticky;
+            top: 70px;
+        }
+        
+        .sidebar-search {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--bg2);
+            z-index: 10;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .nav-section {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .nav-title {
+            padding: 0.5rem 1rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--text2);
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-list {
+            list-style: none;
+        }
+        
+        .nav-item {
+            padding: 0.6rem 1rem 0.6rem 2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+        
+        /* Стрелочка для глав с подразделами */
+        .nav-item.has-subitems::before {
+            content: '▶';
+            position: absolute;
+            left: 0.5rem;
+            font-size: 0.7rem;
+            transition: transform 0.3s;
+        }
+        
+        .nav-item.has-subitems.expanded::before {
+            transform: rotate(90deg);
+        }
+        
+        .nav-item:hover {
+            background: #e8f4f8;
+            border-left-color: var(--accent);
+        }
+        
+        .nav-item.active {
+            background: #e8f4f8;
+            border-left-color: var(--accent);
+            font-weight: 600;
+        }
+        
+        /* Подразделы */
+        .nav-sublist {
+            list-style: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .nav-sublist.expanded {
+            max-height: 1000px;
+        }
+        
+        .nav-subitem {
+            padding: 0.5rem 1rem 0.5rem 3rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+            border-left: 3px solid transparent;
+            color: var(--text2);
+        }
+        
+        .nav-subitem:hover {
+            background: #e8f4f8;
+            border-left-color: var(--accent);
+            color: var(--text);
+        }
+        
+        .nav-subitem.active {
+            background: #e8f4f8;
+            border-left-color: var(--accent);
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        body.dark-theme .nav-item:hover,
+        body.dark-theme .nav-subitem:hover {
+            background: #3d3d3d;
+            color: var(--text);
+        }
+        
+        body.dark-theme .nav-item.active,
+        body.dark-theme .nav-subitem.active {
+            background: #3d3d3d;
+            color: var(--text);
+        }
+        
+        body.dark-theme tr:hover {
+            background: #3d3d3d;
+        }
+        
+        .nav-item.new::after {
+            content: "🆕";
+            margin-left: 0.5rem;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 900px;
+        }
+        
+        .chapter {
+            margin-bottom: 4rem;
+            scroll-margin-top: 80px;
+        }
+        
+        .chapter h1 {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 0.5rem;
+        }
+        
+        .chapter h2 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            scroll-margin-top: 80px;
+        }
+        
+        .chapter h3 {
+            font-size: 1.4rem;
+            margin: 1.5rem 0 0.8rem;
+            scroll-margin-top: 80px;
+        }
+        
+        .chapter p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+        
+        .code-block {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+        
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-family: var(--code-font-family);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            white-space: pre;
+        }
+        
+        code {
+            background: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .b, .bb, strong {
+            font-weight: bold;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        body.dark-theme .table-wrapper {
+            background: var(--bg2);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg2);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        th {
+            background: var(--accent);
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: #e8f4f8;
+        }
+        
+        .info-box {
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            border-radius: 6px;
+            border-left: 4px solid;
+        }
+        
+        .info-box.note {
+            background: #e7f3ff;
+            border-color: var(--accent);
+        }
+        
+        .info-box.warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+        
+        .info-box.success {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .info-box.danger {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        
+        .info-box-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        ul, ol {
+            margin: 1rem 0 1rem 2rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer {
+            background: var(--bg2);
+            border-top: 2px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        /* Dark theme */
+        body.dark-theme {
+            --bg: #1a1a1a;
+            --bg2: #2d2d2d;
+            --text: #e0e0e0;
+            --text2: #b0b0b0;
+            --border: #404040;
+            --code-bg: #3a3a3a;
+        }
+        
+        body.dark-theme .info-box.note {
+            background: #1e3a5f;
+        }
+        
+        body.dark-theme .info-box.warning {
+            background: #5f4c1e;
+        }
+        
+        body.dark-theme .info-box.success {
+            background: #1e4d2b;
+        }
+        
+        body.dark-theme .info-box.danger {
+            background: #5f1e1e;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                top: 0;
+            }
+            .main-content {
+                padding: 1rem;
+            }
+            .chapter h1 {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media print {
+            .header, .sidebar, .footer {
+                display: none;
+            }
+            .main-content {
+                padding: 0;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">📚 JavaScript Справочник</div>
+        <div>
+            <button class="btn" onclick="toggleTheme()">🌙 Тема</button>
+            <button class="btn" onclick="window.print()">🖨️ Печать</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-search">
+                <input type="text" class="search-input" placeholder="🔍 Поиск..." id="searchInput">
+            </div>
+            <nav>
+                <!-- DOM и события -->
+                <div class="nav-section">
+                    <div class="nav-title">🎨 DOM и события</div>
+                    <ul class="nav-list">
+                        <li class="nav-item has-subitems" data-target="ch11">Глава 11. DOM
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch11-intro">Что такое DOM?</li>
+                                <li class="nav-subitem" data-target="ch11-search">Поиск элементов</li>
+                                <li class="nav-subitem" data-target="ch11-content">Изменение содержимого</li>
+                                <li class="nav-subitem" data-target="ch11-attributes">Работа с атрибутами</li>
+                                <li class="nav-subitem" data-target="ch11-classes">Работа с классами</li>
+                                <li class="nav-subitem" data-target="ch11-styles">Работа со стилями</li>
+                                <li class="nav-subitem" data-target="ch11-navigation">Навигация по DOM</li>
+                                <li class="nav-subitem" data-target="ch11-elements">Элементы</li>
+                                <li class="nav-subitem" data-target="ch11-create">Создание элементов</li>
+                                <li class="nav-subitem" data-target="ch11-clone">Копирование элемента</li>
+                                <li class="nav-subitem" data-target="ch11-replace">Замена элемента</li>
+                                <li class="nav-subitem" data-target="ch11-remove">Удаление элемента</li>
+                                <li class="nav-subitem" data-target="ch11-sizes">Размеры и позиция</li>
+                                <li class="nav-subitem" data-target="ch11-attr-manage">Управление атрибутами</li>
+                                <li class="nav-subitem" data-target="ch11-style-manage">Изменение стиля</li>
+                                <li class="nav-subitem" data-target="ch11-custom">Создание своего элемента</li>
+                            </ul>
+                        </li>
+                        <li class="nav-item" data-target="ch12">Глава 12. События</li>
+                        <li class="nav-item" data-target="ch13">Глава 13. Формы</li>
+                    </ul>
+                </div>
+
+                <!-- Остальные разделы (свернуты для примера) -->
+                <div class="nav-section">
+                    <div class="nav-title">📖 Основы (Metanit)</div>
+                    <ul class="nav-list">
+                        <li class="nav-item" data-target="ch1">Глава 1. Введение</li>
+                        <li class="nav-item" data-target="ch2">Глава 2. Основы JS</li>
+                        <li class="nav-item" data-target="ch3">Глава 3. Функции</li>
+                        <li class="nav-item" data-target="ch4">Глава 4-5. ООП</li>
+                    </ul>
+                </div>
+
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            
+            <!-- ГЛАВА 11: DOM (Document Object Model) -->
+            <section class="chapter" id="ch11">
+                <h1>Глава 11. DOM (Document Object Model)</h1>
+
+                <h2 id="ch11-intro">Что такое DOM?</h2>
+                <p>DOM (Document Object Model) — это программный интерфейс для HTML и XML документов. Он представляет структуру документа в виде дерева объектов, которыми можно манипулировать с помощью JavaScript.</p>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Структура DOM</div>
+                    <p>Каждый HTML-элемент в DOM представлен объектом (узлом). Документ имеет иерархическую структуру: родители, потомки, соседние элементы.</p>
+                </div>
+
+                <h2 id="ch11-search">Поиск элементов</h2>
+
+                <h3>getElementById</h3>
+                <div class="code-block"><code>// Находит элемент по ID (возвращает один элемент или null)
+const header = document.getElementById('header');
+console.log(header); // &lt;div id="header"&gt;...&lt;/div&gt;</code></div>
+
+                <h3>getElementsByClassName</h3>
+                <div class="code-block"><code>// Находит все элементы с классом (возвращает HTMLCollection)
+const items = document.getElementsByClassName('item');
+console.log(items.length); // Количество элементов
+console.log(items[0]);     // Первый элемент</code></div>
+
+                <h3>querySelector (рекомендуется)</h3>
+                <div class="code-block"><code>// Находит ПЕРВЫЙ элемент по CSS-селектору
+const header = document.querySelector('#header');
+const firstItem = document.querySelector('.item');
+const firstButton = document.querySelector('button');</code></div>
+
+                <h3>querySelectorAll (рекомендуется)</h3>
+                <div class="code-block"><code>// Находит ВСЕ элементы по CSS-селектору (возвращает NodeList)
+const items = document.querySelectorAll('.item');
+
+// NodeList можно перебирать forEach
+items.forEach(item => {
+    console.log(item);
+});</code></div>
+
+                <h2 id="ch11-content">Изменение содержимого</h2>
+
+                <h3>textContent</h3>
+                <div class="code-block"><code>const div = document.querySelector('#content');
+
+// Получить текст
+console.log(div.textContent); // Весь текст внутри элемента
+
+// Установить текст (HTML-теги экранируются)
+div.textContent = 'Новый текст';</code></div>
+
+                <h3>innerHTML</h3>
+                <div class="code-block"><code>const div = document.querySelector('#content');
+
+// Получить HTML
+console.log(div.innerHTML); // HTML-код внутри элемента
+
+// Установить HTML
+div.innerHTML = '&lt;p&gt;Новый &lt;b&gt;HTML&lt;/b&gt;&lt;/p&gt;';</code></div>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Осторожно с innerHTML</div>
+                    <p>Использование <code>innerHTML</code> с пользовательскими данными может привести к XSS-атакам. Используйте <code>textContent</code> для обычного текста.</p>
+                </div>
+
+                <h2 id="ch11-attributes">Работа с атрибутами</h2>
+
+                <h3>getAttribute / setAttribute</h3>
+                <div class="code-block"><code>const link = document.querySelector('a');
+
+// Получить атрибут
+const href = link.getAttribute('href');
+
+// Установить атрибут
+link.setAttribute('href', 'https://example.com');
+link.setAttribute('target', '_blank');
+
+// Проверка наличия атрибута
+if (link.hasAttribute('target')) {
+    console.log('Атрибут target существует');
+}
+
+// Удалить атрибут
+link.removeAttribute('target');</code></div>
+
+                <h2 id="ch11-classes">Работа с классами</h2>
+
+                <h3>classList (рекомендуется)</h3>
+                <div class="code-block"><code>const div = document.querySelector('div');
+
+// Добавить класс
+div.classList.add('active');
+div.classList.add('highlight', 'important'); // Несколько классов
+
+// Удалить класс
+div.classList.remove('active');
+
+// Переключить класс (toggle)
+div.classList.toggle('hidden'); // Добавит, если нет; удалит, если есть
+
+// Проверить наличие класса
+if (div.classList.contains('active')) {
+    console.log('Элемент активен');
+}</code></div>
+
+                <h2 id="ch11-styles">Работа со стилями</h2>
+
+                <h3>Инлайн-стили (style)</h3>
+                <div class="code-block"><code>const div = document.querySelector('div');
+
+// Установить стиль
+div.style.color = 'red';
+div.style.backgroundColor = 'blue'; // camelCase!
+div.style.fontSize = '20px';
+
+// Множественные стили
+div.style.cssText = 'color: red; background: blue; font-size: 20px;';</code></div>
+
+                <h2 id="ch11-navigation">Навигация по DOM</h2>
+
+                <h3>Родители и потомки</h3>
+                <div class="code-block"><code>const element = document.querySelector('.child');
+
+// Родитель
+const parent = element.parentElement;
+
+// Дети
+const children = element.children; // HTMLCollection (только элементы)
+const firstChild = element.firstElementChild;
+const lastChild = element.lastElementChild;</code></div>
+
+                <h3>Соседи</h3>
+                <div class="code-block"><code>const element = document.querySelector('.item');
+
+// Следующий элемент
+const next = element.nextElementSibling;
+
+// Предыдущий элемент
+const prev = element.previousElementSibling;</code></div>
+
+                <h2 id="ch11-elements">Элементы</h2>
+                <p>Каждый отдельный узел, будь то html-элемент, его атрибут или текст, в структуре DOM представлен объектом <span class="b">Node</span>.</p>
+
+                <h2 id="ch11-create">Создание, добавление элементов</h2>
+
+                <h3>createElement</h3>
+                <div class="code-block"><code>// Создать новый элемент
+const div = document.createElement('div');
+div.textContent = 'Новый блок';
+div.className = 'box';
+
+const p = document.createElement('p');
+p.innerHTML = 'Новый &lt;b&gt;параграф&lt;/b&gt;';</code></div>
+
+                <h3>appendChild</h3>
+                <div class="code-block"><code>const container = document.querySelector('.container');
+const newDiv = document.createElement('div');
+
+// appendChild - добавить в конец
+container.appendChild(newDiv);
+
+// append - добавить в конец (может принимать несколько элементов и строки)
+container.append(newDiv, 'Текст', anotherDiv);
+
+// prepend - добавить в начало
+container.prepend(newDiv);</code></div>
+
+                <h2 id="ch11-clone">Копирование элемента</h2>
+                <div class="code-block"><code>const original = document.querySelector('.item');
+
+// Поверхностное клонирование (без потомков)
+const clone1 = original.cloneNode(false);
+
+// Глубокое клонирование (с потомками)
+const clone2 = original.cloneNode(true);
+
+// Вставить клон
+document.body.appendChild(clone2);</code></div>
+
+                <h2 id="ch11-replace">Замена элемента</h2>
+                <div class="code-block"><code>const oldElement = document.querySelector('.old');
+const newElement = document.createElement('div');
+newElement.textContent = 'Новый элемент';
+
+// Заменить элемент
+oldElement.replaceWith(newElement);</code></div>
+
+                <h2 id="ch11-remove">Удаление элемента</h2>
+                <div class="code-block"><code>const element = document.querySelector('.item');
+
+// remove() - удалить элемент
+element.remove();
+
+// removeChild() - удалить потомка
+const parent = document.querySelector('.container');
+const child = parent.querySelector('.item');
+parent.removeChild(child);
+
+// Очистить содержимое
+parent.innerHTML = '';
+// или
+while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+}</code></div>
+
+                <h2 id="ch11-sizes">Размеры и позиция элемента</h2>
+                <div class="code-block"><code>const div = document.querySelector('div');
+
+// Размеры (включая padding, но без border)
+console.log(div.clientWidth);
+console.log(div.clientHeight);
+
+// Размеры (включая padding и border)
+console.log(div.offsetWidth);
+console.log(div.offsetHeight);
+
+// Позиция относительно offsetParent
+console.log(div.offsetLeft);
+console.log(div.offsetTop);
+
+// Координаты относительно окна
+const rect = div.getBoundingClientRect();
+console.log(rect.top);    // Расстояние от верха окна
+console.log(rect.left);   // Расстояние от левого края окна
+console.log(rect.width);  // Ширина
+console.log(rect.height); // Высота</code></div>
+
+                <h2 id="ch11-attr-manage">Управление атрибутами элементов</h2>
+                <p>Для управления атрибутами элементов JavaScript предоставляет ряд методов:</p>
+
+                <ul>
+                    <li><span class="b">getAttribute(attr)</span>: возвращает значение атрибута attr</li>
+                    <li><span class="b">setAttribute(attr, value)</span>: устанавливает для атрибута attr значение value</li>
+                    <li><span class="b">removeAttribute(attr)</span>: удаляет атрибут attr и его значение</li>
+                </ul>
+
+                <h2 id="ch11-style-manage">Изменение стиля элементов</h2>
+
+                <h3>Свойство style</h3>
+                <p>Свойство <span class="b">style</span> представляет сложный объект <span class="b">CSSStyleDeclaration</span> и напрямую сопоставляется с атрибутом style html-элемента.</p>
+
+                <div class="code-block"><code>const header = document.getElementById("header");
+header.style.color = "navy";
+header.style.fontFamily = "Verdana";</code></div>
+
+                <h3>Свойство className</h3>
+                <p>С помощью свойства <span class="b">className</span> можно получить или установить значение атрибута <code>class</code> элемента html.</p>
+
+                <h3>Свойство classList</h3>
+                <p>Для управления множеством классов гораздо удобнее использовать свойство <span class="b">classList</span>.</p>
+
+                <h2 id="ch11-custom">Создание своего элемента HTML</h2>
+
+                <p>По умолчанию HTML предоставляет ряд встроенных элементов, из которых мы можем составить структуру веб-страницы. Однако мы не ограничены встроенными html-элементами и можем сами создать и использовать свои элементы html.</p>
+
+                <div class="code-block"><code>class HelloMetanit extends HTMLElement {
+    constructor() {
+        super();
+        let welcome = "Доброе утро";
+        const hour = new Date().getHours();
+        if (hour > 17) {
+            welcome = "Добрый вечер";
+        } else if (hour > 12) {
+            welcome = "Добрый день";
+        }
+        this.innerText = welcome;
+    }
+}
+
+customElements.define("hello-metanit", HelloMetanit);</code></div>
+
+            </section>
+
+            <!-- ГЛАВА 12: События в JavaScript -->
+            <section class="chapter" id="ch12">
+                <h1>Глава 12. События в JavaScript</h1>
+
+                <h2>Что такое события?</h2>
+                <p>События — это действия, которые происходят в браузере: клики мышью, нажатия клавиш, загрузка страницы и т.д. JavaScript позволяет реагировать на эти события и выполнять код в ответ на действия пользователя.</p>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Основные типы событий</div>
+                    <ul>
+                        <li><strong>События мыши:</strong> click, dblclick, mouseover, mouseout, mousemove</li>
+                        <li><strong>События клавиатуры:</strong> keydown, keyup, keypress</li>
+                        <li><strong>События форм:</strong> submit, change, focus, blur, input</li>
+                        <li><strong>События документа:</strong> DOMContentLoaded, load, scroll, resize</li>
+                    </ul>
+                </div>
+
+                <h2>Способы назначения обработчиков событий</h2>
+
+                <h3>1. HTML-атрибуты (не рекомендуется)</h3>
+
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p><strong>📚 JavaScript - Полный справочник (Offline версия)</strong></p>
+        <p>На основе Metanit.com и книги "JavaScript и jQuery" Д. Макфарланда</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text2);">
+            Версия 4.0 • 2025
+        </p>
+    </footer>
+
+    <script>
+        // ============== TOGGLE THEME ==============
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const isDark = document.body.classList.contains('dark-theme');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // ============== LOAD SAVED THEME ==============
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-theme');
+            }
+        });
+
+        // ============== EXPANDABLE NAVIGATION ==============
+        const navItems = document.querySelectorAll('.nav-item');
+        const navSubitems = document.querySelectorAll('.nav-subitem');
+        
+        // Toggle подразделов при клике на главу
+        navItems.forEach(item => {
+            if (item.classList.contains('has-subitems')) {
+                item.addEventListener('click', function(e) {
+                    // Предотвращаем скролл при клике на главу
+                    if (e.target === this) {
+                        const sublist = this.querySelector('.nav-sublist');
+                        if (sublist) {
+                            this.classList.toggle('expanded');
+                            sublist.classList.toggle('expanded');
+                        }
+                    }
+                });
+            } else {
+                // Обычная навигация для глав без подразделов
+                item.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    scrollToSection(targetId);
+                });
+            }
+        });
+        
+        // Навигация при клике на подраздел
+        navSubitems.forEach(subitem => {
+            subitem.addEventListener('click', function(e) {
+                e.stopPropagation(); // Предотвращаем всплытие к родителю
+                const targetId = this.getAttribute('data-target');
+                scrollToSection(targetId);
+            });
+        });
+        
+        // Функция плавного скролла к секции
+        function scrollToSection(targetId) {
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        // ============== AUTO-HIGHLIGHT НА СКРОЛЛЕ ==============
+        let isScrolling = false;
+        
+        window.addEventListener('scroll', () => {
+            if (isScrolling) return;
+            isScrolling = true;
+            
+            setTimeout(() => {
+                updateActiveSection();
+                isScrolling = false;
+            }, 100);
+        });
+        
+        function updateActiveSection() {
+            // Получаем все секции (h2 и h3)
+            const sections = document.querySelectorAll('[id^="ch"]');
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                // Если секция в верхней части экрана (с учетом header)
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    currentSection = section.id;
+                }
+            });
+            
+            if (currentSection) {
+                // Убираем активность со всех
+                navSubitems.forEach(item => item.classList.remove('active'));
+                
+                // Добавляем активность нужному подразделу
+                const activeSubitem = document.querySelector(`.nav-subitem[data-target="${currentSection}"]`);
+                if (activeSubitem) {
+                    activeSubitem.classList.add('active');
+                    
+                    // Автоматически раскрываем родительскую главу
+                    const parentItem = activeSubitem.closest('.nav-list').previousElementSibling;
+                    if (parentItem && parentItem.classList.contains('has-subitems')) {
+                        const sublist = parentItem.querySelector('.nav-sublist');
+                        if (sublist && !sublist.classList.contains('expanded')) {
+                            parentItem.classList.add('expanded');
+                            sublist.classList.add('expanded');
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Инициализация при загрузке
+        window.addEventListener('DOMContentLoaded', () => {
+            updateActiveSection();
+        });
+
+        // ============== SEARCH FUNCTIONALITY ==============
+        const searchInput = document.getElementById('searchInput');
+        
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            
+            // Поиск среди глав
+            navItems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(query) || query === '') {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Поиск среди подразделов
+            navSubitems.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(query) || query === '') {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

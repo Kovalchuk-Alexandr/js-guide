@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript - Полный справочник (Offline)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #fff; --bg2: #f8f9fa; --text: #2c3e50; --text2: #6c757d;
+            --border: #dee2e6; --accent: #0066cc; --code-bg: #f4f4f4;
+            --code-font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
+            --code-comment: #008200;
+        }
+        .comment { color: var(--code-comment); }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            line-height: 1.7; color: var(--text); background: var(--bg);
+        }
+        .header {
+            background: var(--bg2); border-bottom: 2px solid var(--border);
+            padding: 1rem 2rem; position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+        .btn {
+            background: var(--accent); color: white; border: none;
+            padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer;
+            font-size: 0.9rem; margin-left: 0.5rem; transition: all 0.3s;
+        }
+        .btn:hover { opacity: 0.9; }
+        .container { display: flex; max-width: 1400px; margin: 0 auto; }
+        .sidebar {
+            width: 280px; background: var(--bg2); border-right: 1px solid var(--border);
+            height: calc(100vh - 70px); overflow-y: auto; position: sticky; top: 70px;
+        }
+        .sidebar-search {
+            padding: 1rem; border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; background: var(--bg2); z-index: 10;
+        }
+        .search-input {
+            width: 100%; padding: 0.7rem; border: 1px solid var(--border);
+            border-radius: 6px; font-size: 0.9rem;
+        }
+        .nav-section { padding: 1rem 0; border-bottom: 1px solid var(--border); }
+        .nav-title {
+            padding: 0.5rem 1rem; font-weight: 700; font-size: 0.85rem;
+            text-transform: uppercase; color: var(--text2); letter-spacing: 0.5px;
+        }
+        .nav-list { list-style: none; }
+        .nav-item {
+            padding: 0.6rem 1rem 0.6rem 2rem; cursor: pointer;
+            transition: all 0.2s; font-size: 0.9rem;
+            border-left: 3px solid transparent; position: relative;
+        }
+        .nav-item.has-subitems::before {
+            content: '▶'; position: absolute; left: 0.5rem;
+            font-size: 0.7rem; transition: transform 0.3s;
+        }
+        .nav-item.has-subitems.expanded::before { transform: rotate(90deg); }
+        .nav-item:hover { background: #e8f4f8; border-left-color: var(--accent); }
+        .nav-item.active { background: #e8f4f8; border-left-color: var(--accent); font-weight: 600; }
+        .nav-sublist {
+            list-style: none; max-height: 0; overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .nav-sublist.expanded { max-height: 1000px; }
+        .nav-subitem {
+            padding: 0.5rem 1rem 0.5rem 3rem; cursor: pointer;
+            transition: all 0.2s; font-size: 0.85rem;
+            border-left: 3px solid transparent; color: var(--text2);
+        }
+        .nav-subitem:hover { background: #e8f4f8; border-left-color: var(--accent); color: var(--text); }
+        .nav-subitem.active { background: #e8f4f8; border-left-color: var(--accent); font-weight: 600; color: var(--text); }
+        body.dark-theme .nav-item:hover, body.dark-theme .nav-subitem:hover,
+        body.dark-theme .nav-item.active, body.dark-theme .nav-subitem.active {
+            background: #3d3d3d; color: var(--text);
+        }
+        .nav-item.new::after { content: "🆕"; margin-left: 0.5rem; }
+        .main-content { flex: 1; padding: 2rem; max-width: 900px; }
+        .chapter { margin-bottom: 4rem; scroll-margin-top: 80px; }
+        .chapter h1 {
+            font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem;
+            border-bottom: 3px solid var(--accent); padding-bottom: 0.5rem;
+        }
+        .chapter h2 { font-size: 1.8rem; margin: 2rem 0 1rem; scroll-margin-top: 80px; }
+        .chapter h3 { font-size: 1.4rem; margin: 1.5rem 0 0.8rem; scroll-margin-top: 80px; }
+        .chapter p { margin-bottom: 1rem; line-height: 1.8; }
+        .code-block {
+            background: var(--code-bg); border: 1px solid var(--border);
+            border-radius: 6px; padding: 1.2rem; margin: 1.5rem 0; overflow-x: auto;
+        }
+        .code-block code {
+            font-family: var(--code-font-family);
+            font-size: 0.9rem; line-height: 1.6; white-space: pre;
+        }
+        code {
+            background: var(--code-bg); padding: 0.2rem 0.4rem;
+            border-radius: 3px; font-family: 'Courier New', monospace; font-size: 0.9em;
+        }
+        .b, strong { font-weight: bold; }
+        table {
+            width: 100%; border-collapse: collapse; background: var(--bg2);
+            border-radius: 6px; overflow: hidden; margin: 1.5rem 0;
+        }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: var(--accent); color: white; font-weight: 600; }
+        tr:hover { background: #e8f4f8; }
+        .info-box {
+            padding: 1.2rem; margin: 1.5rem 0;
+            border-radius: 6px; border-left: 4px solid;
+        }
+        .info-box.note { background: #e7f3ff; border-color: var(--accent); }
+        .info-box.warning { background: #fff3cd; border-color: #ffc107; }
+        .info-box.success { background: #d4edda; border-color: #28a745; }
+        .info-box-title { font-weight: 700; margin-bottom: 0.5rem; }
+        ul, ol { margin: 1rem 0 1rem 2rem; }
+        li { margin-bottom: 0.5rem; }
+        .footer {
+            background: var(--bg2); border-top: 2px solid var(--border);
+            padding: 2rem; text-align: center; margin-top: 4rem;
+        }
+        body.dark-theme {
+            --bg: #1a1a1a; --bg2: #2d2d2d; --text: #e0e0e0;
+            --text2: #b0b0b0; --border: #404040; --code-bg: #3a3a3a;
+        }
+        body.dark-theme .info-box.note { background: #1e3a5f; }
+        body.dark-theme .info-box.warning { background: #5f4c1e; }
+        body.dark-theme .info-box.success { background: #1e4d2b; }
+        body.dark-theme tr:hover { background: #3d3d3d; }
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; top: 0; }
+            .main-content { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">📚 JavaScript Справочник</div>
+        <div>
+            <button class="btn" onclick="toggleTheme()">🌙 Тема</button>
+            <button class="btn" onclick="window.print()">🖨️ Печать</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-search">
+                <input type="text" class="search-input" placeholder="🔍 Поиск..." id="searchInput">
+            </div>
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-title">📖 Основы (Metanit)</div>
+                    <ul class="nav-list">
+                        <li class="nav-item" data-target="ch1">Глава 1. Введение</li>
+                        <li class="nav-item" data-target="ch2">Глава 2. Основы JS</li>
+                        <li class="nav-item" data-target="ch3">Глава 3. Функции</li>
+                        <li class="nav-item" data-target="ch4">Глава 4-5. ООП</li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-title">📊 Типы данных</div>
+                    <ul class="nav-list">
+                        <li class="nav-item" data-target="ch6">Глава 6. Массивы</li>
+                        <li class="nav-item" data-target="ch7">Глава 7. Строки и RegExp</li>
+                        <li class="nav-item" data-target="ch8">Глава 8. Обработка ошибок</li>
+                        <li class="nav-item" data-target="ch9">Глава 9. Date и Number</li>
+                        <li class="nav-item" data-target="ch10">Глава 10. Map и Set</li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-title">🎨 DOM и события</div>
+                    <ul class="nav-list">
+                        <li class="nav-item has-subitems" data-target="ch11">Глава 11. DOM
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch11-intro">Что такое DOM?</li>
+                                <li class="nav-subitem" data-target="ch11-search">Поиск элементов</li>
+                                <li class="nav-subitem" data-target="ch11-content">Изменение содержимого</li>
+                                <li class="nav-subitem" data-target="ch11-attributes">Работа с атрибутами</li>
+                                <li class="nav-subitem" data-target="ch11-classes">Работа с классами</li>
+                                <li class="nav-subitem" data-target="ch11-styles">Работа со стилями</li>
+                                <li class="nav-subitem" data-target="ch11-navigation">Навигация по DOM</li>
+                                <li class="nav-subitem" data-target="ch11-create">Создание элементов</li>
+                                <li class="nav-subitem" data-target="ch11-sizes">Размеры и позиция</li>
+                                <li class="nav-subitem" data-target="ch11-attr-manage">Управление атрибутами</li>
+                                <li class="nav-subitem" data-target="ch11-style-manage">Изменение стиля</li>
+                                <li class="nav-subitem" data-target="ch11-custom">Свой элемент HTML</li>
+                            </ul>
+                        </li>
+                        <li class="nav-item" data-target="ch12">Глава 12. События</li>
+                        <li class="nav-item" data-target="ch13">Глава 13. Формы</li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <section class="chapter" id="ch11">
+                <h1>Глава 11. DOM (Document Object Model)</h1>
+                <h2 id="ch11-intro">Что такое DOM?</h2>
+                <p>DOM — это программный интерфейс для HTML и XML документов.</p>
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Структура DOM</div>
+                    <p>Каждый HTML-элемент представлен объектом (узлом).</p>
+                </div>
+
+                <h2 id="ch11-search">Поиск элементов</h2>
+                <div class="code-block"><code><code class="comment">// getElementById</code>
+const header = document.getElementById('header');</code></div>
+
+                <h2 id="ch11-content">Изменение содержимого</h2>
+                <div class="code-block"><code><code class="comment">// textContent</code>
+div.textContent = 'Новый текст';</code></div>
+
+                <h2 id="ch11-custom">Создание своего элемента HTML</h2>
+                <div class="code-block"><code>class HelloMetanit extends HTMLElement {
+    constructor() {
+        super();
+        this.innerText = "Привет!";
+    }
+}
+customElements.define("hello-metanit", HelloMetanit);</code></div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p><strong>📚 JavaScript - Полный справочник</strong></p>
+        <p>Версия 4.0 • 2025</p>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-theme');
+        });
+
+        const navItems = document.querySelectorAll('.nav-item');
+        const navSubitems = document.querySelectorAll('.nav-subitem');
+        
+        navItems.forEach(item => {
+            if (item.classList.contains('has-subitems')) {
+                item.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        const sublist = this.querySelector('.nav-sublist');
+                        if (sublist) {
+                            this.classList.toggle('expanded');
+                            sublist.classList.toggle('expanded');
+                        }
+                    }
+                });
+            } else {
+                item.addEventListener('click', function() {
+                    scrollToSection(this.getAttribute('data-target'));
+                });
+            }
+        });
+        
+        navSubitems.forEach(subitem => {
+            subitem.addEventListener('click', function(e) {
+                e.stopPropagation();
+                scrollToSection(this.getAttribute('data-target'));
+            });
+        });
+        
+        function scrollToSection(targetId) {
+            const el = document.getElementById(targetId);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        let isScrolling = false;
+        window.addEventListener('scroll', () => {
+            if (isScrolling) return;
+            isScrolling = true;
+            setTimeout(() => { updateActiveSection(); isScrolling = false; }, 100);
+        });
+        
+        function updateActiveSection() {
+            const sections = document.querySelectorAll('[id^="ch"]');
+            let currentSection = '';
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) currentSection = section.id;
+            });
+            if (currentSection) {
+                navSubitems.forEach(i => i.classList.remove('active'));
+                navItems.forEach(i => i.classList.remove('active'));
+                const activeSub = document.querySelector(`.nav-subitem[data-target="${currentSection}"]`);
+                if (activeSub) {
+                    activeSub.classList.add('active');
+                    const parentList = activeSub.closest('ul.nav-sublist');
+                    if (parentList) {
+                        const parentItem = parentList.previousElementSibling;
+                        if (parentItem && !parentList.classList.contains('expanded')) {
+                            parentItem.classList.add('expanded');
+                            parentList.classList.add('expanded');
+                        }
+                    }
+                } else {
+                    const activeChapter = document.querySelector(`.nav-item[data-target="${currentSection}"]`);
+                    if (activeChapter) activeChapter.classList.add('active');
+                }
+            }
+        }
+        window.addEventListener('DOMContentLoaded', updateActiveSection);
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const q = e.target.value.toLowerCase().trim();
+            navItems.forEach(i => i.style.display = (i.textContent.toLowerCase().includes(q) || !q) ? 'block' : 'none');
+            navSubitems.forEach(i => i.style.display = (i.textContent.toLowerCase().includes(q) || !q) ? 'block' : 'none');
+        });
+    </script>
+</body>
+</html>
