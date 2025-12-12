@@ -3287,43 +3287,43 @@ console.log(difference); // Set(2) {1, 2}</code></div>
                 </ul>
 
                 <h3>getElementById</h3>
-                <div class="code-block"><code>// Находит элемент по ID (возвращает один элемент или null)
+                <div class="code-block"><code><code class="comment">// Находит элемент по ID (возвращает один элемент или null)</code>
 const header = document.getElementById('header');
 console.log(header); // &lt;div id="header"&gt;...&lt;/div&gt;</code></div>
 
                 <h3>getElementsByClassName</h3>
-                <div class="code-block"><code>// Находит все элементы с классом (возвращает HTMLCollection)
+                <div class="code-block"><code><code class="comment">// Находит все элементы с классом (возвращает HTMLCollection)</code>
 const items = document.getElementsByClassName('item');
-console.log(items.length); // Количество элементов
-console.log(items[0]);     // Первый элемент
+console.log(items.length);<code class="comment"> // Количество элементов</code>
+console.log(items[0]);<code class="comment">     // Первый элемент</code>
 
-// HTMLCollection - живая коллекция (обновляется автоматически)
-// Нельзя использовать методы массивов напрямую</code></div>
+<code class="comment">// HTMLCollection - живая коллекция (обновляется автоматически)</code>
+<code class="comment">// Нельзя использовать методы массивов напрямую</code></code></div>
 
                 <h3>getElementsByTagName</h3>
-                <div class="code-block"><code>// Находит все элементы по имени тега
+                <div class="code-block"><code><code class="comment">// Находит все элементы по имени тега</code>
 const divs = document.getElementsByTagName('div');
-const allElements = document.getElementsByTagName('*'); // Все элементы</code></div>
+const allElements = document.getElementsByTagName('*');<code class="comment"> // Все элементы</code></code></div>
 
                 <h3>querySelector (рекомендуется)</h3>
-                <div class="code-block"><code>// Находит ПЕРВЫЙ элемент по CSS-селектору
+                <div class="code-block"><code><code class="comment">// Находит ПЕРВЫЙ элемент по CSS-селектору</code>
 const header = document.querySelector('#header');
 const firstItem = document.querySelector('.item');
 const firstButton = document.querySelector('button');
 const complexSelector = document.querySelector('div.container > p.text');</code></div>
 
                 <h3>querySelectorAll (рекомендуется)</h3>
-                <div class="code-block"><code>// Находит ВСЕ элементы по CSS-селектору (возвращает NodeList)
+                <div class="code-block"><code><code class="comment">// Находит ВСЕ элементы по CSS-селектору (возвращает NodeList)</code>
 const items = document.querySelectorAll('.item');
 
-// NodeList можно перебирать forEach
+<code class="comment">// NodeList можно перебирать forEach</code>
 items.forEach(item => {
     console.log(item);
 });
 
-// Преобразование в массив
+<code class="comment">// Преобразование в массив</code>
 const itemsArray = [...items];
-// или
+<code class="comment">// или</code>
 const itemsArray2 = Array.from(items);</code></div>
 
                 <h3>Поиск во вложенных элементах</h3>
@@ -3338,9 +3338,9 @@ const itemsArray2 = Array.from(items);</code></div>
         &lt;p class="text">Footer Text&lt;/p>
     &lt;/div>
     &lt;script>
-    // получаем элемент с id="article"
+    <code class="comment">// получаем элемент с id="article"</code>
     const article = document.getElementById("article");
-    // в этом элементе получаем все элементы с class="text"
+    <code class="comment">// в этом элементе получаем все элементы с class="text"</code>
     const articleContent = article.getElementsByClassName("text");
     for(p of articleContent){
         console.log(p);
@@ -3425,23 +3425,23 @@ const itemsArray2 = Array.from(items);</code></div>
                 <h3>textContent</h3>
                 <div class="code-block"><code>const div = document.querySelector('#content');
 
-// Получить текст
-console.log(div.textContent); // Весь текст внутри элемента
+<code class="comment">// Получить текст</code>
+console.log(div.textContent);<code class="comment"> // Весь текст внутри элемента</code>
 
-// Установить текст (HTML-теги экранируются)
+<code class="comment">// Установить текст (HTML-теги экранируются)</code>
 div.textContent = 'Новый текст';
-div.textContent = '&lt;b&gt;Жирный&lt;/b&gt;'; // Отобразится как текст, не как HTML</code></div>
+div.textContent = '&lt;b&gt;Жирный&lt;/b&gt;'; <code class="comment">//</code> Отобразится как текст, не как HTML</code></div>
 
                 <h3>innerHTML</h3>
                 <div class="code-block"><code>const div = document.querySelector('#content');
 
-// Получить HTML
-console.log(div.innerHTML); // HTML-код внутри элемента
+<code class="comment">// Получить HTML</code>
+console.log(div.innerHTML); <code class="comment">//</code> HTML-код внутри элемента
 
-// Установить HTML
+<code class="comment">// Установить HTML</code>
 div.innerHTML = '&lt;p&gt;Новый &lt;b&gt;HTML&lt;/b&gt;&lt;/p&gt;';
 
-// Добавить к существующему
+<code class="comment">// Добавить к существующему</code>
 div.innerHTML += '&lt;p&gt;Ещё один параграф&lt;/p&gt;';</code></div>
 
                 <div class="info-box warning">
@@ -3452,10 +3452,10 @@ div.innerHTML += '&lt;p&gt;Ещё один параграф&lt;/p&gt;';</code></
                 <h3>outerHTML</h3>
                 <div class="code-block"><code>const div = document.querySelector('#content');
 
-// Получить HTML вместе с самим элементом
-console.log(div.outerHTML); // &lt;div id="content"&gt;...&lt;/div&gt;
+<code class="comment">// Получить HTML вместе с самим элементом</code>
+console.log(div.outerHTML); <code class="comment">// &lt;div id="content"&gt;...&lt;/div&gt;</code>
 
-// Заменить элемент полностью
+<code class="comment">// Заменить элемент полностью</code>
 div.outerHTML = '&lt;section&gt;Новый элемент&lt;/section&gt;';</code></div>
 
                 <h2 id="ch11-attributes">Работа с атрибутами</h2>
@@ -3463,26 +3463,26 @@ div.outerHTML = '&lt;section&gt;Новый элемент&lt;/section&gt;';</cod
                 <h3>getAttribute / setAttribute</h3>
                 <div class="code-block"><code>const link = document.querySelector('a');
 
-// Получить атрибут
+<code class="comment">// Получить атрибут</code>
 const href = link.getAttribute('href');
 const target = link.getAttribute('target');
 
-// Установить атрибут
+<code class="comment">// Установить атрибут</code>
 link.setAttribute('href', 'https://example.com');
 link.setAttribute('target', '_blank');
 
-// Проверка наличия атрибута
+<code class="comment">// Проверка наличия атрибута</code>
 if (link.hasAttribute('target')) {
     console.log('Атрибут target существует');
 }
 
-// Удалить атрибут
+<code class="comment">// Удалить атрибут</code>
 link.removeAttribute('target');</code></div>
 
                 <h3>Прямой доступ к атрибутам</h3>
                 <div class="code-block"><code>const input = document.querySelector('input');
 
-// Стандартные атрибуты доступны как свойства
+<code class="comment">// Стандартные атрибуты доступны как свойства</code>
 input.value = 'Новое значение';
 input.type = 'password';
 input.placeholder = 'Введите пароль';
@@ -3492,51 +3492,51 @@ img.src = 'new-image.jpg';
 img.alt = 'Описание изображения';</code></div>
 
                 <h3>data-атрибуты</h3>
-                <div class="code-block"><code>// HTML: &lt;div data-user-id="123" data-role="admin"&gt;&lt;/div&gt;
+                <div class="code-block"><code><code class="comment">// HTML: &lt;div data-user-id="123" data-role="admin"&gt;&lt;/div&gt;</code>
 
 const div = document.querySelector('div');
 
-// Доступ через dataset
-console.log(div.dataset.userId); // "123"
-console.log(div.dataset.role);   // "admin"
+<code class="comment">// Доступ через dataset</code>
+console.log(div.dataset.userId);<code class="comment"> // "123"</code>
+console.log(div.dataset.role);<code class="comment">   // "admin"</code>
 
-// Установка
+<code class="comment">// Установка</code>
 div.dataset.status = 'active';
-// HTML станет: data-status="active"</code></div>
+<code class="comment">// HTML станет: data-status="active"</code></code></div>
 
                 <h2 id="ch11-classes">Работа с классами</h2>
 
                 <h3>className</h3>
                 <div class="code-block"><code>const div = document.querySelector('div');
 
-// Получить классы (строка)
-console.log(div.className); // "box active large"
+<code class="comment">// Получить классы (строка)</code>
+console.log(div.className);<code class="comment"> // "box active large"</code>
 
-// Установить классы (перезаписывает все)
+<code class="comment">// Установить классы (перезаписывает все)</code>
 div.className = 'container';
 
-// Добавить класс (нужно проверять существующие)
+<code class="comment">// Добавить класс (нужно проверять существующие)</code>
 div.className += ' active';</code></div>
 
                 <h3>classList (рекомендуется)</h3>
                 <div class="code-block"><code>const div = document.querySelector('div');
 
-// Добавить класс
+<code class="comment">// Добавить класс</code>
 div.classList.add('active');
-div.classList.add('highlight', 'important'); // Несколько классов
+div.classList.add('highlight', 'important');<code class="comment"> // Несколько классов</code>
 
-// Удалить класс
+<code class="comment">// Удалить класс</code>
 div.classList.remove('active');
 
-// Переключить класс (toggle)
-div.classList.toggle('hidden'); // Добавит, если нет; удалит, если есть
-
-// Проверить наличие класса
+<code class="comment">// Переключить класс (toggle)</code>
+div.classList.toggle('hidden');<code class="comment"> // Добавит, если нет; удалит, если есть
+</code>
+<code class="comment">// Проверить наличие класса</code>
 if (div.classList.contains('active')) {
     console.log('Элемент активен');
 }
 
-// Заменить класс
+<code class="comment">// Заменить класс</code>
 div.classList.replace('old-class', 'new-class');</code></div>
 
                 <h2 id="ch11-styles">Работа со стилями</h2>
@@ -3544,31 +3544,31 @@ div.classList.replace('old-class', 'new-class');</code></div>
                 <h3>Инлайн-стили (style)</h3>
                 <div class="code-block"><code>const div = document.querySelector('div');
 
-// Установить стиль
+<code class="comment">// Установить стиль</code>
 div.style.color = 'red';
-div.style.backgroundColor = 'blue'; // camelCase!
+div.style.backgroundColor = 'blue';<code class="comment"> // camelCase!</code>
 div.style.fontSize = '20px';
 
-// Множественные стили
+<code class="comment">// Множественные стили</code>
 div.style.cssText = 'color: red; background: blue; font-size: 20px;';
 
-// Удалить стиль
+<code class="comment">// Удалить стиль</code>
 div.style.color = '';
 
-// Получить стиль (только инлайновые!)
-console.log(div.style.color); // "red"</code></div>
+<code class="comment">// Получить стиль (только инлайновые!)</code>
+console.log(div.style.color);<code class="comment"> // "red"</code></code></div>
 
                 <h3>Вычисленные стили (getComputedStyle)</h3>
                 <div class="code-block"><code>const div = document.querySelector('div');
 
-// Получить все вычисленные стили (включая CSS)
+<code class="comment">// Получить все вычисленные стили (включая CSS)</code>
 const styles = getComputedStyle(div);
 
-console.log(styles.color);           // Вычисленный цвет
-console.log(styles.backgroundColor); // Вычисленный фон
-console.log(styles.width);           // Вычисленная ширина
+console.log(styles.color);<code class="comment">           // Вычисленный цвет</code>
+console.log(styles.backgroundColor);<code class="comment"> // Вычисленный фон</code>
+console.log(styles.width);<code class="comment">           // Вычисленная ширина</code>
 
-// Псевдоэлементы
+<code class="comment">//</code> Псевдоэлементы
 const beforeStyles = getComputedStyle(div, '::before');
 console.log(beforeStyles.content);</code></div>
 
@@ -3608,8 +3608,8 @@ console.log(beforeStyles.content);</code></div>
     &lt;/div>
     &lt;script>
         const article = document.getElementById("article");
-        console.log(article.nodeName);  // DIV
-        console.log(article.nodeType);  // 1
+        console.log(article.nodeName);<code class="comment">  // DIV</code>
+        console.log(article.nodeType);<code class="comment">  // 1</code>
     &lt;/script>
 &lt;/body></code></div>
 
@@ -3646,13 +3646,13 @@ console.log(beforeStyles.content);</code></div>
         &lt;p>Page Text&lt;/p>
     &lt;/div>
     &lt;script>
-        // выбираем все элемент c id="header"
+        <code class="comment">// выбираем все элемент c id="header"</code>
         const header = document.getElementById("header");
-        // получаем родительский элемента
+        <code class="comment">// получаем родительский элемента</code>
         const headerParent = header?.parentElement;
-        // можно так
-        // const headerParent = header?.parentNode;
-        console.log(headerParent);    // выводим родительский элемент на консоль
+        <code class="comment">// можно так</code>
+        <code class="comment">// const headerParent = header?.parentNode;</code>
+        console.log(headerParent);<code class="comment">    // выводим родительский элемент на консоль</code>
     &lt;/script>
 &lt;/body></code></div>
 
@@ -3665,24 +3665,24 @@ console.log(beforeStyles.content);</code></div>
                 <div class="code-block"><code>const htmlEl = document.getElementsByTagName("html")[0];
 const parentElem = htmlEl.parentElement;
 const parentNode = htmlEl.parentNode;
-console.log(parentElem);    // null
-console.log(parentNode);    // объект document</code></div>
+console.log(parentElem);<code class="comment">    // null</code>
+console.log(parentNode);<code class="comment">    // объект document</code></code></div>
 
                 <div class="code-block"><code>const element = document.querySelector('.child');
 
-// Родитель
+<code class="comment">// Родитель</code>
 const parent = element.parentElement;
-const parentNode = element.parentNode; // То же самое (почти)
+const parentNode = element.parentNode;<code class="comment"> // То же самое (почти)</code>
 
-// Дети
-const children = element.children; // HTMLCollection (только элементы)
+<code class="comment">// Дети</code>
+const children = element.children;<code class="comment"> // HTMLCollection (только элементы)</code>
 const firstChild = element.firstElementChild;
 const lastChild = element.lastElementChild;
 
-// Количество детей
+<code class="comment">// Количество детей</code>
 console.log(element.childElementCount);
 
-// Все узлы (включая текстовые)
+<code class="comment">// Все узлы (включая текстовые)</code>
 const childNodes = element.childNodes; // NodeList (всё)</code></div>
 
                 <h3>Получение дочерних элементов</h3>
@@ -3706,7 +3706,7 @@ else{
         &lt;p>Page Text&lt;/p>
     &lt;/div>
     &lt;script>
-        // выбираем элемент c id="article"
+        <code class="comment">// выбираем элемент c id="article"</code>
         const article = document.getElementById("article");
         
         for(elem of article.children){
@@ -3732,7 +3732,7 @@ else{
         &lt;p>Page Text&lt;/p>
     &lt;/div>
 &lt;script>
-    // выбираем элемент c id="article"
+    <code class="comment">// выбираем элемент c id="article"</code>
     const article = document.getElementById("article");
     
     for(node of article.childNodes){
@@ -3769,16 +3769,16 @@ P :  элемент
                 <h3>Соседи</h3>
                 <div class="code-block"><code>const element = document.querySelector('.item');
 
-// Следующий элемент
+<code class="comment">// Следующий элемент</code>
 const next = element.nextElementSibling;
 
-// Предыдущий элемент
+<code class="comment">// Предыдущий элемент</code>
 const prev = element.previousElementSibling;</code></div>
 
                 <h3>Поиск ближайшего родителя</h3>
                 <div class="code-block"><code>const button = document.querySelector('button');
 
-// Найти ближайший родительский элемент по селектору
+<code class="comment">// Найти ближайший родительский элемент по селектору</code>
 const form = button.closest('form');
 const container = button.closest('.container');</code></div>
 
@@ -3889,7 +3889,7 @@ const container = button.closest('.container');</code></div>
     &lt;h1 id="header">Home Page&lt;/h1>
     &lt;script>
         const header = document.getElementById("header");
-        console.log(Object.getPrototypeOf(header)); // HTMLHeadingElement
+        console.log(Object.getPrototypeOf(header));<code class="comment"> // HTMLHeadingElement</code>
     &lt;/script>
 &lt;/body></code></div>
 
@@ -3912,7 +3912,7 @@ const container = button.closest('.container');</code></div>
     &lt;h1 id="header">Home Page&lt;/h1>
     &lt;script>
         const header = document.getElementById("header");
-        console.log(header.tagName);  // H1
+        console.log(header.tagName);<code class="comment">  // H1</code>
     &lt;/script>
 &lt;/body></code></div>
 
@@ -3927,9 +3927,9 @@ const container = button.closest('.container');</code></div>
     &lt;h1 id="header">Home Page&lt;/h1>
     &lt;script>
         const header = document.getElementById("header");
-        // получаем текст элемента
-        console.log(header.textContent);  // Home Page
-        // изменяем текст элемента
+        <code class="comment">// получаем текст элемента</code>
+        console.log(header.textContent);<code class="comment">  // Home Page</code>
+        <code class="comment">// изменяем текст элемента</code>
         header.textContent = "Hello World";
     &lt;/script>
 &lt;/body></code></div>
@@ -3942,9 +3942,9 @@ const container = button.closest('.container');</code></div>
     &lt;h1 id="header">Home Page&lt;/h1>
     &lt;script>
         const header = document.getElementById("header");
-        // получаем текст элемента
-        console.log(header.innerText);  // Home Page
-        // изменяем текст элемента
+        <code class="comment">// получаем текст элемента</code>
+        console.log(header.innerText);<code class="comment">  // Home Page</code>
+        <code class="comment">// изменяем текст элемента</code>
         header.innerText = "Hello World2";
     &lt;/script>
 &lt;/body></code></div>
@@ -3976,9 +3976,9 @@ const container = button.closest('.container');</code></div>
     &lt;h1 id="header">Home Page&lt;/h1>
     &lt;script>
         const header = document.getElementById("header");
-        // получаем html-код элемента
-        console.log(header.innerHTML);  // Home Page
-        // изменяем html-код элемента
+        <code class="comment">// получаем html-код элемента</code>
+        console.log(header.innerHTML);<code class="comment">  // Home Page</code>
+        <code class="comment">// изменяем html-код элемента</code>
         header.innerHTML = "&lt;span style='color:navy;'>Hello World&lt;/span>";
     &lt;/script>
 &lt;/body></code></div>
@@ -4001,17 +4001,17 @@ const container = button.closest('.container');</code></div>
 
                 <p>Создадим элемент с помощью <span class="b">createElement</span>:</p>
 
-                <div class="code-block"><code>const header = document.createElement("h1");      // создаем заголовок &lt;h1>
- console.log(header);  // &lt;h1>&lt;/h1></code></div>
+                <div class="code-block"><code>const header = document.createElement("h1");<code class="comment">      // создаем заголовок &lt;h1></code>
+ console.log(header);<code class="comment">  // &lt;h1>&lt;/h1></code></code></div>
 
                 <p>Таким образом, переменная <code>header</code> будет хранить ссылку на элемент <code>h1</code>.</p>
 
                 <p>Создадим текстовый узел с помощью <span class="b">createTextNode</span>:</p>
 
-                <div class="code-block"><code>const  headerText = document.createTextNode("Hello World"); // создаем текстовый узел
- console.log( headerText);  // "Hello World"</code></div>
+                <div class="code-block"><code>const  headerText = document.createTextNode("Hello World");<code class="comment"> // создаем текстовый узел</code>
+ console.log( headerText);  <code class="comment">// "Hello World"</code></code></div>
 
-                <div class="code-block"><code>// Создать новый элемент
+                <div class="code-block"><code><code class="comment">// Создать новый элемент</code>
 const div = document.createElement('div');
 div.textContent = 'Новый блок';
 div.className = 'box';
@@ -4032,10 +4032,10 @@ p.innerHTML = 'Новый &lt;b&gt;параграф&lt;/b&gt;';</code></div>
                 <h3>appendChild</h3>
 
                 <p>Используем метод <span class="b">appendChild()</span>:</p>
-                <div class="code-block"><code>const header = document.createElement("h1");        // создаем заголовок &lt;h1>
-const  headerText = document.createTextNode("Hello World"); // создаем текстовый узел
-header.appendChild( headerText); // добавляем в элемент h1 текстовый узел
-console.log(header);  // &lt;h1>Hello World&lt;/h1></code></div>
+                <div class="code-block"><code>const header = document.createElement("h1");<code class="comment">               // создаем заголовок</code> &lt;h1>
+const  headerText = document.createTextNode("Hello World");<code class="comment"> // создаем текстовый узел</code>
+header.appendChild( headerText); <code class="comment">// добавляем в элемент h1 текстовый узел</code>
+console.log(header);  <code class="comment">           // &lt;h1>Hello World&lt;/h1></code></code></div>
 
                 <p>
                     И чтобы добавить созданный элемент на страницу, его надо добавить в уже имеющийся на странице элемент:
@@ -4043,10 +4043,10 @@ console.log(header);  // &lt;h1>Hello World&lt;/h1></code></div>
 
                 <div class="code-block"><code>&lt;body>
 &lt;script>
-    constheader = document.createElement("h1");     // создаем заголовок &lt;h1>
-    const headerText = document.createTextNode("Hello World");  // создаем текстовый узел
-    header.appendChild(headerText); // добавляем в элемент h1 текстовый узел
-    document.body.appendChild(header);  // добавляем элемент h1 на страницу в элемент body
+    constheader = document.createElement("h1");<code class="comment">     // создаем заголовок</code> &lt;h1>
+    const headerText = document.createTextNode("Hello World");<code class="comment">//  создаем текстовый узел</code>
+    header.appendChild(headerText);<code class="comment">   // добавляем в элемент h1 текстовый узел</code>
+    document.body.appendChild(header);<code class="comment">// добавляем элемент h1 на страницу в элемент body</code>
 &lt;/script>
 &lt;/body></code></div>
 
@@ -4060,8 +4060,8 @@ console.log(header);  // &lt;h1>Hello World&lt;/h1></code></div>
                     воспользоваться свойством <span class="b">textContent</span> и напрямую ему присвоить текст:
                 </p>
 
-                <div class="code-block"><code>const header = document.createElement("h1");      // создаем заголовок &lt;h1>
- header.textContent = "Hello World";     // определяем текст элемента</code></div>
+                <div class="code-block"><code>const header = document.createElement("h1");<code class="comment">//       создаем заголовок </code>&lt;h1>
+ header.textContent = "Hello World";<code class="comment">//      определяем текст элемента</code></code></div>
 
                 <p>В этом случае текстовый узел будет создан неявно при установке текста.</p>
 
@@ -4129,13 +4129,13 @@ div.insertAdjacentHTML('afterend', '&lt;p&gt;После элемента&lt;/p&g
     &lt;/div>
     &lt;script>
         const article = document.getElementById("article");
-        // получаем последний параграф
+        <code class="comment">// получаем последний параграф</code>
         const lastP = article.lastElementChild;
-        // клонируем элемент lastP
+        <code class="comment">// клонируем элемент lastP</code>
         const newLastP = lastP.cloneNode(true);
-        // изменяем текст
+        <code class="comment">// изменяем текст</code>
         newLastP.textContent = "Publication Date: 28/10/2023";
-        // добавляем в конец элемента article
+        <code class="comment">// добавляем в конец элемента article</code>
         article.appendChild(newLastP);
     &lt;/script>
 &lt;/body></code></div>
@@ -4219,22 +4219,22 @@ div.insertAdjacentHTML('afterend', '&lt;p&gt;После элемента&lt;/p&g
                 <div class="code-block"><code>const container = document.querySelector('.container');
 const newDiv = document.createElement('div');
 
-// appendChild - добавить в конец
+<code class="comment">// appendChild - добавить в конец</code>
 container.appendChild(newDiv);
 
-// append - добавить в конец (может принимать несколько элементов и строки)
+<code class="comment">// append - добавить в конец (может принимать несколько элементов и строки)</code>
 container.append(newDiv, 'Текст', anotherDiv);
 
-// prepend - добавить в начало
+<code class="comment">// prepend - добавить в начало</code>
 container.prepend(newDiv);
 
-// before - вставить перед элементом
+<code class="comment">// before - вставить перед элементом</code>
 container.before(newDiv);
 
-// after - вставить после элемента
+<code class="comment">// after - вставить после элемента</code>
 container.after(newDiv);
 
-// insertBefore - вставить перед определённым потомком
+<code class="comment">// insertBefore - вставить перед определённым потомком</code>
 container.insertBefore(newDiv, container.firstChild);</code></div>
 
                 <h2 id="ch11-remove">Удаление элементов</h2>
@@ -22285,7 +22285,6 @@ setInterval(() =&gt; showSlide(currentSlide + 1), 3000);</code></div>
             // Если нашли секцию
             if (bestMatch) {
                 currentSection = bestMatch.id;
-                console.log("current section: ", currentSection);
                 // Убираем активность со всех
                 removeActive();
 
@@ -22293,7 +22292,6 @@ setInterval(() =&gt; showSlide(currentSlide + 1), 3000);</code></div>
                 const activeSubitem = document.querySelector(
                     `.nav-subitem[data-target="${currentSection}"]`
                 );
-                console.log("active Subitem: ", activeSubitem);
 
                 // Добавляем активность нужному подразделу
                 if (activeSubitem) {
@@ -22313,7 +22311,6 @@ setInterval(() =&gt; showSlide(currentSlide + 1), 3000);</code></div>
                 } else {
                     // Это глава - проверяем, есть ли у неё подразделы
                     const activeItem = document.querySelector(`.nav-item[data-target="${currentSection}"]`);
-                    console.log("active Item: ", activeItem);
 
                     if (activeItem && activeItem.classList.contains('has-subitems')) {
                         // У главы есть подразделы - раскрываем меню, но НЕ подсвечиваем саму главу
@@ -22326,7 +22323,6 @@ setInterval(() =&gt; showSlide(currentSlide + 1), 3000);</code></div>
                         // Пытаемся найти первый видимый подраздел
                         const firstVisibleSubitem =
                             findFirstVisibleSubitem(currentSection);
-                            console.log("first Visible Sub: ", firstVisibleSubitem);
                         if (firstVisibleSubitem) {
                             const firstSubitemNav = document.querySelector(
                                 `.nav-subitem[data-target="${firstVisibleSubitem}"]`
@@ -22347,20 +22343,18 @@ setInterval(() =&gt; showSlide(currentSlide + 1), 3000);</code></div>
         function findFirstVisibleSubitem(chapterId) {
             // Ищем все h2/h3 внутри главы с id=chapterId
             const chapterElement = document.getElementById(chapterId);
-            console.log("chapter Element: ", chapterElement);
+            // console.log("chapter Element: ", chapterElement);
             if (!chapterElement) return null;
 
             const subitems = chapterElement.querySelectorAll(
                 '[id^="' + chapterId + '-"]'
             );
 
-            console.log("subitems: ", subitems);
 
             for (let subitem of subitems) {
                 const rect = subitem.getBoundingClientRect();
-                console.log("subItemID: %s, rect.top: %s, rect.bottom: %s", subitem.id, Math.round(rect.top), Math.round(rect.bottom) );
+                // console.log("subItemID: %s, rect.top: %s, rect.bottom: %s", subitem.id, Math.round(rect.top), Math.round(rect.bottom) );
                 if (rect.top <= 150 && rect.bottom >= 45) {
-                    console.log("subitem ID: ", subitem.id);
                     return subitem.id;
                 }
             }
