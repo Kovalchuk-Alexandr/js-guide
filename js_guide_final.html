@@ -158,6 +158,7 @@
 
         /* Подразделы */
         .nav-sublist {
+            margin-left: 0;
             list-style: none;
             max-height: 0;
             overflow: hidden;
@@ -169,7 +170,7 @@
         }
         
         .nav-subitem {
-            padding: 0.5rem 1rem 0.5rem 3rem;
+            padding: 0.5rem 1rem 0.5rem 1rem;
             cursor: pointer;
             transition: all 0.2s;
             font-size: 0.85rem;
@@ -22261,26 +22262,42 @@ setInterval(() =&gt; showSlide(currentSlide + 1), 3000);</code></div>
         function updateActiveSection() {
             // Получаем все секции (h2 и h3)
             const sections = document.querySelectorAll('[id^="ch"]');
+            // console.log("sections: ", sections);
             let currentSection = '';
+            let bestMatch = null;
+            let bestDistance = Infinity; 
             
             sections.forEach(section => {
+                // console.log("section: ", section);
                 const rect = section.getBoundingClientRect();
+                const distance = Math.abs(rect.top - 100);
+
                 // Если секция в верхней части экрана (с учетом header)
-                if (rect.top <= 100 && rect.bottom >= 100) {
-                    currentSection = section.id;
+                // Ищем ближайшую к верху экрана секцию
+                if (rect.top <= 150 && rect.bottom >= 100) {
+                    if (distance < bestDistance) {
+                        bestDistance = distance;
+                        bestMatch = section;
+                    }
                 }
             });
             
-            if (currentSection) {
+            // Если нашли секцию
+            if (bestMatch) {
+                currentSection = bestMatch.id;
+                console.log("current section: ", currentSection);
                 // Убираем активность со всех
-                // navItems.forEach(item => item.classList.remove('active'));
-                // navSubitems.forEach(item => item.classList.remove('active'));
                 removeActive();
 
-                
+                // Сначала проверяем, есть ли подраздел с таким ID
+                const activeSubitem = document.querySelector(
+                    `.nav-subitem[data-target="${currentSection}"]`
+                );
+                console.log("active Subitem: ", activeSubitem);
+
                 // Добавляем активность нужному подразделу
-                const activeSubitem = document.querySelector(`.nav-subitem[data-target="${currentSection}"]`);
                 if (activeSubitem) {
+                    // Это подраздел - подсвечиваем его
                     activeSubitem.classList.add('active');
                     
                     // Автоматически раскрываем родительскую главу
@@ -22294,13 +22311,61 @@ setInterval(() =&gt; showSlide(currentSlide + 1), 3000);</code></div>
                         }
                     }
                 } else {
-                    // Если это глава без подразделов
+                    // Это глава - проверяем, есть ли у неё подразделы
                     const activeItem = document.querySelector(`.nav-item[data-target="${currentSection}"]`);
-                    if (activeItem && !activeItem.classList.contains('has-subitems')) {
-                        activeItem.classList.add('active');
+                    console.log("active Item: ", activeItem);
+
+                    if (activeItem && activeItem.classList.contains('has-subitems')) {
+                        // У главы есть подразделы - раскрываем меню, но НЕ подсвечиваем саму главу
+                        const sublist = activeItem.querySelector(".nav-sublist");
+                        if (sublist && !sublist.classList.contains("expanded")) {
+                            activeItem.classList.add("expanded");
+                            sublist.classList.add("expanded");
+                        }
+
+                        // Пытаемся найти первый видимый подраздел
+                        const firstVisibleSubitem =
+                            findFirstVisibleSubitem(currentSection);
+                            console.log("first Visible Sub: ", firstVisibleSubitem);
+                        if (firstVisibleSubitem) {
+                            const firstSubitemNav = document.querySelector(
+                                `.nav-subitem[data-target="${firstVisibleSubitem}"]`
+                            );
+                            if (firstSubitemNav) {
+                                firstSubitemNav.classList.add("active");
+                            }
+                        }
+                    } else {
+                        // Обычная глава без подразделов
+                        activeItem.classList.add("active");
                     }
                 }
             }
+        }
+
+        // Вспомогательная функция для поиска первого видимого подраздела
+        function findFirstVisibleSubitem(chapterId) {
+            // Ищем все h2/h3 внутри главы с id=chapterId
+            const chapterElement = document.getElementById(chapterId);
+            console.log("chapter Element: ", chapterElement);
+            if (!chapterElement) return null;
+
+            const subitems = chapterElement.querySelectorAll(
+                '[id^="' + chapterId + '-"]'
+            );
+
+            console.log("subitems: ", subitems);
+
+            for (let subitem of subitems) {
+                const rect = subitem.getBoundingClientRect();
+                console.log("subItemID: %s, rect.top: %s, rect.bottom: %s", subitem.id, Math.round(rect.top), Math.round(rect.bottom) );
+                if (rect.top <= 150 && rect.bottom >= 45) {
+                    console.log("subitem ID: ", subitem.id);
+                    return subitem.id;
+                }
+            }
+
+            return null;
         }
         
         // Инициализация при загрузке
