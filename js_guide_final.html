@@ -122,11 +122,12 @@
         
         .nav-list {
             list-style: none;
+            margin-left: 0.5rem;
         }
         
         .nav-item {
             padding: 0.6rem 1rem 0.6rem 1.5rem;
-            height: 2.4rem;
+            /* height: 2.4rem; */
             cursor: pointer;
             transition: all 0.2s;
             font-size: 0.9rem;
@@ -135,7 +136,7 @@
         
         .nav-item.has-subitems .ch-emoj::before {
         content:'📁';
-            height: 2.4rem;
+            /* height: 2.4rem; */
             /* transition: height 0.3s; */
         }
 
@@ -146,7 +147,7 @@
         }
 
         .nav-item.has-subitems.expanded {
-            height: auto;
+            /* height: auto; */
             /* transition: height 0.3s; */
         }
 
@@ -178,7 +179,7 @@
         /* Подразделы */
         .nav-sublist {
             /* display: none; */
-            margin-left: 0;
+            margin: 0;
             list-style: none;
             max-height: 0;
             overflow: hidden;
@@ -188,8 +189,9 @@
         }
         
         .nav-sublist.expanded {
-            max-height: 1180px;
-            top: 0;
+            padding-top: 8px;
+            max-height: fit-content;
+            /* top: 0; */
         }
         
         .nav-subitem {
@@ -367,7 +369,7 @@
         }
         
         ul, ol {
-            margin: 0.5rem 0 0.5rem 0.5rem;
+            margin: 0.5rem 0 0.5rem 2rem;
         }
         
         li {
@@ -517,6 +519,10 @@
                                 <li class="nav-subitem" data-target="ch12-mouse-event">📜 События мыши</li>
                                 <li class="nav-subitem" data-target="ch12-kb-event">📜 События клавиатуры</li>
                                 <li class="nav-subitem" data-target="ch12-form-event">📜 События форм</li>
+                                <li class="nav-subitem" data-target="ch12-doc-win-event">📜 События документа и окна</li>
+                                <li class="nav-subitem" data-target="ch12-event-handlers">📜 Обработчики событий</li>
+                                <li class="nav-subitem" data-target="ch12-event-object">📜 Передача данных в обработчик события. Объект Event</li>
+                                <li class="nav-subitem" data-target="ch12-events-spread">📜 Всплытие и погружение событий</li>
                             </ul>
                         </li>
                         <li class="nav-item" data-target="ch13">Глава 13. Формы</li>
@@ -4917,36 +4923,6 @@ customElements.define("hello-metanit", HelloMetanit);
                     </ul>
                 </div>
 
-                <h3>Базовые события</h3>
-
-                <p>
-                    Вкратце перечислю основные события, которые мы можем использовать в JavaScript. События мыши:
-                </p>
-
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Событие</th>
-                                <th>Описание</th>
-                                <th>Объект события</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td><code>click</code></td><td>возникает при нажатии указателем мыши на элемент</td><td><code>MouseEvent</code></td></tr>
-                            <tr><td><code>dblclick</code></td><td>возникает при двойном нажатии указателем мыши на элемент</td><td><code>MouseEvent</code></td></tr>
-                            <tr><td><code>contextmenu</code></td><td>возникает при открытии контекстного меню (правой кнопкой мыши)</td><td><code>MouseEvent</code></td></tr>
-                            <tr><td><code>mousedown</code></td><td>возникает при нахождении указателя мыши на элементе, когда кнопка мыши находится в нажатом состоянии</td><td><code>MouseEvent</code></td></tr>
-                            <tr><td><code>mouseup</code></td><td>возникает при нахождении указателя мыши на элементе во время отпускания кнопки мыши</td><td><code>MouseEvent</code></td></tr>
-                            <tr><td><code>mousemove</code></td><td>возникает при прохождении указателя мыши над элементом</td><td><code>MouseEvent</code></td></tr>
-                            <tr><td><code>mouseover</code></td><td>возникает при вхождении указателя мыши в границы элемента</td><td><code>MouseEvent</code></td></tr>
-                            <tr><td><code>mouseout</code></td><td>возникает, когда указатель мыши выходит за пределы элемента</td><td><code>MouseEvent</code></td></tr>
-                            <tr><td><code>mouseenter</code></td><td>возникает при вхождении указателя мыши в границы элемента</td><td><code>MouseEvent</code></td></tr>
-                            <tr><td><code>mouseleave</code></td><td>возникает, когда указатель мыши выходит за пределы элемента</td><td><code>MouseEvent</code></td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
                 <h2 id="ch12-assigning">Способы назначения обработчиков событий</h2>
 
                 <h3>1. HTML-атрибуты (не рекомендуется)</h3>
@@ -5073,6 +5049,31 @@ button.removeEventListener('click', handleClick);</code></div>
                 </div>
 
                 <h2 id="ch12-mouse-event">События мыши</h2>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Событие</th>
+                                <th>Описание</th>
+                                <th>Объект события</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>click</code></td><td>возникает при нажатии указателем мыши на элемент</td><td><code>MouseEvent</code></td></tr>
+                            <tr><td><code>dblclick</code></td><td>возникает при двойном нажатии указателем мыши на элемент</td><td><code>MouseEvent</code></td></tr>
+                            <tr><td><code>contextmenu</code></td><td>возникает при открытии контекстного меню (правой кнопкой мыши)</td><td><code>MouseEvent</code></td></tr>
+                            <tr><td><code>mousedown</code></td><td>возникает при нахождении указателя мыши на элементе, когда кнопка мыши находится в нажатом состоянии</td><td><code>MouseEvent</code></td></tr>
+                            <tr><td><code>mouseup</code></td><td>возникает при нахождении указателя мыши на элементе во время отпускания кнопки мыши</td><td><code>MouseEvent</code></td></tr>
+                            <tr><td><code>mousemove</code></td><td>возникает при прохождении указателя мыши над элементом</td><td><code>MouseEvent</code></td></tr>
+                            <tr><td><code>mouseover</code></td><td>возникает при вхождении указателя мыши в границы элемента</td><td><code>MouseEvent</code></td></tr>
+                            <tr><td><code>mouseout</code></td><td>возникает, когда указатель мыши выходит за пределы элемента</td><td><code>MouseEvent</code></td></tr>
+                            <tr><td><code>mouseenter</code></td><td>возникает при вхождении указателя мыши в границы элемента</td><td><code>MouseEvent</code></td></tr>
+                            <tr><td><code>mouseleave</code></td><td>возникает, когда указатель мыши выходит за пределы элемента</td><td><code>MouseEvent</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
                 <div class="code-block"><code>const box = document.querySelector('.box');
 
 // click - одиночный клик
@@ -5128,6 +5129,24 @@ box.addEventListener('contextmenu', (e) => {
 });</code></div>
 
                 <h2 id="ch12-kb-event">События клавиатуры</h2>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Событие</th>
+                                <th>Описание</th>
+                                <th>Объект события</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>keydown</code></td><td>возникает при нажатии клавиши клавиатуры и длится, пока нажата клавиша</td><td><code>KeyboardEvent</code></td></tr>
+                            <tr><td><code>keyup</code></td><td>возникает при отпускании клавиши клавиатуры</td><td><code>KeyboardEvent</code></td></tr>
+                            <tr><td><code>keypress</code></td><td>возникает при нажатии клавиши клавиатуры, но после события keydown и до события keyup.</td><td><code>KeyboardEvent</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
                 <div class="code-block"><code>const input = document.querySelector('input');
 
 // keydown - клавиша нажата
@@ -5180,6 +5199,47 @@ document.addEventListener('keydown', (e) => {
 });</code></div>
 
                 <h2 id="ch12-form-event">События форм</h2>
+
+                <h3>События элементов форм</h3>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Событие</th>
+                                <th>Описание</th>
+                                <th>Объект события</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>input</code></td><td>возникает при изменении текста/значения в элементах (в реальном времени)</td><td><code>Event</code></td></tr>
+                            <tr><td><code>change</code></td><td>возникает при изменении значения в списках, флажках (checkbox) или радиокнопках (после потери фокуса)</td><td><code>Event</code></td></tr>
+                            <tr><td><code>submit</code></td><td>возникает при отправке формы.</td><td><code>Event</code></td></tr>
+                            <tr><td><code>reset</code></td><td>возникает при сбросе формы (через кнопку reset).</td><td><code>Event</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>События фокусировки</h3>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Событие</th>
+                                <th>Описание</th>
+                                <th>Объект события</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>focus</code></td><td>возникает, когда элемент получил фокус</td><td><code>FocusEvent</code></td></tr>
+                            <tr><td><code>blur</code></td><td>возникает, когда элемент потерял фокус</td><td><code>FocusEvent</code></td></tr>
+                            <tr><td><code>focusin</code></td><td>возникает при получении фокуса (в отличие от события focus, это событие поднимающееся. Про поднимающиеся и опускающиеся события далее)</td><td><code>FocusEvent</code></td></tr>
+                            <tr><td><code>focusout</code></td><td>возникает при потере фокуса(это событие поднимающееся в отличие от события blur)</td><td><code>FocusEvent</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
                 <div class="code-block"><code>const form = document.querySelector('form');
 const input = document.querySelector('input');
 
@@ -5219,7 +5279,60 @@ select.addEventListener('change', (e) => {
     console.log('Выбрано:', e.target.value);
 });</code></div>
 
-                <h2>События документа и окна</h2>
+                <h2 id="ch12-doc-win-event">События документа и окна</h2>
+
+                <h3>Общие события интерфейса:</h3>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Событие</th>
+                                <th>Описание</th>
+                                <th>Объект события</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>load</code></td><td>возникает при загрузке веб-страницы</td><td><code>UIEvent</code></td></tr>
+                            <tr><td><code>unload</code></td><td>возникает при выгрузке веб-страницы (например, когда запрошена страница по новому адресу)</td><td><code>UIEvent</code></td></tr>
+                            <tr><td><code>abort</code></td><td>возникает при отмене загрузки ресурса</td><td><code>UIEvent</code></td></tr>
+                            <tr><td><code>Error</code></td><td>возникает при генерации ошибки при загрузке страницы (например, ошибка в коде JavaScript)</td><td><code>UIEvent</code></td></tr>
+                            <tr><td><code>select</code></td><td>возникает при выделении текста на странице</td><td><code>UIEvent</code></td></tr>
+                            <tr><td><code>resize</code></td><td>возникает при изменении размеров окна браузера</td><td><code>UIEvent</code></td></tr>
+                            <tr><td><code>scroll</code></td><td>возникает при прокрутке</td><td><code>UIEvent</code></td></tr>
+                            <tr><td><code>beforeunload</code></td><td>возникает непосредственно перед выгрузкой страницы</td><td><code>BeforeUnloadEvent</code></td></tr>
+                            <tr><td><code>DOMContentLoaded</code></td><td>возникает при полной загрузке дерева DOM</td><td><code>Event</code></td></tr>
+                            <tr><td><code>cut</code></td><td>возникает при вырезании текста из поля ввода (например, с помощью Ctrl+X)</td><td><code>ClipboardEvent</code></td></tr>
+                            <tr><td><code>copy</code></td><td>возникает при копировании текста из поля ввода (например, с помощью Ctrl+C)</td><td><code>ClipboardEvent</code></td></tr>
+                            <tr><td><code>paste</code></td><td>возникает при вставке текста в поле ввода (например, с помощью Ctrl+V)</td><td><code>ClipboardEvent</code></td></tr>
+                            <tr><td><code>select</code></td><td>возникает при выделении текста в поле ввода</td><td><code>ClipboardEvent</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>События мобильных устройств и других устройств с сенсорным экраном:</h3>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Событие</th>
+                                <th>Описание</th>
+                                <th>Объект события</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>orientationchange</code></td><td>возникает при изменении ориентации устройства</td><td><code>Event</code></td></tr>
+                            <tr><td><code>deviceorientation</code></td><td>возникает, когда появляются новые данные об ориентации устройства</td><td><code>DeviceOrientationEvent</code></td></tr>
+                            <tr><td><code>devicemotion</code></td><td>возникает с регулярными интервалами и указывает на силу ускорения, действующую на конечное устройство</td><td><code>DeviceMotionEvent</code></td></tr>
+                            <tr><td><code>touchstart</code></td><td>возникает при касании дисплея</td><td><code>TouchEvent</code></td></tr>
+                            <tr><td><code>touchend</code></td><td>возникает, когда палец убран с дисплея (касание завершилось)</td><td><code>TouchEvent</code></td></tr>
+                            <tr><td><code>touchmove</code></td><td>возникает при движении пальцем по сенсорному дисплею</td><td><code>TouchEvent</code></td></tr>
+                            <tr><td><code>touchcancel</code></td><td>возникает при прерывании отслеживания касаний</td><td><code>TouchEvent</code></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
                 <div class="code-block"><code>// DOMContentLoaded - DOM загружен (без стилей/картинок)
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM готов!');
@@ -5246,7 +5359,369 @@ window.addEventListener('scroll', () => {
     console.log(`Прокручено: ${window.scrollY}px`);
 });</code></div>
 
-                <h2>Всплытие и погружение событий</h2>
+                <h2 id="ch12-event-handlers">Обработчики событий</h2>
+
+                <p>
+                    Если в коде JavaScript возникает событие, то его обрабатывает связанный с этим событием обработчик. Рассмотрим, как определять обработчики событий.
+                </p>
+
+                <h3>Встроенные обработчики</h3>
+
+                <p>
+                    Самый простой способ определения обработчиков событий - их установка в коде html. Это так называемые встроенные обработчики или inline-обработчики, 
+                    которые определяются в коде элемента с помощью атрибутов. Подобные атрибуты начинаются с префикса <span class="b">on</span>. Например, у многих html-элементов есть 
+                    атрибут <span class="b">on</span><code>click</code>, который определяет обработчик нажатия элемента.<br>
+                    Посмотрим на примере кнопки:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;button onclick="console.log('Clicked!')">Click Me&lt;/div>
+&lt;/body></code></div>
+
+                <p>
+                    С помощью атрибута <code>onclick="console.log('Clicked!')"</code> к кнопке прикрепляется обработчик ее нажатия. Этот обработчик состоит из одной инструкции 
+                    JavaScript - <code>console.log("Clicked!")</code>, которая выводит сообщение на консоль. Таким образом, при нажатии на кнопку сработает событие нажатия, и будет 
+                    выполняться обработчик из атрибута onclick:
+                </p>
+                <p>Можно даже определить несколько инструкций подобным образом:</p>
+
+                <div class="code-block"><code>&lt;button onclick="console.log('Hello');console.log('Clicked!')">Click Me&lt;/div></code></div>
+
+                <p>
+                    Но, очевидно, что это не самый удобный способ. Но также можно вынести все инструкции в отдельную функцию JavaScript. А атрибуту <code>onclick</code> 
+                    передать вызов этой функции:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;button onclick="btn_click()">Click Me&lt;/div>
+    &lt;script>
+        let clicks = 0;     // счетчик нажатий
+        function btn_click(){
+            console.log("Clicked", ++clicks);
+        }
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>Теперь по нажатию кнопки будет вызываться функция btn_click, которая определена в коде JavaScript.</p>
+                <p>Хотя этот подход прекрасно работает, но он имеет кучу недостатков:</p>
+
+                <ul>
+                    <li>Код html смешивается с кодом JavaScript, в связи с чем становится труднее разрабатывать, отлаживать и поддерживать приложение</li>
+                    <li>Обработчики событий можно задать только для уже созданных на веб-странице элементов. Динамически создаваемые элементы в этом случае 
+                    лишаются возможности обработки событий</li>
+                    <li>К элементу для одного события может быть прикреплен только один обработчик</li>
+                    <li>Нельзя удалить обработчик без изменения кода</li>
+                </ul>
+
+                <h3>Свойства обработчиков событий</h3>
+
+                <p>
+                    Проблемы, которые возникают при использовании встроенных обработчиков, были призваны решить свойства обработчиков. Подобно тому, как у html-элементов 
+                    есть атрибуты для обработчиков, так и в коде javascript у элементов DOM мы можем получить свойства обработчиков, которые соответствуют атрибутам:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;button id="btn">Click Me&lt;/div>
+    &lt;script>
+        let clicks = 0;     // счетчик нажатий
+        function btn_click(){
+            console.log("Clicked", ++clicks);
+        }
+        // устанавливаем обработчик нажатия для элемента с id="btn"
+        document.getElementById("btn").onclick = btn_click; 
+    &lt;/script>
+&lt;/body>
+</code></div>
+
+                <p>
+                    В итоге нам достаточно взять свойство <span class="b">onclick</span> и присвоить ему функцию, используемую в качестве обработчика. За счет 
+                    этого код html отделяется от кода javascript.
+                </p>
+
+                <h3>Слушатели событий</h3>
+
+                <p>
+                    Несмотря на то, что свойства обработчиков решают ряд проблем, которые связаны с использованием атрибутов, в то же время это также 
+                    не оптимальный подход. Еще один способ установки обработчиков событий представляет использование слушателей.
+                </p>
+                <p>
+                    Для работы со слушателями событий в JavaScript есть объект <span class="b">EventTarget</span>, который определяет методы 
+                    <span class="b">addEventListener()</span> (для добавления слушателя) и <span class="b">removeEventListener()</span> 
+                    для удаления слушателя. И поскольку html-элементы DOM тоже являются объектами EventTarget, то они также имеют эти методы. Фактически слушатели представляют те же функции обработчиков.
+                </p>
+                <p>Метод <code>addEventListener()</code> принимает два параметра: название события без префикса on и функцию обработчика этого события. Например:</p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;button id="btn">Click Me&lt;/div>
+    &lt;script>
+        let clicks = 0;     // счетчик нажатий
+        function btn_click(){
+            console.log("Clicked", ++clicks);
+        }
+        const btn = document.getElementById("btn");
+        // прикрепляем обработчик события "click"
+        btn.addEventListener("click", btn_click);
+    &lt;/script>
+&lt;/body>
+</code></div>
+
+                <p>То есть в данном случае опять же обрабатывается событие click. Удаление слушателя аналогично добавлению:</p>
+
+                <div class="code-block"><code>rect.removeEventListener("click", btn_click);</code></div>
+
+                <p>Преимуществом использования слушателей является и то, что мы можем установить для одного события несколько функций:</p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;button id="btn">Click Me&lt;/div>
+    &lt;script>
+        let clicks = 0;     // счетчик нажатий
+        function btn_click(){
+            console.log("Clicked", ++clicks);
+        }
+        const btn = document.getElementById("btn");
+    
+        // прикрепляем первый обработчик события "click" в виде функции btn_click
+        btn.addEventListener("click", btn_click);
+    
+        // прикрепляем второй обработчик события "click" в виде анонимной функции
+        btn.addEventListener("click", function(){
+            console.log("Button clicked!")
+        });
+    
+        // прикрепляем третий обработчик события "click" в виде стрелочной функции
+        btn.addEventListener("click", ()=>console.log("Element clicked!"));
+ 
+    &lt;/script>
+&lt;/body></code></div>
+
+                <h2 id="ch12-event-object">Передача данных в обработчик события. Объект Event</h2>
+
+                <p>
+                    Иногда возникает необходимость передать в обработчик некоторые данные. Если обработчики событий устанавливаются с помощью атрибутов элементов, то
+                    это сделать довольно просто. Например, передадим в обработчик нажатия кнопки текст, которые будет использоваться в обработчике:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;button id="btn" onclick="btn_click('Button Clicked')">Click Me&lt;/button>
+    &lt;script>
+        // в обработчик передается текст
+        function btn_click(text){
+            console.log(text);  // выводим этот текст
+        }
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>Итак, здесь в обработчик кнопки передается некоторый текст:</p>
+
+                <div class="code-block"><code>&lt;button id="btn" onclick="btn_click('Button Clicked')"></code></div>
+
+                <p>В функции обработчика получаем этот текст и некоторым образом его используем, например, выводим на консоль:</p>
+
+                <div class="code-block"><code>function btn_click(text){
+    console.log(text);  // выводим этот текст
+}</code></div>
+
+                <p>
+                    В данном случае в функцию обработчика передавалась строка, но в реальности, это может быть любой объект. Например, через значение <span class="b">this</span> 
+                    можно передать текущий объект, на котором возникает событие:
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;button id="btn" onclick="btn_click(this)">Click Me&lt;/button>
+    &lt;script>
+        let clicks = 0;     // счетчик нажатий
+        // в обработчик передается ссылка на элемент кнопки
+        function btn_click(btn){
+            // изменяем текст кнопки
+            btn.textContent = `Clicked ${++clicks}`;
+        }
+        &lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    Ключевое слово <code>this</code> указывает на текущий объект ссылки, на которую производится нажатие. И в коде обработчика мы можем 
+                    получить этот объект и обратиться к его свойствам, например, к свойству textContent и таким образом изменить текст кнопки.
+                </p>
+                <p>Стоит отметить, что в некоторых случаях нам может потребоваться возвращать из обработчика значение <code>false</code>. Например, рассмотрим следующую программу:</p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;a id="link" href="https://metanit.com" onclick="return a_click(this)">Metanit.com&lt;/a>
+    &lt;script>
+        // в обработчик передается ссылка
+        function a_click(anchor){
+            // получаем адрес ссылки
+            console.log(anchor.href);
+            return false;   // запрещаем переадресацию
+        }
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>Здесь в атрибуте <code>onclick</code> ссылки - элемента <code>&lt;a&gt;</code> не просто вызывается обработчик события, а возвращается его результат:</p>
+
+                <div class="code-block"><code>&lt;a id="link" href="https://metanit.com" onclick="return a_click(this)"></code></div>
+
+                <p>Причем функция обработчика возвращает <span class="b">false</span>:</p>
+
+                <div class="code-block"><code>function a_click(anchor){
+    console.log(anchor.href);
+    return false;   // запрещаем переадресацию
+}</code></div>
+
+                <p>
+                    Дело в том, что для некоторых обработчиков можно подтвердить или остановить обработку события. Например, нажатие на ссылку должно привести к переадресации. 
+                    Но возвращая из обработчика <span class="b">false</span>, мы можем остановить стандартный путь обработки события, и переадресации не будет. 
+                    Если же возвращать значение <code>true</code>, то событие обрабатывается в стандартном порядке.
+                </p>
+
+                <p>Если же мы вовсе уберем возвращении результата, то событие будет обрабатываться, как будто возвращается значение <code>true</code>:</p>
+
+                <div class="code-block"><code>&lt;a id="link" href="https://metanit.com" onclick="a_click(this)">Metanit.com&lt;/a>
+&lt;script>
+    function a_click(anchor){
+        console.log(anchor.href);
+    }
+&lt;/script></code></div>
+
+                <h3>Объект Event</h3>
+
+                <p>
+                    При обработке события браузер автоматически передает в функцию обработчика в качестве параметра объект <span class="b">Event</span>, который инкапсулирует всю информацию о событии. И с помощью его свойств 
+                    мы можем получить эту информацию:
+                </p>
+
+                <ul>
+                    <li><span class="b">bubbles</span>: возвращает <code>true</code>, если событие является восходящим. Например, если событие возникло на вложенном элементе, то 
+                    оно может быть обработано на родительском элементе.</li>
+                    <li><span class="b">cancelable</span>: возвращает <code>true</code>, если можно отменить стандартную обработку события</li>
+                    <li><span class="b">currentTarget</span>: определяет элемент, к которому прикреплен обработчик события</li>
+                    <li><span class="b">defaultPrevented</span>: возвращает <code>true</code>, если был вызван у объекта Event метод <code>preventDefault()</code></li>
+                    <li><span class="b">eventPhase</span>: хранит число, которое представляет стадию обработки события. Возможные значения:
+                        <ul>
+                            <li>0 (<code>Event.NONE</code>)</li>
+                            <li>1 (<code>Event.CAPTURING_PHASE</code>)</li>
+                            <li>2 (<code>Event.AT_TARGET</code>)</li>
+                            <li>3 (<code>Event.BUBBLING_PHASE</code>)</li>
+                        </ul>
+                    </li>
+                    <li><span class="b">target</span>: указывает на элемент, на котором было вызвано событие</li>
+                    <li><span class="b">timeStamp</span>: хранит время возникновения события</li>
+                    <li><span class="b">type</span>: указывает на имя события</li>
+                    <li><span class="b">isTrusted</span>: указывает, событие было сгенерировано элементами веб-страницы или кодом JavaScript</li>
+                </ul>
+
+                <p>Например:</p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;button onclick="btn_click(event)">Click Me&lt;/button>
+    &lt;script>
+        function btn_click(e){
+            console.log(e);
+        }
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    При вызове функции-обработчика информация о событии доступна через объект <code>event</code>. 
+                    Этот объект не определяется разработчиком, это просто аргумент функции обработчика, который хранит всю информацию о событии:
+                </p>
+
+                <div class="code-block"><code>&lt;button onclick="btn_click(event)">&lt;/button></code></div>
+
+                <p>В коде JavaScript этот объект можно получить через параметр функции:</p>
+
+                <div class="code-block"><code>function btn_click(e){
+    console.log(e);
+}</code></div>
+
+                <p>В данном случае просто выводим объект на консоль. Но естественно также можно было бы получить отдельную конкретную информацию о событии:</p>
+
+                <div class="code-block"><code>function btn_click(e){
+    console.log("Type:", e.type);       // Type: click
+    console.log("Target:", e.target);   // Target: &lt;button onclick=​"btn_click(event)​">​Click Me​&lt;/button>​
+    console.log("Timestamp:", e.timeStamp);
+}</code></div>
+
+                <p>
+                    Подобным образом мы можем получить объект события, если обработчик события прикрепляется через свойства элементов или через метод <span class="b">addEventListener()</span>. 
+                    Например, прикрепеление обработчика через свойство элемента:
+                </p>
+
+
+                <div class="code-block"><code>&lt;button id="btn">Click Me&lt;/button>
+&lt;script>
+    function btn_click(e){
+        console.log("Type:", e.type);
+        console.log("Target:", e.target);
+        console.log("Timestamp:", e.timeStamp);
+    }
+    // устанавливаем обработчик нажатия для элемента с id="btn"
+    document.getElementById("btn").onclick = btn_click; 
+&lt;/script></code></div>
+
+                <p>Или прикрепеление обработчика с помощью метода <code>addEventListener</code>:</p>
+
+                <div class="code-block"><code>&lt;button id="btn">Click Me&lt;/button>
+&lt;script>
+    function btn_click(e){
+        console.log("Type:", e.type);
+        console.log("Target:", e.target);
+        console.log("Timestamp:", e.timeStamp);
+    }
+    const btn = document.getElementById("btn");
+    // прикрепляем обработчик события "click"
+    btn.addEventListener("click", btn_click);
+&lt;/script></code></div>
+
+                <h3>Остановка выполнения события</h3>
+
+                <p>
+                    С помощью метода <span class="b">preventDefault()</span> объекта Event мы можем остановить дальнейшее выполнение события. В ряде случаев этот метод 
+                    не играет большой роли. Однако в некоторых ситуаций он может быть полезен. Например, при нажатии на ссылку мы можем с помощью дополнительной обработки 
+                    определить, надо ли переходить по ссылке или надо запретить переход. Или другой пример: пользователь отправляет данные формы, но в ходе обработки 
+                    в обработчике события мы определили, что поля формы заполнены неправильно, и в этом случае мы также можем запретить отправку.
+                </p>
+                <p>Например, остановим переход по ссылке:</p>
+
+                <div class="code-block"><code>&lt;a id="link" href="https://metanit.com">Metanit.com&lt;/a>
+&lt;script>
+    function linkHandler(e){
+        console.log("Link has been clicked");
+        e.preventDefault();     // останавливаем переход по ссылке
+    }
+    const link = document.getElementById("link");
+    link.addEventListener("click", linkHandler);
+&lt;/script></code></div>
+
+                <p>
+                    Здесь по нажатию на ссылку будет срабатывать метод linkHandler. И, поскольку в этом методе с помощью вызова <code>e.preventDefault()</code> предупреждаем 
+                    переход по ссылке, то перехода не будет. Данный подход, к примеру, часто используется при ajax-запросах, когда надо обработать нажатие на ссылку, но при этом не выполнять перехода на другой ресурс, а сделать к нему 
+                    запрос из кода javascript без перезагрузки страницы.
+                </p>
+
+                <h3>Получение текущего объекта</h3>
+
+                <p>Для получения текущего объекта, для которого обрабатыватся событие, внутри обработчика события мы можем использовать ключевое слово <span class="b">this</span>:</p>
+
+                <div class="code-block"><code>&lt;button id="btn">Click Me&lt;/button>
+&lt;script>
+    const btn = document.getElementById("btn");
+    function btn_click(){
+        console.log(this);  //  &lt;button id="btn">Click Me&lt;/button>
+    }
+    btn.addEventListener("click", btn_click);
+&lt;/script></code></div>
+
+                <p>
+                    Здесь при обработке события <code>click</code> на кнопке объект this в функции <code>btn_click</code> будет представлять эту кнопку. Фактически в данном случае значения <code>this</code> и 
+                    <code>event.target</code> были бы эквивалентны
+                </p>
+
+                <div class="code-block"><code>function btn_click(e){
+    console.log(this===e.target); // true
+}</code></div>
+
+
+                <h2 id="ch12-events-spread">Распространение (всплытие и погружение) событий</h2>
                 <p>События в DOM проходят три фазы:</p>
                 <ol>
                     <li><strong>Фаза захвата (capturing)</strong> — от window к целевому элементу</li>
