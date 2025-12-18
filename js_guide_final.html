@@ -523,6 +523,10 @@
                                 <li class="nav-subitem" data-target="ch12-event-handlers">📜 Обработчики событий</li>
                                 <li class="nav-subitem" data-target="ch12-event-object">📜 Передача данных в обработчик события. Объект Event</li>
                                 <li class="nav-subitem" data-target="ch12-events-spread">📜 Всплытие и погружение событий</li>
+                                <li class="nav-subitem" data-target="ch12-stop-bubbling">📜 Остановка всплытия</li>
+                                <li class="nav-subitem" data-target="ch12-cansel-default">📜 Отмена действия по умолчанию</li>
+                                <li class="nav-subitem" data-target="ch12-delegation">📜 Делегирование событий</li>
+                                <li class="nav-subitem" data-target="ch12-dispatch-event">📜 Программный вызов событий</li>
                             </ul>
                         </li>
                         <li class="nav-item" data-target="ch13">Глава 13. Формы</li>
@@ -5074,6 +5078,111 @@ button.removeEventListener('click', handleClick);</code></div>
                     </table>
                 </div>
 
+                <p>
+                    Отдельно стоит сказать про разницу между последними четырьмя событиями. <code>mouseenter</code> и <code>mouseleave</code> срабатывают только тогда, когда пересекается внешний край соответствующего элемента. 
+                    А события <code>mouseover</code> и <code>mouseout</code> также срабатывают, когда другой элемент находится внутри соответствующего элемента и 
+                    курсор мыши перемещается во внутренний элемент (т.е. уходит от внешнего элемента) или покидает внутренний элемент (то есть 
+                    перемещается на внешний элемент).
+                </p>
+                <p>Например, обработаем события <code>mouseover</code> и <code>mouseout</code>:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>MOUSE EVENT EXAMP&lt;/title>
+    &lt;style>
+    #blueRect{
+        width:100px;
+        height:100px;
+        background-color:blue;
+    }
+    &lt;/style>
+&lt;/head>
+&lt;body>
+&lt;div id="blueRect">&lt;/div>
+ 
+&lt;script>
+    function setColor(e){
+        if(e.type==="mouseover")
+            e.target.style.backgroundColor = "red";
+        else if(e.type==="mouseout")
+            e.target.style.backgroundColor = "blue";
+    }
+    const blueRect = document.getElementById("blueRect");
+    blueRect.addEventListener("mouseover", setColor);
+    blueRect.addEventListener("mouseout", setColor);
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>Теперь при наведении указателя мыши на блок blueRect он будет окрашиваться в красный цвет, а при уходе указателя мыши - блок будет обратно окрашиваться в синий цвет.</p>
+
+                <h3>MouseEvent</h3>
+
+                <p>
+                    Объект Event является общим для всех событий. Однако для разных типов событий существуют также свои объекты событий, которые добавляют ряд своих свойств. 
+                    Так, для работы с событиями указателя мыши определен объект <span class="b">MouseEvent</span>, который добавляет следующие свойства:
+                </p>
+
+                <ul>
+                    <li><span class="b">altKey</span>: возвращает <code>true</code>, если была нажата клавиша Alt во время генерации события</li>
+                    <li><span class="b">button</span>: содержит номер нажатой кнопки мыши</li>
+                    <li><span class="b">buttons</span>: содержит номер, который представляет нажатую кнопку мыши:
+                        <ul>
+                            <li>1 обозначает левую кнопку мыши,</li>
+                            <li>2 — правую кнопыши,</li>
+                            <li>4 — колесо мыши или среднюю кнопку мыши,</li>
+                            <li>8 — четвертую кнопку мыши,</li>
+                            <li>16 — пятую кнопку мыши.</li>
+                        </ul>   
+                        Если при срабатывании события было нажато несколько кнопок, это свойство содержат сумму соответствующих чисел.</p></li>
+                    <li><span class="b">clientX</span>: определяет координату Х окна браузера, на которой находился указатель мыши во время генерации события</li>
+                    <li><span class="b">clientY</span>: определяет координату Y окна браузера, на которой находился указатель мыши во время генерации события</li>
+                    <li><span class="b">ctrlKey</span>: возвращает <code>true</code>, если была нажата клавиша Ctrl во время генерации события</li>
+                    <li><span class="b">movementX</span>: содержит координату Х относительно предыдущей координаты X при последнем событии перемещения мыши</li>
+                    <li><span class="b">movementY</span>: содержит координату Y относительно предыдущей координаты Y при последнем событии перемещения мыши</li>
+                    <li><span class="b">metaKey</span>: возвращает <code>true</code>, если была нажата во время генерации события метаклавиша клавиатуры</li>
+                    <li><span class="b">region</span>: содержит идентификатор области или элемента, которая относится к событию</li>
+                    <li><span class="b">relatedTarget</span>: определяет вторичный источник возникновения события</li>
+                    <li><span class="b">screenX</span>: определяет координату Х относительно верхнего левого угла экрана монитора, на которой находился указатель мыши во время генерации события</li>
+                    <li><span class="b">screenY</span>: определяет координату Y относительно верхнего левого угла экрана монитора, на которой находился указатель мыши во время генерации события</li>
+                    <li><span class="b">shiftKey</span>: возвращает <code>true</code>, если была нажата клавиша Shift во время генерации события</li>
+                </ul>
+
+                <p></p>
+                <p>Определим координаты клика:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;style>
+    #blueRect{
+        width:100px;
+        height:100px;
+        background-color:blue;
+    }
+    &lt;/style>
+&lt;/head>
+&lt;body>
+&lt;div id="blueRect">&lt;/div>
+ 
+&lt;script>
+    function handleClick(e){
+        console.log("screenX: " + e.screenX);
+        console.log("screenY: " + e.screenY);
+        console.log("clientX: " + e.clientX);
+        console.log("clientY: " + e.clientY);
+    }
+    const blueRect = document.getElementById("blueRect");
+    blueRect.addEventListener("click", handleClick);
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>Еще примеры:</p>
+
                 <div class="code-block"><code>const box = document.querySelector('.box');
 
 // click - одиночный клик
@@ -5142,11 +5251,30 @@ box.addEventListener('contextmenu', (e) => {
                         <tbody>
                             <tr><td><code>keydown</code></td><td>возникает при нажатии клавиши клавиатуры и длится, пока нажата клавиша</td><td><code>KeyboardEvent</code></td></tr>
                             <tr><td><code>keyup</code></td><td>возникает при отпускании клавиши клавиатуры</td><td><code>KeyboardEvent</code></td></tr>
-                            <tr><td><code>keypress</code></td><td>возникает при нажатии клавиши клавиатуры, но после события keydown и до события keyup.</td><td><code>KeyboardEvent</code></td></tr>
+                            <tr><td><code>keypress</code></td><td>возникает при нажатии клавиши клавиатуры, но после события keydown и до события keyup. Надо учитывать, что данное событие генерируется только для тех клавиш, которые формируют вывод в виде символов, например, при печати символов. Нажатия на остальные клавиши, например, на Alt, не учитываются.</td><td><code>KeyboardEvent</code></td></tr>
                         </tbody>
                     </table>
                 </div>
 
+                <p>
+                    Для работы с событиями клавиатуры определен объект <span class="b">KeyboardEvent</span>, который добавляет к свойствам объекта Event ряд специфичных 
+                    для клавиатуры свойств:
+                </p>
+
+                <ul>
+                    <li><span class="b">altKey</span>: возвращает <code>true</code>, если была нажата клавиша Alt во время генерации события</li>
+                    <li><span class="b">key</span>: возвращает символ нажатой клавиши, например, при нажатии на клавишу "T" это свойство будет содержать "T". А 
+                    если нажата клавиша "Я", то это свойство будет содержать "Я"</p></li>
+                    <li><span class="b">code</span>: возвращает строковое представление нажатой клавиши физической клавиатуры QWERTY, например, при нажатии на клавишу "T" это свойство будет содержать "KeyT", 
+                    а при нажатии на клавишу ";" (точка запятой), то свойство возвратит "Semicolon".</p>
+                    <p>При использовании этого свойства следует учитывать ряд момент. Прежде всего используется клавиатура QWERTY. То есть мы переключим раскладку, к примеру, на русскоязычную и нажмем на клавишу "Я", то 
+                    значением будет "KeyZ" - на клавиатуре QWERTY клавиша Z представляет ту же клавишу, что и на русскоязычной раскладке "Я"</p>
+                    <p>Другой момент - учитывается именно физическая клавитура. Если нажата клавиша на виртуальной клавиатуре, 
+                    то возвращаемое значение будет устанавливаться браузером исходя из того, какой клавише на физической клавиатуре соответствовало нажатие.</li>
+                    <li><span class="b">ctrlKey</span>: возвращает <code>true</code>, если была нажата клавиша Ctrl во время генерации события</li>
+                    <li><span class="b">metaKey</span>: возвращает <code>true</code>, если была нажата во время генерации события метаклавиша клавиатуры</li>
+                    <li><span class="b">shiftKey</span>: возвращает <code>true</code>, если была нажата клавиша Shift во время генерации события</li>
+                </ul>
                 <div class="code-block"><code>const input = document.querySelector('input');
 
 // keydown - клавиша нажата
@@ -5197,6 +5325,167 @@ document.addEventListener('keydown', (e) => {
             break;
     }
 });</code></div>
+
+                <p>Например, мы можем с помощью клавиш клавиатуры перемещать элемент на веб-странице:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>KB EVENT EXAMP&lt;/title>
+    &lt;style>
+    #blueRect{
+        width:100px;
+        height:100px;
+        background-color:blue;
+    }
+    &lt;/style>
+&lt;/head>
+&lt;body>
+&lt;div id="blueRect">&lt;/div>
+ 
+&lt;script>
+const blueRect = document.getElementById("blueRect");
+// получаем стиль для blueRect
+const blueRectStyle = window.getComputedStyle(blueRect);
+// устанавливаем обработчик нажатия клавиши
+window.addEventListener("keydown", moveRect);
+ 
+function moveRect(e){
+    const left = parseInt(blueRectStyle.marginLeft); //смещение от левого края
+    const top = parseInt(blueRectStyle.marginTop);  // смещения от левой границы
+     
+    switch(e.key){
+         
+        case "ArrowLeft":  // если нажата клавиша влево
+            if(left>0)
+                blueRect.style.marginLeft = left - 10 + "px";
+            break;
+        case "ArrowUp":   // если нажата клавиша вверх
+            if(top>0)
+                blueRect.style.marginTop = top - 10 + "px";
+            break;
+        case "ArrowRight":   // если нажата клавиша вправо
+            if(left &lt; document.documentElement.clientWidth - 100)
+                blueRect.style.marginLeft = left + 10 + "px";
+            break;
+        case "ArrowDown":   // если нажата клавиша вниз
+            if(top &lt; document.documentElement.clientHeight - 100)
+                blueRect.style.marginTop = top + 10 + "px";
+            break;
+    }
+}
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>
+                    В данном случае обрабатывается событие <code>keydown</code>, в обработчке которого управляем стилевыми свойствами элемента blueRect. 
+                    Так как, при прикреплении обработчика стиль элемента может быть не установлен, то явным образом вычисляем его с помощью метода <code>window.getComputedStyle()</code>:
+                </p>
+
+                <div class="code-block"><code>const blueRectStyle = window.getComputedStyle(blueRect);</code></div>
+
+                <p>В обработчике события из этого стиля выбираем значения свойств marginLeft и marginTop.</p>
+
+                <div class="code-block"><code>const left = parseInt(blueRectStyle.marginLeft); //смещение от левого края
+ const top = parseInt(blueRectStyle.marginTop);   // смещения от левой границы</code></div>
+
+                <p>Затем м помощью свойства <code>e.key</code> получаем нажатую клавишу. Список кодов клавиш клавиатуры можно посмотреть на странице <a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values">https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values</a>.</p>
+                <p>
+                    Здесь нам интересуют четыре клавиши: вверх, вниз, влево, вправо. Им соответственно будут соответствовать названия "ArrowUp", "ArrowDown", "ArrowLeft" и "ArrowRight". Если одна из них 
+                    нажата, производим действия: увеличение или уменьшение отступа элемента от верхней или левой границы. Ну и чтобы элемент не выходил за границы окна, проверяем 
+                    предельные значения с помощью document.documentElement.clientWidth (ширина корневого элемента) и document.documentElement.clientHeight (высота корневого элемента).
+                </p>
+
+                <p>
+                    Стоит отметить, что этот код не очень оптимален, поскольку для проверки значений нам приходится вычислять положение blueRect по горизонтали и вертикали. Плюс необходимо вычислять 
+                    при каждом вызове обработчика проверяем правый (<code>document.documentElement.clientWidth - 100</code>) и нижний край (<code>document.documentElement.clientHeight - 100;</code> области документа, чтобы blueRect не вышел за предел видимого пространства. В этом случае мы можем добавить дополнительные абстракции в 
+                    виде текущих координат blueRect и положения правой и нижней границ видимой области.
+                </p>
+                <p>Так, изменим код JavaScript следующим образом:</p>
+
+                <div class="code-block"><code>const blueRect = document.getElementById("blueRect");
+const position = [20, 20];  // позиция blueRect
+ 
+// перемещаем blueRect на позицию в position
+function setPosition() { 
+    blueRect.style.marginLeft = position[0] + "px";  
+    blueRect.style.marginTop = position[1] + "px";   
+}
+ 
+function init(){
+    const rightLimit = document.documentElement.clientWidth - 100;  // правый край
+    const bottomLimit = document.documentElement.clientHeight - 100;    // нижний край
+ 
+    setPosition();  // устанавливаем начальную позицию для blueRect
+ 
+    function moveRect(e){
+        switch(e.key){
+          
+        case "ArrowLeft":  // если нажата клавиша влево
+            if(position[0] > 0)
+                position[0] = position[0] - 10;
+            break;
+        case "ArrowUp":   // если нажата клавиша вверх
+            if(position[1] > 0)
+                position[1] = position[1] - 10;
+            break;
+        case "ArrowRight":   // если нажата клавиша вправо
+            if(position[0] < rightLimit)
+                position[0] = position[0] + 10;
+            break;
+        case "ArrowDown":   // если нажата клавиша вниз
+            if(position[1] < bottomLimit)
+                position[1] = position[1] + 10;
+            break;
+        }
+        setPosition();
+    }
+    window.addEventListener("keydown", moveRect);
+}
+//  при загрузке страницы выполняем функцию init
+window.addEventListener("load", init);</code></div>
+
+                <p>
+                    Теперь координаты blueRect хранятся в массиве position, где первое значение - это отступ слева, а второе значение - отступ сверху. Чтобы по этим координатам 
+                    установить реальную позицию blueRect на странице определена функция setPosition.
+                </p>
+
+                <div class="code-block"><code>const position = [20, 20];  // позиция blueRect
+ 
+// перемещаем blueRect на позицию в position
+function setPosition() { 
+    blueRect.style.marginLeft = position[0] + "px";  
+    blueRect.style.marginTop = position[1] + "px";   
+}</code></div>
+
+                <p>Прикрепляем к событию загрузки окна - <span class="b">load</span> обработчик - функцию init:</p>
+
+                <div class="code-block"><code>window.addEventListener("load", init);</code></div>
+
+                <p>В функции init определяем правый и нижний край для перемещения blueRect, а также устанавливаем его начальную позицию:</p>
+
+                <div class="code-block"><code>const rightLimit = document.documentElement.clientWidth - 100;  // правый край
+const bottomLimit = document.documentElement.clientHeight - 100;    // нижний край
+setPosition();  // устанавливаем начальную позицию для blueRect</code></div>
+
+                <p>Далее определяем обработчик moveRect, в котором изменяем значения в массиве position:</p>
+
+                <div class="code-block"><code>function moveRect(e){
+    switch(e.key){
+          
+    case "ArrowLeft":  // если нажата клавиша влево
+        if(position[0] > 0)
+            position[0] = position[0] - 10;
+        break;
+    //............
+    }
+    setPosition();
+}</code></div>
+
+                <p>И после всех изменений переустанавливаем позицию с помощью функции setPosition.</p>
+                <p>В конце прикрепляем обработчик к нажатию клавиши клавиатуры:</p>
 
                 <h2 id="ch12-form-event">События форм</h2>
 
@@ -5722,12 +6011,120 @@ window.addEventListener('scroll', () => {
 
 
                 <h2 id="ch12-events-spread">Распространение (всплытие и погружение) событий</h2>
+
+                <p>
+                    Когда мы нажимаем на какой-либо элемент на станице и генерируется событие нажатия, то это событие может распространяться от элемента к элементу. 
+                    Например, если мы нажимаем на блок div, то также мы нажимаем и на элемент body, в котором блок div находится. То есть происходит распространение события.
+                </p>
+
                 <p>События в DOM проходят три фазы:</p>
                 <ol>
-                    <li><strong>Фаза захвата (capturing)</strong> — от window к целевому элементу</li>
+                    <li><strong>Фаза захвата (нисходящее/capturing)</strong> — от window к целевому элементу: событие распространяется вверх по дереву DOM от дочерних узлов к родительским</li>
                     <li><strong>Фаза цели (target)</strong> — на самом элементе</li>
-                    <li><strong>Фаза всплытия (bubbling)</strong> — от целевого элемента к window</li>
+                    <li><strong>Фаза всплытия (восходящее/bubbling)</strong> — от целевого элемента к window: событие распространяется вниз по дереву DOM от родительских узлов к дочерним, пока не достигнет того элемента, на котором это событие и возникло</li>
                 </ol>
+
+                <h3>Восходящие события</h3>
+                <p>Восходящие (bubbling) события: распространяются в верх по дереву DOM. Допустим, у нас есть следующая веб-страница:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>BUBBLING EVENT EXAMP&lt;/title>
+    &lt;style>
+    #blueRect{
+        width:100px;
+        height:100px;
+        background-color:blue;
+    }
+    #redRect{
+        width:50px;
+        height:50px;
+        background-color:red;
+    }
+    &lt;/style>
+&lt;/head>
+&lt;body>
+    &lt;div id="blueRect">
+        &lt;div id="redRect">&lt;/div>
+    &lt;/div>
+    &lt;script>
+        const redRect = document.getElementById("redRect");
+        redRect.addEventListener("click", () => console.log("Событие на redRect"));
+        
+        const blueRect = document.getElementById("blueRect");
+        blueRect.addEventListener("click", ()=>console.log("Событие на blueRect"));
+        
+        document.body.addEventListener("click", () => console.log("Событие на body"));
+    &lt;/script>
+&lt;/body>
+&lt;/html>
+
+// Событие на redRect
+// Событие на blueRect
+// Событие на body
+</code></div>
+
+                <p>Если мы нажмем на вложенный (красный) div, то событие пойдет к родительскому элементу div и далее к элементу body:</p>
+
+                <p>
+                    Подобное поведение не всегда является желательным. И в этом случае мы можем остановить распространение событие с помощью 
+                    метода <span class="b">stopPropagation()</span> объекта Event:
+                </p>
+
+                <div class="code-block"><code>const redRect = document.getElementById("redRect");
+redRect.addEventListener("click", function(e){
+    console.log("Событие на redRect");
+    e.stopPropagation();
+});</code></div>
+
+                <p>И в результате нажатия событие будет обработано только обработчиком для redRect.</p>
+                <p>
+                    Правда, у <code>stopPropagation()</code> есть одна проблема - он приостанавливает дальнейшее выполнение <span class="b">текущего</span> обработчика. Однако если 
+                    для одного и того же события элемента прикреплены несколько обработчиков событий, то остальные обработчики продолжат выполняться. И чтобы оставить также 
+                    выполнение всех остальных обработчиков подобных образом можно вызывать метод <span class="b">stopImmediatePropagation</span>
+                </p>
+
+                <div class="code-block"><code>const redRect = document.getElementById("redRect");
+function handler1(e){
+    console.log("handler1: Событие на redRect");
+    e.stopImmediatePropagation();   // останавливаем также выполнение handler2
+}
+function handler2(e){
+    console.log("handler2: Событие на redRect");
+}
+redRect.addEventListener("click", handler1);
+redRect.addEventListener("click", handler2);</code></div>
+
+                <h3>Нисходящие события</h3>
+
+                <p>
+                    События также могут быть нисходящими (capturing). Для их использования в метод <span class="b">addEventListener()</span> в качестве третьего 
+                    необязательного параметра передается логическое значение true или false. Значение <span class="b">true</span> указывает, что событие нисходящим. 
+                    По умолчанию все события восходящие.
+                </p>
+                <p>Возьмем ту же веб-станицу, только изменим ее код javascript:</p>
+
+                <div class="code-block"><code>const redRect = document.getElementById("redRect");
+redRect.addEventListener("click", function(){
+    console.log("Событие на redRect");
+}, true);
+ 
+const blueRect = document.getElementById("blueRect");
+blueRect.addEventListener("click", function(){
+    console.log("Событие на blueRect");
+}, true);
+ 
+document.body.addEventListener("click", function(){
+    console.log("Событие на body");
+}, true);
+
+ // Событие на body
+ // Событие на blueRect                    
+ // Событие на redRect</code></div>
+
+                <p>Теперь события будут распространяться в обратном порядке:</p>
 
                 <div class="code-block"><code>&lt;div class="outer"&gt;
     &lt;div class="inner"&gt;
@@ -5780,7 +6177,7 @@ outer.addEventListener('click', () => {
 // target: button (на чём кликнули)
 // currentTarget: outer (где висит обработчик)</code></div>
 
-                <h2>Остановка всплытия</h2>
+                <h2 id="ch12-stop-bubbling">Остановка всплытия</h2>
                 <div class="code-block"><code>button.addEventListener('click', (e) => {
     e.stopPropagation(); // Остановить всплытие
     console.log('Button clicked');
@@ -5802,7 +6199,7 @@ button.addEventListener('click', (e) => {
                     <p>Остановка всплытия может сломать аналитику, модальные окна и другие системы, которые слушают события на document. Используйте только когда точно понимаете, что делаете.</p>
                 </div>
 
-                <h2>Отмена действия по умолчанию</h2>
+                <h2 id="ch12-cansel-default">Отмена действия по умолчанию</h2>
                 <div class="code-block"><code>// Отменить переход по ссылке
 const link = document.querySelector('a');
 link.addEventListener('click', (e) => {
@@ -5828,7 +6225,7 @@ element.addEventListener('click', (e) => {
     }
 });</code></div>
 
-                <h2>Делегирование событий</h2>
+                <h2 id="ch12-delegation">Делегирование событий</h2>
                 <p>Вместо назначения обработчика каждому элементу, назначаем один обработчик родителю и используем <code>event.target</code>.</p>
 
                 <div class="code-block"><code>&lt;ul id="menu"&gt;
@@ -5891,6 +6288,70 @@ container.addEventListener('click', (e) => {
 });
 &lt;/script&gt;</code></div>
 
+                <h2 id="ch12-dispatch-event">Программный вызов событий</h2>
+
+                <p>События могут возникать не только в следствие действий пользователя на веб-странице. События также можно генерировать программно.</p>
+                <p>
+                    Чтобы программно вызвать событие, у элемента на веб-странице можно вызвать метод <span class="b">dispatchEvent()</span>, в который передается 
+                    экземпляр объекта <span class="b">Event</span> (либо его производные типа MouseEvent или KeybordEvent).
+                </p>
+
+                <div class="code-block"><code>const event = new Event(имя_события, config);   //  определяем объект события
+element.dispatchEvent(event);   //   вызываем событие для элемента element</code></div>
+
+                <p>
+                    Первый аргумент, передаваемый конструктору Event, представляет собой строку - тип события. Дополнительно в качестве второго параметра можно передать 
+                    объект конфигурации. В частности, с помощью объекта конфигурации можно определить следующие свойства:
+                </p>
+
+                <ul>
+                    <li><code>cancelable</code>: можно ли событие отменить (если true, то отменяемое событие, false - неотменяемое)</li>
+                    <li><code>bubbles</code>: должно ли событие быть восходящим (если true, то восходящее)</li>
+                </ul>
+
+                <p>Например, программно нажмем на ссылку:</p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;a id="link" href="https://metanit.com">Metanit.com&lt;/a>
+    &lt;script>
+        const link = document.getElementById("link");   // получаем ссылку
+        const event = new MouseEvent("click");
+        link.dispatchEvent(event);
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>Нажатие на ссылку представляет событие мыши "click", поэтому определяем объект события типа MouseEvent:</p>
+
+                <div class="code-block"><code>const event = new MouseEvent("click");</code></div>
+
+                <p>Затем вызываем событие для элемента link:</p>
+
+                <div class="code-block"><code>link.dispatchEvent(event);</code></div>
+
+                <p>В итоге произойдет переход по ссылке уже при загрузке страницы.</p>
+
+                <p>И как в общем случае, это событие также можно обработать:</p>
+                <div class="code-block"><code>&lt;body>
+    &lt;a id="link" href="https://metanit.com">Metanit.com&lt;/a>
+    &lt;script>
+    const link = document.getElementById("link");
+ 
+    link.addEventListener("click", (e)=>{
+        console.log("Link has been clicked");
+        e.preventDefault();     // предупреждаем переход
+    });
+ 
+    const event = new MouseEvent("click", {cancelable:true});
+    link.dispatchEvent(event);
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    Чтобы выполнение события можно было остановить, в конструктор MouseEvent в качестве второго параметра передаем конфигурационных объект с одним свойством: 
+                    <code>cancelable:true</code> указывает, что можно остановить обработку события. Благодаря этому в обработчике события "click" можно вызвать метод  <code>e.preventDefault()</code>
+                </p>
+
+                
                 <h2>Пользовательские события</h2>
                 <div class="code-block"><code>// Создать пользовательское событие
 const myEvent = new CustomEvent('myevent', {
