@@ -554,7 +554,26 @@
                                 <li class="nav-subitem" data-target="ch12-practical-examp">📜 Практические примеры</li>
                             </ul>
                         </li>
-                        <li class="nav-item" data-target="ch13">Глава 13. Формы</li>
+                        <li class="nav-item has-subitems" data-target="ch13"><span class="ch-emoj"></span>Глава 13. Формы
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch13-forms&elements">📜 Формы и их элементы</li>
+                                <li class="nav-subitem" data-target="ch13-get-set-value">📜 Получение и установка значений</li>
+                                <li class="nav-subitem" data-target="ch13-event-obj">📜 Объект события (Event)</li>
+                                <li class="nav-subitem" data-target="ch13-mouse-event">📜 События мыши</li>
+                                <li class="nav-subitem" data-target="ch13-kb-event">📜 События клавиатуры</li>
+                                <li class="nav-subitem" data-target="ch13-form-event">📜 События форм</li>
+                                <li class="nav-subitem" data-target="ch13-doc-win-event">📜 События документа и окна</li>
+                                <li class="nav-subitem" data-target="ch13-event-handlers">📜 Обработчики событий</li>
+                                <li class="nav-subitem" data-target="ch13-event-object">📜 Передача данных в обработчик события. Объект Event</li>
+                                <li class="nav-subitem" data-target="ch13-events-spread">📜 Всплытие и погружение событий</li>
+                                <li class="nav-subitem" data-target="ch13-stop-bubbling">📜 Остановка всплытия</li>
+                                <li class="nav-subitem" data-target="ch13-cansel-default">📜 Отмена действия по умолчанию</li>
+                                <li class="nav-subitem" data-target="ch13-delegation">📜 Делегирование событий</li>
+                                <li class="nav-subitem" data-target="ch13-dispatch-event">📜 Программный вызов событий</li>
+                                <li class="nav-subitem" data-target="ch13-custom-events">📜 Пользовательские события</li>
+                                <li class="nav-subitem" data-target="ch13-practical-examp">📜 Практические примеры</li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
 
@@ -3636,7 +3655,7 @@ console.log(styles.color);<code class="comment">           // Вычисленн
 console.log(styles.backgroundColor);<code class="comment"> // Вычисленный фон</code>
 console.log(styles.width);<code class="comment">           // Вычисленная ширина</code>
 
-<code class="comment">//</code> Псевдоэлементы
+<code class="comment">// Псевдоэлементы</code>
 const beforeStyles = getComputedStyle(div, '::before');
 console.log(beforeStyles.content);</code></div>
 
@@ -4972,19 +4991,19 @@ function handleClick() {
                 <h3>2. DOM-свойства</h3>
                 <div class="code-block"><code>const button = document.querySelector('button');
 
-// Назначить обработчик
+<code class="comment">// Назначить обработчик</code>
 button.onclick = function() {
     alert('Кнопка нажата!');
 };
 
-// Можно использовать именованную функцию
+<code class="comment">// Можно использовать именованную функцию</code>
 function handleClick() {
     alert('Клик!');
 }
 
 button.onclick = handleClick;
 
-// Удалить обработчик
+<code class="comment">// Удалить обработчик</code>
 button.onclick = null;</code></div>
 
                 <div class="info-box warning">
@@ -4995,24 +5014,24 @@ button.onclick = null;</code></div>
                 <h3>3. addEventListener (рекомендуется)</h3>
                 <div class="code-block"><code>const button = document.querySelector('button');
 
-// Добавить обработчик
+<code class="comment">// Добавить обработчик</code>
 button.addEventListener('click', function() {
     alert('Первый обработчик');
 });
 
-// Можно добавить несколько обработчиков
+<code class="comment">// Можно добавить несколько обработчиков</code>
 button.addEventListener('click', function() {
     alert('Второй обработчик');
 });
 
-// С именованной функцией
+<code class="comment">// С именованной функцией</code>
 function handleClick() {
     console.log('Клик обработан');
 }
 
 button.addEventListener('click', handleClick);
 
-// Удалить обработчик (нужна ссылка на функцию)
+<code class="comment">// Удалить обработчик (нужна ссылка на функцию)</code>
 button.removeEventListener('click', handleClick);</code></div>
 
                 <div class="info-box success">
@@ -5027,16 +5046,16 @@ button.removeEventListener('click', handleClick);</code></div>
 
                 <h2 id="ch12-event-obj">Объект события (Event)</h2>
                 <div class="code-block"><code>button.addEventListener('click', function(event) {
-    // event (или e) - объект события
+    <code class="comment">//</code> event (или e) - объект события
     
-    console.log(event.type);        // "click"
-    console.log(event.target);      // Элемент, который вызвал событие
-    console.log(event.currentTarget); // Элемент, к которому привязан обработчик
+    console.log(event.type);<code class="comment">        // "click"</code>
+    console.log(event.target);<code class="comment">      // Элемент, который вызвал событие</code>
+    console.log(event.currentTarget);<code class="comment"> // Элемент, к которому привязан обработчик</code>
     
-    console.log(event.clientX);     // X-координата мыши
-    console.log(event.clientY);     // Y-координата мыши
+    console.log(event.clientX);<code class="comment">     // X-координата мыши</code>
+    console.log(event.clientY);<code class="comment">     // Y-координата мыши</code>
     
-    console.log(event.timeStamp);   // Время события
+    console.log(event.timeStamp);<code class="comment">   // Время события</code>
 });</code></div>
 
                 <h3>Свойства объекта события</h3>
@@ -5210,44 +5229,44 @@ button.removeEventListener('click', handleClick);</code></div>
 
                 <div class="code-block"><code>const box = document.querySelector('.box');
 
-// click - одиночный клик
+<code class="comment">// click - одиночный клик</code>
 box.addEventListener('click', (e) => {
     console.log('Клик!');
 });
 
-// dblclick - двойной клик
+<code class="comment">// dblclick - двойной клик</code>
 box.addEventListener('dblclick', (e) => {
     console.log('Двойной клик!');
 });
 
-// mouseover - курсор заходит на элемент
+<code class="comment">// mouseover - курсор заходит на элемент</code>
 box.addEventListener('mouseover', (e) => {
     box.style.backgroundColor = 'lightblue';
 });
 
-// mouseout - курсор уходит с элемента
+<code class="comment">// mouseout - курсор уходит с элемента</code>
 box.addEventListener('mouseout', (e) => {
     box.style.backgroundColor = '';
 });
 
-// mousemove - движение мыши над элементом
+<code class="comment">// mousemove - движение мыши над элементом</code>
 box.addEventListener('mousemove', (e) => {
     console.log(`X: ${e.clientX}, Y: ${e.clientY}`);
 });
 
-// mousedown - кнопка мыши нажата
+<code class="comment">// mousedown - кнопка мыши нажата</code>
 box.addEventListener('mousedown', (e) => {
     console.log('Кнопка нажата');
 });
 
-// mouseup - кнопка мыши отпущена
+<code class="comment">// mouseup - кнопка мыши отпущена</code>
 box.addEventListener('mouseup', (e) => {
     console.log('Кнопка отпущена');
 });
 
-// contextmenu - правый клик (контекстное меню)
+<code class="comment">// contextmenu - правый клик (контекстное меню)</code>
 box.addEventListener('contextmenu', (e) => {
-    e.preventDefault(); // Отменить стандартное меню
+    e.preventDefault();<code class="comment"> // Отменить стандартное меню</code>
     console.log('Правый клик');
 });</code></div>
 
@@ -5302,28 +5321,28 @@ box.addEventListener('contextmenu', (e) => {
                 </ul>
                 <div class="code-block"><code>const input = document.querySelector('input');
 
-// keydown - клавиша нажата
+<code class="comment">// keydown - клавиша нажата</code>
 input.addEventListener('keydown', (e) => {
-    console.log('Нажата:', e.key);      // Символ клавиши
-    console.log('Код:', e.code);        // Физическая клавиша
-    console.log('KeyCode:', e.keyCode); // Устаревший код
+    console.log('Нажата:', e.key);<code class="comment">      // Символ клавиши</code>
+    console.log('Код:', e.code);<code class="comment">        // Физическая клавиша</code>
+    console.log('KeyCode:', e.keyCode);<code class="comment"> // Устаревший код</code>
 });
 
-// keyup - клавиша отпущена
+<code class="comment">// keyup - клавиша отпущена</code>
 input.addEventListener('keyup', (e) => {
     console.log('Отпущена:', e.key);
 });
 
-// keypress - клавиша нажата (устарел, не использовать)
+<code class="comment">// keypress - клавиша нажата (устарел, не использовать)</code>
 
-// Проверка модификаторов
+<code class="comment">// Проверка модификаторов</code>
 document.addEventListener('keydown', (e) => {
     if (e.ctrlKey) console.log('Ctrl зажат');
     if (e.shiftKey) console.log('Shift зажат');
     if (e.altKey) console.log('Alt зажат');
     if (e.metaKey) console.log('Meta/Cmd зажат');
     
-    // Комбинация Ctrl+S
+    <code class="comment">// Комбинация Ctrl+S</code>
     if (e.ctrlKey && e.key === 's') {
         e.preventDefault();
         console.log('Сохранение...');
@@ -5371,30 +5390,30 @@ document.addEventListener('keydown', (e) => {
  
 &lt;script>
 const blueRect = document.getElementById("blueRect");
-// получаем стиль для blueRect
+<code class="comment">// получаем стиль для blueRect</code>
 const blueRectStyle = window.getComputedStyle(blueRect);
-// устанавливаем обработчик нажатия клавиши
+<code class="comment">// устанавливаем обработчик нажатия клавиши</code>
 window.addEventListener("keydown", moveRect);
  
 function moveRect(e){
-    const left = parseInt(blueRectStyle.marginLeft); //смещение от левого края
-    const top = parseInt(blueRectStyle.marginTop);  // смещения от левой границы
+    const left = parseInt(blueRectStyle.marginLeft);<code class="comment"> // смещение от левого края</code>
+    const top = parseInt(blueRectStyle.marginTop);<code class="comment">   // смещения от верхней границы</code>
      
     switch(e.key){
          
-        case "ArrowLeft":  // если нажата клавиша влево
+        case "ArrowLeft":<code class="comment">  // если нажата клавиша влево</code>
             if(left>0)
                 blueRect.style.marginLeft = left - 10 + "px";
             break;
-        case "ArrowUp":   // если нажата клавиша вверх
+        case "ArrowUp":<code class="comment">    // если нажата клавиша вверх</code>
             if(top>0)
                 blueRect.style.marginTop = top - 10 + "px";
             break;
-        case "ArrowRight":   // если нажата клавиша вправо
+        case "ArrowRight":<code class="comment">  // если нажата клавиша вправо</code>
             if(left &lt; document.documentElement.clientWidth - 100)
                 blueRect.style.marginLeft = left + 10 + "px";
             break;
-        case "ArrowDown":   // если нажата клавиша вниз
+        case "ArrowDown":<code class="comment">   // если нажата клавиша вниз</code>
             if(top &lt; document.documentElement.clientHeight - 100)
                 blueRect.style.marginTop = top + 10 + "px";
             break;
@@ -5413,8 +5432,8 @@ function moveRect(e){
 
                 <p>В обработчике события из этого стиля выбираем значения свойств marginLeft и marginTop.</p>
 
-                <div class="code-block"><code>const left = parseInt(blueRectStyle.marginLeft); //смещение от левого края
- const top = parseInt(blueRectStyle.marginTop);   // смещения от левой границы</code></div>
+                <div class="code-block"><code>const left = parseInt(blueRectStyle.marginLeft);<code class="comment"> // смещение от левого края</code>
+ const top = parseInt(blueRectStyle.marginTop);<code class="comment">   // смещения от верхней границы</code></code></div>
 
                 <p>Затем м помощью свойства <code>e.key</code> получаем нажатую клавишу. Список кодов клавиш клавиатуры можно посмотреть на странице <a href="https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values">https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values</a>.</p>
                 <p>
@@ -5431,36 +5450,36 @@ function moveRect(e){
                 <p>Так, изменим код JavaScript следующим образом:</p>
 
                 <div class="code-block"><code>const blueRect = document.getElementById("blueRect");
-const position = [20, 20];  // позиция blueRect
+const position = [20, 20];<code class="comment">  // позиция blueRect</code>
  
-// перемещаем blueRect на позицию в position
+<code class="comment">// перемещаем blueRect на позицию в position</code>
 function setPosition() { 
     blueRect.style.marginLeft = position[0] + "px";  
     blueRect.style.marginTop = position[1] + "px";   
 }
  
 function init(){
-    const rightLimit = document.documentElement.clientWidth - 100;  // правый край
-    const bottomLimit = document.documentElement.clientHeight - 100;    // нижний край
+    const rightLimit = document.documentElement.clientWidth - 100;<code class="comment">   // правый край</code>
+    const bottomLimit = document.documentElement.clientHeight - 100;<code class="comment"> // нижний край</code>
  
-    setPosition();  // устанавливаем начальную позицию для blueRect
+    setPosition();<code class="comment">  // устанавливаем начальную позицию для blueRect</code>
  
     function moveRect(e){
         switch(e.key){
           
-        case "ArrowLeft":  // если нажата клавиша влево
+        case "ArrowLeft":<code class="comment">  // если нажата клавиша влево</code>
             if(position[0] > 0)
                 position[0] = position[0] - 10;
             break;
-        case "ArrowUp":   // если нажата клавиша вверх
+        case "ArrowUp":<code class="comment">    // если нажата клавиша вверх</code>
             if(position[1] > 0)
                 position[1] = position[1] - 10;
             break;
-        case "ArrowRight":   // если нажата клавиша вправо
+        case "ArrowRight":<code class="comment">  // если нажата клавиша вправо</code>
             if(position[0] < rightLimit)
                 position[0] = position[0] + 10;
             break;
-        case "ArrowDown":   // если нажата клавиша вниз
+        case "ArrowDown":<code class="comment">   // если нажата клавиша вниз</code>
             if(position[1] < bottomLimit)
                 position[1] = position[1] + 10;
             break;
@@ -5469,7 +5488,7 @@ function init(){
     }
     window.addEventListener("keydown", moveRect);
 }
-//  при загрузке страницы выполняем функцию init
+<code class="comment">//  при загрузке страницы выполняем функцию init</code>
 window.addEventListener("load", init);</code></div>
 
                 <p>
@@ -5477,9 +5496,9 @@ window.addEventListener("load", init);</code></div>
                     установить реальную позицию blueRect на странице определена функция setPosition.
                 </p>
 
-                <div class="code-block"><code>const position = [20, 20];  // позиция blueRect
+                <div class="code-block"><code>const position = [20, 20];<code class="comment">  // позиция blueRect</code>
  
-// перемещаем blueRect на позицию в position
+<code class="comment">// перемещаем blueRect на позицию в position</code>
 function setPosition() { 
     blueRect.style.marginLeft = position[0] + "px";  
     blueRect.style.marginTop = position[1] + "px";   
@@ -5491,20 +5510,20 @@ function setPosition() {
 
                 <p>В функции init определяем правый и нижний край для перемещения blueRect, а также устанавливаем его начальную позицию:</p>
 
-                <div class="code-block"><code>const rightLimit = document.documentElement.clientWidth - 100;  // правый край
-const bottomLimit = document.documentElement.clientHeight - 100;    // нижний край
-setPosition();  // устанавливаем начальную позицию для blueRect</code></div>
+                <div class="code-block"><code>const rightLimit = document.documentElement.clientWidth - 100;<code class="comment">  // правый край</code>
+const bottomLimit = document.documentElement.clientHeight - 100;<code class="comment">    // нижний край</code>
+setPosition();<code class="comment">  // устанавливаем начальную позицию для blueRect</code></code></div>
 
                 <p>Далее определяем обработчик moveRect, в котором изменяем значения в массиве position:</p>
 
                 <div class="code-block"><code>function moveRect(e){
     switch(e.key){
           
-    case "ArrowLeft":  // если нажата клавиша влево
+    case "ArrowLeft":<code class="comment">  // если нажата клавиша влево</code>
         if(position[0] > 0)
             position[0] = position[0] - 10;
         break;
-    //............
+    <code class="comment">//............</code>
     }
     setPosition();
 }</code></div>
@@ -5557,37 +5576,37 @@ setPosition();  // устанавливаем начальную позицию 
                 <div class="code-block"><code>const form = document.querySelector('form');
 const input = document.querySelector('input');
 
-// submit - отправка формы
+<code class="comment">// submit - отправка формы</code>
 form.addEventListener('submit', (e) => {
-    e.preventDefault(); // Отменить стандартную отправку
+    e.preventDefault(); <code class="comment">// Отменить стандартную отправку</code>
     console.log('Форма отправлена');
     
-    // Собрать данные формы
+    <code class="comment">// Собрать данные формы</code>
     const formData = new FormData(form);
     console.log(Object.fromEntries(formData));
 });
 
-// focus - элемент получил фокус
+<code class="comment">// focus - элемент получил фокус</code>
 input.addEventListener('focus', (e) => {
     e.target.style.borderColor = 'blue';
 });
 
-// blur - элемент потерял фокус
+<code class="comment">// blur - элемент потерял фокус</code>
 input.addEventListener('blur', (e) => {
     e.target.style.borderColor = '';
 });
 
-// input - значение изменилось (в реальном времени)
+<code class="comment">// input - значение изменилось (в реальном времени)</code>
 input.addEventListener('input', (e) => {
     console.log('Текущее значение:', e.target.value);
 });
 
-// change - значение изменилось (после потери фокуса)
+<code class="comment">// change - значение изменилось (после потери фокуса)</code>
 input.addEventListener('change', (e) => {
     console.log('Финальное значение:', e.target.value);
 });
 
-// select для &lt;select&gt;
+<code class="comment">// select для &lt;select&gt;</code>
 const select = document.querySelector('select');
 select.addEventListener('change', (e) => {
     console.log('Выбрано:', e.target.value);
@@ -5647,28 +5666,28 @@ select.addEventListener('change', (e) => {
                     </table>
                 </div>
 
-                <div class="code-block"><code>// DOMContentLoaded - DOM загружен (без стилей/картинок)
+                <div class="code-block"><code><code class="comment">// DOMContentLoaded - DOM загружен (без стилей/картинок)</code>
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM готов!');
 });
 
-// load - всё загружено (включая стили/картинки)
+<code class="comment">// load - всё загружено (включая стили/картинки)</code>
 window.addEventListener('load', () => {
     console.log('Страница полностью загружена');
 });
 
-// beforeunload - перед закрытием/перезагрузкой
+<code class="comment">// beforeunload - перед закрытием/перезагрузкой</code>
 window.addEventListener('beforeunload', (e) => {
     e.preventDefault();
-    e.returnValue = ''; // Показать диалог "Покинуть страницу?"
+    e.returnValue = '';<code class="comment"> // Показать диалог "Покинуть страницу?"</code>
 });
 
-// resize - изменение размера окна
+<code class="comment">// resize - изменение размера окна</code>
 window.addEventListener('resize', () => {
     console.log(`Ширина: ${window.innerWidth}px`);
 });
 
-// scroll - прокрутка страницы
+<code class="comment">// scroll - прокрутка страницы</code>
 window.addEventListener('scroll', () => {
     console.log(`Прокручено: ${window.scrollY}px`);
 });</code></div>
@@ -5709,7 +5728,7 @@ window.addEventListener('scroll', () => {
                 <div class="code-block"><code>&lt;body>
     &lt;button onclick="btn_click()">Click Me&lt;/div>
     &lt;script>
-        let clicks = 0;     // счетчик нажатий
+        let clicks = 0;<code class="comment">     // счетчик нажатий</code>
         function btn_click(){
             console.log("Clicked", ++clicks);
         }
@@ -5737,11 +5756,11 @@ window.addEventListener('scroll', () => {
                 <div class="code-block"><code>&lt;body>
     &lt;button id="btn">Click Me&lt;/div>
     &lt;script>
-        let clicks = 0;     // счетчик нажатий
+        let clicks = 0;<code class="comment">     // счетчик нажатий</code>
         function btn_click(){
             console.log("Clicked", ++clicks);
         }
-        // устанавливаем обработчик нажатия для элемента с id="btn"
+        <code class="comment">// устанавливаем обработчик нажатия для элемента с id="btn"</code>
         document.getElementById("btn").onclick = btn_click; 
     &lt;/script>
 &lt;/body>
@@ -5768,12 +5787,12 @@ window.addEventListener('scroll', () => {
                 <div class="code-block"><code>&lt;body>
     &lt;button id="btn">Click Me&lt;/div>
     &lt;script>
-        let clicks = 0;     // счетчик нажатий
+        let clicks = 0;<code class="comment">     // счетчик нажатий</code>
         function btn_click(){
             console.log("Clicked", ++clicks);
         }
         const btn = document.getElementById("btn");
-        // прикрепляем обработчик события "click"
+        <code class="comment">// прикрепляем обработчик события "click"</code>
         btn.addEventListener("click", btn_click);
     &lt;/script>
 &lt;/body>
@@ -5788,21 +5807,21 @@ window.addEventListener('scroll', () => {
                 <div class="code-block"><code>&lt;body>
     &lt;button id="btn">Click Me&lt;/div>
     &lt;script>
-        let clicks = 0;     // счетчик нажатий
+        let clicks = 0;<code class="comment">     // счетчик нажатий</code>
         function btn_click(){
             console.log("Clicked", ++clicks);
         }
         const btn = document.getElementById("btn");
     
-        // прикрепляем первый обработчик события "click" в виде функции btn_click
+        <code class="comment">// прикрепляем первый обработчик события "click" в виде функции btn_click</code>
         btn.addEventListener("click", btn_click);
     
-        // прикрепляем второй обработчик события "click" в виде анонимной функции
+        <code class="comment">// прикрепляем второй обработчик события "click" в виде анонимной функции</code>
         btn.addEventListener("click", function(){
             console.log("Button clicked!")
         });
     
-        // прикрепляем третий обработчик события "click" в виде стрелочной функции
+        <code class="comment">// прикрепляем третий обработчик события "click" в виде стрелочной функции</code>
         btn.addEventListener("click", ()=>console.log("Element clicked!"));
  
     &lt;/script>
@@ -5818,9 +5837,9 @@ window.addEventListener('scroll', () => {
                 <div class="code-block"><code>&lt;body>
     &lt;button id="btn" onclick="btn_click('Button Clicked')">Click Me&lt;/button>
     &lt;script>
-        // в обработчик передается текст
+        <code class="comment">// в обработчик передается текст</code>
         function btn_click(text){
-            console.log(text);  // выводим этот текст
+            console.log(text);<code class="comment">  // выводим этот текст</code>
         }
     &lt;/script>
 &lt;/body></code></div>
@@ -5832,7 +5851,7 @@ window.addEventListener('scroll', () => {
                 <p>В функции обработчика получаем этот текст и некоторым образом его используем, например, выводим на консоль:</p>
 
                 <div class="code-block"><code>function btn_click(text){
-    console.log(text);  // выводим этот текст
+    console.log(text);<code class="comment">  // выводим этот текст</code>
 }</code></div>
 
                 <p>
@@ -5843,10 +5862,10 @@ window.addEventListener('scroll', () => {
                 <div class="code-block"><code>&lt;body>
     &lt;button id="btn" onclick="btn_click(this)">Click Me&lt;/button>
     &lt;script>
-        let clicks = 0;     // счетчик нажатий
-        // в обработчик передается ссылка на элемент кнопки
+        let clicks = 0;<code class="comment">     // счетчик нажатий</code>
+        <code class="comment">// в обработчик передается ссылка на элемент кнопки</code>
         function btn_click(btn){
-            // изменяем текст кнопки
+            <code class="comment">// изменяем текст кнопки</code>
             btn.textContent = `Clicked ${++clicks}`;
         }
         &lt;/script>
@@ -5861,11 +5880,11 @@ window.addEventListener('scroll', () => {
                 <div class="code-block"><code>&lt;body>
     &lt;a id="link" href="https://metanit.com" onclick="return a_click(this)">Metanit.com&lt;/a>
     &lt;script>
-        // в обработчик передается ссылка
+        <code class="comment">// в обработчик передается ссылка</code>
         function a_click(anchor){
-            // получаем адрес ссылки
+            <code class="comment">// получаем адрес ссылки</code>
             console.log(anchor.href);
-            return false;   // запрещаем переадресацию
+            return false;<code class="comment">   // запрещаем переадресацию</code>
         }
     &lt;/script>
 &lt;/body></code></div>
@@ -5878,7 +5897,7 @@ window.addEventListener('scroll', () => {
 
                 <div class="code-block"><code>function a_click(anchor){
     console.log(anchor.href);
-    return false;   // запрещаем переадресацию
+    return false;<code class="comment">   // запрещаем переадресацию</code>
 }</code></div>
 
                 <p>
@@ -5950,8 +5969,8 @@ window.addEventListener('scroll', () => {
                 <p>В данном случае просто выводим объект на консоль. Но естественно также можно было бы получить отдельную конкретную информацию о событии:</p>
 
                 <div class="code-block"><code>function btn_click(e){
-    console.log("Type:", e.type);       // Type: click
-    console.log("Target:", e.target);   // Target: &lt;button onclick=​"btn_click(event)​">​Click Me​&lt;/button>​
+    console.log("Type:", e.type);<code class="comment">      // Type: click</code>
+    console.log("Target:", e.target);<code class="comment">  // Target: &lt;button onclick=​"btn_click(event)​">​Click Me​&lt;/button>​</code>
     console.log("Timestamp:", e.timeStamp);
 }</code></div>
 
@@ -5968,7 +5987,7 @@ window.addEventListener('scroll', () => {
         console.log("Target:", e.target);
         console.log("Timestamp:", e.timeStamp);
     }
-    // устанавливаем обработчик нажатия для элемента с id="btn"
+    <code class="comment">// устанавливаем обработчик нажатия для элемента с id="btn"</code>
     document.getElementById("btn").onclick = btn_click; 
 &lt;/script></code></div>
 
@@ -5982,7 +6001,7 @@ window.addEventListener('scroll', () => {
         console.log("Timestamp:", e.timeStamp);
     }
     const btn = document.getElementById("btn");
-    // прикрепляем обработчик события "click"
+    <code class="comment">// прикрепляем обработчик события "click"</code>
     btn.addEventListener("click", btn_click);
 &lt;/script></code></div>
 
@@ -6000,7 +6019,7 @@ window.addEventListener('scroll', () => {
 &lt;script>
     function linkHandler(e){
         console.log("Link has been clicked");
-        e.preventDefault();     // останавливаем переход по ссылке
+        e.preventDefault();<code class="comment">     // останавливаем переход по ссылке</code>
     }
     const link = document.getElementById("link");
     link.addEventListener("click", linkHandler);
@@ -6020,7 +6039,7 @@ window.addEventListener('scroll', () => {
 &lt;script>
     const btn = document.getElementById("btn");
     function btn_click(){
-        console.log(this);  //  &lt;button id="btn">Click Me&lt;/button>
+        console.log(this);<code class="comment">  // &lt;button id="btn">Click Me&lt;/button></code>
     }
     btn.addEventListener("click", btn_click);
 &lt;/script></code></div>
@@ -6031,7 +6050,7 @@ window.addEventListener('scroll', () => {
                 </p>
 
                 <div class="code-block"><code>function btn_click(e){
-    console.log(this===e.target); // true
+    console.log(this===e.target);<code class="comment"> // true</code>
 }</code></div>
 
 
@@ -6086,9 +6105,9 @@ window.addEventListener('scroll', () => {
 &lt;/body>
 &lt;/html>
 
-// Событие на redRect
-// Событие на blueRect
-// Событие на body
+<code class="comment">// Событие на redRect</code>
+<code class="comment">// Событие на blueRect</code>
+<code class="comment">// Событие на body</code>
 </code></div>
 
                 <p>Если мы нажмем на вложенный (красный) div, то событие пойдет к родительскому элементу div и далее к элементу body:</p>
@@ -6114,7 +6133,7 @@ redRect.addEventListener("click", function(e){
                 <div class="code-block"><code>const redRect = document.getElementById("redRect");
 function handler1(e){
     console.log("handler1: Событие на redRect");
-    e.stopImmediatePropagation();   // останавливаем также выполнение handler2
+    e.stopImmediatePropagation();<code class="comment">   // останавливаем также выполнение handler2</code>
 }
 function handler2(e){
     console.log("handler2: Событие на redRect");
@@ -6145,9 +6164,9 @@ document.body.addEventListener("click", function(){
     console.log("Событие на body");
 }, true);
 
- // Событие на body
- // Событие на blueRect                    
- // Событие на redRect</code></div>
+ <code class="comment">// Событие на body</code>
+ <code class="comment">// Событие на blueRect     </code>               
+ <code class="comment">// Событие на redRect</code></code></div>
 
                 <p>Теперь события будут распространяться в обратном порядке:</p>
 
@@ -6162,7 +6181,7 @@ const outer = document.querySelector('.outer');
 const inner = document.querySelector('.inner');
 const button = document.querySelector('button');
 
-// Всплытие (по умолчанию)
+<code class="comment">// Всплытие (по умолчанию)</code>
 outer.addEventListener('click', () => {
     console.log('1. Outer (всплытие)');
 });
@@ -6175,48 +6194,48 @@ button.addEventListener('click', () => {
     console.log('3. Button (цель)');
 });
 
-// При клике на button:
-// 3. Button (цель)
-// 2. Inner (всплытие)
-// 1. Outer (всплытие)
+<code class="comment">// При клике на button:</code>
+<code class="comment">// 3. Button (цель)</code>
+<code class="comment">// 2. Inner (всплытие)</code>
+<code class="comment">// 1. Outer (всплытие)</code>
 
-// Захват (capture: true)
+<code class="comment">// Захват (capture: true)</code>
 outer.addEventListener('click', () => {
     console.log('Outer (захват)');
 }, true);
 
-// При клике на button:
-// Outer (захват)
-// 3. Button (цель)
-// 2. Inner (всплытие)
-// 1. Outer (всплытие)
+<code class="comment">// При клике на button:</code>
+<code class="comment">// Outer (захват)</code>
+<code class="comment">// 3. Button (цель)</code>
+<code class="comment">// 2. Inner (всплытие)</code>
+<code class="comment">// 1. Outer (всплытие)</code>
 &lt;/script&gt;</code></div>
 
                 <h3>event.target vs event.currentTarget</h3>
                 <div class="code-block"><code>outer.addEventListener('click', (e) => {
-    console.log('target:', e.target);         // Элемент, на котором произошел клик
-    console.log('currentTarget:', e.currentTarget); // Элемент с обработчиком
+    console.log('target:', e.target);<code class="comment">         // Элемент, на котором произошел клик</code>
+    console.log('currentTarget:', e.currentTarget);<code class="comment"> // Элемент с обработчиком</code>
 });
 
-// Если кликнуть на button:
-// target: button (на чём кликнули)
-// currentTarget: outer (где висит обработчик)</code></div>
+<code class="comment">// Если кликнуть на button:</code>
+<code class="comment">// target: button (на чём кликнули)</code>
+<code class="comment">// currentTarget: outer (где висит обработчик)</code></code></div>
 
                 <h2 id="ch12-stop-bubbling">Остановка всплытия</h2>
                 <div class="code-block"><code>button.addEventListener('click', (e) => {
-    e.stopPropagation(); // Остановить всплытие
+    e.stopPropagation();<code class="comment"> // Остановить всплытие</code>
     console.log('Button clicked');
-    // Обработчики на inner и outer НЕ сработают
+    <code class="comment">// Обработчики на inner и outer НЕ сработают</code>
 });
 
-// stopImmediatePropagation - остановить все обработчики
+<code class="comment">// stopImmediatePropagation - остановить все обработчики</code>
 button.addEventListener('click', (e) => {
     e.stopImmediatePropagation();
     console.log('Первый обработчик');
 });
 
 button.addEventListener('click', (e) => {
-    console.log('Второй обработчик'); // НЕ выполнится
+    console.log('Второй обработчик');<code class="comment"> // НЕ выполнится</code>
 });</code></div>
 
                 <div class="info-box warning">
@@ -6225,25 +6244,25 @@ button.addEventListener('click', (e) => {
                 </div>
 
                 <h2 id="ch12-cansel-default">Отмена действия по умолчанию</h2>
-                <div class="code-block"><code>// Отменить переход по ссылке
+                <div class="code-block"><code><code class="comment">// Отменить переход по ссылке</code>
 const link = document.querySelector('a');
 link.addEventListener('click', (e) => {
     e.preventDefault();
     console.log('Переход отменён');
 });
 
-// Отменить отправку формы
+<code class="comment">// Отменить отправку формы</code>
 form.addEventListener('submit', (e) => {
     e.preventDefault();
     console.log('Отправка отменена');
 });
 
-// Отменить контекстное меню
+<code class="comment">// Отменить контекстное меню</code>
 document.addEventListener('contextmenu', (e) => {
     e.preventDefault();
 });
 
-// Проверка, можно ли отменить событие
+<code class="comment">// Проверка, можно ли отменить событие</code>
 element.addEventListener('click', (e) => {
     if (e.cancelable) {
         e.preventDefault();
@@ -6260,7 +6279,7 @@ element.addEventListener('click', (e) => {
 &lt;/ul&gt;
 
 &lt;script&gt;
-// Плохо: обработчик на каждый элемент
+<code class="comment">// Плохо: обработчик на каждый элемент</code>
 const items = document.querySelectorAll('li');
 items.forEach(item => {
     item.addEventListener('click', () => {
@@ -6268,7 +6287,7 @@ items.forEach(item => {
     });
 });
 
-// Хорошо: один обработчик на родителе
+<code class="comment">// Хорошо: один обработчик на родителе</code>
 const menu = document.querySelector('#menu');
 menu.addEventListener('click', (e) => {
     if (e.target.tagName === 'LI') {
@@ -6297,7 +6316,7 @@ menu.addEventListener('click', (e) => {
 const container = document.querySelector('#container');
 
 container.addEventListener('click', (e) => {
-    // Проверка класса
+    <code class="comment">// Проверка класса</code>
     if (e.target.classList.contains('delete-btn')) {
         console.log('Удаление');
     }
@@ -6306,7 +6325,7 @@ container.addEventListener('click', (e) => {
         console.log('Редактирование');
     }
     
-    // Или через matches (поддерживает CSS-селекторы)
+    <code class="comment">// Или через matches (поддерживает CSS-селекторы)</code>
     if (e.target.matches('.delete-btn')) {
         console.log('Удаление через matches');
     }
@@ -6321,8 +6340,8 @@ container.addEventListener('click', (e) => {
                     экземпляр объекта <span class="b">Event</span> (либо его производные типа MouseEvent или KeybordEvent).
                 </p>
 
-                <div class="code-block"><code>const event = new Event(имя_события, config);   //  определяем объект события
-element.dispatchEvent(event);   //   вызываем событие для элемента element</code></div>
+                <div class="code-block"><code>const event = new Event(имя_события, config);<code class="comment">   // определяем объект события</code>
+element.dispatchEvent(event);<code class="comment">        // вызываем событие для элемента element</code></code></div>
 
                 <p>
                     Первый аргумент, передаваемый конструктору Event, представляет собой строку - тип события. Дополнительно в качестве второго параметра можно передать 
@@ -6339,7 +6358,7 @@ element.dispatchEvent(event);   //   вызываем событие для эл
                 <div class="code-block"><code>&lt;body>
     &lt;a id="link" href="https://metanit.com">Metanit.com&lt;/a>
     &lt;script>
-        const link = document.getElementById("link");   // получаем ссылку
+        const link = document.getElementById("link");<code class="comment">   // получаем ссылку</code>
         const event = new MouseEvent("click");
         link.dispatchEvent(event);
     &lt;/script>
@@ -6363,7 +6382,7 @@ element.dispatchEvent(event);   //   вызываем событие для эл
  
     link.addEventListener("click", (e)=>{
         console.log("Link has been clicked");
-        e.preventDefault();     // предупреждаем переход
+        e.preventDefault();<code class="comment">     // предотвращаем переход</code>
     });
  
     const event = new MouseEvent("click", {cancelable:true});
@@ -6406,13 +6425,13 @@ element.dispatchEvent(event);   //   вызываем событие для эл
     &lt;button id="btn">Pay&lt;/button>
     &lt;script>
     const button = document.getElementById("btn");
-    const myAcc = new Account(100); // условный денежный счет
-    // устанавливаем обработчик события payment для всего документа
+    const myAcc = new Account(100);<code class="comment"> // условный денежный счет</code>
+    <code class="comment">// устанавливаем обработчик события payment для всего документа</code>
     document.addEventListener("payment", ()=>console.log("Payment succeeded!"));
  
-    // по нажатию на кнопку выполняем метод pay
+    <code class="comment">// по нажатию на кнопку выполняем метод pay</code>
     button.addEventListener("click", ()=>myAcc.pay(50));
-    // конструктор объекта счета
+    <code class="comment">// конструктор объекта счета</code>
     function Account(money) {
         _money = money;
         this.pay=function(sum){
@@ -6420,8 +6439,8 @@ element.dispatchEvent(event);   //   вызываем событие для эл
                 _money -= sum;
                 console.log(_money);
  
-                const event = new Event("payment"); // определяем объект события
-                document.dispatchEvent(event);      // генерируем событие для всего документа
+                const event = new Event("payment");<code class="comment"> // определяем объект события</code>
+                document.dispatchEvent(event);<code class="comment">      // генерируем событие для всего документа</code>
             }
         }
     }
@@ -6433,8 +6452,8 @@ element.dispatchEvent(event);   //   вызываем событие для эл
                     создаем). Затем генерируем это событие:
                 </p>
 
-                <div class="code-block"><code>const event = new Event("payment"); // определяем объект события
-document.dispatchEvent(event);      // генерируем событие для всего документа</code></div>
+                <div class="code-block"><code>const event = new Event("payment");<code class="comment"> // определяем объект события</code>
+document.dispatchEvent(event);<code class="comment">       // генерируем событие для всего документа</code></code></div>
 
                 <p>
                     Стоит отметить, что событие генерируется для всего документа: <code><span class="b">document</span>.dispatchEvent(event)</code>, но это может быть 
@@ -6448,16 +6467,16 @@ document.dispatchEvent(event);      // генерируем событие дл�
                 <p>По нажатию на кнопку вызываем метод pay объекта myAcc и тем самым генерируем событие "payment" (если на счете достаточно средств).</p>
                 <p>Для тестирования понажимаем на кнопку:</p>
                 
-                <div class="code-block"><code>// 50
-// Payment succeeded!
-// 0
-// Payment succeeded!</code></div>
+                <div class="code-block"><code><code class="comment">// 50</code>
+<code class="comment">// Payment succeeded!</code>
+<code class="comment">// 0</code>
+<code class="comment">// Payment succeeded!</code></code></div>
 
                 <p>Также, как и в общем случае, мы можем получить объект-подобное события в обработчике:</p>
 
-                <div class="code-block"><code>// получаем через параметр e объект события
+                <div class="code-block"><code><code class="comment">// получаем через параметр e объект события</code>
 document.addEventListener("payment", (e)=>{
-    console.log(e.type);                //  payment
+    console.log(e.type);    <code class="comment">//  payment</code>
     console.log("Payment succeeded!");
 });</code></div>
 
@@ -6471,12 +6490,12 @@ document.addEventListener("payment", (e)=>{
                 <div class="code-block"><code>const button = document.getElementById("btn");
 document.addEventListener("payment", (e)=>{
     console.log("Payment succeeded!");
-    console.log("Payment Sum:", e.detail.paymentSum);   // получаем данные события
+    console.log("Payment Sum:", e.detail.paymentSum);<code class="comment">   // получаем данные события</code>
     console.log("Current balance:", e.detail.balance);
 });
  
 const myAcc = new Account(100);
-// по нажатию на кнопку выполняем метод pay
+<code class="comment">// по нажатию на кнопку выполняем метод pay</code>
 button.addEventListener("click", ()=>myAcc.pay(50));
  
 function Account(money) {
@@ -6484,14 +6503,14 @@ function Account(money) {
     this.pay=function(sum){
         if(_money >= sum){
             _money -= sum;
-            // определяем объект события
+            <code class="comment">// определяем объект события</code>
             const event = new CustomEvent("payment", {
-                detail:{                //  передаем в CustomEvent данные о событии
+                detail:{<code class="comment">                   // передаем в CustomEvent данные о событии</code>
                     paymentSum: sum, 
                     balance: _money
                 }
             });
-            document.dispatchEvent(event);      // генерируем событие для всего документа
+            document.dispatchEvent(event);<code class="comment">  // генерируем событие для всего документа</code>
         }
     }
 }</code></div>
@@ -6517,7 +6536,7 @@ function Account(money) {
 
                 <div class="code-block"><code>document.addEventListener("payment", (e)=>{
     console.log("Payment succeeded!");
-    console.log("Payment Sum:", e.detail.paymentSum);   // получаем данные события
+    console.log("Payment Sum:", e.detail.paymentSum);<code class="comment">   // получаем данные события</code>
     console.log("Current balance:", e.detail.balance);
 });</code></div>
 
@@ -6580,23 +6599,23 @@ Current balance: 50
 Current balance: 0 Requested Sum:  50</span>
 </pre>
 
-                <div class="code-block"><code>// Создать пользовательское событие
+                <div class="code-block"><code><code class="comment">// Создать пользовательское событие</code>
 const myEvent = new CustomEvent('myevent', {
     detail: { message: 'Привет!', data: 123 },
     bubbles: true,
     cancelable: true
 });
 
-// Подписаться на событие
+<code class="comment">// Подписаться на событие</code>
 element.addEventListener('myevent', (e) => {
     console.log('Событие получено:', e.detail);
 });
 
-// Вызвать событие
+<code class="comment">// Вызвать событие</code>
 element.dispatchEvent(myEvent);</code></div>
 
                 <h3>Практический пример</h3>
-                <div class="code-block"><code>// Создаём событие "покупка товара"
+                <div class="code-block"><code><code class="comment">// Создаём событие "покупка товара"</code>
 class ShoppingCart {
     constructor() {
         this.items = [];
@@ -6605,7 +6624,7 @@ class ShoppingCart {
     addItem(item) {
         this.items.push(item);
         
-        // Генерируем событие
+        <code class="comment">// Генерируем событие</code>
         const event = new CustomEvent('itemAdded', {
             detail: { item, total: this.items.length }
         });
@@ -6614,16 +6633,16 @@ class ShoppingCart {
     }
 }
 
-// Слушаем событие
+<code class="comment">// Слушаем событие</code>
 document.addEventListener('itemAdded', (e) => {
     console.log(`Добавлен: ${e.detail.item}`);
     console.log(`Всего товаров: ${e.detail.total}`);
 });
 
-// Использование
+<code class="comment">// Использование</code>
 const cart = new ShoppingCart();
-cart.addItem('Ноутбук');  // Событие сработает
-cart.addItem('Мышь');     // Событие сработает</code></div>
+cart.addItem('Ноутбук');<code class="comment">  // Событие сработает</code>
+cart.addItem('Мышь');<code class="comment">     // Событие сработает</code></code></div>
 
                 <h2 id="ch12-practical-examp">Практические примеры</h2>
 
@@ -6632,24 +6651,24 @@ cart.addItem('Мышь');     // Событие сработает</code></div>
 const openBtn = document.querySelector('.open-modal');
 const closeBtn = document.querySelector('.close-modal');
 
-// Открыть модалку
+<code class="comment">// Открыть модалку</code>
 openBtn.addEventListener('click', () => {
     modal.classList.add('active');
 });
 
-// Закрыть по кнопке
+<code class="comment">// Закрыть по кнопке</code>
 closeBtn.addEventListener('click', () => {
     modal.classList.remove('active');
 });
 
-// Закрыть по клику вне модалки
+<code class="comment">// Закрыть по клику вне модалки</code>
 modal.addEventListener('click', (e) => {
     if (e.target === modal) {
         modal.classList.remove('active');
     }
 });
 
-// Закрыть по Escape
+<code class="comment">// Закрыть по Escape</code>
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modal.classList.contains('active')) {
         modal.classList.remove('active');
@@ -6662,11 +6681,11 @@ const contents = document.querySelectorAll('.tab-content');
 
 tabs.forEach((tab, index) => {
     tab.addEventListener('click', () => {
-        // Убрать активные классы
+        <code class="comment">// Убрать активные классы</code>
         tabs.forEach(t => t.classList.remove('active'));
         contents.forEach(c => c.classList.remove('active'));
         
-        // Добавить активные классы
+        <code class="comment">// Добавить активные классы</code>
         tab.classList.add('active');
         contents[index].classList.add('active');
     });
@@ -6677,7 +6696,7 @@ tabs.forEach((tab, index) => {
 let loading = false;
 
 window.addEventListener('scroll', () => {
-    // Если почти долистали до конца
+    <code class="comment">// Если почти долистали до конца</code>
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
         if (!loading) {
             loading = true;
@@ -6689,11 +6708,11 @@ window.addEventListener('scroll', () => {
 async function loadMoreContent() {
     console.log('Загрузка страницы', page);
     
-    // Загрузить данные
+    <code class="comment">// Загрузить данные</code>
     const data = await fetch(`/api/posts?page=${page}`);
     const posts = await data.json();
     
-    // Добавить на страницу
+    <code class="comment">// Добавить на страницу</code>
     posts.forEach(post => {
         const div = document.createElement('div');
         div.textContent = post.title;
@@ -6707,7 +6726,7 @@ async function loadMoreContent() {
                 <h2>Оптимизация обработчиков</h2>
 
                 <h3>Debounce (задержка)</h3>
-                <div class="code-block"><code>// Функция будет вызвана только через 300мс после последнего события
+                <div class="code-block"><code><code class="comment">// Функция будет вызвана только через 300мс после последнего события</code>
 function debounce(func, delay) {
     let timeout;
     return function(...args) {
@@ -6716,7 +6735,7 @@ function debounce(func, delay) {
     };
 }
 
-// Использование
+<code class="comment">// Использование</code>
 const input = document.querySelector('input');
 
 input.addEventListener('input', debounce((e) => {
@@ -6724,7 +6743,7 @@ input.addEventListener('input', debounce((e) => {
 }, 300));</code></div>
 
                 <h3>Throttle (ограничение частоты)</h3>
-                <div class="code-block"><code>// Функция будет вызываться не чаще, чем раз в delay мс
+                <div class="code-block"><code><code class="comment">// Функция будет вызываться не чаще, чем раз в delay мс</code>
 function throttle(func, delay) {
     let lastCall = 0;
     return function(...args) {
@@ -6736,7 +6755,7 @@ function throttle(func, delay) {
     };
 }
 
-// Использование
+<code class="comment">// Использование</code>
 window.addEventListener('scroll', throttle(() => {
     console.log('Прокрутка');
 }, 100));</code></div>
@@ -6754,48 +6773,189 @@ window.addEventListener('scroll', throttle(() => {
             <section class="chapter" id="ch13">
                 <h1>Глава 13. Работа с формами</h1>
 
-                <h2>Доступ к формам и элементам</h2>
+                <p>
+                    Один из способов взаимодействия с пользователями представляют html-формы. Например, если нам надо получить от пользователя некоторую информацию, 
+                    мы можем определить на веб-странице формы, которая будет содержать текстовые поля для ввода информации и кнопку для отправки. И после ввода данных мы можем 
+                    обработать введенную информацию.
+                </p>
+                <p>Для создания формы используется элемент <code>&lt;form&gt;</code>:</p>
+
+                <div class="code-block"><code>&lt;form id="search" name="search">
+&lt;/form></code></div>
+
+                <p>В JavaScript форма представлена объектом <span class="b">HtmlFormElement</span>. И после создания формы мы можем к ней обратиться различными способами.</p>
+
+                <h2 id="ch13-forms&elements">Доступ к формам и элементам</h2>
 
                 <h3>Доступ к форме</h3>
-                <div class="code-block"><code>// Через document.forms (коллекция всех форм)
-const form1 = document.forms[0];        // Первая форма
-const form2 = document.forms['myForm']; // По атрибуту name
-const form3 = document.forms.myForm;    // Короткая запись
 
-// Через querySelector
+                <p>Первый способ заключается в прямом обращении по имени формы:</p>
+
+                <div class="code-block"><code>const searchForm = document.search;</code></div>
+
+                <p>Второй способ состоит в обращении к коллекции форм документа - коллекция <span class="b">forms</span> и поиске в ней нужной формы:</p>
+                
+                <div class="code-block"><code><code class="comment">// Через document.forms (коллекция всех форм)</code>
+const form1 = document.forms[0];        <code class="comment">// Первая форма</code>
+const form2 = document.forms['myForm']; <code class="comment">// По атрибуту name</code>
+const form3 = document.forms.myForm;    <code class="comment">// Короткая запись</code></code></div>
+
+                <p>Третий способ представляет получение форм стандартными методами для поиска элемента по id, по тегу или по селектору. Например:</p>
+                
+<div class="code-block"><code>// Через querySelector
 const form = document.querySelector('#myForm');
 const form = document.querySelector('form');</code></div>
+
+                <h3>Свойства и методы форм</h3>
+
+                <ul>
+                    <li><span class="b">name</span>: имя формы</li>
+                    <li><span class="b">elements</span>: коллекция элементов формы</li>
+                    <li><span class="b">length</span>: количество элементов формы</li>
+                    <li><span class="b">action</span>: значение атрибута <code>action</code> - адрес отправки формы</li>
+                    <li><span class="b">method</span>: значение атрибута <code>method</code> - метод HTTP, применяемый для отправки</li>
+                </ul>
+
+                <p>Например, получим свойства формы:</p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;form id="search" name="search" action="https://google.com/search" method="get">
+        &lt;input type="text" id="key" name="q" />
+        &lt;input type="submit" id="send" name="send" />
+    &lt;/form>
+    &lt;script>
+        const form = document.getElementById("search");
+        console.log(form.elements); <code class="comment">// HTMLFormControlsCollection(2) [input, input, q: input, send: input]</code>
+        console.log(form.length);   <code class="comment">// 2</code>
+        console.log(form.name);     <code class="comment">// search</code>
+        console.log(form.action);   <code class="comment">// https://google.com/search</code>
+        console.log(form.method);   <code class="comment">// get</code>
+    &lt;/script>
+&lt;/body></code></div>
 
                 <h3>Доступ к элементам формы</h3>
                 <div class="code-block"><code>const form = document.forms.myForm;
 
-// Через form.elements (рекомендуется)
-const input = form.elements.username;    // По name
+<code class="comment">//</code> Через form.elements (рекомендуется)
+const input = form.elements.username;    <code class="comment">// По name</code>
 const input = form.elements['username'];
-const input = form.elements[0];          // По индексу
+const input = form.elements[0];          <code class="comment">// По индексу</code>
 
-// Прямой доступ через name (короткая запись)
+<code class="comment">// Прямой доступ через name (короткая запись)</code>
 const input = form.username;
 
-// Через querySelector
+<code class="comment">// Через querySelector</code>
 const input = form.querySelector('input[name="username"]');
 const input = form.querySelector('#username');</code></div>
 
-                <h2>Получение и установка значений</h2>
+                <p>
+                    Среди методов формы надо отметить метод <span class="b">submit()</span>, который отправляет данные формы на сервер, и метод <span class="b">reset()</span>, который 
+                    очищает поля формы:
+                </p>
+                <div class="code-block"><code>const form = document.forms["search"];
+form.submit();
+form.reset();</code></div>
+
+                <h3>Элементы форм</h3>
+
+                <p>Форма может содержать различные элементы ввода html: input, textarea, button, select и т.д. Для каждого из элементов существует свой тип JavaScript:</p>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>html-элемент</th>
+                                <th>Тип JavaScript</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>&lt;input&gt;</code></td><td>HTMLInputElement</td></tr>
+                            <tr><td><code>&lt;textarea&gt;</code></td><td>HTMLTextAreaElement</td></tr>
+                            <tr><td><code>&lt;select&gt;</code></td><td>HTMLSelectElement</td></tr>
+                            <tr><td><code>&lt;option&gt; (в списках &lt;select&gt;)</code></td><td>HTMLOptionElement</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>Для получения элементов форм можно использовать несколько способов:</p>
+
+                <ul>
+                    <li>Применение стандартных методов <code>getElementById()</code>, <code>getElementsByClassName()</code>, <code>getElementsByTagName()</code>, 
+                    <code>getElementsByName()</code>, <code>querySelector()</code> и <code>querySelectorAll()</code> для поиска элементов соответственно по id, классу, тегу, 
+                    имени или селектору. Например, возьмем ранее определенную форму и получим ее поле ввода:
+                    <div class="code-block"><code><code class="comment">// получаем элемент по id="key"</code>
+const keyField = document.getElementById("key");
+console.log(keyField);</code>
+                    </li>
+                    <li>Использование свойства <span class="b">elements</span> соответствующей формы. Например:
+                    <div class="code-block"><code>const form = document.getElementById("search");
+<code class="comment">// получение поля по индексу</code>
+const keyField = form.elements[0];
+console.log(keyField);
+<code class="comment">// получение этого же поля, но через имя</code>
+const keyField2 = form.elements["q"];
+console.log(keyField2);</code></div>
+                    </li>
+                    <li>Использование имени формы и элемента. Например:</p>
+                    <div class="code-block"><code><code class="comment">// поле q на форме search</code>
+const keyField = document.search.q;
+console.log(keyField);</code></div>
+                    </li>
+                </ul>
+
+                <h3>Свойства элементов форм</h3>
+
+                <p>
+                    Все они имеют ряд общих свойств и методов. Также, как и форма, элементы форм имеют свойство <span class="b">name</span>, с помощью которого можно получить 
+                    значение атрибута <code>name</code>. Другим важным свойством является свойство <span class="b">value</span>, которое позволяет получить или изменить значение поля:
+                </p>
+
+                <div class="code-block"><code>&lt;form name="search">
+    &lt;input type="text" name="key" value="hello world">&lt;/input>
+    &lt;input type="submit" name="send">&lt;/input>
+&lt;/form>
+&lt;script>
+    const form = document.getElementById("search");
+    <code class="comment">// получение поля формы по имени</code>
+    const keyField = form.elements["key"];
+    <code class="comment">// получение значения поля</code>
+    console.log(keyField.value);
+    <code class="comment">// установка значения поля</code>
+    keyField.value = "Enter a string";
+&lt;/script></code></div>
+
+                <p>
+                    Свойство <span class="b">type</span> позволяет получить тип поля ввода. Это либо название тега элемента (например, textarea), либо 
+                    значение атрибута <code>type</code> у элементов <code>input</code>.
+                </p>
+
+                <div class="code-block"><code>const form = document.getElementById("search");
+<code class="comment">// получение поля формы по имени</code>
+const keyField = form.elements["key"];
+<code class="comment">// получение значения поля</code>
+console.log(keyField.type);<code class="comment"> // text</code></code></div>
+
+                <p>Из методов можно выделить методы <span class="b">focus()</span> (устанавливает фокус на элемент) и <span class="b">blur()</span> (убирает фокус с элемента):</p>
+
+                <div class="code-block"><code>const searchForm = document.forms["search"];
+const keyField = searchForm.elements["key"];
+keyField.focus();</code></div>
+
+                <h2 id="ch13-get-set-value">Получение и установка значений</h2>
 
                 <h3>Текстовые поля (input, textarea)</h3>
                 <div class="code-block"><code>const input = document.querySelector('input[name="username"]');
 
-// Получить значение
-console.log(input.value); // "John"
+<code class="comment">// Получить значение</code>
+console.log(input.value); <code class="comment">//</code> "John"
 
-// Установить значение
+<code class="comment">// Установить значение</code>
 input.value = 'Alice';
 
-// Очистить поле
+<code class="comment">// Очистить поле</code>
 input.value = '';
 
-// Проверка на пустоту
+<code class="comment">// Проверка на пустоту</code>
 if (input.value.trim() === '') {
     console.log('Поле пустое');
                 }</code></div>
