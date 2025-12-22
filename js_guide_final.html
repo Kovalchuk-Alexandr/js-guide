@@ -23,6 +23,7 @@
             --border: #dee2e6;
             --accent: #0066cc;
             --code-bg: #f4f4f4;
+            --code-bg: #f5f5fa;
             --code-font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
             --code-comment: #008200;
             --browser-textcolor: #202020;
@@ -554,10 +555,15 @@
                                 <li class="nav-subitem" data-target="ch12-practical-examp">📜 Практические примеры</li>
                             </ul>
                         </li>
-                        <li class="nav-item has-subitems" data-target="ch13"><span class="ch-emoj"></span>Глава 13. Формы
+                        <li class="nav-item has-subitems" data-target="ch13"><span class="ch-emoj"></span> Глава 13. Формы
                             <ul class="nav-sublist">
                                 <li class="nav-subitem" data-target="ch13-forms&elements">📜 Формы и их элементы</li>
+                                <li class="nav-subitem" data-target="ch13-buttons">📜 Кнопки</li>
+                                <li class="nav-subitem" data-target="ch13-textarea">📜 Текстовые поля</li>
+                                <li class="nav-subitem" data-target="ch13-flags-radios">📜 Флажки и радиокнопки</li>
+                                <li class="nav-subitem" data-target="ch13-select">📜 Список select</li>
                                 <li class="nav-subitem" data-target="ch13-get-set-value">📜 Получение и установка значений</li>
+
                                 <li class="nav-subitem" data-target="ch13-event-obj">📜 Объект события (Event)</li>
                                 <li class="nav-subitem" data-target="ch13-mouse-event">📜 События мыши</li>
                                 <li class="nav-subitem" data-target="ch13-kb-event">📜 События клавиатуры</li>
@@ -6941,13 +6947,501 @@ console.log(keyField.type);<code class="comment"> // text</code></code></div>
 const keyField = searchForm.elements["key"];
 keyField.focus();</code></div>
 
+                <h2 id="ch13-buttons">Кнопки</h2>
+
+                <p>Для отправки введенных данных на форме используются кнопки. Для создания кнопки используется либо элемент <code>button</code>:</p>
+
+                <div class="code-block"><code>&lt;button name="send">Отправить&lt;/button></code></div>
+
+                <p>Либо элемент <code>input</code>:</p>
+                <div class="code-block"><code>&lt;input type="submit" name="send" value="Отправить" />
+</code></div>
+
+                <p>С точки зрения функциональности в html эти элементы не совсем равноценны, но в данном случае они нас интересуют с точки зрения взаимодействия с кодом javascript.</p>
+                <p>
+                    При нажатии на любой из этих двух вариантов кнопки происходит отправка формы по адресу, который указан у формы в атрибуте <code>action</code>, либо по адресу веб-страницы, если атрибут action не указан. 
+                    Однако в коде javascript мы можем перехватить отправку, обрабатывая событие <span class="b">click</span>
+                </p>
+
+                <div class="code-block"><code>&lt;body>
+&lt;form name="search">
+    &lt;input type="text" name="key">&lt;/input>
+    &lt;input type="submit" name="send" value="Отправить" />
+&lt;/form>
+&lt;script>
+function sendForm(e){
+     
+    <code class="comment">// получаем значение поля key</code>
+    const keyBox = document.search.key;
+    const val = keyBox.value;
+    if(val.length&lt;3){
+        alert("Недопустимая длина строки");
+        e.preventDefault();
+    }   
+    else
+        alert("Отправка разрешена");
+}
+ 
+const sendButton = document.search.send;
+sendButton.addEventListener("click", sendForm);
+&lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    При нажатии на кнопку происходит событие <code>click</code>, и для его обработки к кнопке прикрепляем обработчик <code>sendForm</code>. В этом 
+                    обработчике проверяем введенный в текстовое поле текст. Если его длина меньше 3 символов, то выводим сообщение о недостимой длине и прерываем обычный 
+                    ход события с помощью вызова <span class="b">e.preventDefault()</span>. В итоге форма не отправляется.
+                </p>
+                <p>Если же длина текста три и больше символов, то также выводится сообщение, и затем форма отправляется.</p>
+
+                <p>Также мы можем при необходимости при отправке изменить адрес, на который отправляются данные:</p>
+                <div class="code-block"><code>function sendForm(e){
+     
+    <code class="comment">// получаем значение поля key</code>
+    const keyBox = document.search.key;
+    const val = keyBox.value;
+    if(val.length &gt; 3){
+        alert("Недопустимая длина строки");
+        document.search.action="PostForm";
+    }   
+    else
+        alert("Отправка разрешена");
+}</code></div>
+
+                <p>
+                    В данном случае, если длина текста меньше 3 символов, то текст отправляется, только теперь он отправляется по адресу <code>PostForm</code>, 
+                    поскольку задано свойство action:
+                </p>
+
+                <div class="code-block"><code>document.search.action="PostForm";</code></div>
+
+                <h3>Очистка формы</h3>
+                <p>Для очистки формы предназначены следующие равноценные по функциональности кнопки:</p>
+                <div class="code-block"><code>&lt;button type="reset">Очистить&lt;/button>
+&lt;input type="reset" value="Очистить" /></code></div>
+
+                <p>
+                    При нажатию на кнопки произойдет очистка форм. Но также функциональность по очистке полей формы можно реализовать с помощью метода 
+                    <code>reset()</code>:
+                </p>
+                <div class="code-block"><code>function sendForm(e){
+     
+    <code class="comment">// получаем значение поля key</code>
+    const keyBox = document.search.key;
+    const val = keyBox.value;
+    if(val.length < 3){
+        alert("Недопустимая длина строки");
+        document.search.reset();
+        e.preventDefault();
+    }   
+    else
+        alert("Отправка разрешена");
+}</code></div>
+
+                <p>Кроме специальных кнопок отправки и очистки на форме также может использоваться обычная кнопка:</p>
+
+                <div class="code-block"><code>&lt;input type="button" name="send" value="Отправить" /></code></div>
+
+                <p>При нажатии на подобную кнопку отправки данных не происходит, хотя также генерируется событие click:</p>
+
+                <div class="code-block"><code>&lt;body>
+&lt;form name="search">
+    &lt;input type="text" name="key" placeholder="Введите ключ">&lt;/input>
+    &lt;input type="button" name="print" value="Печать" />
+&lt;/form>
+&lt;div id="printBlock">&lt;/div>
+&lt;script>
+    function printForm(e){
+        <code class="comment">// получаем значение поля key</code>
+        const keyBox = document.search.key;
+        const val = keyBox.value;
+        <code class="comment">// получаем элемент printBlock</code>
+        const printBlock = document.getElementById("printBlock");
+        <code class="comment">// создаем новый параграф</code>
+        const pElement = document.createElement("p");
+        <code class="comment">// устанавливаем у него текст</code>
+        pElement.textContent = val;
+        <code class="comment">// добавляем параграф в printBlock</code>
+        printBlock.appendChild(pElement);
+    }
+    
+    const printButton = document.search.print;
+    printButton.addEventListener("click", printForm);
+&lt;/script>
+&lt;/body></code></div>
+                
+                <p>При нажатии на кнопку получаем введенный в текстовое поле текст, создаем новый элемент параграфа для этого текста и добавляем параграф в элемент printBlock.</p>
+
+                <h2 id="ch13-textarea">Текстовые поля</h2>
+
+                <p>Для ввода простейшей текстовой информации предназначены элементы <code>&lt;input type="text"</code>:</p>
+                <div class="code-block"><code>&lt;input type="text" name="kye" size="10" maxlength="15" value="hello world" /></code></div>
+
+                <p>Данный элемент поддерживает ряд событий, в частности:</p>
+
+                <ul>
+                    <li><code>focus</code>: происходит при получении фокуса</li>
+                    <li><code>blur</code>: происходит при потере фокуса</li>
+                    <li><code>change</code>: происходит при изменении значения поля</li>
+                    <li><code>input</code>: происходит при изменении значения поля</li>
+                    <li><code>select</code>: происходит при выделении текста в текстовом поле</li>
+                    <li><code>keydown</code>: происходит при нажатии клавиши клавиатуры</li>
+                    <li><code>keypress</code>: происходит при нажатии клавиши клавиатуры для печатаемых символов</li>
+                    <li><code>keyup</code>: происходит при отпускании ранее нажатой клавиши клавиатуры</li>
+                </ul>
+
+                <p>Применим ряд событий:</p>
+                <div class="code-block"><code>&lt;body>
+&lt;form name="search">
+    &lt;input type="text" name="key" placeholder="Введите ключ" />
+    &lt;input type="button" name="print" value="Печать" />
+&lt;/form>
+&lt;div id="printBlock">&lt;/div>
+&lt;script>
+    const keyBox = document.search.key;
+    
+    // обработчик изменения текста
+    function onchange(e){
+        // получаем элемент printBlock
+        const printBlock = document.getElementById("printBlock");
+        // получаем новое значение
+        const val = e.target.value;
+        // установка значения
+        printBlock.textContent = val;
+    }
+
+    // обработка потери фокуса
+    function onblur(e){
+        // получаем его значение и обрезаем все пробелы
+        const text = keyBox.value.trim();
+        if(text==="")
+            keyBox.style.borderColor = "red";
+        else
+            keyBox.style.borderColor = "green";
+    }
+
+    // получение фокуса
+    function onfocus(e){
+        // установка цвета границ поля
+        keyBox.style.borderColor = "blue";
+    }
+
+    keyBox.addEventListener("change", onchange);
+    keyBox.addEventListener("blur", onblur);
+    keyBox.addEventListener("focus", onfocus);
+&lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    Здесь к текстовому полю прикрепляется три обработчика для событий blur, focus и change. Обработка события change позволяет 
+                    сформировать что-то вроде привязки: при изменении текста весь текст отображается в блоке printBlock. Но надо учитывать, что событие change 
+                    возникает не сразу после изменения текста, а после потери им фокуса.
+                </p>
+                <p>
+                    Обработка события потери фокуса blur позволяет провести валидацию введенного значения. Например, в данном случае если текст состоит из пробелов или 
+                    не был введен, то окрашиваем границу поля в красный цвет.
+                </p>
+
+                <p>
+                    Кроме события <code>change</code> мы можем обрабатывать изменение введенного текста, обрабатывая событие <span class="b">input</span>. Но если событие 
+                    <span class="b">change</span> возникает, когда пользователь закончит ввод и переведт фокус с текстового поля на другой элемент, то событие <span class="b">input</span> 
+                    возникает сразу при вводе нового символа или удаления имеющегося:
+                </p>
+
+                <div class="code-block"><code>const keyBox = document.search.key;
+  
+// обработчик изменения текста
+function oninput(e){
+    // получаем элемент printBlock
+    const printBlock = document.getElementById("printBlock");
+    // получаем новое значение
+    const val = e.target.value;
+    // установка значения
+    printBlock.textContent = val;
+}
+ 
+keyBox.addEventListener("input", oninput);</code></div>
+
+                <h3>Поле ввода пароля</h3>
+
+                <p>
+                    Кроме данного текстового поля есть еще специальные поля ввода. Так, поле <code>&lt;input type="password"</code> предназначено для ввода пароля. 
+                    По функциональности оно во многом аналогично обычному текстовому полю за тем исключением, что для вводимых символов используется маска:
+                </p>
+
+                <div class="code-block"><code>&lt;input type="password" name="password" /></code></div>
+
+                <p>Однако само вводимое значение никак не шифруется, и мы его можем спокойно получить:</p>
+
+                <div class="code-block"><code>&lt;body>
+ &lt;form name="loginForm">
+    &lt;input type="password" name="password" />
+&lt;/form>
+&lt;div id="printBlock">&lt;/div>
+&lt;script>
+    const passwordBox = document.loginForm.password;
+    
+    // обработчик изменения текста
+    function oninput(e){
+        // получаем элемент printBlock
+        const printBlock = document.getElementById("printBlock");
+        // получаем новое значение
+        printBlock.textContent = e.target.value;
+    } 
+    passwordBox.addEventListener("input", oninput); 
+&lt;/script>
+&lt;/body></code></div>
+
+                <h3>Скрытое поле</h3>
+
+                <p>Если нам надо, чтобы на форме было некоторое значение, но чтобы оно было скрыто от пользователя, то для этого могут использоваться скрытые поля:</p>
+                <div class="code-block"><code>&lt;input type="hidden" name="id" value="345" /></code></div>
+
+                <p>Для скрытого поля обычно не используется обработка событий, но также, как и для других элементов, мы можем в javascript получить его значение или изменить его.</p>
+
+                <h3>Элемент textarea</h3>
+
+                <p>Для создания многострочных текстовых полей используется элемент <code>textarea</code>:</p>
+                <div class="code-block"><code>&lt;textarea rows="15" cols="40" name="textArea">&lt;/textarea></code></div>
+
+                <p>Данные элемент генерирует все те же самые события, что и обычное текстовое поле:</p>
+
+                <div class="code-block"><code>&lt;body>
+&lt;form name="search">
+    &lt;textarea rows="7" cols="40" name="message">&lt;/textarea>
+&lt;/form>
+&lt;div id="printBlock">&lt;/div>
+&lt;script>
+const messageBox = document.search.message;
+    
+    // обработчик ввода символа
+    function onkeypress(e){
+        // получаем элемент printBlock
+        const printBlock = document.getElementById("printBlock");
+        // получаем введенный символ
+        const val = String.fromCharCode(e.keyCode);
+        // добавление символа
+        printBlock.textContent += val;
+    }
+    
+    function onkeydown(e){
+        if(e.keyCode===8){ // если нажат Backspace
+        
+            // получаем элемент printBlock
+            const printBlock = document.getElementById("printBlock"), 
+                length = printBlock.textContent.length;
+            // обрезаем строку по последнему символу
+            printBlock.textContent = printBlock.textContent.substring(0, length-1);
+        }
+    }
+    
+    messageBox.addEventListener("keypress", onkeypress);
+    messageBox.addEventListener("keydown", onkeydown);
+&lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    Здесь к текстовому полю прикрепляются обработчики для событий keypress и keydown. В обработчике keypress получаем введенный символ с помощью конвертации 
+                    числового кода клавиши в строку:
+                </p>
+                <div class="code-block"><code>const val = String.fromCharCode(e.keyCode);</code></div>
+
+                <p>Затем символ добавляется к содержимому блока printBlock.</p>
+                <p>
+                    Событие keypress возникает при нажатии на клавиши для печатаемых символов, то такие символы отображаются в текстовом поле. Однако есть и другие 
+                    клавиши, которые оказывают влияние на текстовое поле, но они не дают отображаемого символа, поэтому не отслеживаются событием keypress. К таким клавишам относится клавиша 
+                    Backspace, которая удаляет последний символ. И для ее отслеживания также обрабатываем событие keydown. В обработчике keydown удаляем из строки в блоке printBlock последний символ.
+                </p>
+                
+                <h2 id="ch13-flags-radios">Флажки (чекбоксы) и радиокнопки</h2>
+
+                <p>Особую группу элементов ввода составляют флажки (чекбоксы) и радиокнопки.</p>
+
+                <h3>Флажки (чекбоксы)</h3>
+
+                <p>
+                    Флажки представляют поле, в которое можно поставить отметки и которое создается с помощью элемента <code>&lt;input type="checkbox"</code>. 
+                    Отличительную особенность флажка составляет свойство <span class="b">checked</span>, которое в отмеченном состоянии принимает значение true:
+                </p>
+
+                <div class="code-block"><code>&lt;form name="myForm">
+    &lt;input type="checkbox" name="enabled" checked>&lt;span>Включить&lt;/span>
+&lt;/form>
+&lt;div id="printBlock">&lt;/div>
+&lt;script>
+    const enabledBox = document.myForm.enabled;
+    const printBlock = document.getElementById("printBlock");
+    <code class="comment">//  в текст printBlock передаем установленное значение</code>
+    enabledBox.addEventListener("click", (e)=> printBlock.textContent = e.target.checked);
+&lt;/script></code></div>
+                
+                <p>
+                    Нажатие на флажок генерирует событие <code>click</code>. В данном случае при обработке данного события мы просто выводим информацию, отмечен 
+                    ли данный флажок, в блок div.
+                </p>
+
+                <h3>Радиокнопки</h3>
+
+                <p>Радиокнопки представляют группы кнопок, из которых мы можем выбрать только одну. Радиокнопки создаются элементом <code>&lt;input type="radio"</code>.</p>
+                <p>Выбор или нажатие на одну из них также представляет событие click:</p>
+
+                <div class="code-block"><code>&lt;form name="myForm">
+    &lt;input type="radio" name="languages" value="Java" />&lt;span>Java&lt;/span>
+    &lt;input type="radio" name="languages" value="C#" />&lt;span>C#&lt;/span>
+    &lt;input type="radio" name="languages" value="C++" />&lt;span>C++&lt;/span>
+&lt;/form>
+&lt;div id="printBlock">&lt;/div>
+&lt;script>
+    const printBlock = document.getElementById("printBlock");
+    const myForm = document.myForm;
+    function onclick(e){
+        printBlock.textContent = `Вы выбрали: ${language}`;
+    }
+    for (let i = 0; i &lt; myForm.languages.length; i++) {
+        myForm.languages[i].addEventListener("click", onclick);
+    }
+&lt;/script></code></div>
+
+                <p>
+                    При создании группы радиокнопок их атрибут name должен иметь одно и то же значение. В данном случае это - languages. То есть радиокнопки 
+                    образуют группу languages.
+                </p>
+                <p>
+                    Поскольку радиокнопок может быть много, то при прикреплении к ним обработчика события нам надо пробежаться по всему массиву радиокнопок, 
+                    который можно получить по имени группы:
+                </p>
+                <div class="code-block"><code>for (let i = 0; i &lt; myForm.languages.length; i++) {
+    myForm.languages[i].addEventListener("click", onclick);
+}</code></div>
+
+                <p>Значение выбранного радиокнопки также можно получить через объект Event: <code>e.target.value</code></p>
+                <p>
+                    Каждая радиокнопка также, как и флажок, имеет свойство <code>checked</code>, которое возвращает значение true, если радиокнопка отмечена. 
+                    Например, отметим последнюю радиокнопку:
+                </p>
+
+                <div class="code-block"><code>myForm.languages[myForm.languages.length-1].checked = true;</code></div>
+
+                <h2 id="ch13-select">Список select</h2>
+                <p>
+                    Для создания списка используется html-элемент select. Причем с его помощью можно создавать как выпадающие списки, так и обычные с ординарным или 
+                    множественным выбором.<br>Например, стандартный список:
+                </p>
+                <div class="code-block"><code>&lt;select name="language" size="4">
+    &lt;option value="JS" selected="selected">JavaScript&lt;/option>
+    &lt;option value="Java">Java&lt;/option>
+    &lt;option value="C#">C#&lt;/option>
+    &lt;option value="C++">C++&lt;/option>
+&lt;/select></code></div>
+
+                <p>
+                    Атрибут <code>size</code> позволяет установить, сколько элементов будут отображаться одномоментно в списке. Значение <code>size="1"</code> 
+                    отображает только один элемент списка, а сам список становится выпадающим. Если установить у элемента select атрибут <span class="b">multiple</span>, 
+                    то в списке можно выбрать сразу несколько значений.
+                </p>
+                <p>Каждый элемент списка представлен html-элементом option, у которого есть отображаемая метка и есть значения в виде атрибута <code>value</code>.</p>
+                <p>
+                    В JavaScript элементу select соответствует объект <span class="b">HTMLSelectElement</span>, а элементу option - объект <span class="b">HtmlOptionElement</span> или 
+                    просто <span class="b">Option</span>.
+                </p>
+                <p>
+                    Все элементы списка в javascript доступны через коллекцию <span class="b">options</span>. А каждый объект HtmlOptionElement имеет свойства: 
+                    <ul>
+                        <li><code>index</code> (индекс в коллекции options),</li>
+                        <li><code>text</code> (отображаемый текст)</li>
+                        <li><code>value</code> (значение элемента)</li>
+                    </ul>
+                    Например, получим первый элемент списка и выведем о нем через его свойства всю информацию:
+                </p>
+                <div class="code-block"><code>&lt;form name="myForm">
+    &lt;select name="language" size="4">
+        &lt;option value="JS" selected="selected">JavaScript&lt;/option>
+        &lt;option value="Java">Java&lt;/option>
+        &lt;option value="CS">C#&lt;/option>
+        &lt;option value="CPP">C++&lt;/option>
+    &lt;/select>
+&lt;/form>
+&lt;script>
+    const firstLanguage = document.myForm.language.options[0];
+    console.log("Index:", firstLanguage.index);     // Index: 0
+    console.log("Text:", firstLanguage.text);       // Text: JavaScript
+    console.log("Value:", firstLanguage.value);     // Value: JS
+&lt;/script></code></div>
+
+                <p>Другой способ получить нужный элемент списка по индексу представляет метод <span class="b">item()</span>, в который передается индекс элемента:</p>
+                <div class="code-block"><code>const firstLanguage = myForm.language.item(0);
+console.log("Index:", firstLanguage.index);     // Index: 0
+console.log("Text:", firstLanguage.text);       // Text: JavaScript
+console.log("Value:", firstLanguage.value);     // Value: JS</code></div>
+
+                <h3>Динамическое управление списком</h3>
+
+                <p>В javascript мы можем не только получать элементы, но и динамически управлять списком. Например, применим добавление и удаление объектов списка:</p>
+                <div class="code-block"><code>&lt;body>
+&lt;form name="myForm">
+    &lt;select name="language" size="5">
+        &lt;option value="JS" selected="selected">JavaScript&lt;/option>
+        &lt;option value="Java">Java&lt;/option>
+        &lt;option value="CS">C#&lt;/option>
+        &lt;option value="CPP">C++&lt;/option>
+    &lt;/select>
+    &lt;p>&lt;input type="text" name="textInput" placeholder="Введите текст" />&lt;/p>
+    &lt;p>&lt;input type="text" name="valueInput" placeholder="Введите значение" />&lt;/p>
+    &lt;p>
+        &lt;input type="button" name="addButton" value="Добавить" />
+        &lt;input type="button" name="removeButton" value="Удалить" />
+    &lt;/p>
+&lt;/form>
+ 
+&lt;script>
+    const myForm = document.myForm;
+    const addButton = myForm.addButton, 
+        removeButton = myForm.removeButton, 
+        languagesSelect = myForm.language;
+    // обработчик добавления элемента
+    function addOption(){
+        // получаем текст для элемента
+        const text = myForm.textInput.value;
+        // получаем значение для элемента
+        const value = myForm.valueInput.value;
+        // создаем новый элемента
+        const newOption = new Option(text, value);
+        languagesSelect.options[languagesSelect.options.length]=newOption;
+    }
+    // обработчик удаления элемент
+    function removeOption(){
+        
+        const selectedIndex = languagesSelect.options.selectedIndex;
+        // удаляем элемент 
+        languagesSelect.options[selectedIndex] = null;
+    }
+    
+    addButton.addEventListener("click", addOption);
+    removeButton.addEventListener("click", removeOption);
+&lt;/script>
+&lt;/body></code></div>
+
+                <p>
+                    Для добавления на форме предназначены два текстовых поля (для текстовой метки и значения элемента option) и кнопка. Для удаления выделенного элемента 
+                    предназначена еще одна кнопка.
+                </p>
+                <p>
+                    За добавление в коде javascript отвечает функция <code>addOption</code>, в которой получаем введенные в текстовые поля значения, создаем новый объект Option и 
+                    добавляем его в массив options объекта списка.
+                </p>
+                <p>
+                    За удаление отвечает функция <code>removeOption</code>, в которой просто получаем индекс выделенного элемента с помощью свойства <span class="b">selectedIndex</span> 
+                    и в коллекции options приравниваем по этому индексу значение null.
+                </p>
+
                 <h2 id="ch13-get-set-value">Получение и установка значений</h2>
+
 
                 <h3>Текстовые поля (input, textarea)</h3>
                 <div class="code-block"><code>const input = document.querySelector('input[name="username"]');
 
-<code class="comment">// Получить значение</code>
-console.log(input.value); <code class="comment">//</code> "John"
+<code class="comment"><code class="comment">// Получить значение</code></code>
+console.log(input.value); <code class="comment">// "John"</code>
 
 <code class="comment">// Установить значение</code>
 input.value = 'Alice';
