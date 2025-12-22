@@ -7351,7 +7351,7 @@ const messageBox = document.search.message;
                         <li><code>text</code> (отображаемый текст)</li>
                         <li><code>value</code> (значение элемента)</li>
                     </ul>
-                    Например, получим первый элемент списка и выведем о нем через его свойства всю информацию:
+                    Например, получим первый элемент списка и выведем всю информацию о нем через его свойства:
                 </p>
                 <div class="code-block"><code>&lt;form name="myForm">
     &lt;select name="language" size="4">
@@ -7363,16 +7363,16 @@ const messageBox = document.search.message;
 &lt;/form>
 &lt;script>
     const firstLanguage = document.myForm.language.options[0];
-    console.log("Index:", firstLanguage.index);     // Index: 0
-    console.log("Text:", firstLanguage.text);       // Text: JavaScript
-    console.log("Value:", firstLanguage.value);     // Value: JS
+    console.log("Index:", firstLanguage.index);<code class="comment">     // Index: 0</code>
+    console.log("Text:", firstLanguage.text);<code class="comment">       // Text: JavaScript</code>
+    console.log("Value:", firstLanguage.value);<code class="comment">     // Value: JS</code>
 &lt;/script></code></div>
 
                 <p>Другой способ получить нужный элемент списка по индексу представляет метод <span class="b">item()</span>, в который передается индекс элемента:</p>
                 <div class="code-block"><code>const firstLanguage = myForm.language.item(0);
-console.log("Index:", firstLanguage.index);     // Index: 0
-console.log("Text:", firstLanguage.text);       // Text: JavaScript
-console.log("Value:", firstLanguage.value);     // Value: JS</code></div>
+console.log("Index:", firstLanguage.index);<code class="comment">     // Index: 0</code>
+console.log("Text:", firstLanguage.text);<code class="comment">       // Text: JavaScript</code>
+console.log("Value:", firstLanguage.value);<code class="comment">     // Value: JS</code></code></div>
 
                 <h3>Динамическое управление списком</h3>
 
@@ -7398,21 +7398,21 @@ console.log("Value:", firstLanguage.value);     // Value: JS</code></div>
     const addButton = myForm.addButton, 
         removeButton = myForm.removeButton, 
         languagesSelect = myForm.language;
-    // обработчик добавления элемента
+    <code class="comment">// обработчик добавления элемента</code>
     function addOption(){
-        // получаем текст для элемента
+        <code class="comment">// получаем текст для элемента</code>
         const text = myForm.textInput.value;
-        // получаем значение для элемента
+        <code class="comment">// получаем значение для элемента</code>
         const value = myForm.valueInput.value;
-        // создаем новый элемента
+        <code class="comment">// создаем новый элемента</code>
         const newOption = new Option(text, value);
         languagesSelect.options[languagesSelect.options.length]=newOption;
     }
-    // обработчик удаления элемент
+    <code class="comment">// обработчик удаления элемент</code>
     function removeOption(){
         
         const selectedIndex = languagesSelect.options.selectedIndex;
-        // удаляем элемент 
+        <code class="comment">// удаляем элемент </code>
         languagesSelect.options[selectedIndex] = null;
     }
     
@@ -7432,6 +7432,94 @@ console.log("Value:", firstLanguage.value);     // Value: JS</code></div>
                 <p>
                     За удаление отвечает функция <code>removeOption</code>, в которой просто получаем индекс выделенного элемента с помощью свойства <span class="b">selectedIndex</span> 
                     и в коллекции options приравниваем по этому индексу значение null.
+                </p>
+                <p>Для добавления/удаления также в качестве альтернативы можно использовать методы элемента select:</p>
+
+                <div class="code-block"><code><code class="comment">// вместо вызова</code>
+<code class="comment">// languagesSelect.options[languagesSelect.options.length]=newOption;</code>
+<code class="comment">// использовать для добавления вызов метода add</code>
+languagesSelect.add(newOption);
+<code class="comment">// вместо вызова</code>
+<code class="comment">// languagesSelect.options[selectedIndex] = null;</code>
+<code class="comment">// использовать для удаления метод remove</code>
+languagesSelect.remove(selectedIndex);</code></div>
+
+                <h3>События элемента select. Обработка выбора в списке</h3>
+
+                <p>
+                    Элемент select поддерживает три события:
+                    <ul>
+                        <li><code class="b">blur</code> (потеря фокуса),</li>
+                        <li><code class="b">focus</code> (получение фокуса)</li>
+                        <li><code class="b">change</code> (изменение выделенного элемента в списке)</li>
+                    </ul>
+                    Рассмотрим применение события select:
+                </p>
+
+                <div class="code-block"><code>&lt;form name="myForm">
+    &lt;select name="language" size="5">
+        &lt;option value="JS" selected="selected">JavaScript&lt;/option>
+        &lt;option value="Java">Java&lt;/option>
+        &lt;option value="CS">C#&lt;/option>
+        &lt;option value="CPP">C++&lt;/option>
+    &lt;/select>
+&lt;/form>
+&lt;div id="selection">&lt;/div>
+&lt;script>
+    const languagesSelect = document.myForm.language;
+    const selection = document.getElementById("selection");
+    
+    function changeOption(){
+        const selectedOption = languagesSelect.options[languagesSelect.selectedIndex];
+        selection.textContent = "Вы выбрали: " + selectedOption.text;
+    }
+    
+    languagesSelect.addEventListener("change", changeOption);
+&lt;/script></code></div>
+
+                <h3>Список со множественным выбором</h3>
+
+                <p>
+                    Если у элемента <code>&lt;select&gt;</code> установлен атрибут <span class="b">multiple</span>, то список позволяет выбрать несколько элементов. В этом случае для получения всех выделенных элементов необходимо использовать свойство <span class="b">selectedOptions</span>, 
+                    которое представляет объект типа <span class="b">HTMLCollection</span> и содержит список выбранных элементов. А каждый объект в этом списке имеет тип 
+                    <span class="b">HTMLOptionElement</span>. Соответственно для получения каждого из выбранных элементов нам надо перебрать эту коллекцию:
+                </p>
+                <div class="code-block"><code>&lt;form name="myForm">
+    &lt;select name="languages" multiple>
+        &lt;option value="JS">JavaScript&lt;/option>
+        &lt;option value="Java">Java&lt;/option>
+        &lt;option value="CS">C#&lt;/option>
+        &lt;option value="CPP">C++&lt;/option>
+    &lt;/select>
+&lt;/form>
+&lt;div id="selection">&lt;/div>
+&lt;script>
+    const languages = document.myForm.languages;
+    const selection = document.getElementById("selection");
+    
+    function changeOption(){
+        <code class="comment">// удаляем ранее выбранные элементы</code>
+        while (selection.firstChild) { 
+            selection.removeChild(selection.firstChild);  
+        }
+        <code class="comment">// получаем выбранные элементы </code>
+        const options = languages.selectedOptions;
+        for (let i = 0; i &lt; options.length; i++) {<code class="comment">  // for each option ...   </code> 
+            const option = options[i].text  <code class="comment">// получаем выбранный элемент </code>
+            <code class="comment">// для каждого выбранного элемента создаем div</code>
+            const div = document.createElement("div");  
+            <code class="comment">// создаем текстовый узел для выбранного элемента  </code>
+            const optionText = document.createTextNode(option); 
+            div.appendChild(optionText);<code class="comment">    // добавляем  optionText в div</code>
+            selection.appendChild(div)<code class="comment">      // добавляем div в контейнер</code>
+        }
+    }
+    languages.addEventListener("change", changeOption);
+&lt;/script></code></div>
+
+                <p>
+                    В данном случае в обработчике события change проходим по каждому выбранному элементу и для каждого элемента создаем текстовый узел, который помещаем в 
+                    элемент div, который, в свою очередь, помещаем в элемент selection на веб-странице.
                 </p>
 
                 <h2 id="ch13-get-set-value">Получение и установка значений</h2>
