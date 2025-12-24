@@ -563,21 +563,10 @@
                                 <li class="nav-subitem" data-target="ch13-flags-radios">📜 Флажки и радиокнопки</li>
                                 <li class="nav-subitem" data-target="ch13-select">📜 Список select</li>
                                 <li class="nav-subitem" data-target="ch13-get-set-value">📜 Получение и установка значений</li>
-
-                                <li class="nav-subitem" data-target="ch13-event-obj">📜 Объект события (Event)</li>
-                                <li class="nav-subitem" data-target="ch13-mouse-event">📜 События мыши</li>
-                                <li class="nav-subitem" data-target="ch13-kb-event">📜 События клавиатуры</li>
-                                <li class="nav-subitem" data-target="ch13-form-event">📜 События форм</li>
-                                <li class="nav-subitem" data-target="ch13-doc-win-event">📜 События документа и окна</li>
-                                <li class="nav-subitem" data-target="ch13-event-handlers">📜 Обработчики событий</li>
-                                <li class="nav-subitem" data-target="ch13-event-object">📜 Передача данных в обработчик события. Объект Event</li>
-                                <li class="nav-subitem" data-target="ch13-events-spread">📜 Всплытие и погружение событий</li>
-                                <li class="nav-subitem" data-target="ch13-stop-bubbling">📜 Остановка всплытия</li>
-                                <li class="nav-subitem" data-target="ch13-cansel-default">📜 Отмена действия по умолчанию</li>
-                                <li class="nav-subitem" data-target="ch13-delegation">📜 Делегирование событий</li>
-                                <li class="nav-subitem" data-target="ch13-dispatch-event">📜 Программный вызов событий</li>
-                                <li class="nav-subitem" data-target="ch13-custom-events">📜 Пользовательские события</li>
-                                <li class="nav-subitem" data-target="ch13-practical-examp">📜 Практические примеры</li>
+                                <li class="nav-subitem" data-target="ch13-form-submission">📜 Отправка формы</li>
+                                <li class="nav-subitem" data-target="ch13-validation">📜 Валидация форм</li>
+                                <li class="nav-subitem" data-target="ch13-validation-management">📜 Управление валидацией форм</li>
+                                <li class="nav-subitem" data-target="ch13-files-validation">📜 Работа с файлами</li>
                             </ul>
                         </li>
                     </ul>
@@ -7524,7 +7513,6 @@ languagesSelect.remove(selectedIndex);</code></div>
 
                 <h2 id="ch13-get-set-value">Получение и установка значений</h2>
 
-
                 <h3>Текстовые поля (input, textarea)</h3>
                 <div class="code-block"><code>const input = document.querySelector('input[name="username"]');
 
@@ -7545,14 +7533,14 @@ if (input.value.trim() === '') {
                     <h3>Checkbox (флажки)</h3>
                     <div class="code-block"><code>const checkbox = document.querySelector('input[type="checkbox"]');
 
-// Проверить, отмечен ли
-console.log(checkbox.checked); // true/false
+<code class="comment">// Проверить, отмечен ли</code>
+console.log(checkbox.checked);<code class="comment"> // true/false</code>
 
-// Установить/снять галочку
+<code class="comment">// Установить/снять галочку</code>
 checkbox.checked = true;
 checkbox.checked = false;
 
-// Обработчик изменения
+<code class="comment">// Обработчик изменения</code>
 checkbox.addEventListener('change', (e) => {
     if (e.target.checked) {
         console.log('Отмечено');
@@ -7562,24 +7550,24 @@ checkbox.addEventListener('change', (e) => {
 });</code></div>
 
     <h3>Radio buttons (переключатели)</h3>
-    <div class="code-block"><code>// HTML:
-// &lt;input type="radio" name="gender" value="male"&gt; Мужской
-// &lt;input type="radio" name="gender" value="female"&gt; Женский
+    <div class="code-block"><code><code class="comment">// HTML:</code>
+<code class="comment">// &lt;input type="radio" name="gender" value="male"&gt; Мужской</code>
+<code class="comment">// &lt;input type="radio" name="gender" value="female"&gt; Женский</code>
 
 const radios = document.querySelectorAll('input[name="gender"]');
 
-// Получить выбранное значение
+<code class="comment">// Получить выбранное значение</code>
 function getSelectedRadio(name) {
     const radio = document.querySelector(`input[name="${name}"]:checked`);
     return radio ? radio.value : null;
 }
 
-console.log(getSelectedRadio('gender')); // "male" или "female"
+console.log(getSelectedRadio('gender'));<code class="comment"> // "male" или "female"</code>
 
-// Установить значение
+<code class="comment">// Установить значение</code>
 document.querySelector('input[value="male"]').checked = true;
 
-// Обработчик для всех radio
+<code class="comment">// Обработчик для всех radio</code>
 radios.forEach(radio => {
     radio.addEventListener('change', (e) => {
         console.log('Выбрано:', e.target.value);
@@ -7589,82 +7577,82 @@ radios.forEach(radio => {
     <h3>Select (выпадающий список)</h3>
     <div class="code-block"><code>const select = document.querySelector('select');
 
-// Получить значение выбранного option
-console.log(select.value); // "2"
+<code class="comment">// Получить значение выбранного option</code>
+console.log(select.value);<code class="comment"> // "2"</code>
 
-// Получить текст выбранного option
-console.log(select.options[select.selectedIndex].text); // "Два"
+<code class="comment">// Получить текст выбранного option</code>
+console.log(select.options[select.selectedIndex].text);<code class="comment"> // "Два"</code>
 
-// Установить значение
+<code class="comment">// Установить значение</code>
 select.value = '3';
 
-// Обработчик изменения
+<code class="comment">// Обработчик изменения</code>
 select.addEventListener('change', (e) => {
     console.log('Выбрано:', e.target.value);
     console.log('Текст:', e.target.options[e.target.selectedIndex].text);
 });
 
-// Добавить новый option
+<code class="comment">// Добавить новый option</code>
 const option = document.createElement('option');
 option.value = '4';
 option.text = 'Четыре';
 select.add(option);
 
-// Удалить option
-select.remove(0); // Удалить первый option</code></div>
+<code class="comment">// Удалить option</code>
+select.remove(0);<code class="comment"> // Удалить первый option</code></code></div>
 
     <h3>Множественный выбор (multiple select)</h3>
-    <div class="code-block"><code>// &lt;select name="colors" multiple&gt;
+    <div class="code-block"><code><code class="comment">// &lt;select name="colors" multiple&gt;</code>
 const select = document.querySelector('select[multiple]');
 
-// Получить все выбранные значения
+<code class="comment">// Получить все выбранные значения</code>
 function getSelectedValues(select) {
     return Array.from(select.selectedOptions).map(option => option.value);
 }
 
-console.log(getSelectedValues(select)); // ["red", "blue"]
+console.log(getSelectedValues(select));<code class="comment"> // ["red", "blue"]</code>
 
-// Установить множественный выбор
+<code class="comment">// Установить множественный выбор</code>
 Array.from(select.options).forEach(option => {
     if (option.value === 'red' || option.value === 'blue') {
         option.selected = true;
     }
 });</code></div>
 
-    <h2>Отправка формы</h2>
+    <h2 id="ch13-form-submission">Отправка формы</h2>
 
     <h3>Событие submit</h3>
     <div class="code-block"><code>const form = document.querySelector('form');
 
 form.addEventListener('submit', (e) => {
-    e.preventDefault(); // Отменить стандартную отправку
+    e.preventDefault(); <code class="comment">// Отменить стандартную отправку</code>
     
     console.log('Форма отправлена');
     
-    // Получить данные формы
+    <code class="comment">// Получить данные формы</code>
     const formData = new FormData(form);
     
-    // Вывести все данные
+    <code class="comment">// Вывести все данные</code>
     for (let [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
     }
 });
 
-// Программная отправка формы
-form.submit(); // Событие submit НЕ сработает!
-form.requestSubmit(); // Событие submit сработает (современный способ)</code></div>
+<code class="comment">// Программная отправка формы</code>
+form.submit();<code class="comment">        // Событие submit НЕ сработает!</code>
+form.requestSubmit();<code class="comment"> // Событие submit сработает (современный способ)</code></code></div>
 
     <h3>Сбор данных формы</h3>
     <div class="code-block"><code>const form = document.querySelector('form');
 
-// Способ 1: FormData (рекомендуется)
+<code class="comment">// Способ 1: FormData (рекомендуется)</code>
 const formData = new FormData(form);
 
-// Преобразовать в объект
+<code class="comment">// Преобразовать в объект</code>
 const data = Object.fromEntries(formData);
-console.log(data); // {username: "John", email: "john@example.com"}
+console.log(data); <code class="comment">// {username: "John", email: "john@example.com"}</code>
 
-// Способ 2: Ручной сбор
+<code class="comment">// Способ 2: Ручной сбор</code>
 function getFormData(form) {
     const data = {};
     const inputs = form.querySelectorAll('input, select, textarea');
@@ -7686,33 +7674,226 @@ function getFormData(form) {
 
 console.log(getFormData(form));</code></div>
 
-    <h2>Валидация форм</h2>
+    <h2 id="ch13-validation">Validation API. Валидация элементов формы</h2>
 
     <h3>HTML5 валидация</h3>
-    <div class="code-block"><code>// HTML атрибуты валидации:
-// required - обязательное поле
-// minlength, maxlength - длина
-// min, max - числовые границы
-// pattern - регулярное выражение
-// type="email" - проверка email
-// type="url" - проверка URL
+
+    <p>HTML5 поддерживает нативную валидацию форм и их элементов. Для этого у полей ввода применяются различные атрибуты, которые настраивают валидацию. В частности, мы можем применять 
+        следующие атрибуты:
+    </p>
+    <ul>
+        <li><span class="b">required</span> требует, чтобы поле ввода обязательно содержало какое-нибудь значение</li>
+        <li><span class="b">max</span> задает максимальное числовое значение (для ввода числовых данных)</li>
+        <li><span class="b">min</span> задает минимальное числовое значение (для ввода числовых данных)</li>
+        <li><span class="b">maxlength</span> задает максимальную длину строки</li>
+        <li><span class="b">minlength</span> задает минимальную длину строки</li>
+    </ul>
+
+    <p>Например, возьмем следующую страницу:</p>
+    <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>VALIDATION TEST&lt;/title>
+    &lt;style>
+        input {width: 150px;}
+        input:invalid {border-color: red; }
+        input:valid { border-color: green;}
+    &lt;/style>
+&lt;/head>
+&lt;body>
+&lt;form id="registerForm" name="registerForm" method="post" action="register">
+    &lt;p>
+        &lt;label for="username">Username:&lt;/label>&lt;br>
+        &lt;input id="username" name="username" maxlength="20" minlength="3" required>
+    &lt;/p>
+    &lt;p>
+        &lt;label for="email">Email:&lt;/label>&lt;br>
+        &lt;input type="email" id="email" name="email" required>
+    &lt;/p>
+    &lt;p>
+        &lt;label for="age">Age:&lt;/label>&lt;br>
+        &lt;input type="number" id="age" name="age" min="1" max="110" value="18">
+    &lt;/p>
+    &lt;button type="submit" id="submit" name="submit">Register&lt;/button>
+&lt;/form>
+&lt;/body>
+&lt;/html></code></div>
+
+    <p>
+        Здесь на форме определено поле username для ввода условного имени пользователя. Причем это имя должно иметь не меньше 3 и не больше 20 символов. Поля для ввода имени и email 
+        обязательны для заполнения (имеют атрибут <code>required</code>). Также для поля age, которое предназначено для ввода условного возраста, установлено минимальное и максимальное допустимые 
+        значения - 1 и 110 соответственно.
+    </p>
+    <p>
+        Также стоит отметить, что с помощью селектора <code>input:invalid</code> можно определить стиль для невалидных полей, тогда как селектор 
+        <code>input:valid</code> задает стиль для полей, которые прошли валидацию.
+    </p>
+    <p>
+        И если мы введем в поле значение, которое не соответствует атрибутам валидации, или не введем никакого значения в поля, которые требуют наличия ввода, то при попытке 
+        отправить форму браузер нам отобразит для соответствующего поля ошибку валидации:
+    </p>
+    <p>
+        Конкретное сообщение валидации зависит от веб-браузера. Выше приведен пример для Google Chrome. Однако в данном случае нас будет интересовать, как мы можем взаимодействовать 
+        с нативной валидацией HTML5 в коде JavaScript. в других браузерах вид может отличаться
+    </p>
+
+    <h3>Получение информации о валидации в JavaScript</h3>
+
+    <p>
+        Современные веб-браузеры позволяют взаимодействовать в коде JavaScript с механизмом нативной валидации HTML5. Для этого предназначен 
+        специальный API - <span class="b">Constraint Validation API</span>. Этот API определяет ряд свойств, 
+        которые можно применять к формам или элементам форм и которые позволяют получить состояние валидации элементов:
+    </p>
+
+    <ul>
+            <li><span class="b">willValidate</span>: возвращает булевое значение, которое указывает, доступна ли валидация для элемента формы. 
+            Если валидация доступна, то возвращается <code>true</code>, при недоступности возвращается <code>false</code>. Например, если для элемента формы установлен 
+            атрибут <span class="b">disabled</span>, что делает этот элемент недоступным для взаимодействия, то валидация для него также недоступна. Для других 
+            элементов (не элементов формы) возвращается значение <code>undefined</code></li>
+
+            <li><span class="b">validity</span>: возвращает объект типа <span class="b">ValidityState</span>, который, в свою очередь, содержит информацию о валидации 
+            данного элемента формы. Свойства <span class="b">ValidityState</span>:
+                <ul>
+                    <li><code>valid</code>: возвращает булевое значение, которое указывает, проходит ли элемент формы валидацию (true) или нет (false</li>
+                    <li><code>valueMissing</code>: возвращает <code>true</code>, если в элементе формы, который требует обязательного ввода, отсутствует значение</li>
+                    <li><code>typeMismatch</code>: возвращает <code>true</code>, если введенное значение не соответствует типу элемента формы (например, вмент 
+                    <code>&lt;input type="email"&gt;</code> введен текст, которые не является адресом элементронной почты)</li>
+                    <li><code>patternMismatch</code>: возвращает <code>true</code>, если введенное значение не соответствует указанному шаблону</li>
+                    <li><code>tooLong</code>: возвращает <code>true</code>, если введенное значение превышает максимально допустимый лимит</li>
+                    <li><code>tooShort</code>: возвращает <code>true</code>, если введенное значение меньше минимально допустимого значения</li>
+                    <li><code>rangeUnderflow</code>: возвращает <code>true</code>, если введенное значение меньше диапазона допустимых значений</li>
+                    <li><code>rangeOverflow</code>: возвращает <code>true</code>, если введенное значение превышает диапазон допустимых значений</li>
+                    <li><code>stepMismatch</code>: возвращает <code>true</code>, если введенное значение не соответствует значению атрибута <code>step</code></li>
+                    <li><code>badInput</code>: возвращает <code>true</code>, если введенное значение некорректно</li>
+                    <li><code>customError</code>: возвращает <code>true</code>, если при вводе была сгенерирована кастомная ошибка</li>
+                </ul>
+            </li>
+            <li><span class="b">validationMessage</span>: содержит сообщение об ошибке валидации для текущего элемента формы. Конкретное сообщение зависит от используемого веб-браузера</li>
+    </ul>
+    
+    <p>Применим некоторые из этих свойств для проверки ввода в элемент формы:</p>
+    <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>FORM VALIDATION&lt;/title>
+    &lt;style>
+        input {width: 150px;}
+        input:invalid {border-color: red; }
+        input:valid { border-color: green;}
+    &lt;/style>
+&lt;/head>
+&lt;body>
+&lt;form id="registerForm" name="registerForm" method="post" action="register">
+    &lt;p>
+        &lt;label for="email">E-mail:&lt;/label>&lt;br>
+        &lt;input type="email" id="email" name="email" required>
+    &lt;/p>
+    &lt;button type="submit" id="submit" name="submit">Register&lt;/button>
+&lt;/form>
+&lt;script>
+    const emailField = document.getElementById("email");  
+    emailField.addEventListener("change", validateEmail);
+    
+    function validateEmail() {
+        console.log("Может валидироваться:", emailField.willValidate);
+        console.log("Значение отсутствует:", emailField.validity.valueMissing);
+        console.log("Значение валидно:", emailField.validity.valid);
+        console.log("Значение соответствует типу:", emailField.validity.typeMismatch);
+        console.log(emailField.validationMessage);
+    }
+&lt;/script>
+&lt;/body>
+&lt;/html>
+<code class="comment">// Может валидироваться: true</code>
+<code class="comment">// Значение отсутствует: false</code>
+<code class="comment">// Значение валидно: false</code>
+<code class="comment">// Значение соответствует типу: true</code>
+<code class="comment">// Адрес электронной почты должен содержать символ "@"</code>
+<code class="comment">// В адресе "t" отсутствует символ "@"</code></code></div>
+
+    <p>Благодаря этому мы можем производить дополнительную обработку информации о валидации, например, выводить ошибки валидации на страницу:</p>
+
+    <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+    &lt;style>
+        input {width: 150px;}
+        input:invalid {border-color: red; }
+        input:valid { border-color: green;}
+        #emailErrors {padding:5px;background-color: #ffcccc; color:#b33939; display:none;}
+    &lt;/style>
+&lt;/head>
+&lt;body>
+&lt;form id="registerForm" name="registerForm" method="post" action="register">
+    &lt;p>
+        &lt;label for="email">E-mail:&lt;/label>&lt;br>
+        &lt;input type="email" id="email" name="email" required>
+        &lt;div id="emailErrors">&lt;/div>
+    &lt;/p>
+    &lt;button type="submit" id="submit" name="submit">Register&lt;/button>
+&lt;/form>
+&lt;script>
+    const emailField = document.getElementById("email");
+    const emailErrors = document.getElementById("emailErrors");
+    emailField.addEventListener("change", validateEmail);
+    
+    function validateEmail() {
+        if(!emailField.validity.valid){
+            emailErrors.textContent = emailField.validationMessage;
+            emailErrors.style.display = "block";
+        }
+        else{
+            emailErrors.textContent = "";
+            emailErrors.style.display = "none";
+        }
+    }
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+    <p>Здесь при наличии ошибки валидации в блок <code class="b">emailErrors</code>  помещаем данное сообщение:</p>
+    <p>Как видно, браузер сам определяет сообщение об ошибке. Однако, мы можем проверять валидацию по конкретным параметрам и устанавливать свои сообщения об ошибке</p>
+
+    <div class="code-block"><code>function validateEmail() {
+    if(!emailField.validity.valueMissing){
+        emailErrors.textContent = "Отстуствет email!";
+        emailErrors.style.display = "block";
+    }
+    else{
+        emailErrors.textContent = "";
+        emailErrors.style.display = "none";
+    }
+}</code></div>
+
+    <p>Еще пример валидации:</p>
+    <div class="code-block"><code><code class="comment">// HTML атрибуты валидации:</code>
+<code class="comment">// - required - обязательное поле</code>
+<code class="comment">// - minlength, maxlength - длина</code>
+<code class="comment">// - min, max - числовые границы</code>
+<code class="comment">// - pattern - регулярное выражение</code>
+<code class="comment">// - type="email" - проверка email</code>
+<code class="comment">// - type="url" - проверка URL</code>
 
 &lt;input type="text" name="username" required minlength="3" maxlength="20"&gt;
 &lt;input type="email" name="email" required&gt;
 &lt;input type="number" name="age" min="18" max="100"&gt;
 &lt;input type="text" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"&gt;
 
-// Проверка валидности
+<code class="comment">// Проверка валидности</code>
 const input = document.querySelector('input[name="username"]');
 
-console.log(input.validity.valid);        // true/false
-console.log(input.validity.valueMissing); // Поле пустое
-console.log(input.validity.tooShort);     // Слишком короткое
-console.log(input.validity.tooLong);      // Слишком длинное
-console.log(input.validity.typeMismatch); // Неверный тип (email, url)
-console.log(input.validity.patternMismatch); // Не соответствует pattern
+console.log(input.validity.valid);<code class="comment">           // true/false</code>
+console.log(input.validity.valueMissing);<code class="comment">    // Поле пустое</code>
+console.log(input.validity.tooShort);<code class="comment">        // Слишком короткое</code>
+console.log(input.validity.tooLong);<code class="comment">         // Слишком длинное</code>
+console.log(input.validity.typeMismatch);<code class="comment">    // Неверный тип (email, url)</code>
+console.log(input.validity.patternMismatch);<code class="comment"> // Не соответствует pattern</code>
 
-// Сообщение об ошибке
+<code class="comment">// Сообщение об ошибке</code>
 console.log(input.validationMessage);</code></div>
 
     <h3>JavaScript валидация</h3>
@@ -7725,12 +7906,12 @@ form.addEventListener('submit', (e) => {
     const email = form.elements.email.value.trim();
     const password = form.elements.password.value;
     
-    // Очистить предыдущие ошибки
+    <code class="comment">// Очистить предыдущие ошибки</code>
     clearErrors();
     
     let isValid = true;
     
-    // Проверка username
+    <code class="comment">// Проверка username</code>
     if (username === '') {
         showError('username', 'Имя пользователя обязательно');
         isValid = false;
@@ -7739,7 +7920,7 @@ form.addEventListener('submit', (e) => {
         isValid = false;
     }
     
-    // Проверка email
+    <code class="comment">// Проверка email</code>
     if (email === '') {
         showError('email', 'Email обязателен');
         isValid = false;
@@ -7748,7 +7929,7 @@ form.addEventListener('submit', (e) => {
         isValid = false;
     }
     
-    // Проверка пароля
+    <code class="comment">// Проверка пароля</code>
     if (password === '') {
         showError('password', 'Пароль обязателен');
         isValid = false;
@@ -7759,7 +7940,7 @@ form.addEventListener('submit', (e) => {
     
     if (isValid) {
         console.log('Форма валидна!');
-        // Отправить данные на сервер
+        <code class="comment">// Отправить данные на сервер</code>
     }
 });
 
@@ -7785,7 +7966,7 @@ function isValidEmail(email) {
     <div class="code-block"><code>const input = document.querySelector('input[name="username"]');
 
 input.addEventListener('invalid', (e) => {
-    e.preventDefault(); // Отменить стандартное сообщение
+    e.preventDefault(); <code class="comment">// Отменить стандартное сообщение</code>
     
     if (input.validity.valueMissing) {
         input.setCustomValidity('Пожалуйста, введите имя пользователя');
@@ -7795,16 +7976,193 @@ input.addEventListener('invalid', (e) => {
 });
 
 input.addEventListener('input', () => {
-    input.setCustomValidity(''); // Сбросить сообщение при вводе
+    input.setCustomValidity(''); <code class="comment">// Сбросить сообщение при вводе</code>
 });</code></div>
 
-    <h2>Работа с файлами</h2>
+    <h2 id="ch13-validation-management">Управление валидацией форм</h2>
+
+    <h3>Методы валидации</h3>
+
+    <p>
+        В прошлой теме было рассмотрено, как получить состояние с помощью свойств <span class="b">Constraint Validation API</span>. 
+        Но в дополнение к свойствам <span class="b">Constraint Validation API</span> предоставляет ряд методов, которые позволяют управлять валидацией:
+    </p>
+
+    <ul>
+        <li><span class="b">checkValidity()</span>: проверяет, проходит ли элемент формы или вся форма валидацию. Этот метод можно вызвать как для формы, так и для отдельных ее элементов. Элемент формы является валидным, если он удовлетворяет 
+        всем атрибутам валидации. Форма является валидной, если все ее элементы проходят валидацию. Если форма или ее элементы проходят валидацию, то возвращается <code>true</code>, 
+        иначе возвращается <code>false</code></li>
+        <li><span class="b">reportValidity()</span>: также проверяет, проходит ли элемент формы или вся форма валидацию. Однако в отличие от 
+        <code>checkValidity()</code> этот метод также отображает ошибки валидации. Этот метод также можно вызвать как для формы, так и для отдельных ее элементов.</li>
+        <li><span class="b">setCustomValidity()</span>: этот метод позволяет настроить сообщения валидации</li>
+    </ul>
+
+    <p>Например, проверка валидности формы и ее элементов с помощью <code>checkValidity()</code>:</p>
+    <div class="code-block"><code>&lt;form id="registerForm" name="registerForm" method="post" action="register">
+&lt;p>
+    &lt;label for="username">Username:&lt;/label>&lt;br>
+    &lt;input id="username" name="username" maxlength="20" minlength="3" required>
+&lt;/p>
+&lt;p>
+    &lt;label for="age">Age:&lt;/label>&lt;br>
+    &lt;input type="number" id="age" name="age" min="1" max="110" required>
+&lt;/p>
+&lt;button type="submit" id="submit" name="submit">Register&lt;/button>
+&lt;/form>
+&lt;script>
+    const registerForm = document.registerForm;
+    const submit = registerForm.submit;
+    submit.addEventListener("click", validate);
+    
+    function validate(){
+        if(!registerForm.username.checkValidity()){
+            console.log("Username is not valid");
+        }
+        if(!registerForm.age.checkValidity()){
+            console.log("Age is not valid");
+        }
+        if(!registerForm.checkValidity()){
+            console.log("Form data is not valid");
+        }
+    }
+&lt;/script></code></div>
+
+    <p>Для элементов вызов этого метода аналогичен проверке валидности с помощью свойства <code>validity.valid</code>:</p>
+
+    <div class="code-block"><code>function validate(){
+    if(!registerForm.username.validity.valid){
+        console.log("Username is not valid");
+    }
+    if(!registerForm.age.validity.valid){
+        console.log("Age is not valid");
+    }
+    if(!registerForm.checkValidity()){
+        console.log("Form data is not valid");
+    }
+}</code></div>
+
+    <h3>Настройка собственных сообщений валидации</h3>
+
+    <p>Для настройки своих сообщений валидации в метод <span class="b">setCustomValidity()</span> передается необходимое сообщение:</p>
+
+    <div class="code-block"><code>&lt;form id="registerForm" name="registerForm">
+&lt;p>
+    &lt;label for="username">Username:&lt;/label>&lt;br>
+    &lt;input id="username" name="username" maxlength="20" minlength="3" required>
+&lt;/p>
+&lt;button type="submit" id="submit" name="submit">Register&lt;/button>
+&lt;/form>
+&lt;script>
+const registerForm = document.registerForm;
+const submit = registerForm.submit;
+submit.addEventListener("click", validate);
+ 
+function validate(){
+    if(registerForm.username.validity.valueMissing){
+        registerForm.username.setCustomValidity("Необходимо ввести имя пользователя");
+    }
+    if(registerForm.username.validity.tooLong){
+        registerForm.username.setCustomValidity("Имя пользователя не должно превышать 20 символов");
+    }
+    if(registerForm.username.validity.tooShort){
+        registerForm.username.setCustomValidity("Имя пользователя не должно быть меньше 3 символов");
+    }
+}
+&lt;/script></code></div>
+
+    <p>
+        Здесь при отправке формы проверяем значение поля username. В зависимости от того, какое правило валидации не соблюдается, устанавливаем соответствующее сообщение об ошибке. 
+        И браузер также будет использовать эти сообщения:
+    </p>
+
+    <h3>Определение своих правил валидации</h3>
+
+    <p>
+        При валидации мы не ограничены встроенными правилами валидации, которые применяются к элементу формы с помощью атрибутов <code>required</code>, 
+        <code>minlength</code>, <code>maxlength</code>, <code>min</code>, <code>max</code>, либо в зависимости от типа поля ввода. При необходимости мы можем задавать 
+        свою логику валидации для кастомных сценарией. Например, возьмем простейший пример: имя пользователя у нас не должно быть равно "admin". Для этого 
+        определим следующую программу:
+    </p>
+
+    <div class="code-block"><code>&lt;form id="registerForm" name="registerForm">
+&lt;p>
+    &lt;label for="username">Username:&lt;/label>&lt;br>
+    &lt;input id="username" name="username" maxlength="20" minlength="3" required>
+&lt;/p>
+&lt;button type="submit" id="submit" name="submit">Register&lt;/button>
+&lt;/form>
+&lt;script>
+    const usernameField = document.registerForm.username;
+    const submit = registerForm.submit;
+    submit.addEventListener("click", validate);
+    
+    function validate(){
+        if(usernameField.value === "admin"){
+            usernameField.setCustomValidity("Недопустимое имя пользователя");
+        }
+    }
+&lt;/script></code></div>
+
+    <p>В функции <code class="b">validate()</code> проверяем значение поля usernameField. Если оно равно "admin", то устанавливаем сообщение об ошибке.</p>
+
+    <p>
+        Поскольку мы установили сообщение об ошибке, то поле username уже не проходит валидацию, даже если оно соответствует атрибутам required. maxlength и minlength. 
+        Соотвественно далее мы можем получить это сообщение через свойство <code>validationMessage</code>:
+    </p>
+
+    <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>CASTOM MESSAGE VALIDATION&lt;/title>
+    &lt;style>
+        input {width: 150px;}
+        input:invalid {border-color: red; }
+        input:valid { border-color: green;}
+        #usernameErrors {padding:5px;background-color: #ffcccc; color:#b33939; display:none;}
+    &lt;/style>
+&lt;/head>
+&lt;body>
+&lt;form id="registerForm" name="registerForm">
+&lt;p>
+    &lt;label for="username">Username:&lt;/label>&lt;br>
+    &lt;input id="username" name="username" maxlength="20" minlength="3" required>
+    &lt;div id="usernameErrors">&lt;/div>
+&lt;/p>
+&lt;button type="submit" id="submit" name="submit">Register&lt;/button>
+&lt;/form>
+&lt;script>
+    const usernameErrors = document.getElementById("usernameErrors");
+    const usernameField = document.registerForm.username;
+    const submit = registerForm.submit;
+    submit.addEventListener("click", validate);
+    
+    function validate(e){
+        if(usernameField.value === "admin"){
+            usernameField.setCustomValidity("Недопустимое имя пользователя");
+        }
+        <code class="comment">// проверяем на валидацию</code>
+        if(!usernameField.validity.valid){
+            usernameErrors.textContent = usernameField.validationMessage;
+            usernameErrors.style.display = "block";
+        }
+        else{
+            usernameErrors.textContent = "";
+            usernameErrors.style.display = "none";
+            e.preventDefault(); <code class="comment">// предупреждаем отправку форму и перезагрузку страницы</code>
+        }
+    }
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+    <h2 id="ch13-files-validation">Работа с файлами</h2>
 
     <h3>Загрузка файла</h3>
     <div class="code-block"><code>const fileInput = document.querySelector('input[type="file"]');
 
 fileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0]; // Первый файл
+    const file = e.target.files[0]; <code class="comment">// Первый файл</code>
     
     if (file) {
         console.log('Имя:', file.name);
@@ -7812,14 +8170,14 @@ fileInput.addEventListener('change', (e) => {
         console.log('Тип:', file.type);
         console.log('Дата изменения:', file.lastModified);
         
-        // Проверка размера (макс 5MB)
+        <code class="comment">// Проверка размера (макс 5MB)</code>
         if (file.size > 5 * 1024 * 1024) {
             alert('Файл слишком большой (макс 5MB)');
-            e.target.value = ''; // Очистить
+            e.target.value = ''; <code class="comment">// Очистить</code>
             return;
         }
         
-        // Проверка типа
+        <code class="comment">// Проверка типа</code>
         const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
         if (!allowedTypes.includes(file.type)) {
             alert('Разрешены только изображения (JPEG, PNG, GIF)');
@@ -7830,7 +8188,7 @@ fileInput.addEventListener('change', (e) => {
 });</code></div>
 
     <h3>Множественная загрузка</h3>
-    <div class="code-block"><code>// &lt;input type="file" multiple&gt;
+    <div class="code-block"><code><code class="comment">// &lt;input type="file" multiple&gt;</code>
 const fileInput = document.querySelector('input[type="file"][multiple]');
 
 fileInput.addEventListener('change', (e) => {
@@ -7852,29 +8210,29 @@ fileInput.addEventListener('change', (e) => {
     if (file) {
         const reader = new FileReader();
         
-        // Прочитать как текст
+        <code class="comment">// Прочитать как текст</code>
         reader.readAsText(file);
         
-        // Когда файл прочитан
+        <code class="comment">// Когда файл прочитан</code>
         reader.onload = (e) => {
             console.log('Содержимое:', e.target.result);
         };
         
-        // Обработка ошибки
+        <code class="comment">// Обработка ошибки</code>
         reader.onerror = () => {
             console.error('Ошибка чтения файла');
         };
     }
 });
 
-// Чтение изображения
+<code class="comment">// Чтение изображения</code>
 fileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     
     if (file && file.type.startsWith('image/')) {
         const reader = new FileReader();
         
-        reader.readAsDataURL(file); // Прочитать как Data URL
+        reader.readAsDataURL(file); <code class="comment">// Прочитать как Data URL</code>
         
         reader.onload = (e) => {
             const img = document.createElement('img');
@@ -7903,7 +8261,7 @@ form.addEventListener('submit', async (e) => {
         if (response.ok) {
             const data = await response.json();
             console.log('Успех:', data);
-            form.reset(); // Очистить форму
+            form.reset(); <code class="comment">// Очистить форму</code>
         } else {
             console.error('Ошибка:', response.status);
         }
