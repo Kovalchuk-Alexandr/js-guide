@@ -590,6 +590,7 @@
                                 <li class="nav-subitem" data-target="ch14-dialog-search">📜 Диалоговые окна и поиск на странице</li>
                                 <li class="nav-subitem" data-target="ch14-open-close">📜 Открытие, закрытие и позиционирование окон</li>
                                 <li class="nav-subitem" data-target="ch14-history">📜 История браузера. History API</li>
+                                <li class="nav-subitem" data-target="ch14-location">📜 Объект location</li>
                                
                             </ul>
                         </li>
@@ -9185,13 +9186,115 @@ history.pushState(pages.home, "Home", pages.home.url); </code></div>
 
                 <p>Но в этом случае страница должна располагаться на веб-сервере:</p>
 
+                <h2 id="ch14-location">Объект location</h2>
+
+                <p>
+                    Объект <span class="b">location</span> содержит информацию о расположении текущей веб-страницы: URL, информацию о сервере, номер порта, протокол. С помощью 
+                    свойств объекта мы можем получить эту информацию:
+                </p>
+
+                <ul>
+                    <li><span class="b">href</span>: полный адрес URL веб-страницы</li>
+                    <li><span class="b">origin</span>: общая схема запроса</li>
+                    <li><span class="b">protocol</span>: протокол (включая двоеточие), например, <code>http:</code> или <code>https:</code></li>
+                    <li><span class="b">host</span>: хост, например, <code>localhost.com</code>. Если адрес URL  содержит номер порта, то порт также входит в хост, например, <code>localhost.com:8080</code></li>
+                    <li><span class="b">hostname</span>: домен, аналогичен хосту, только не включает порт, например, <code>localhost.com</code></li>
+                    <li><span class="b">port</span>: порт, используемый ресурсом</li>
+                    <li><span class="b">pathname</span>: путь к ресурсу - та часть адреса, которая идет после хоста после слеша / </li>
+                    <li><span class="b">hash</span>: идентификатор фрагмента - та часть адреса, которая идет после символа решетки # (при его наличии)</li>
+                    <li><span class="b">search</span>: строка запроса - та часть адреса, которая идет после знака вопроса ? (при его налии)</li>
+                    <li><span class="b">username</span>: имя пользователя, которое указано в адресе. Например, в адресе <code>«https://tom:qwerty5@localhost.com</code> это подстрока "tom"</li>
+                    <li><span class="b">password</span>: пароль, который указан в адресе. Например, в адресе <code>«https://tom:qwerty5@localhost.com</code> это подстрока "qwerty5"</li>
+                </ul>
+
+                <p>В общем случае формат адреса URL выглядит следующим образом:</p>
+                <div class="code-block"><code>protocol//username:password@hostname:port/path?search#hash</code></div>
+
+                <p>Например, пусть есть следующая веб-страница <code>index.html</code>:</p>
+                <div class="code-block"><code>&lt;body>
+&lt;script>
+    console.log("href:", location.href);
+    console.log("path:", location.pathname);
+    console.log("origin:", location.origin);
+    console.log("protocol:", location.protocol);
+    console.log("port:", location.port);
+    console.log("host:", location.host);
+    console.log("hostname", location.hostname);
+    console.log("hash:", location.hash);
+    console.log("search:", location.search);
+&lt;/script>
+&lt;/body>
+
+<code class="comment">// href: http://localhost:8080/index.html?name=tom&amp;age=39#userinfo</code>
+<code class="comment">// path: /index.html</code>
+<code class="comment">// origin: http://localhost:8080</code>
+<code class="comment">// protocol: http</code>
+<code class="comment">// port: 8080</code>
+<code class="comment">// host: localhost:8080</code>
+<code class="comment">// hostname: localhost</code>
+<code class="comment">// hash: #userinfo</code>
+<code class="comment">// serch: ?name=tom&amp;age=39</code></code></div>
+
+                <p>Пусть она лежит на локальном веб-сервере, и к ней мы обращаемся с помощью адреса <code>http://localhost:8080/index.html?name=tom&amp;age=39#userinfo</code>:</p>
+
+                <h3>Управление адресом</h3>
+
+                <p>Также объект location предоставляет ряд методов, которые можно использовать для управления адресом веб-страницы:</p>
+
+                <ul>
+                    <li><span class="b">assign(url)</span>: загружает ресурс, который находится по пути url</li>
+                    <li><span class="b">reload(forcedReload)</span>: перезагружает текущую веб-страницу. Параметр <code class="b">forcedReload</code> указывает, надо ли использовать кэш браузера. Если параметр равен true, то кэш не используется</li>
+                    <li><span class="b">replace(url)</span>: заменяет текущую веб-станицу другим ресурсом, который находится по пути url. В отличие от метода <code class="b">assign</code>, который также загружает веб-станицу с другого ресурса, метод <code class="b">replace</code> не сохраняет предыдущую веб-страницу в стеке истории переходов 
+                    <code class="b">history</code>, поэтому мы не сможем вызвать метод <code class="b">history.back()</code> для перехода к ней.</li>
+                </ul>
+
+                <p>Для перенаправления на другой ресурс мы можем использовать как свойства, так и методы location:</p>
+                <div class="code-block"><code>location = "http://google.com";
+<code class="comment">// аналогично</code>
+<code class="comment">// location.href = "http://google.com";</code>
+<code class="comment">// location.assign("http://google.com");</code></code></div>
+
+                <h4>Переход на другой локальный ресурс:</h4>
+                <div class="code-block"><code>location.replace("index.html");</code></div>
+                
+                <p>Например, выполним переход на странице по нажатию на кнопку:</p>
+                <div class="code-block"><code>&lt;body>
+&lt;input type="url" id="url" />
+&lt;button id="btn">Click&lt;/button>
+&lt;script>
+    const btn = document.getElementById("btn");
+    btn.addEventListener("click", () => {  
+        const url = document.getElementById("url").value;  
+        location.assign(url);
+    }); 
+&lt;/script>
+&lt;/body></code></div>
+
+                <p>Здесь по нажатию на кнопку выполняется переход по адресу, который введен в текстовое поле url.</p>
+                <p>Переход с помощью метода <span class="b">replace()</span> производится аналогично:</p>
+                <div class="code-block"><code>const btn = document.getElementById("btn");
+btn.addEventListener("click", () => {  
+    const url = document.getElementById("url").value;  
+    location.replace(url);
+}); </code></div>
+
+                <h4>Перезагрузка страницы:</h4>
+
+                <div class="code-block"><code>const btn = document.getElementById("btn");
+btn.addEventListener("click", () => {  
+    const url = document.getElementById("url").value;  
+    location.reload(true);
+}); </code></div>
+
+
+
                 <h3>Таймеры</h3>
-                <div class="code-block"><code>// setTimeout - выполнить через заданное время (один раз)
+                <div class="code-block"><code><code class="comment">// setTimeout - выполнить через заданное время (один раз)</code>
 const timerId = setTimeout(() => {
     console.log('Выполнилось через 2 секунды');
 }, 2000);
 
-// Отменить выполнение
+<code class="comment">// Отменить выполнение</code>
 clearTimeout(timerId);
 
 
