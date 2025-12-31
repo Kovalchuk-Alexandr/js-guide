@@ -610,8 +610,21 @@
                                
                             </ul>
                         </li>
-
-                        <li class="nav-item" data-target="ch16">Глава 16. Хранение данных</li>
+                        <li class="nav-item has-subitems" data-target="ch16"><span class="ch-emoj"></span> Глава 16. Хранение данных
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch16-store-methods">📜 Способы хранения данных в браузере</li>
+                                <li class="nav-subitem" data-target="ch16-cookies">📜 Cookies (Куки)</li>
+                                <li class="nav-subitem" data-target="ch16-server">📜 Простой web-сервер</li>
+                                <li class="nav-subitem" data-target="ch16-web-storage">📜 Web Storage API</li>
+                                <li class="nav-subitem" data-target="ch16-localstorage">📜 localStorage</li>
+                                <li class="nav-subitem" data-target="cgh16-sessionstorage">📜 sessionStorage</li>
+                                <li class="nav-subitem" data-target="ch16-storage-events">📜 События Storage</li>
+                                <li class="nav-subitem" data-target="ch16-storage-compare">📜 Сравнение способов хранения</li>
+                                <li class="nav-subitem" data-target="ch16-limits-secure">📜 Ограничения и безопасность</li>
+                                <li class="nav-subitem" data-target="ch16-access-limits">📜 Проверка доступности и лимитов</li>
+                                <li class="nav-subitem" data-target="ch16-useful-utilities">📜 Полезные утилиты</li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
 
@@ -10267,7 +10280,7 @@ items.forEach(item => {
             <section class="chapter" id="ch16">
                 <h1>Глава 16. Хранение данных</h1>
                 
-                <h2>Способы хранения данных в браузере</h2>
+                <h2 id="ch16-store-methods">Способы хранения данных в браузере</h2>
                 <p>JavaScript предоставляет несколько способов хранения данных на стороне клиента:</p>
                 <ul>
                     <li><strong>Cookies (Куки)</strong> — классический способ, данные отправляются с каждым HTTP-запросом</li>
@@ -10276,9 +10289,25 @@ items.forEach(item => {
                     <li><strong>IndexedDB</strong> — полноценная база данных в браузере (см. главу 24)</li>
                 </ul>
 
-                <h2>Cookies (Куки)</h2>
+                <h2 id="ch16-cookies">Cookies (Куки)</h2>
                 <p><strong>Cookies</strong> — это небольшие фрагменты данных, которые веб-сервер отправляет браузеру, а браузер сохраняет их и отправляет обратно серверу с каждым последующим запросом.</p>
+                <p>
+                    Каждый раз, когда мы обращаемся к веб-странице в интернете, то веб-сервер вместе с этой страницей 
+                    присылает связаные с этой страницей куки (при их наличии). И браузер хранит эти данные некоторое время. При последующих обращениях к той же странице или сайту в зависимости от настроек куки 
+                    обратно посылаются из браузера на сервер.
+                </p>
+                <p>Для работы с куками в языке JavaScript в объекте <span class="b">document</span> предназначено свойство <span class="b">cookie</span>.</p>
+                <p>Для установки куки достаточно свойству <code class="b">document.cookie</code> присвоить строку с куками:</p>
 
+                <div class="code-block"><code>&lt;body>
+&lt;script>
+    document.cookie = "login=tom32;";
+    console.log(document.cookie);
+&lt;/script>
+&lt;/body></code></div>
+
+                <p>В данном случае устанавливается куки, которая называется "login" и которая имеет значение "tom32". Затем получаем куки и выводим их на консоль.</p>
+                
                 <div class="info-box note">
                     <div class="info-box-title">💡 Особенности cookies</div>
                     <ul>
@@ -10289,28 +10318,90 @@ items.forEach(item => {
                     </ul>
                 </div>
 
-                <h3>Чтение cookies</h3>
-                <div class="code-block"><code><code class="comment">// Получаем все cookies в виде строки</code>
-    console.log(document.cookie);
-// Пример вывода: "username=Alice; theme=dark; lang=ru"</code></div>
+                <h3>Установка параметров куки</h3>
 
-                <h3>Создание/изменение cookie</h3>
-                <div class="code-block"><code>// Простая установка cookie
-document.cookie = "username=Alice";
+                <p>Строка куки принимает до шести различных параметров:</p>
 
-// Cookie с истечением через 7 дней
-const date = new Date();
-date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000)); // +7 дней
-document.cookie = `username=Alice; expires=${date.toUTCString()}; path=/`;
+                <ul>
+                    <li>
+                        <h4>Имя и значение куки</h4>
+                        <p>Имя не чувствительно к регистру, что означает, что, например, login и Login относятся к одному и тому же файлу cookie. В качестве значений разрешены 
+                        только строки (а не, скажем, числа). Имя и значение — единственные обязательные компоненты. Указывать остальную информацию необязательно 
+                        (если она не указана, используются значения по умолчанию).</p>
+                    </li>
+                    <li><h4>Срок окончания действия (параметр <span class="b"><i>expires</i></span>)</h4>
+                    <p>Дата истечения срока действия, до которой файл cookie действителен. По истечении указанной здесь даты срок действия файла cookie истекает, 
+                    файл cookie удаляется и больше не отправляется на сервер. Если при создании файла cookie не указана дата истечения срока действия, он удаляется по 
+                    умолчанию при завершении сеанса браузера.</p></li>
+                    <li><h4>Путь (параметр <i>path</i> ) и домен (параметр <i>domain</i>)</h4>
+                    <p>Используются для разграничения куки. Например, файл cookie с доменом <code>www.localhost.com</code> отправляется только с запросами к этому домену. 
+                    Файл cookie с доменом <code>www.localhost.com</code> и путем <code>/home</code> отправляется только с запросами на <code>www.localhost.com/home</code>, 
+                    но не на <code>www.localhost.com/about</code>.</p></li>
+                    <li><h4>Параметр <span class="b"><i>secure</i></span></h4>
+                    <p>Флаг безопасности, который можно использовать, чтобы дополнительно указать, следует ли отправлять файлы cookie только при соединениях, использующих протокол Secure Sockets Layer (SSL), например, чтобы разрешить отправку по https. 
+                    Если этот параметр установлен, куки могут быть посланы по адресу <code>https://www.localhost.com</code>, а при запросах по адресу посланы по адресу 
+                    <code>http://www.localhost.com</code> такие куки НЕ посылаются.</p></li>
+                </ul>
 
-// Cookie с max-age (в секундах)
-document.cookie = "theme=dark; max-age=604800; path=/"; // 7 дней
+                <p>Выше использовались только два параметра: имя куки и значение:</p>
 
-// Secure cookie (только HTTPS)
-document.cookie = "token=abc123; secure; path=/";
+                <div class="code-block"><code>document.cookie = "login=tom32;";</code></div>
 
-// HttpOnly cookie (только для сервера, JS не может читать)
-// Устанавливается только сервером!</code></div>
+                <p>То есть в данном случае куки имеет имя login и значение tom32.</p>
+
+
+                <h4>Параметр expires</h4>
+
+                <p>
+                    Но подобная куки имеет очень ограниченный срок жизни: если явным образом не установить срок действия, то кука будет удалена с закрытием браузера.
+                    Подобная ситуация, возможно, идеальна для тех случаев, когда необходимо удалять всю информацию после завершения работы с веб-приложением и закрытия браузера. 
+                    Однако данное поведение не всегда подходит.
+                </p>
+                <p>И в этом случае нам надо установить параметр <span class="b">expires</span>, то есть срок действия куков:</p>
+
+                <div class="code-block"><code>document.cookie = "login=tom32;expires=Sun, 31 Dec 2023 23:59:00 GMT;";</code></div>
+
+                <p>
+                    То есть срок действия куки login истекает в понедельник 31 декабря 2023 года в 23:59. Формат параметра expires очень важен. 
+                    Однако его можно сгенерировать программно. Для этого мы можем использовать метод <span class="b">toUTCString()</span> объекта Date:
+                </p>
+
+                <div class="code-block"><code>const expire = new Date();
+expire.setHours(expire.getHours() + 4);
+document.cookie = "login=tom32;expires=" + expire.toUTCString() + ";";</code></div>
+
+                <p>В данном случае срок действия куки будет составлять 4 часа.</p>
+
+                <h4>Путь и домен</h4>
+
+                <p>
+                    Если в друг нам надо установить куки для какого-то определенного пути на сайте, то мы можем использовать параметр <span class="b">path</span>. Например, 
+                    мы хотим установить куки только для пути <code>http://localhost:3000/home</code>:
+                </p>
+
+                <div class="code-block"><code>document.cookie = "login=tom32;expires=Sun, 31 Dec 2023 23:59:00 GMT;path=/home;";</code></div>
+
+                <p>
+                    В этом случае для других путей на сайте, например, <code>http://localhost:3000/about</code>, эти куки будут недоступны. Однако стоит отметить, что эта кука будет установлена, 
+                    если мы обращаемся по пути <code>http://localhost:3000/home</code>.\
+                </p>
+                <p>
+                    Если на нашем сайте есть несколько доменов, и мы хотим установить куки непосредственно для определенного домена, тогда можно использовать параметр 
+                    <span class="b">domain</span>. Например, у нас на сайте есть поддомен <code>blog.mysite.com</code>:
+                </p>
+
+                <div class="code-block"><code>document.cookie="login=tom32;expires=Sun, 31 Dec 2023 23:59:00 GMT;path=/;domain=blog.mysite.com;";</code></div>
+
+                <p>Параметр <code>path=/</code> указывает, что куки будут доступны для всех директорий и путей поддомена blog.mysite.com.</p>
+
+                <h4>Параметр secure</h4>
+
+                <p>
+                    Последний параметр - <span class="b">secure</span> задает использование SSL (SecureSockets Layer) и подходит для сайтов, использующих протокол https. 
+                    Если значение этого параметра равно <code>true</code>, то куки будут использоваться только при установке защищенного соединения ssl. По умолчанию 
+                    данный параметр равен false.
+                </p>
+                <div class="code-block"><code>document.cookie = "login=tom32;expires=Sun, 31 Dec 2023 23:59:00 GMT;path=/;secure=true;";</code></div>
 
                 <div class="info-box warning">
                     <div class="info-box-title">⚠️ Важные параметры cookies</div>
@@ -10322,15 +10413,67 @@ document.cookie = "token=abc123; secure; path=/";
                     </ul>
                 </div>
 
+
+                <h3>Чтение/получение cookies</h3>
+
+                <p>Для простейшего извлечения куки из браузера достаточно обратиться к свойству <span class="b">document.cookie</span>:</p>
+
+                <div class="code-block"><code><code class="comment"><code class="comment">// Получаем все cookies в виде строки</code></code>
+    console.log(document.cookie);
+<code class="comment">// Пример вывода: "username=Alice; theme=dark; lang=ru"</code></code></div>
+
+                <div class="code-block"><code>const expire = new Date();
+expire.setHours(expire.getHours() + 4);
+ 
+document.cookie = "language=JavaScript;expires="+expire.toUTCString()+";";
+document.cookie = "company=Localhost;expires="+expire.toUTCString()+";";
+document.cookie = "login=tom32;";
+ 
+console.log(document.cookie);</code></div>
+
+                <p>Здесь были установлены три куки, и консоль браузера выведет нам все эти куки:</p>
+                <pre class="browser">language=JavaScript; company=Localhost; login=tom32</pre>
+
+                <p>
+                    Извлеченные куки не включают параметры <code>expires, path, domain</code> и <code>secure</code>. 
+                    Кроме того, сами куки разделяются точкой с запятой, поэтому нужно еще провести некоторые преобразования, чтобы получить их имя и значение:
+                </p>
+
+                <div class="code-block"><code>const cookies = document.cookie.split(";");
+for(cookie of cookies){
+ 
+    const parts = cookie.split("=");
+    console.log("Имя куки:", parts[0]);
+    console.log("Значение:", parts[1],"\n\n");
+}</code></div>
+
+                <h3>Создание/изменение cookie</h3>
+                <div class="code-block"><code><code class="comment">// Простая установка cookie</code>
+document.cookie = "username=Alice";
+
+<code class="comment">// Cookie с истечением через 7 дней</code>
+const date = new Date();
+date.setTime(date.getTime() + (7 * 24 * 60 * 60 * 1000)); <code class="comment">// +7 дней</code>
+document.cookie = `username=Alice; expires=${date.toUTCString()}; path=/`;
+
+<code class="comment">// Cookie с max-age (в секундах)</code>
+document.cookie = "theme=dark; max-age=604800; path=/"; <code class="comment">// 7 дней</code>
+
+<code class="comment">// Secure cookie (только HTTPS)</code>
+document.cookie = "token=abc123; secure; path=/";
+
+<code class="comment">// HttpOnly cookie (только для сервера, JS не может читать)</code>
+<code class="comment">// Устанавливается только сервером!</code></code></div>
+
                 <h3>Удаление cookie</h3>
-                <div class="code-block"><code>// Устанавливаем expires в прошлое
+                <div class="code-block"><code><code class="comment">// Устанавливаем expires в прошлое</code>
 document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
 
-// Или используем max-age=0
+<code class="comment">// Или используем max-age=0</code>
 document.cookie = "theme=; max-age=0; path=/";</code></div>
 
                 <h3>Вспомогательные функции для работы с cookies</h3>
-                <div class="code-block"><code>// Функция для установки cookie
+                <div class="code-block"><code><code class="comment">// Функция для установки cookie</code>
 function setCookie(name, value, days) {
     const date = new Date();
     date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
@@ -10338,7 +10481,7 @@ function setCookie(name, value, days) {
     document.cookie = `${name}=${value}; ${expires}; path=/`;
 }
 
-// Функция для получения cookie
+<code class="comment">// Функция для получения cookie</code>
 function getCookie(name) {
     const nameEQ = name + "=";
     const cookies = document.cookie.split(';');
@@ -10352,44 +10495,160 @@ function getCookie(name) {
     return null;
 }
 
-// Функция для удаления cookie
+<code class="comment">// Функция для удаления cookie</code>
 function deleteCookie(name) {
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
 }
 
-// Использование
-setCookie('username', 'Alice', 7);        // Установить на 7 дней
-console.log(getCookie('username'));       // "Alice"
-deleteCookie('username');                 // Удалить</code></div>
+<code class="comment">// Использование</code>
+setCookie('username', 'Alice', 7);        <code class="comment">// Установить на 7 дней</code>
+console.log(getCookie('username'));       <code class="comment">// "Alice"</code>
+deleteCookie('username');                 <code class="comment">// Удалить</code></code></div>
 
     <h3>Практический пример: Запоминание темы</h3>
-    <div class="code-block"><code>// Сохраняем выбор темы
+    <div class="code-block"><code><code class="comment">// Сохраняем выбор темы</code>
 function saveTheme(theme) {
-    setCookie('theme', theme, 365); // На год
+    setCookie('theme', theme, 365); <code class="comment">// На год</code>
     applyTheme(theme);
 }
 
-// Применяем тему
+<code class="comment">// Применяем тему</code>
 function applyTheme(theme) {
     document.body.className = theme === 'dark' ? 'dark-theme' : '';
 }
 
-// При загрузке страницы проверяем сохранённую тему
+<code class="comment">// При загрузке страницы проверяем сохранённую тему</code>
 window.addEventListener('DOMContentLoaded', () => {
     const savedTheme = getCookie('theme') || 'light';
     applyTheme(savedTheme);
 });
 
-// Переключатель темы
+<code class="comment">// Переключатель темы</code>
 document.getElementById('themeToggle').addEventListener('click', () => {
     const currentTheme = getCookie('theme') || 'light';
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
     saveTheme(newTheme);
 });</code></div>
 
-                <h2>Web Storage API</h2>
+                <h3>Ограничения куки</h3>
+
+                <p>
+                    Все файлы cookie для соответствующего домена и соответствующего пути отправляются с каждым запросом, что влияет на объем пересылаемых данных. 
+                    Кроме того, файлы cookie, отправляемые по протоколу HTTP (а не по безопасному протоколу HTTPS), передаются в незашифрованном виде, что представляет угрозу безопасности в зависимости от типа передаваемой информации. Еще одним ограничением файлов cookie является разрешенный размер памяти в 4 КБ.
+                </p>
+
+                <h2 id="ch16-server">Простой web-сервер для использования cookies</h2>
+
+                <p>
+                    Работа с куками может различаться от того, какой браузер используется, и как запускается веб-страница: как локальный файл или как файл на веб-сервере. 
+                    Например, если мы запустим веб-страницу как локальный файл, то есть просто бросим выше определенную веб-страницу в браузер 
+                    Mozilla FireFox или Safari, то браузер установит куки и выведет их на консоль. Браузеры поддерживают просмотр установленных кук (как и других сохраненных данных). 
+                    Например, если брать Mozilla FireFox, то в инструментах разработчика есть вкладки "Хранилище" (в русскоязычной локализации), и и там можно посмотреть куки:
+                </p>
+
+                <p>
+                    Однако в других браузерах, например, в Google Chrome или Opera на установку куки в веб-страницах, которые представляют локальные файлы, 
+                    действуют ограничения. Соответственно, если мы бросим выше определенную страницу в Google Chrome, то консоль нам ничего не отобразит. Потому что Google Chrome по умолчанию 
+                    поддерживает установку кук только в веб-страницах, которые загружаются с веб-сервера и принадлежат некоторому домену в сети. Что в принципе неудивительно. Ведь куки предназначены 
+                    прежде всего для пересылки данных по протоколу http от клиента серверу и обратно.
+                </p>
+                <p>
+                    Поэтому в дальнейшем для работы с куками мы будем располагать html-страницы на веб-сервере. В данном случае воспользуемся самым простым вариантом - Node.js, так как эта технология двольно проста, доступна для всех основных операционных систем и также 
+                    также позволяет использовать javascript для создания приложений. Но естественно перед созданием приложения необходимо <a href="https://metanit.com/web/nodejs/1.1.php">установить Node.js</a>. 
+                    В данном случае не потребуется никаких знаний node.js, весь используемый код подробно описывается. Но опять же вместо node.js это может быть любая другая технология сервера - 
+                    php, asp.net, python и т.д. либо какой-то определенный веб-сервер типа Apache или IIS.
+                </p>
+                <p>
+                    Итак, создадим в файловой системе папку для файлов веб-сервера. Например, в моем случае это папка <span class="b">C:\app</span>. Далее в этой папке 
+                    определим файл сервера. Пусть он будет называться <span class="b">server.js</span> и будет иметь следующий код:
+                </p>
+
+                <div class="code-block"><code>const http = require("http");
+const fs = require("fs");
+    
+http.createServer(function(_, response){
+      
+    fs.readFile("index.html", (_, data) => response.end(data));
+ 
+}).listen(3000, ()=>console.log("Сервер запущен по адресу http://localhost:3000"));</code></div>
+
+                <p>Это самый примитивный сервер, который достаточен для нашей задачи. Вкратце пробежимся по коду. Сначала подключаются пакеты с функциональностью, которую мы собираемся использовать:</p>
+
+                <div class="code-block"><code>const http = require("http");  <code class="comment">// для обработки входящих запросов</code>
+const fs = require("fs");       <code class="comment">// для чтения с жесткого диска файла index.html</code></code></div>
+
+                <p>
+                    Для создания сервера применяется функция <span class="b">http.createServer()</span>. В эту функцию передается функция-обработчик, которая вызывается каждый раз, когда к серверу приходит запрос. 
+                    Эта функция имеет два параметра: <code>request</code> (содержит данные запроса) и <code>response</code> (управляет отправкой ответа). Первый параметр не используется, поэтмоу вместо него указан прочерк _.
+                </p>
+
+                <p>В функции-обработчике отправляем файл <span class="b">index.html</span>, который мы дальше определим:</p>
+
+                <div class="code-block"><code>fs.readFile("index.html", (error, data) => response.end(data));</code></div>
+
+                <p>
+                    Для считывания файлов применяется встроенная функция <span class="b">fs.readFile()</span>. Первый параметр функции - адрес файла 
+                    (в данном случае предполагается, что файл index.html находится в одной папке с файлом сервера server.js). Второй параметр - функция, которая вызывается после считывания файла 
+                    и получет его содержимое через свой второй параметр data. Затем считанное содежимое также может быть отпавлено с помощью функции <code>response.end(data)</code>.
+                </p>
+
+                <p>В конце с помощью функции <span class="b">listen()</span> запускаем веб-сервер на 3000 порту. То есть сервер будет запускаться по адресу http://localhost:3000/</p>
+                <p>И также в той же папке определим файл <span class="b">index.html</span> со следующим кодом:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+&lt;script>
+    document.cookie = "login=tom32;";
+    console.log(document.cookie);
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>Здесь, как уже было рассмотрено выше, устанавливается куки login. Затем куки выводятся на консоль.</p>
+
+                <p>Теперь в консоли перейдем к папке сервера с помощью команды <span class="b">cd</span> и запустим сервер с помощью команды <span class="b">node server.js</span></p>
+                
+                <pre class="sh">C:\app&gt;node server.js
+Сервер запущен по адресу http://localhost:3000</pre>
+
+                <p>
+                    После запуска сервера мы можем перейти в браузере по адресу http://localhost:3000, нам отобразится страница <span class="b">index.html</span>. 
+                    С помощью инструментов браузера мы сможем посмотреть установленные куки. Так, в Google Chrome это вкладка <span class="b">Application</span>, а в 
+                    левой части пункт <span class="b">Storage</span> -&gt; <span class="b">Cookies</span>:
+                </p>
+
+                <h2 id="ch16-web-storage">Web Storage API</h2>
+                <p>
+                    Для хранения данных в HTML5 применяется специальный API - <span class="b">Web Storage API</span>, который обеспечивает доступ к внутреннему хранилищу браузера (web storage). 
+                    Данное хранилище состоит из двух компонентов: 
+                    <span class="b">session storage</span> и <span class="b">local storage</span>.
+                </p>
                 <p><strong>Web Storage API</strong> предоставляет два объекта для хранения данных в браузере: <code>localStorage</code> и <code>sessionStorage</code>.</p>
 
+                <p><span class="b">Session storage</span> представляет временное хранилище информации, которая удаляется после закрытия вкладки браузера.</p>
+                <p>
+                    <span class="b">Local storage</span> представляет хранилище для данных на постоянной основе. Данные из local storage автоматически не удаляются и 
+                    не имеют срока действия. Эти данные не передаются на сервер в запросе HTTP. Кроме того, объем local storage составляет в Chrome и Firefox 5 Mб для домена.
+                </p>
+                <p>Все данные в web storage представляют набор пар ключ-значение. То есть каждый объект имеет уникальное имя-ключ и определенное значение.</p>
+                <p>
+                    Для работы с local storage в javascript используется объект <span class="b">localStorage</span>, а для работы с session storage - объект 
+                    <span class="b">sessionStorage</span>. Оба этих объектов с точки зрения API похожи и предоставляют аналогичные свойства и методы:
+                </p>
+                
+                <ul>
+                    <li><span class="b">length</span>: содержит количество элементов в хранилище</li>
+                    <li><span class="b">clear()</span>: удаляет все элементы из хранилища</li>
+                    <li><span class="b">getItem(key)</span>: возвращает определенный элемент, который имеет ключ key</li>
+                    <li><span class="b">key(index)</span>: возвращает ключ элемента, который имеет индекс index</li>
+                    <li><span class="b">removeItem(key)</span>: удаляет элемент с ключом key</li>
+                    <li><span class="b">setItem(key, value)</span>: устанавливает для элемента с ключом key значение value. Если элемент с ключом key уже есть в хранилище, то его значение перезаписывается. Если элемента нет, то он добавляется.</li>
+                </ul>
                 <table>
                     <thead>
                         <tr>
@@ -10433,40 +10692,41 @@ document.getElementById('themeToggle').addEventListener('click', () => {
                     </tbody>
                 </table>
 
-                <h2>localStorage</h2>
+                <h2 id="ch16-localstorage">localStorage</h2>
+
                 <p><code>localStorage</code> — постоянное хранилище данных в браузере. Данные сохраняются даже после закрытия браузера.</p>
 
                 <h3>Основные методы localStorage</h3>
-                <div class="code-block"><code>// 1. setItem() - сохранение данных
+                <div class="code-block"><code><code class="comment">// 1. setItem() - сохранение данных</code>
 localStorage.setItem('username', 'Alice');
 localStorage.setItem('age', '25');
 
-// 2. getItem() - получение данных
+<code class="comment">// 2. getItem() - получение данных</code>
 const username = localStorage.getItem('username');
-console.log(username); // "Alice"
+console.log(username); <code class="comment">//</code> "Alice"
 
-// 3. removeItem() - удаление одного элемента
+<code class="comment">// 3. removeItem() - удаление одного элемента</code>
 localStorage.removeItem('age');
 
-// 4. clear() - удаление всех данных
+<code class="comment">// 4. clear() - удаление всех данных</code>
 localStorage.clear();
 
-// 5. key(index) - получение ключа по индексу
+<code class="comment">// 5. key(index) - получение ключа по индексу</code>
 const firstKey = localStorage.key(0);
 
-// 6. length - количество элементов
+<code class="comment">// 6. length - количество элементов</code>
 console.log(localStorage.length);</code></div>
 
                 <h3>Альтернативный синтаксис (как объект)</h3>
-                <div class="code-block"><code>// Запись
+                <div class="code-block"><code><code class="comment">// Запись</code>
 localStorage.username = 'Alice';
 localStorage['theme'] = 'dark';
 
-// Чтение
-console.log(localStorage.username);     // "Alice"
-console.log(localStorage['theme']);     // "dark"
+<code class="comment">// Чтение</code>
+console.log(localStorage.username);     <code class="comment">// "Alice"</code>
+console.log(localStorage['theme']);     <code class="comment">// "dark"</code>
 
-// Удаление
+<code class="comment">// Удаление</code>
 delete localStorage.username;</code></div>
 
                 <div class="info-box warning">
@@ -10475,54 +10735,54 @@ delete localStorage.username;</code></div>
                 </div>
 
                 <h3>Работа с объектами в localStorage</h3>
-                <div class="code-block"><code>// Сохранение объекта
+                <div class="code-block"><code><code class="comment">// Сохранение объекта</code>
 const user = {
     name: 'Alice',
     age: 25,
     skills: ['JavaScript', 'React', 'Node.js']
 };
 
-// Преобразуем в JSON-строку
+<code class="comment">// Преобразуем в JSON-строку</code>
 localStorage.setItem('user', JSON.stringify(user));
 
-// Получение объекта
+<code class="comment">// Получение объекта</code>
 const savedUser = JSON.parse(localStorage.getItem('user'));
-console.log(savedUser.name);        // "Alice"
-console.log(savedUser.skills[0]);   // "JavaScript"</code></div>
+console.log(savedUser.name);        <code class="comment">// "Alice"</code>
+console.log(savedUser.skills[0]);   <code class="comment">// "JavaScript"</code></code></div>
 
                 <h3>Перебор всех элементов localStorage</h3>
-                <div class="code-block"><code>// Способ 1: через цикл for
+                <div class="code-block"><code><code class="comment">// Способ 1: через цикл for</code>
 for (let i = 0; i &lt; localStorage.length; i++) {
     const key = localStorage.key(i);
     const value = localStorage.getItem(key);
     console.log(`${key}: ${value}`);
 }
 
-// Способ 2: через Object.keys()
+<code class="comment">// Способ 2: через Object.keys()</code>
 Object.keys(localStorage).forEach(key => {
     console.log(`${key}: ${localStorage[key]}`);
 });</code></div>
 
                 <h3>Практический пример: Корзина товаров</h3>
-                <div class="code-block"><code>// Класс для работы с корзиной
+                <div class="code-block"><code><code class="comment">// Класс для работы с корзиной</code>
 class ShoppingCart {
     constructor() {
         this.storageKey = 'cart';
         this.items = this.loadCart();
     }
     
-    // Загрузка корзины из localStorage
+    <code class="comment"><code class="comment">// Загрузка корзины из localStorage</code></code>
     loadCart() {
         const data = localStorage.getItem(this.storageKey);
         return data ? JSON.parse(data) : [];
     }
     
-    // Сохранение корзины в localStorage
+    <code class="comment">// Сохранение корзины в localStorage</code>
     saveCart() {
         localStorage.setItem(this.storageKey, JSON.stringify(this.items));
     }
     
-    // Добавление товара
+    <code class="comment">// Добавление товара</code>
     addItem(product) {
         const existing = this.items.find(item => item.id === product.id);
         
@@ -10535,52 +10795,52 @@ class ShoppingCart {
         this.saveCart();
     }
                 
-// Удаление товара
+<code class="comment">// Удаление товара</code>
 removeItem(productId) {
     this.items = this.items.filter(item => item.id !== productId);
     this.saveCart();
 }
 
-// Получение общей суммы
+<code class="comment">// Получение общей суммы</code>
 getTotal() {
     return this.items.reduce((sum, item) => {
         return sum + (item.price * item.quantity);
     }, 0);
 }
 
-// Очистка корзины
+<code class="comment">// Очистка корзины</code>
 clear() {
     this.items = [];
     this.saveCart();
 }
 }
 
-// Использование
+<code class="comment">// Использование</code>
 const cart = new ShoppingCart();
 
-// Добавляем товары
+<code class="comment">// Добавляем товары</code>
 cart.addItem({ id: 1, name: 'Книга по JS', price: 1500 });
 cart.addItem({ id: 2, name: 'Мышка', price: 800 });
 
 console.log('Товаров в корзине:', cart.items.length);
 console.log('Итого:', cart.getTotal(), 'руб.');
 
-// Корзина сохранится и после перезагрузки страницы!</code></div>
+<code class="comment">// Корзина сохранится и после перезагрузки страницы!</code></code></div>
 
-                <h2>sessionStorage</h2>
+                <h2 id="cgh16-sessionstorage">sessionStorage</h2>
                 <p><code>sessionStorage</code> работает аналогично <code>localStorage</code>, но данные удаляются при закрытии вкладки/окна браузера.</p>
 
                 <h3>Основные методы (такие же, как у localStorage)</h3>
-                <div class="code-block"><code>// Сохранение
+                <div class="code-block"><code><code class="comment">// Сохранение</code>
 sessionStorage.setItem('tempData', 'Это временные данные');
 
-// Получение
+<code class="comment">// Получение</code>
 const data = sessionStorage.getItem('tempData');
 
-// Удаление
+<code class="comment">// Удаление</code>
 sessionStorage.removeItem('tempData');
 
-// Очистка всех данных
+<code class="comment">// Очистка всех данных</code>
 sessionStorage.clear();</code></div>
 
                 <h3>Когда использовать sessionStorage</h3>
@@ -10592,34 +10852,34 @@ sessionStorage.clear();</code></div>
                 </ul>
 
                 <h3>Пример: Сохранение состояния формы</h3>
-                <div class="code-block"><code>// Автосохранение данных формы
+                <div class="code-block"><code><code class="comment">// Автосохранение данных формы</code>
 const form = document.getElementById('myForm');
 const inputs = form.querySelectorAll('input, textarea, select');
 
-// Загружаем сохранённые данные при загрузке страницы
+<code class="comment">// Загружаем сохранённые данные при загрузке страницы</code>
 inputs.forEach(input => {
     const savedValue = sessionStorage.getItem(input.name);
     if (savedValue) {
         input.value = savedValue;
     }
     
-    // Сохраняем при изменении
+    <code class="comment">// Сохраняем при изменении</code>
     input.addEventListener('input', () => {
         sessionStorage.setItem(input.name, input.value);
     });
 });
 
-// Очищаем при отправке формы
+<code class="comment">// Очищаем при отправке формы</code>
 form.addEventListener('submit', () => {
     inputs.forEach(input => {
         sessionStorage.removeItem(input.name);
     });
 });</code></div>
 
-                <h2>События Storage</h2>
+                <h2 id="ch16-storage-events">События Storage</h2>
                 <p>Событие <code>storage</code> срабатывает, когда localStorage/sessionStorage изменяется <strong>в другой вкладке/окне</strong> того же домена.</p>
 
-                <div class="code-block"><code>// Отслеживаем изменения в других вкладках
+                <div class="code-block"><code><code class="comment">// Отслеживаем изменения в других вкладках</code>
 window.addEventListener('storage', (e) => {
     console.log('Ключ:', e.key);
     console.log('Старое значение:', e.oldValue);
@@ -10627,21 +10887,21 @@ window.addEventListener('storage', (e) => {
     console.log('URL:', e.url);
     console.log('Хранилище:', e.storageArea);
     
-    // Например, синхронизируем тему между вкладками
+    <code class="comment">// Например, синхронизируем тему между вкладками</code>
     if (e.key === 'theme') {
         applyTheme(e.newValue);
     }
 });</code></div>
 
                 <h3>Практический пример: Синхронизация между вкладками</h3>
-                <div class="code-block"><code>// В первой вкладке
+                <div class="code-block"><code><code class="comment">// В первой вкладке</code>
 function updateStatus(status) {
     localStorage.setItem('userStatus', status);
 }
 
 updateStatus('online');
 
-// Во второй вкладке автоматически обновится
+<code class="comment">// Во второй вкладке автоматически обновится</code>
 window.addEventListener('storage', (e) => {
     if (e.key === 'userStatus') {
         console.log('Статус изменён:', e.newValue);
@@ -10649,7 +10909,7 @@ window.addEventListener('storage', (e) => {
     }
 });</code></div>
 
-                <h2>Сравнение способов хранения</h2>
+                <h2 id="ch16-storage-compare">Сравнение способов хранения</h2>
 
                 <div class="info-box success">
                     <div class="info-box-title">✅ Когда использовать localStorage</div>
@@ -10682,7 +10942,7 @@ window.addEventListener('storage', (e) => {
                     </ul>
                 </div>
 
-                <h2>Ограничения и безопасность</h2>
+                <h2 id="ch16-limits-secure">Ограничения и безопасность</h2>
 
                 <div class="info-box danger">
                     <div class="info-box-title">🔒 Важные моменты безопасности</div>
@@ -10696,18 +10956,18 @@ window.addEventListener('storage', (e) => {
                 </div>
 
                 <h3>Пример безопасной работы с токенами</h3>
-                <div class="code-block"><code>// ❌ ПЛОХО: храним токен в localStorage
+                <div class="code-block"><code><code class="comment">// ❌ ПЛОХО: храним токен в localStorage</code>
 localStorage.setItem('authToken', 'secret123');
 
-// ✅ ХОРОШО: используем HttpOnly cookie (устанавливается сервером)
-// Клиентский JS не может прочитать такую cookie
-// Set-Cookie: authToken=secret123; HttpOnly; Secure; SameSite=Strict
+<code class="comment">// ✅ ХОРОШО: используем HttpOnly cookie (устанавливается сервером)</code>
+<code class="comment">//</code> Клиентский JS не может прочитать такую cookie
+<code class="comment">//</code> Set-Cookie: authToken=secret123; HttpOnly; Secure; SameSite=Strict
 
-// Для refresh-токенов можно использовать localStorage с осторожностью
-// Но access-токен всегда в HttpOnly cookie!</code></div>
+<code class="comment">//</code> Для refresh-токенов можно использовать localStorage с осторожностью
+<code class="comment">//</code> Но access-токен всегда в HttpOnly cookie!</code></div>
 
-    <h2>Проверка доступности и лимитов</h2>
-    <div class="code-block"><code>// Проверка поддержки localStorage
+    <h2 id="ch16-access-limits">Проверка доступности и лимитов</h2>
+    <div class="code-block"><code><code class="comment">// Проверка поддержки localStorage</code>
 function storageAvailable(type) {
     try {
         const storage = window[type];
@@ -10726,7 +10986,7 @@ if (storageAvailable('localStorage')) {
     console.log('localStorage недоступен (приватный режим или отключен)');
 }
 
-// Проверка лимита хранилища
+<code class="comment">// Проверка лимита хранилища</code>
 function getStorageSize() {
     let total = 0;
     for (let key in localStorage) {
@@ -10739,8 +10999,8 @@ function getStorageSize() {
 
 console.log('Использовано:', getStorageSize());</code></div>
 
-                <h2>Полезные утилиты</h2>
-                <div class="code-block"><code>// Обёртка для работы с localStorage с автоматическим JSON
+                <h2 id="ch16-useful-utilities">Полезные утилиты</h2>
+                <div class="code-block"><code><code class="comment">// Обёртка для работы с localStorage с автоматическим JSON</code>
 const storage = {
 set(key, value) {
     try {
@@ -10775,10 +11035,10 @@ has(key) {
 }
 };
 
-// Использование
+<code class="comment">//</code> Использование
 storage.set('user', { name: 'Alice', age: 25 });
 const user = storage.get('user');
-console.log(user.name); // "Alice"
+console.log(user.name); <code class="comment">//</code> "Alice"
 
 if (storage.has('user')) {
     console.log('Пользователь найден');
@@ -10800,11 +11060,11 @@ if (storage.has('user')) {
                 <h3>Пример синхронного кода</h3>
                 <div class="code-block"><code>console.log("Начало");
 
-// Эта функция блокирует выполнение на 3 секунды
+<code class="comment">// Эта функция блокирует выполнение на 3 секунды</code>
 function heavyOperation() {
     const start = Date.now();
     while (Date.now() - start &lt; 3000) {
-        // Ничего не делаем, просто ждём
+        <code class="comment">//< Ничего не делаем, просто ждём/code>
     }
     return "Результат";
 }
