@@ -638,6 +638,7 @@
                                 <li class="nav-subitem" data-target="ch17-callback">📜 Callback функции (устаревший подход)</li>
                                 <li class="nav-subitem" data-target="ch17-promise-intro">📜 Введение в промисы</li>
                                 <li class="nav-subitem" data-target="ch17-then">📜 Получение результата: .then()</li>
+                                <li class="nav-subitem" data-target="ch17-error">📜 Обработка ошибок: .catch()</li>
 
                                 <li class="nav-subitem" data-target="ch16-useful-utilities">📜 Полезные утилиты</li>
                             </ul>
@@ -11082,26 +11083,26 @@ const result = heavyOperation();
 console.log(result);
 console.log("Конец");
 
-// Вывод (с задержкой 3 секунды):
-// Начало
-// Результат
-// Конец</code></div>
+<code class="comment">// Вывод (с задержкой 3 секунды):</code>
+<code class="comment">// Начало</code>
+<code class="comment">// Результат</code>
+<code class="comment">// Конец</code></code></div>
 
                 <h3>Пример асинхронного кода</h3>
                 <div class="code-block"><code>console.log("Начало");
 
-// Асинхронная функция (setTimeout)
+<code class="comment">// Асинхронная функция (setTimeout)</code>
 setTimeout(() => {
     console.log("Асинхронная операция завершена");
 }, 2000);
 
 console.log("Конец");
 
-// Вывод (немедленно):
-// Начало
-// Конец
-// (через 2 секунды):
-// Асинхронная операция завершена</code></div>
+<code class="comment">// Вывод (немедленно):</code>
+<code class="comment">// Начало</code>
+<code class="comment">// Конец</code>
+<code class="comment">// (через 2 секунды):</code>
+<code class="comment">// Асинхронная операция завершена</code></code></div>
 
                 <p>Определим простую асинхронную функцию, которая эмулирует долгую работу с помощью вызова setTimeout() и задержки в 1 секунду, а затем выводит на консоль случайное число:</p>
                 <div class="code-block"><code>function asyncFunction() {
@@ -11132,7 +11133,7 @@ result: 22
     return result;
 }
 const asyncResult = asyncFunction();
-console.log("result:", asyncResult) // result: undefined</code></div>
+console.log("result:", asyncResult) <code class="comment">// result: undefined</code></code></div>
 
                 <p>
                     Здесь асинхронная функция asyncFunction вызывается в синхронной манере, в итоге мы получаем неопределенный результат. Потому что переменная asyncResult устанавливается до 
@@ -11155,7 +11156,7 @@ try {
     console.log("result:", asyncResult)
 } 
 catch(error) {  
-    console.error("Error:", error); // Эта строка НЕ выполняется
+    console.error("Error:", error); <code class="comment">// Эта строка НЕ выполняется</code>
 }
 console.log("Конец программы");</code></div>
 
@@ -11169,17 +11170,17 @@ console.log("Конец программы");</code></div>
                     передавались в другую функцию и вызывались позже в некоторый момент времени. Простейший шаблон использования коллбеков:
                 </p>
 
-                <div class="code-block"><code>// Функция принимает callback
+                <div class="code-block"><code><code class="comment">// Функция принимает callback</code>
 function asyncFunction(callback) {
     setTimeout(() => {
         const result = 22;
-        callback(result); // Вызываем callback с результатом
+        callback(result); <code class="comment">// Вызываем callback с результатом</code>
     }, 1000);
 }
 
-// Использование
+<code class="comment">// Использование</code>
 asyncFunction(function(result) {
-    console.log("Результат:", result); // Результат: 22
+    console.log("Результат:", result); <code class="comment">// Результат: 22</code>
 });</code></div>
 
                 <div class="code-block"><code>function asyncFunction(callback) {
@@ -11196,10 +11197,10 @@ asyncFunction(callbackFunc);</code></div>
 
                 <p>Например, используем коллбек для получения и обработки результата и ошибки асинхронной функции:</p>
                 <div class="code-block"><code>function handleResult(error, result){    
-    if(error) {     // если передана ошибка 
+    if(error) {   <code class="comment">// если передана ошибка </code>
         console.error(error);   
     }  
-    else {     // если асинхронная функция завершилась успешно
+    else {        <code class="comment">// если асинхронная функция завершилась успешно</code>
         console.log("Result:", result);    
     }  
 }
@@ -11207,12 +11208,12 @@ asyncFunction(callbackFunc);</code></div>
 function asyncFunction(callback) {
     setTimeout(()=>{
         let result = Math.floor(Math.random() * 100) + 1;
-        if(result < 50) { 
-            // если меньше 50, устанавливаем ошибку
+        if(result &lt; 50) { 
+            <code class="comment">// если меньше 50, устанавливаем ошибку</code>
             callback(new Error("Некорректное значение: " + result), null);      
         } 
         else{
-            // в остальных случаях устанавливаем результат
+            <code class="comment">// в остальных случаях устанавливаем результат</code>
             callback(null, result);
         }
     }, 1000);
@@ -11230,14 +11231,14 @@ asyncFunction(handleResult);</code></div>
                 <p>Если сгенерированное число меньше 50, то устанавливаем первый параметр функции handleResult, который представляет ошибку:</p>
 
                 <div class="code-block"><code>if(result &lt; 50) { 
-    // если меньше 50, устанавливаем ошибку
+    <code class="comment">// если меньше 50, устанавливаем ошибку</code>
     callback(new Error("Некорректное значение: " + result), null);      
 } </code></div>
 
                 <p>В остальных случаях устанавливаем результат, а для ошибки передаем null:</p>
 
                 <div class="code-block"><code>else{
-    // в остальных случаях устанавливаем результат
+    <code class="comment">// в остальных случаях устанавливаем результат</code>
     callback(null, result);
 }</code></div>
 
@@ -11260,13 +11261,13 @@ asyncFunction(handleResult);</code></div>
     asyncFunction2( (error2, result2) => { 
         asyncFunction3( (error3, result3) => {
             asyncFunction4( (error4, result4) => {              
-                // некоторый код
+                <code class="comment">// некоторый код</code>
             });          
         });      
     });  
 });</code></div>
 
-                <div class="code-block"><code>// Вложенные callback'и становятся нечитаемыми
+                <div class="code-block"><code><code class="comment">// Вложенные callback'и становятся нечитаемыми</code>
 getData(function(a) {
     getMoreData(a, function(b) {
         getMoreData(b, function(c) {
@@ -11356,24 +11357,24 @@ const myPromise2000 = new Promise(function(){
                 </p>
 
 
-                <div class="code-block"><code>// Синтаксис создания Promise
+                <div class="code-block"><code><code class="comment">// Синтаксис создания Promise</code>
 const myPromise = new Promise(function(resolve, reject) {
-    // Асинхронная операция
+    <code class="comment">// Асинхронная операция</code>
     console.log("Выполнение асинхронной операции");
     
-    // Если успешно - вызываем resolve()
+    <code class="comment">// Если успешно - вызываем resolve()</code>
     resolve("Успех!");
     
-    // Если ошибка - вызываем reject()
-    // reject("Ошибка!");
+    <code class="comment">// Если ошибка - вызываем reject()</code>
+    <code class="comment">// reject("Ошибка!");</code>
 });</code></div>
 
                 <h3>Простой пример Promise</h3>
-                <div class="code-block"><code>// Создаём Promise
+                <div class="code-block"><code><code class="comment">// Создаём Promise</code>
 const myPromise = new Promise(function(resolve) {
     console.log("Выполнение асинхронной операции");
     
-    // Имитация асинхронной работы
+    <code class="comment">// Имитация асинхронной работы</code>
     setTimeout(() => {
         resolve("Привет, мир!");
     }, 1000);
@@ -11464,7 +11465,38 @@ const myPromise = new Promise(function(resolve, reject){
 
 
                 <h2 id="ch17-then">Получение результата: .then()</h2>
-                <p>Для получения результата промиса используется метод <code>.then()</code>:</p>
+
+                <p>Ранее мы рассмотрели, как из функции промиса мы можем передать во вне результат асинхронной операции:</p>
+                <div class="code-block"><code>const myPromise = new Promise(function(resolve){
+    console.log("Выполнение асинхронной операции");
+    resolve("Привет мир!");
+});</code></div>
+
+                <p>Теперь получим это значение. Для получения результата операции промиса применяется функция <span class="b">then()</span> объекта <code>Promise</code>:</p>
+                <div class="code-block"><code>then(onFulfilled, onRejected);</code></div>
+
+                <p>Первый параметр функции - <code>onFulfilled</code> представляет функцию, которая выполняется при успешном завершении промиса и в качестве параметра получает переданные в <code>resolve()</code> данные.</p>
+                <p>
+                    Второй параметр функции - <code>onRejected</code> представляет функцию, которая выполняется при возникновении ошибки и в качестве параметра 
+                    получает переданные в <code>reject()</code> данные.
+                </p>
+                <p>Функция <span class="b">then()</span> возвращает также объект <code>Promise</code>.</p>
+                <p>Так, получим переданные данные:</p>
+                <div class="code-block"><code>const myPromise = new Promise(function(resolve){
+    console.log("Выполнение асинхронной операции");
+    resolve("Привет мир!");
+});
+myPromise.then(function(value){
+    console.log(`Из промиса получены данные: ${value}`);
+})</code></div>
+
+                <p>
+                    То есть параметр <code>value</code> здесь будет представлять строку <code>"Привет мир!"</code>, которая передается c помощью <code>resolve("Привет мир!")</code>. 
+                    В итоге консольный вывод будет выглядеть следующим образом:
+                </p>
+
+                <pre class="sh">Выполнение асинхронной операции
+Из промиса получены данные: Привет мир!</pre>
 
                 <div class="code-block"><code>const myPromise = new Promise(function(resolve) {
     setTimeout(() => {
@@ -11472,64 +11504,139 @@ const myPromise = new Promise(function(resolve, reject){
     }, 1000);
 });
 
-// Получаем результат
+<code class="comment">// Получаем результат</code>
 myPromise.then(function(value) {
     console.log("Из промиса получены данные:", value);
 });
 
-// Вывод:
-// Из промиса получены данные: Привет, мир!</code></div>
+<code class="comment">// Вывод:</code>
+<code class="comment">// Из промиса получены данные: Привет, мир!</code></code></div>
 
-                <h3>Практический пример: функция с Promise</h3>
-                <div class="code-block"><code>// Функция возвращает Promise
-function sum(x, y) {
-    return new Promise(function(resolve) {
+                <h4>Для примера вызовем несколько промисов, чтобы увидеть асинхронность в деле:</h4>
+                <div class="code-block"><code>const myPromise3000 = new Promise(function(resolve){
+    console.log("[myPromise3000] Выполнение асинхронной операции");
+    setTimeout(()=>{resolve("[myPromise3000] Готово!")}, 3000);
+});
+const myPromise1000 = new Promise(function(resolve){
+    console.log("[myPromise1000] Выполнение асинхронной операции");
+    setTimeout(()=>{resolve("[myPromise1000] Готово!")}, 1000);
+});
+const myPromise2000 = new Promise(function(resolve){
+    console.log("[myPromise2000] Выполнение асинхронной операции");
+    setTimeout(()=>{resolve("[myPromise2000] Готово!")}, 2000);
+});
+
+<code class="comment">// Все запускаются одновременно!</code>
+myPromise3000.then((value)=>console.log(value));
+myPromise1000.then((value)=>console.log(value));
+myPromise2000.then((value)=>console.log(value));</code></div>
+
+                <p>
+                    Здесь определены три однотипных промиса. Чтобы каждый из них не выполнялся сразу, они используют функцию setTimeout и устанавливают возвращаемое значение только 
+                    через несколько секунд. Для разных промисов длительность задержки различается. И в данном случае мы получим следующий консольный вывод:
+                </p>
+                <pre class="sh">[myPromise3000] Выполнение асинхронной операции
+[myPromise1000] Выполнение асинхронной операции
+[myPromise2000] Выполнение асинхронной операции
+[myPromise1000] Готово (через 1 сек)!
+[myPromise2000] Готово (через 2 сек)!
+[myPromise3000] Готово (через 3 сек)!
+</pre>
+
+                <p>
+                    Здесь мы видим, что первым начал выполняться промис myPromise3000, однако он же завершился последним, так как для него установлено наибольшее время задержки - 3 секунды. 
+                    Однако его задержка не помешала выполнению остальных промисов.
+                </p>
+
+                <p>При этом нам необязательно вообще передавать в <code>resolve()</code> какое-либо значение. Возможно, асинхронная операция просто выполняется и не передает во вне никакого результата.</p>
+
+                <div class="code-block"><code>const x = 4;
+const y = 8;
+const myPromise = new Promise(function(){
+    console.log("Выполнение асинхронной операции");
+    const z = x + y;
+    console.log(`Результат операции: ${z}`)
+});
+myPromise.then();</code></div>
+
+                <p>В данном случае функция в промисе вычисляет сумму чисел x и y и выводит результат на консоль.</p>
+
+                <h3>Метод Promise.resolve</h3>
+
+                <p>
+                    Иногда требуется просто вернуть из промиса некоторое значение. Для этого можно использовать метод <span class="b">Promise.resolve()</span>. В этот метод передается 
+                    возвращаемое из промиса значение. Метод <span class="b">Promise.resolve()</span> возвращает объект Promise:
+                </p>
+                <div class="code-block"><code>const myPromise = Promise.resolve("Привет мир!");
+ 
+myPromise.then(value => console.log(value));  <code class="comment">// Привет мир!</code></code></div>
+
+                <h3>Определение промиса через функцию</h3>
+                
+                <p>Нередко промис определяется через функцию, которая возвращет объект Promise. Например:</p>
+
+                <div class="code-block"><code><code class="comment">// Функция возвращает Promise</code>
+function sum(x, y){ 
+    return new Promise(function(resolve){
         const result = x + y;
         resolve(result);
-    });
+    })
 }
+<code class="comment">// Использование</code>
+sum(3, 5).then(function(value){ console.log("Результат операции:", value);}); <code class="comment">// Результат: 8</code>
+sum(25, 4).then(function(value){ console.log("Сумма чисел:", value);});       <code class="comment">// Результат: 29</code>
+<code class="comment">// Или с arrow function</code>
+sum(10, 20).then(value => console.log("Сумма:", value)); <code class="comment">                     // Сумма: 30</code></code></div>
 
-// Использование
-sum(5, 3).then(function(value) {
-    console.log("Результат:", value); // Результат: 8
-});
+                <p>
+                    Здесь функция <code>sum()</code> принимает два числа и возвращает промис, который инкапсулирует операцию суммы этих чисел. После вычисления сумма чисел передается в 
+                    <code>resolve()</code>, соответственно мы ее затем можем получить через метод <code>then()</code>. Определение промиса через функцию позволяет нам, с одной стороны, при вызове функции 
+                    передавать разные значения. А с другой стороны, работать с результатом этой функции как с промисом и настроить при каждом конкретном вызове обработку полученного 
+                    значения.
+                </p>
 
-// Или с arrow function
-sum(10, 20).then(value => console.log("Сумма:", value)); // Сумма: 30</code></div>
+                <p>Однако, что если у нас совпадает принцип обработки полученного из асинхронной функции значения?</p>
+                <div class="code-block"><code>sum(3, 5).then(function(value){ console.log("Результат операции:", value);});
+sum(25, 4).then(function(value){ console.log("Результат операции:", value);});</code></div>
+                
+                <p>В этом случае логика обработки будет повторяться. Но поскольку метод <code>then()</code> также возвращает объект Promise, то мы можем сделать следующим образом:</p>
+                <div class="code-block"><code>function sum(x, y){ 
+    return new Promise(function(resolve){
+        const result = x + y;
+        resolve(result);
+    }).then(function(value){ console.log("Результат операции:", value);});
+}
+sum(3, 5);
+sum(25, 4);</code></div>
 
-                <h3>Несколько Promise одновременно</h3>
-                <div class="code-block"><code>const myPromise3000 = new Promise(function(resolve) {
-    console.log("[myPromise3000] Выполнение");
-    setTimeout(() => resolve("[myPromise3000] Готово!"), 3000);
-});
+                <h3>Гибкая настройка функции</h3>
 
-const myPromise1000 = new Promise(function(resolve) {
-    console.log("[myPromise1000] Выполнение");
-    setTimeout(() => resolve("[myPromise1000] Готово!"), 1000);
-});
+                <p>
+                    А что, если мы хотим, чтобы у программиста был выбор: если он хочет, то может определить свой обработчик, а если нет, то применяется некоторый обработчик по умолчанию. 
+                    В этом случае мы можем определить функцию обработчика в качестве параметра функции, а если он не передан, то устанавливать обработчик по умолчанию:
+                </p>
 
-const myPromise2000 = new Promise(function(resolve) {
-    console.log("[myPromise2000] Выполнение");
-    setTimeout(() => resolve("[myPromise2000] Готово!"), 2000);
-});
+                <div class="code-block"><code>function sum(x, y, func){ 
+    <code class="comment">// если обработчик не установлен, то устанавливаем обработчик по умолчанию</code>
+    if(func===undefined) func = function(value){ console.log("Результат операции:", value);};
+     
+    return new Promise(function(resolve){
+        const result = x + y;
+        resolve(result);
+    }).then(func);
+}
+sum(3, 5);
+sum(25, 4, function(value){ console.log("Сумма:", value);});</code></div>
 
-// Все запускаются одновременно!
-myPromise3000.then(value => console.log(value));
-myPromise1000.then(value => console.log(value));
-myPromise2000.then(value => console.log(value));
+                <p>
+                    Здесь при первом вызове функции <code>sum()</code> (<code>sum(3, 5)</code>) будет срабатывать обработчик по умолчанию. Во втором случае обработчик явным 
+                    образом передается через третий параметр, соответственно он будет задействован <code>sum(25, 4, function(value){ console.log("Сумма:", value);})</code>
+                </p>
 
-// Вывод (по мере готовности):
-// [myPromise3000] Выполнение
-// [myPromise1000] Выполнение
-// [myPromise2000] Выполнение
-// [myPromise1000] Готово!  (через 1 сек)
-// [myPromise2000] Готово!  (через 2 сек)
-// [myPromise3000] Готово!  (через 3 сек)</code></div>
-
-                <h2>Обработка ошибок: .catch()</h2>
+                <h2 id="ch17-error">Обработка ошибок: .catch()</h2>
                 <p>Для обработки ошибок в Promise используется метод <code>.catch()</code>:</p>
 
-                <div class="code-block"><code>// Promise с ошибкой
+                <div class="code-block"><code><code class="comment">// Promise с ошибкой</code>
 const myPromise = new Promise(function(resolve, reject) {
     const y = 0;
     
@@ -11540,20 +11647,20 @@ const myPromise = new Promise(function(resolve, reject) {
     }
 });
 
-// Обрабатываем ошибку
+<code class="comment">// Обрабатываем ошибку</code>
 myPromise
     .then(value => console.log("Результат:", value))
     .catch(error => console.log("Ошибка:", error));
 
-// Вывод:
-// Ошибка: Деление на ноль!</code></div>
+<code class="comment">// Вывод:</code>
+<code class="comment">// Ошибка: Деление на ноль!</code></code></div>
 
                 <h3>Генерация ошибок с throw</h3>
                 <div class="code-block"><code>const myPromise = new Promise(function(resolve) {
     const parsed = parseInt("Hello");
     
     if (isNaN(parsed)) {
-        throw "Not a number"; // Генерируем ошибку
+        throw "Not a number"; <code class="comment">// Генерируем ошибку</code>
     }
     
     resolve(parsed);
