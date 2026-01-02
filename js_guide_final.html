@@ -11633,8 +11633,27 @@ sum(25, 4, function(value){ console.log("Сумма:", value);});</code></div>
                     образом передается через третий параметр, соответственно он будет задействован <code>sum(25, 4, function(value){ console.log("Сумма:", value);})</code>
                 </p>
 
-                <h2 id="ch17-error">Обработка ошибок: .catch()</h2>
-                <p>Для обработки ошибок в Promise используется метод <code>.catch()</code>:</p>
+                <h2 id="ch17-error">Обработка ошибок в Promise: .catch()</h2>
+                <p>
+                    Одним из преимуществ промисов является более простая обработка ошибок. Для получения и обработки ошибки мы можем использовать 
+                    функцию <span class="b">catch()</span> объекта <code>Promise</code>, которая в качестве параметра принимает функцию обработчика ошибки:
+                </p>
+
+                <div class="code-block"><code>const myPromise = new Promise(function(resolve, reject){
+    console.log("Выполнение асинхронной операции");
+    reject("Переданы некорректные данные");
+});
+myPromise.catch( function(error){
+    console.log(error);
+});</code></div>
+
+                <p>
+                    Функция <span class="b">catch()</span> в качестве параметра принимает обработчик ошибки. Параметром этой функции-обработчика является то значение, 
+                    которое передается в <code>reject()</code>.
+                </p>
+                <p>Консольный вывод:</p>
+                <pre class="sh">Выполнение асинхронной операции
+Переданы некорректные данные</pre>
 
                 <div class="code-block"><code><code class="comment">// Promise с ошибкой</code>
 const myPromise = new Promise(function(resolve, reject) {
@@ -11655,22 +11674,94 @@ myPromise
 <code class="comment">// Вывод:</code>
 <code class="comment">// Ошибка: Деление на ноль!</code></code></div>
 
-                <h3>Генерация ошибок с throw</h3>
-                <div class="code-block"><code>const myPromise = new Promise(function(resolve) {
-    const parsed = parseInt("Hello");
-    
-    if (isNaN(parsed)) {
-        throw "Not a number"; <code class="comment">// Генерируем ошибку</code>
-    }
-    
-    resolve(parsed);
-});
+                <h3>Генерация ошибок</h3>
 
-myPromise.catch(error => {
-    console.log("Ошибка:", error); // Ошибка: Not a number
+                <p>
+                    Выше для извещения о возникшей ошибке вызывалась функция <code>reject()</code>. Но стоит отметить, что ошибка может возникнуть и без вызова функции 
+                    <code>reject()</code>. И если в выполняемой в промисе операции генерируется ошибка в силу тех или иных причин, то вся операция также завершается ошибкой. 
+                    Например, в следующем коде вызывается нигде не определенная функция <code>getSomeWork()</code>:
+                </p>
+
+                <div class="code-block"><code>const myPromise = new Promise(function(resolve){
+    console.log("Выполнение асинхронной операции");
+    getSomeWork();      <code class="comment">// вызов не существующей функции</code>
+    resolve("Hello world!");
+});
+myPromise.catch( function(error){
+    console.log(error);
 });</code></div>
 
-                <h3>Практический пример с обработкой ошибок</h3>
+                <p>
+                    Поскольку функция <code>getSomeWork()</code> нигде не объявлена, то выполнение асинхронной задачи завершится ошибкой и не дойдет до вызова <code>resolve("Hello world!")</code>. 
+                    Поэтому сработает функция обработки ошибок из <code>catch()</code>, которая через параметр error получит информацию о возникшей ошибке, и 
+                    в консоли браузера мы увидим сообщение об ошибке:
+                </p>
+
+                <pre class="sh">Выполнение асинхронной операции
+ReferenceError: getSomeWork is not defined
+    at index.html:39
+    at new Promise (&lt;anonymous&gt;)
+    at index.html:37
+</pre>
+
+                <h3>throw</h3>
+
+                <p>Также ошибка может быть результатом вызова оператора <span class="b">throw</span>, который генерирует ошибку:</p>
+
+                <div class="code-block"><code>cconst myPromise = new Promise(function(resolve, reject){
+    console.log("Выполнение асинхронной операции");
+    const parsed = parseInt("Hello");
+    if (isNaN(parsed)) { 
+        throw "Not a number";   <code class="comment">// Генерируем ошибку</code>
+    }
+    resolve(parsed);
+});
+myPromise.catch( function(error){
+    console.log(error);
+});</code></div>
+
+                <p>
+                    Здесь парсится в число случайная строка. И если результат парсинга не представляет число, то с помощью оператора <code>throw</code> генерируем ошибку. 
+                    Это придет к завершению всей функции с ошибкой. И в итоге результат будет обработан функцией <code>catch</code>:
+                </p>
+
+                <pre class="consoletext">Выполнение асинхронной операции
+Not a number
+</pre>
+
+                <p>В этом случае функция обработчика получает сообщение об оошибке, который указывается после оператора <code>throw</code>.</p>
+
+                <p>
+                    Данная ситуация может показаться искуственной, так как нам нет смысла генерировать в коде выше ошибку с помощью throw, поскольку в этом случае мы также 
+                    можем передать сообщение об ошибке в функцию reject:
+                </p>
+
+                <div class="code-block"><code>if (isNaN(parsed)) { 
+    reject("Not a number");
+}</code></div>
+
+                <p>Однако данный оператор может применяться во внешней функции, которую мы вызываем в коде:</p>
+
+                <div class="code-block"><code>function getNumber(str){
+    const parsed = parseInt(str);
+    if (isNaN(parsed)) throw "Not a number";      <code class="comment">// Генерируем ошибку</code>
+    else return parsed;
+}
+const myPromise = new Promise(function(resolve){
+    console.log("Выполнение асинхронной операции");
+    const result = getNumber("hello");
+    resolve(result);
+});
+myPromise.catch( function(error){
+    console.log(error);
+});</code></div>
+
+                <p>
+                    Здесь парсинг строки в число вынесен во внешнюю функцию - <code>getNumber</code>, однако при вызове этой функции в промисе, также из оператора throw возникнет ошибка. 
+                    И соответственно будет выполняться функция <code>catch()</code>, где роизойдет обработка ошибки.
+                </p>
+
+                <h4>Практический пример с обработкой ошибок</h4>
                 <div class="code-block"><code>function generateNumber(str) {
     return new Promise((resolve, reject) => {
         const parsed = parseInt(str);
@@ -11683,17 +11774,80 @@ myPromise.catch(error => {
     });
 }
 
-// Успешный случай
+<code class="comment">// Успешный случай</code>
 generateNumber("23")
     .then(value => console.log("Результат:", value))
     .catch(error => console.log("Ошибка:", error));
-// Вывод: Результат: 23
+<code class="comment">// Вывод: Результат: 23</code>
 
-// Случай с ошибкой
+<code class="comment">// Случай с ошибкой</code>
 generateNumber("hello")
     .then(value => console.log("Результат:", value))
     .catch(error => console.log("Ошибка:", error));
-// Вывод: Ошибка: Значение не является числом</code></div>
+<code class="comment">// Вывод: Ошибка: Значение не является числом</code></code></div>
+
+                <h3>try..catch</h3>
+
+                <p>Как и в общем случае, операции, которые могут генерировать ошибку, можно помещать в конструкцию <code>try..catch</code>, а при возникновении исключения в блоке catch вызывать функцию <code>reject()</code>:</p>
+
+                <div class="code-block"><code>const myPromise = new Promise(function(resolve, reject){
+    try{
+        console.log("Выполнение асинхронной операции");
+        getSomeWork();      <code class="comment">// вызов не существующей функции</code>
+        resolve("Hello world!");
+    }
+    catch(err){
+        reject(`Произошла ошибка: ${err.message}`);
+    }
+});
+myPromise.catch( function(error){
+    console.log(error);
+});</code></div>
+
+                <p>Консольный вывод:</p>
+
+                <pre class="sh">Выполнение асинхронной операции
+Произошла ошибка: getSomeWork is not defined
+</pre>
+
+                <h3>Обработка ошибки с помощью функции then</h3>
+
+                <p>
+                    Кроме функции <code>catch</code> для получения информации об ошибке и ее обработки также можно использовать функцию 
+                    <span class="b">then()</span> - ее второй параметр представляет обработчик ошибки, который в качестве параметра получает переданное из функции 
+                    <code>reject</code> значение:
+                </p>
+
+                <div class="code-block"><code>promise
+  .then(function(value){
+    <code class="comment">// получение значения</code>
+  },
+  function(error){
+    <code class="comment">// обработка ошибки</code>
+  });</code></div>
+
+                <p>Второй параметр функции <code>then()</code> представляет функцию обработчика ошибок. С помощью параметра <code>error</code> в функции-обработчика мы можем получить переданное в <code>reject()</code> значение, либо информацию о возникшей ошибке.</p>
+
+                <p>Рассмотрим следуюший пример:</p>
+                <div class="code-block"><code>function generateNumber(str){ 
+    return new Promise(function(resolve, reject){
+        const parsed = parseInt(str);
+        if (isNaN(parsed))  reject("значение не является числом")
+        else resolve(parsed);
+    })
+    .then(function(value){ console.log("Результат операции:", value);}, 
+        function(error){ console.log("Возникла ошибка:", error);});
+}
+ 
+generateNumber("23");
+generateNumber("hello");</code></div>
+
+                <p>В данном случае для того, чтобы в промис можно было передать разные данные, он определен как возващаемый результат функции <code>generateNumber()</code>. То есть в данном случае консольный вывод будет следующим:</p>
+
+                <pre class="sh">Результат операции: 23
+Возникла ошибка: значение не является числом
+</pre>
+
 
                 <h2>Цепочки Promise</h2>
                 <p>Одно из главных преимуществ промисов — возможность создавать цепочки вызовов:</p>
@@ -11706,11 +11860,11 @@ generateNumber("hello")
     });
 }
 
-// Цепочка вызовов
+<code class="comment">// Цепочка вызовов</code>
 generateNumber("3")
-    .then(value => value * value)        // 9
-    .then(value => value + 10)           // 19
-    .then(value => console.log("Результат:", value)) // Результат: 19
+    .then(value => value * value)        <code class="comment">// 9</code>
+    .then(value => value + 10)           <code class="comment">// 19</code>
+    .then(value => console.log("Результат:", value)) <code class="comment">// Результат: 19</code>
     .catch(error => console.error("Ошибка:", error));</code></div>
 
                 <h3>Метод .finally()</h3>
@@ -11727,15 +11881,15 @@ generateNumber("3")
             return "hello from catch";
         })
         .finally(() => {
-            console.log("Завершено"); // Выполнится в любом случае
+            console.log("Завершено"); <code class="comment">// Выполнится в любом случае</code>
         })
         .then(message => console.log(message));
 }
 
 printNumber("3");
-// Значение: 3
-// Завершено
-// hello from then</code></div>
+<code class="comment">// Значение: 3</code>
+<code class="comment">// Завершено</code>
+<code class="comment">// hello from then</code></code></div>
 
                 <h2>Комбинирование Promise</h2>
 
