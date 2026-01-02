@@ -639,6 +639,8 @@
                                 <li class="nav-subitem" data-target="ch17-promise-intro">📜 Введение в промисы</li>
                                 <li class="nav-subitem" data-target="ch17-then">📜 Получение результата: .then()</li>
                                 <li class="nav-subitem" data-target="ch17-error">📜 Обработка ошибок: .catch()</li>
+                                <li class="nav-subitem" data-target="ch17-chain">📜 Цепочки Promise</li>
+                                <li class="nav-subitem" data-target="ch17-combine">📜 Комбинирование Promise</li>
 
                                 <li class="nav-subitem" data-target="ch16-useful-utilities">📜 Полезные утилиты</li>
                             </ul>
@@ -11849,8 +11851,15 @@ generateNumber("hello");</code></div>
 </pre>
 
 
-                <h2>Цепочки Promise</h2>
-                <p>Одно из главных преимуществ промисов — возможность создавать цепочки вызовов:</p>
+                <h2 id="ch17-chain">Цепочки Promise</h2>
+                <p>
+                    Одним из примуществом промисов является то, что они позволяют создавать цепочки промисов. Так, ранее мы рассмотрели применение методов <span class="b">then()</span> и 
+                    <span class="b">catch()</span> для получения и обработки результатов и ошибок асинхронной операции. При выполнении эти методы генерируют новый объект 
+                    <span class="b">Promise</span>, для которого мы также можем вызвать методы <code>then()</code> и <code>catch()</code>, и, таким образом, построить цепочку промисов. 
+                    Благодаря этому мы можем обрабатывать подряд несколько асинхронных операций - одна за другой.
+                </p>
+
+                <div class="code-block"><code>promise.then(..).then(..).then(..)</code></div>
 
                 <div class="code-block"><code>function generateNumber(str) {
     return new Promise((resolve, reject) => {
@@ -11866,6 +11875,199 @@ generateNumber("3")
     .then(value => value + 10)           <code class="comment">// 19</code>
     .then(value => console.log("Результат:", value)) <code class="comment">// Результат: 19</code>
     .catch(error => console.error("Ошибка:", error));</code></div>
+
+                <p>Возвращаемое значение из функции-обработчика в методе <span class="b">then()</span> передается в последующий вызов метода <code>then()</code> в цепочке:</p>
+
+                <div class="code-block"><code>const helloPromise = new Promise(function(resolve){
+        resolve("Hello");
+})
+ 
+const worldPromise = helloPromise.then(function(value){
+        <code class="comment">// возвращаем новое значение</code>
+        return value + " World";
+});
+const metanitPromise = worldPromise.then(function(value){
+        <code class="comment">// возвращаем новое значение</code>
+        return value + " from METANIT.COM";
+});
+metanitPromise.then(function(finalValue){
+        <code class="comment">// получаем финальное значение</code>
+        console.log(finalValue);    <code class="comment">// Hello World from METANIT.COM</code>
+});</code></div>
+
+                <p>Здесь для большей ясности весь процесс раздел на раздельные промисы: helloPromise, worldPromise и metanitPromise.</p>
+                <p>Рассмотрим поэтапно.</p>
+
+                <ol>
+                    <li>Сначала создается промис <code>helloPromise</code>:
+                        <div class="code-block"><code>const helloPromise = new Promise(function(resolve){
+    resolve("Hello");
+});</code></div>
+                        <p>
+                            В асинхронной операции с помощью вызова <code>resolve("Hello")</code> промис переводится в состояние <code>fulfilled</code>, то есть выполнение операции 
+                            успешно завершено. А во вне передается значение "Hello".
+                        </p>
+                    </li>
+
+                    <li>Далее у промиса <code>helloPromise</code> вызывается метод <span class="b">then()</span>:
+                        <div class="code-block"><code>const worldPromise = helloPromise.then(function(value){
+        <code class="comment">// возвращаем новое значение</code>
+        return value + " World";
+});</code></div>
+                        <p>
+                            В качестве значения параметра <code>value</code> функция обработчика получает строку "Hello" и затем возвращает строку "Hello World". Эта строка затем можно будет получить через метод 
+                            <code>then()</code> нового промиса, который генерируется вызовом <code>helloPromise.then()</code> и который называется здесь <code>worldPromise</code>.
+                        </p>
+                    </li>
+
+                    <li>Затем аналогичным образом у промиса <code>worldPromise</code> вызывается метод <span class="b">then()</span>:
+                        <div class="code-block"><code>const metanitPromise = worldPromise.then(function(value){
+        <code class="comment">// возвращаем новое значение</code>
+        return value + " from METANIT.COM";
+});</code></div>
+                        <p>
+                            В качестве значения параметра <code>value</code> функция обработчика получает строку "Hello World" и затем возвращает строку "Hello World from METANIT.COM". 
+                            Вызов <code>worldPromise.then()</code> возвращает новый промис <code>metanitPromise</code>.
+                        </p>
+                    </li>
+
+                    <li>На последним этапе у промиса <code>metanitPromise</code> вызывается метод <span class="b">then()</span>:
+                        <div class="code-block"><code>metanitPromise.then(function(finalValue){
+    console.log(finalValue);    <code class="comment">// Hello World from METANIT.COM</code>
+});</code></div>
+                        <p>Здесь через параметр <code>finalValue</code> получаем финальное значение - строку "Hello World from METANIT.COM" и выводим на консоль. После этого цепочка завершена.</p>
+                    </li>
+                </ol>
+
+                <p>Для большей краткости и наглядности мы можем упростить цепочку:</p>
+
+                <div class="code-block"><code>new Promise(resolve => resolve("Hello"))
+.then(value => value + " World")
+.then(value => value + " from METANIT.COM")
+.then(finalValue => console.log(finalValue));</code></div>
+
+                <h3>Обработка ошибок</h3>
+
+                <p>
+                    Для обработки ошибок к цепочке в конце добавляется метод <span class="b">catch()</span>, который также возвращет объект Promise. 
+                    Рассмотрим на простом примере:
+                </p>
+
+                <div class="code-block"><code>function generateNumber(str){
+    return new Promise((resolve, reject) => {
+        const parsed = parseInt(str);
+        if (isNaN(parsed)) reject("Not a number");
+        else resolve(parsed);
+    });
+};
+function printNumber(str){
+    generateNumber(str)
+        .then(value => console.log(value))
+        .catch(error => console.log(error)); 
+}
+printNumber("rty"); <code class="comment">// Not a number</code>
+printNumber("3");   <code class="comment">// 3</code></code></div>
+
+                <p>
+                    В данном случае функция <code class="b">generateNumber()</code> возвращает промис, в котором получаем извне некоторое значение, 
+                    пытаемся конвертировать его в число. В функции <code class="b">printNumber()</code> вызываем эту функцию и у полученного промиса создаем небольшую цепочку из 
+                    методов <code class="b">then()</code> и <code class="b">catch()</code>.
+                </p>
+                <p>Если конвертация строки в число в промисе прошла успешно, то распарсенное число передачется в функцию <code class="b">resolve()</code>:</p>
+                <div class="code-block"><code>else resolve(parsed)</code></div>
+                
+                <p>В этом случае при получении этого результата срабатывает метод <span class="b">then()</span>, который в данном случае выводит полученное значение на консоль:</p>
+                <div class="code-block"><code>.then(value => console.log(value))</code></div>
+
+                <p>Метод <span class="b">catch()</span> при отстутствии ошибок не выполняется.</p>
+
+                <p>Однако если передаеваемое значение невозможно конвертировать в число, соответственно в промисе выполняется вызов</p>
+                <div class="code-block"><code>if (isNaN(parsed)) reject("Not a number");</code></div>
+
+                <p>В этом случае метод <code>then()</code> игнорируется, и выполнение переходит к вызову</p>
+                <div class="code-block"><code>.catch(error => console.log(error));</code></div>
+
+                <h3>Обработка ошибок в цепочке промисов</h3>
+
+                <p>Теперь усложним цепочку. Пусть у нас в цепочке выполняется сразу несколько промисов:</p>
+
+                <div class="code-block"><code>function generateNumber(str){
+    return new Promise((resolve, reject) => {
+        const parsed = parseInt(str);
+        if (isNaN(parsed)) reject("Not a number");
+        else resolve(parsed);
+    });
+};
+function printNumber(str){
+    generateNumber(str)
+        .then(value => {
+            if (value===4) throw "Несчастливое число";
+            return value * value;
+        })
+        .then(finalValue => console.log(`Result: ${finalValue}`))
+        .catch(error => console.error(error));
+}
+printNumber("rty"); <code class="comment">// Not a number</code>
+printNumber("3");   <code class="comment">// Result: 9</code>
+printNumber("4");   <code class="comment">// Несчастливое число</code>
+printNumber("5");   <code class="comment">// Result: 25</code></code></div>
+
+                <p>
+                    Здесь для простоты весь код вынесен в функцию <code>generateNumber()</code>, которая создает цепочку промисов. В этой цепочке промисов 
+                    также получаем извне некоторое значение, пытаемся конвертировать его в число, и затем вычисляем его квадрат и выводит на консоль. В конце которой находится метод <code>catch()</code>. В этот метод передается обработчик ошибки, 
+                    который получает ошибку и выводит ее на консоль. В итоге если в цепочке промисов на одном из этапов генерируется ошибка (в силу внутренней работы кода, например, при генерации ошибки с помощью оператора <code>throw</code>, либо при вызове функции <code>reject()</code>), 
+                    то все последующие вызовы метода <code>then()</code>, которые содержат только обработку значения, игнорируются, и выполнение цепочки переходит к методу 
+                    <code>catch()</code>.
+                </p>
+
+                <p>Для примера вызываем функцию <code>printNumber()</code>, передавая в нее различные исходные данные. Например, при выполнении вызова</p>
+                <div class="code-block"><code>printNumber("rty"); <code class="comment">// Not a number</code></code></div>
+
+                <h3>Возвращение Promise из catch</h3>
+
+                <p>При этом стоит отметить, что, поскольку <code>catch()</code> возвращает объект Promise, то далее также можно продолжить цепочку:</p>
+                <div class="code-block"><code>function generateNumber(str){
+    return new Promise((resolve, reject) => {
+        const parsed = parseInt(str);
+        if (isNaN(parsed)) reject("Not a number");
+        else resolve(parsed);
+    });
+};
+function printNumber(str){
+    generateNumber(str)
+        .then(value => value * value)
+        .then(value => console.log(`Result: ${value}`))
+        .catch(error => console.error(error))
+        .then(() => console.log("Work has been done"));
+}
+printNumber("3");   
+<code class="comment">// Result: 9</code>
+<code class="comment">// Work has been done</code></code></div>
+
+                <p>Причем метод <code>then()</code> после <code>catch()</code> будет вызываться, даже если не произошло ошибок и сам метод <code>catch()</code> не выполнялся.</p>
+
+                <p>И мы даже можем из функции-обработчика ошибки в <code>catch()</code> также передавать некоторое значение и получать через последующий метод <code>then()</code>:</p>
+
+                <div class="code-block"><code>function generateNumber(str){
+    return new Promise((resolve, reject) => {
+        const parsed = parseInt(str);
+        if (isNaN(parsed)) reject("Not a number");
+        else resolve(parsed);
+    });
+};
+function printNumber(str){
+    generateNumber(str)
+        .then(value => value * value)
+        .then(value => console.log(`Result: ${value}`))
+        .catch(error => {
+            console.log(error);
+            return 0;
+        })
+        .then(value => console.log("Status code:", value));
+}
+printNumber("ert3");    <code class="comment">// Not a number</code>
+                        <code class="comment">// Status code: 0</code></code></div>
+
 
                 <h3>Метод .finally()</h3>
                 <p>Метод <code>.finally()</code> выполняется всегда, независимо от успеха или ошибки:</p>
@@ -11891,7 +12093,89 @@ printNumber("3");
 <code class="comment">// Завершено</code>
 <code class="comment">// hello from then</code></code></div>
 
-                <h2>Комбинирование Promise</h2>
+                <p>В качестве параметра метод принимает функцию, которая выполняет некоторые финальные действия по обработке работы промиса:</p>
+                <div class="code-block"><code>function generateNumber(str){
+    return new Promise((resolve, reject) => {
+        const parsed = parseInt(str);
+        if (isNaN(parsed)) reject("Not a number");
+        else resolve(parsed);
+    });
+};
+function printNumber(str){
+    generateNumber(str)
+    .then(value => console.log(value))
+    .catch(error => console.log(error))
+    .finally(() => console.log("End"));
+}
+ 
+printNumber("3");
+printNumber("triuy");</code></div>
+
+                <p>
+                    Здесь мы два раза обращаемся к промису, возвращаемому функцией <span class="b">generateNumber()</span> . В одном случае строка удачно сконвертируется в число, в другом же - произойдет ошибка. Однако вне 
+                    зависимости от отсутствия или наличия ошибки в обоих случаях будет выполняться метод <code>finally()</code>, который выведет на консоль строку "End".
+                </p>
+
+                <p>Метод <code>finally()</code> возвращает объект Promise, поэтому после него можно продолжить продолжить цепочку:</p>
+
+                <div class="code-block"><code>function generateNumber(str){
+    return new Promise((resolve, reject) => {
+        const parsed = parseInt(str);
+        if (isNaN(parsed)) reject("Not a number");
+        else resolve(parsed);
+    });
+};
+function printNumber(str){
+    generateNumber(str)
+    .then(value => console.log(value))
+    .catch(error => console.log(error))
+    .finally(() => console.log("Выполнение промиса завершено"))
+    .then(() => console.log("Промис все еще работает"));
+}
+printNumber("3");</code></div>
+
+                <p>Консольный вывод:</p>
+                <pre class="sh">3
+Выполнение промиса завершено
+Промис все еще работает
+</pre>
+                <br>
+                <p>
+                    Стоит отметить что в метод <code class="b">then()</code> также можно передать данные. Но эти данные передаются не из метода <code class="b">finally()</code>, а из предыдущего метода 
+                    <code class="b">then()</code> или <code class="b">catch()</code>:
+                </p>
+
+                <div class="code-block"><code>function generateNumber(str){
+    return new Promise((resolve, reject) => {
+        const parsed = parseInt(str);
+        if (isNaN(parsed)) reject("Not a number");
+        else resolve(parsed);
+    });
+};
+function printNumber(str){
+    generateNumber(str)
+    .then(value => {
+        console.log(value);
+        return "hello from then";
+    })
+    .catch(error => {
+        console.log(error);
+        return "hello from catch";
+    })
+    .finally(() => {
+        console.log("End");
+        return "hello from finally";
+    })
+    .then(message => console.log(message));
+}
+printNumber("3");</code></div>
+
+                <pre class="sh">3
+End
+hello from then
+</pre>
+
+                <h2 id="ch17-combine">Комбинирование Promise</h2>
 
                 <h3>Promise.all() — ждём все промисы</h3>
                 <p><code>Promise.all()</code> принимает массив промисов и возвращает новый промис, который выполняется, когда <strong>все</strong> промисы завершены успешно:</p>
@@ -11904,14 +12188,14 @@ const promise2 = new Promise((resolve) => {
     setTimeout(resolve, 500, "World");
 });
 
-// Ждём оба промиса
+<code class="comment">// Ждём оба промиса</code>
 Promise.all([promise1, promise2])
     .then(values => {
         const [result1, result2] = values;
-        console.log(result1, result2); // Hello World (через 1 секунду)
+        console.log(result1, result2); <code class="comment">// Hello World (через 1 секунду)</code>
     });
 
-// Или деструктуризация сразу
+<code class="comment">// Или деструктуризация сразу</code>
 Promise.all([promise1, promise2])
     .then(([result1, result2]) => {
         console.log(result1, result2);
