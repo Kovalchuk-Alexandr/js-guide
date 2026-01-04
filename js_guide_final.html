@@ -642,6 +642,7 @@
                                 <li class="nav-subitem" data-target="ch17-chain">📜 Цепочки Promise</li>
                                 <li class="nav-subitem" data-target="ch17-combine">📜 Комбинирование Promise</li>
                                 <li class="nav-subitem" data-target="ch17-async-await">📜 Async/Await — современный синтаксис</li>
+                                <li class="nav-subitem" data-target="ch17-async-await-error">📜 Обработка ошибок в async/await</li>
                             </ul>
                         </li>
                         <li class="nav-item" data-target="ch18">Глава 18. AJAX</li>
@@ -11058,9 +11059,9 @@ if (storage.has('user')) {
 
             <!-- ГЛАВА 17: Асинхронность, Promise, async и await -->
             <section class="chapter" id="ch17">
-                <h1>Глава 17. Асинхронность, Promise, async и await</h1>
+                <h1>📖 Глава 17. Асинхронность, Promise, async и await</h1>
                 
-                <h2 id="ch17-intro">Что такое асинхронность?</h2>
+                <h2 id="ch17-intro">📜 Что такое асинхронность?</h2>
                 <p>В обычной ситуации код JavaScript выполняется последовательно — одна инструкция за другой. Это называется <strong>синхронным выполнением</strong>. Однако что, если одна из операций выполняется продолжительное время (например, запрос к серверу или чтение файла)? В этом случае все последующие операции будут ожидать её выполнения.</p>
 
                 <div class="info-box note">
@@ -11164,7 +11165,7 @@ console.log("Конец программы");</code></div>
                 <p>Здесь обработка ошибки в блоке <code>catch</code> работать не будет, так как к моменту выдачи ошибки вызывающий код уже ушел и некому поймать ошибку.</p>
                 
 
-                <h2 id="ch17-callback">Callback функции (устаревший подход)</h2>
+                <h2 id="ch17-callback">📜 Callback функции (устаревший подход)</h2>
 
                 <p>
                     Изначально, до появления <span class="b">Promise</span>, асинхронные операции (обработка результата и ошибок в асинхронных функциях) обрабатывались с помощью <strong>callback-функций</strong> (функций обратного вызова), которые 
@@ -11293,7 +11294,7 @@ getData(function(a) {
 
                 <p>И для решения этой проблемы начиная со стандарта ES2015 в JavaScript была добавлена поддержка промисов, которые далее будут рассмотрены.</p>
                 
-                <h2 id="ch17-promise-intro">Введение в промисы (Promise)</h2>
+                <h2 id="ch17-promise-intro">📜 Введение в промисы (Promise)</h2>
 
                 <p>
                     <span class="b">Промис (promise)</span> - это объект, представляющий результат успешного или неудачного завершения асинхронной операции. 
@@ -11465,7 +11466,7 @@ const myPromise = new Promise(function(resolve, reject){
                 </p>
 
 
-                <h2 id="ch17-then">Получение результата: .then()</h2>
+                <h2 id="ch17-then">📜 Получение результата: .then()</h2>
 
                 <p>Ранее мы рассмотрели, как из функции промиса мы можем передать во вне результат асинхронной операции:</p>
                 <div class="code-block"><code>const myPromise = new Promise(function(resolve){
@@ -11634,7 +11635,7 @@ sum(25, 4, function(value){ console.log("Сумма:", value);});</code></div>
                     образом передается через третий параметр, соответственно он будет задействован <code>sum(25, 4, function(value){ console.log("Сумма:", value);})</code>
                 </p>
 
-                <h2 id="ch17-error">Обработка ошибок в Promise: .catch()</h2>
+                <h2 id="ch17-error">📜 Обработка ошибок в Promise: .catch()</h2>
                 <p>
                     Одним из преимуществ промисов является более простая обработка ошибок. Для получения и обработки ошибки мы можем использовать 
                     функцию <span class="b">catch()</span> объекта <code>Promise</code>, которая в качестве параметра принимает функцию обработчика ошибки:
@@ -11850,7 +11851,7 @@ generateNumber("hello");</code></div>
 </pre>
 
 
-                <h2 id="ch17-chain">Цепочки Promise</h2>
+                <h2 id="ch17-chain">📜 Цепочки Promise</h2>
                 <p>
                     Одним из примуществом промисов является то, что они позволяют создавать цепочки промисов. Так, ранее мы рассмотрели применение методов <span class="b">then()</span> и 
                     <span class="b">catch()</span> для получения и обработки результатов и ошибок асинхронной операции. При выполнении эти методы генерируют новый объект 
@@ -12174,7 +12175,7 @@ End
 hello from then
 </pre>
 
-                <h2 id="ch17-combine">Комбинирование Promise. <br>
+                <h2 id="ch17-combine">📜 Комбинирование Promise. <br>
                 Функции Promise.all, Promise.allSettled, Promise.any и Promise.race</h2>
 
                 <p>Функции <span class="b">Promise.all()</span>, <span class="b">Promise.allSettled()</span> и <span class="b">Promise.race()</span> позволяют сгруппировать выполнение нескольких промисов.</p>
@@ -12450,7 +12451,12 @@ Promise.any([promise1, promise2])
                     </tbody>
                 </table>
 
-                <h2 id="ch17-async-await">Async/Await — современный синтаксис</h2>
+                <h2 id="ch17-async-await">📜 Async/Await — современный синтаксис</h2>
+
+                <p>
+                    Внедение стандарта ES2017 в JavaScript привнесло два новых оператора: <span class="b">async</span> и <span class="b">await</span>, который призваны упростить работу 
+                    с промисами.
+                </p>
                 <p><code>async/await</code> — это синтаксический сахар над промисами, который делает асинхронный код похожим на синхронный.</p>
 
                 <h3>Ключевое слово async</h3>
@@ -12469,7 +12475,20 @@ async function asyncFunction() {
 <code class="comment">// asyncFunction() автоматически возвращает Promise</code>
 asyncFunction().then(value => console.log(value)); <code class="comment">// Hello</code></code></div>
 
+                <p>Оператор <span class="b">async</span> определяет асинхронную функцию, в которой, как предполагается, будет выполняться одна или несколько асинхронных задач:</p>
+ 
+                <div class="code-block"><code>async function название_функции(){
+    <code class="comment">//</code> асинхронные операции
+}</code></div>
+
                 <h3>Ключевое слово await</h3>
+
+                <p>Внутри асинхронной функции мы можем применить оператор <span class="b">await</span>. Он ставится перед вызовом асинхронной операции, которая представляет объект Promise:</p>
+
+                <div class="code-block"><code>async function название_функции(){
+    await асинхронная_операция();
+}</code></div>
+
                 <p><code>await</code> приостанавливает выполнение async-функции до получения результата промиса. Работает <strong>только внутри async-функций</strong>:</p>
 
                 <div class="code-block"><code>function sum(x, y) {
@@ -12479,16 +12498,80 @@ asyncFunction().then(value => console.log(value)); <code class="comment">// Hell
     });
 }
 
-// Асинхронная функция с await
+<code class="comment">// Асинхронная функция с await</code>
 async function calculate() {
-    const value = await sum(5, 3); // Ждём результата
-    console.log("Результат:", value); // Результат: 8
+    const value = await sum(5, 3); <code class="comment">   // Ждём результата</code>
+    console.log("Результат:", value); <code class="comment">// Результат: 8</code>
 }
 
 calculate();</code></div>
 
+                <p>Рассмотрим простейший пример с использованием Promise:</p>
+                <div class="code-block"><code>function sum(x, y){ 
+    return new Promise(function(resolve){
+        const result = x + y;
+        resolve(result);
+    });
+}
+sum(5, 3).then(function(value){ 
+    console.log("Результат асинхронной операции:", value);
+}); <code class="comment">// Результат асинхронной операции: 8</code></code></div>
+
+                <p>
+                    В данной случае функция <code>sum()</code> представляет асинхронную задачу. Она принимает два числа и возвращает объект Promise, в котором выполняется сложение этих чисел. Результат сложения передается в функцию <code>resolve()</code>. И далее 
+                    в методе <code>then()</code> мы можем получить этот результат и выполнить с ним различные действия.
+                </p>
+                <p>Теперь перепишем этот пример с использованием <span class="b">async/await</span>:</p>
+
+                <div class="code-block"><code>function sum(x, y){ 
+    return new Promise(function(resolve){
+        const result = x + y;
+        resolve(result);
+    });
+}
+<code class="comment">// сокращенный вариант</code>
+// function sum(x, y){ return Promise.resolve(x + y);}
+ 
+ 
+async function calculate(){
+    const value = await sum(5, 3);
+    console.log("Результат асинхронной операции:", value);
+}
+calculate();    <code class="comment">// Результат асинхронной операции: 8</code></code></div>
+
+                <p>Здесь мы определили асинхронную функцию <code class="b">calculate()</code>, к которой применяется <span class="b">async</span>:</p>
+
+                <div class="code-block"><code>async function calculate()&#123;</code></div>
+
+                <p>
+                    Внутри функции вызывается асинхронная операция <code>sum()</code>, которой передаются некоторые значения. 
+                    Причем к этой функции применяется оператор <span class="b">await</span>. Благодаря оператору <code>await</code> больше нет надобности вызывать у промиса метод 
+                    <span class="b">then()</span>. А результат, который возвращает Promise, мы можем получить напрямую из вызова функции sum и, например, присвоить константе или переменной:
+                </p>
+
+                <div class="code-block"><code>const value = await sum(5, 3);</code></div>
+
+                <p>Затем мы можем вызвать функцию <code>calculate()</code> как обычную функцию и тем самым выполнить все ее действия.</p>
+                <div class="code-block"><code>calculate();</code></div>
+
+                <p>Стоит отметить, что для функции, которая определена со словом <span class="b">async</span> неявно создается объект Promise. Поэтому ее также можно использовать как промис:</p>
+
+                <div class="code-block"><code>function sum(x, y){ 
+    return new Promise(function(resolve){
+        const result = x + y;
+        resolve(result);
+    });
+}
+ 
+async function calculate(){
+    const result = await sum(5, 3);
+    return result;
+}
+calculate().then(value=> console.log("Результат асинхронной операции:", value));
+</code></div>
+
                 <h3>Сравнение: Promise vs Async/Await</h3>
-                <div class="code-block"><code>// С Promise (цепочка .then)
+                <div class="code-block"><code><code class="comment">// С Promise (цепочка .then)</code>
 sum(5, 3)
     .then(result => {
         console.log("Результат 1:", result);
@@ -12498,7 +12581,7 @@ sum(5, 3)
         console.log("Результат 2:", result);
     });
 
-// С Async/Await (выглядит синхронно)
+<code class="comment">// С Async/Await (выглядит синхронно)</code>
 async function calculate() {
     const result1 = await sum(5, 3);
     console.log("Результат 1:", result1);
@@ -12519,7 +12602,11 @@ calculate();</code></div>
                     </ul>
                 </div>
 
-                <h3>Несколько await подряд</h3>
+
+                <h3>Выполнение последовательности асинхронных операций (несколько await подряд)</h3>
+
+                <p>Асинхронная функция может содержать множество асинхронных операций, к которым применяется оператор <span class="b">await</span>. В этом случае все асинхронные операции будут выполняться последовательно:</p>
+
                 <div class="code-block"><code>function sum(x, y) {
     return new Promise(resolve => {
         const result = x + y;
@@ -12529,19 +12616,48 @@ calculate();</code></div>
 
 async function calculate() {
     const value1 = await sum(5, 3);
-    console.log("Результат 1:", value1); // 8
+    console.log("Результат 1 асинхронной операции:", value1); <code class="comment">// 8</code>
     
     const value2 = await sum(6, 4);
-    console.log("Результат 2:", value2); // 10
+    console.log("Результат 2 асинхронной операции:", value2); <code class="comment">// 10</code>
     
     const value3 = await sum(7, 5);
-    console.log("Результат 3:", value3); // 12
+    console.log("Результат 3 асинхронной операции:", value3); <code class="comment">// 12</code>
 }
 
-calculate();</code></div>
+calculate();
+<code class="comment">// Результат 1 асинхронной операции: 8</code>
+<code class="comment">// Результат 2 асинхронной операции: 10</code>
+<code class="comment">// Результат 3 асинхронной операции: 12</code></code></div>
 
-                <h2>Обработка ошибок в async/await</h2>
-                <p>Для обработки ошибок используется конструкция <code>try...catch</code>:</p>
+                <h2 id="ch17-async-await-error">📜 Обработка ошибок в async/await</h2>
+                <p>Для обработки ошибок используется конструкция <code>try...catch...finally</code>:</p>
+
+                <p>Например, возьмем следующий код с использованием Promise:</p>
+                <div class="code-block"><code>function square(str){
+    return new Promise((resolve, reject) => {
+        const n = parseInt(str);
+        if (isNaN(n)) reject("Not a number");
+        else resolve(n * n);
+    });
+};
+function calculate(str){
+     
+    square(str)
+        .then(value => console.log("Result: ", value))
+        .catch(error => console.log(error));
+}
+ 
+calculate("g8");    <code class="comment">// Not a number </code>
+calculate("4");     <code class="comment">// Result:  16</code></code></div>
+
+                <p>
+                    Функция <code class="b">square()</code> получает некоторое значение, в промисе это значение преобразуется в число. И при удачном преобразовании из промиса 
+                    возвращается квадра числа. Если переданное значение не является числом, то возвращаем ошибку.
+                </p>
+                <p>При вызове функции <code>square()</code> с помощью метода <span class="b">catch()</span> можно обработать возникшую ошибку.</p>
+
+                <p>Теперь перепишем пример с использованием <span class="b">async/await</span>:</p>
 
                 <div class="code-block"><code>function square(str) {
     return new Promise((resolve, reject) => {
@@ -12560,8 +12676,11 @@ async function calculate(str) {
     }
 }
 
-calculate("4");     // Результат: 16
-calculate("abc");   // Ошибка: Not a number</code></div>
+calculate("4");     <code class="comment">// Результат: 16</code>
+calculate("abc");   <code class="comment">// Ошибка: Not a number</code></code></div>
+
+                <p>Вызов асинхронной операции помещается в блок <span class="b">try</span>, соответственно в блоке <span class="b">catch</span> можно получить возникшую ошибку и обработать ее.</p>
+
 
                 <h3>try...catch...finally</h3>
                 <div class="code-block"><code>async function fetchUserData(userId) {
