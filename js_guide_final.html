@@ -643,6 +643,10 @@
                                 <li class="nav-subitem" data-target="ch17-combine">📜 Комбинирование Promise</li>
                                 <li class="nav-subitem" data-target="ch17-async-await">📜 Async/Await — современный синтаксис</li>
                                 <li class="nav-subitem" data-target="ch17-async-await-error">📜 Обработка ошибок в async/await</li>
+                                <li class="nav-subitem" data-target="ch17-async-await-parallel">📜 Параллельное выполнение async/await</li>
+                                <li class="nav-subitem" data-target="ch17-practical-exapm">📜 Практические примеры</li>
+                                <li class="nav-subitem" data-target="ch17-async-iterator">📜 Асинхронные итераторы</li>
+                                <li class="nav-subitem" data-target="ch17-async-generator">📜 Асинхронный генератор</li>
                             </ul>
                         </li>
                         <li class="nav-item" data-target="ch18">Глава 18. AJAX</li>
@@ -12697,7 +12701,7 @@ calculate("abc");   <code class="comment">// Ошибка: Not a number</code></
     }
 }</code></div>
 
-                <h2>Параллельное выполнение async/await</h2>
+                <h2 id="ch17-async-await-parallel">📜 Параллельное выполнение async/await</h2>
 
                 <h3>Последовательное выполнение (медленно)</h3>
                 <div class="code-block"><code>async function loadData() {
@@ -12721,7 +12725,7 @@ calculate("abc");   <code class="comment">// Ошибка: Not a number</code></
     // Общее время: 1 секунда (максимум из трёх)
 }</code></div>
 
-                <h2>Практические примеры</h2>
+                <h2 id="ch17-practical-exapm">📜 Практические примеры</h2>
 
                 <h3>Пример 1: Загрузка данных с API</h3>
                 <div class="code-block"><code>async function loadUser(userId) {
@@ -12820,9 +12824,203 @@ fetchWithTimeout('https://api.example.com/slow-endpoint', 3000);</code></div>
 
 fetchWithRetry('https://api.example.com/unstable');</code></div>
 
-                <h2>Асинхронные итераторы и генераторы</h2>
+                <h2 id="ch17-async-iterator">📜 Асинхронные итераторы</h2>
 
-                <h3>Асинхронный итератор</h3>
+                <p>
+                    Асинхронные итераторы объединяют возможности итераторов и операторов <span class="b">async</span> и <span class="b">await</span>. 
+                    Асинхронные итераторы прежде всего предназначены для обращения к источникам данных данных, которые используют асинхронный API. Это могут быть какие-нибудь данные, которые загружаются по части, 
+                    например, по сети, из файловой системы или из базы данных.
+                </p>
+                <p>
+                    Из статьи про <a href="https://metanit.com/web/javascript/14.1.php">итераторы</a> мы должны помнить, что интератор предоставляет метод <span class="b">next()</span>, который возвращает 
+                    объект с двумя свойствами: <span class="b">{ value, done }</span>. Свойство <code>value</code> хранит некоторое значение, которое, например, можно получить в 
+                    цикле <code>for..of</code> при переборе объекта. А свойство <code>done</code> указывает, завершен ли перебор объектов. 
+                    Если это свойство равно <code>false</code>, значит, итератор еще не завершил перебор объектов, и есть еще доступные объекты. Если свойство 
+                    равно <code>true</code>, то перебор закончен, и в наборе больше нет доступных для перебора объектов.
+                </p>
+                <p>
+                    Асинхронный итератор похож на обычный синхронный за тем исключением, что его метод <span class="b">next()</span> возвращает объект 
+                    <span class="b">Promise</span>. А из промиса, в свою очередь, возвращается объект <span class="b">{ value, done }</span>.
+                </p>
+
+                <h3>Цикл for-await-of</h3>
+
+                <p>Для получения данных с помощью асинхронных итераторов применяется цикл <span class="b">for-await-of</span>:</p>
+
+                <div class="code-block"><code>for await (variable of iterable) {
+  <code class="comment">// действия </code>
+}</code></div>
+
+                <p>
+                    В цикле <span class="b">for-await-of</span> после оператора <span class="b">of</span> идет некоторый набор данных, который можно перебрать по элементам. 
+                    Это может асинхронный источник данных, но также может быть и синхронный источник данных, как массивы или, например, встроенные объекты String, Map, Set и т.д.
+                </p>
+                <p>Стоит отметить, что данная форма цикла может использоваться только в функциях, определенных с оператором <span class="b">async</span>.</p>
+                
+                <p>Рассмотрим простейший пример, где в качестве источника данных выступает обычный массив:</p>
+
+                <div class="code-block"><code>const dataSource = ["Tom", "Sam", "Bob"];
+async function readData(){
+    for await (const item of dataSource) {
+        console.log(item);
+    }
+}
+readData();
+<code class="comment">// Tom</code>
+<code class="comment">// Sam</code>
+<code class="comment">// Bob</code></code></div>
+
+                <p>
+                    Здесь в цикле происходит перебор массива dataSource. При выполнении цикла для источника данных (в данном случае для массива) 
+                    с помощью метода <code>[Symbol.asyncIterator]()</code> неявно создается асинхронный итератор. И при каждом обращении к очередному элементу в этом источнике данных 
+                    неявно из итератора возвращается объект Promise, из которого и получаем текущий элемент массива.
+                </p>
+
+                <h3>Создание асинхронного итератора</h3>
+
+                <p>В примере выше асинхронный итератор создавался неявно. Но мы также можем его определить явно. Например, определим асинхронный итератор, который возвращает элементы массива:</p>
+
+                <div class="code-block"><code>const generatePerson = {
+  [Symbol.asyncIterator]() {
+    return {
+      index: 0,
+      people: ["Tom", "Sam", "Bob"],
+      next() {
+        if (this.index &lt; this.people.length) {
+          return Promise.resolve({ value: this.people[this.index++], done: false });
+        }
+ 
+        return Promise.resolve({ done: true });
+      }
+    };
+  }
+};</code></div>
+
+                <p>
+                    Итак, здесь определен объект <span class="b">generatePerson</span>, в котором реализован только один метод - <span class="b">[Symbol.asyncIterator]()</span>, 
+                    который по сути и представляет асинхронный итератор. Реализация асинхронного итератора (как и в случае с синхронным итератором) позволяет сделать объект <span class="b">generatePerson</span> 
+                    перебираемым.
+                </p>
+                
+                <p>Основные моменты асинхронного итератора:</p>
+                <ul>
+                    <li>Асинхронный итератор реализуется методом <span class="b">[Symbol.asyncIterator]()</span>, который возвращает объект.</li>
+                    <li>Возвращаемый объект итератора имеет метод <span class="b">next()</span>, который возвращает объект <span class="b">Promise</span>.</li>
+                    <li>
+                        Объект <span class="b">Promise</span>, в свою очередь, возвращает объект с двумя свойстами <span class="b">{ value, done }</span>. Свойство <code>value</code> собственно хранит некоторое значение. 
+                        А свойство <code>done</code> указывает, завершен ли перебор и соответственно, есть ли в наборе доступные для перебора объекты. 
+                        Если свойство <code>done</code> равно <code>true</code> (перебор закончен, и доступных для перебора объектов больше нет), 
+                        то нет смысла указывать свойство <code>value</code>
+                    </li>
+                </ul>
+
+                <p>
+                    В данном случае итератор реализует простую задачу - возвращает очереднего пользователя. Для хранения пользователей в объекте итератора определен массив <code>people</code>, а для хранения 
+                    индекса текущего элемента массива определена переменная <code>index</code>.
+                </p>
+
+                <div class="code-block"><code>index: 0,
+people: ["Tom", "Sam", "Bob"],</code></div>
+
+                <p>
+                    В методе <span class="b">next()</span> возвращаем объект Promise. Если текущий индекс меньше длины массивы (то есть в массиве еще имеются для 
+                    перебора элементы), то возвращаем Promise, в котором возвращаем элемент массива по текущему индексу:
+                </p>
+
+                <div class="code-block"><code>return Promise.resolve({ value: this.people[this.index++], done: false });</code></div>
+
+                <p>Если все элементы массива уже получены, то возвращаем Promise с объектом <code>{ done: true }</code>:</p>
+
+                <div class="code-block"><code>return Promise.resolve({ done: true });</code></div>
+                
+                <p>Где значение <code>done: true</code> будет указывать внешнему коду, что все значения итератора уже получены.</p>
+                
+                <p>Теперь посмотрим, как мы можем получить из итератора данные:</p>
+                <p>Как и с обычным итератором, мы можем обратиться к самому асинхронному итератору:</p>
+                <div class="code-block"><code>generatePerson[Symbol.asyncIterator](); <code class="comment">// получаем асинхронный итератор</code></code></div>
+
+                <p>И вызвать явным образом его метод <span class="b">next()</span>:</p>
+                <div class="code-block"><code>generatePerson[Symbol.asyncIterator]().next(); <code class="comment">// Promise</code></code></div>
+
+                <p>Этот метод возвращает Promise, у котоого можно вызвать метод <span class="b">then()</span> и обработать его значение:</p>
+                <div class="code-block"><code>generatePerson[Symbol.asyncIterator]()
+    .next()
+    .then((data)=>console.log(data.value));  <code class="comment">// Tom</code></code></div>
+
+                <p>Поскольку метод <code>next()</code> возвращает Promise, то мы можем использовать оператор <code>await</code> для получения значений:</p>
+                <div class="code-block"><code>async function printPeople(){
+    const peopleIterator = generatePerson[Symbol.asyncIterator]();
+     
+    while(!(personData = await peopleIterator.next()).done){
+        console.log(personData.value);
+    }
+}
+printPeople();</code></div>
+
+                <p>Здесь в асинхронной функции цикле while с помощью оператора <code>await</code> последовательно получаем из итератора один за другим объекты Promise, из которых извлекаем данные, пока не достигнем конца данных итератора.</p>
+
+                <p>Однако для перебора объекта асинхронного итератора гораздо проще использовать выше рассмотренный цикл <span class="b">for-await-of</span>:</p>
+
+                <div class="code-block"><code>const generatePerson = {
+  [Symbol.asyncIterator]() {
+    return {
+      index: 0,
+      people: ["Tom", "Sam", "Bob"],
+      next() {
+        if (this.index &lt; this.people.length) {
+          return Promise.resolve({ value: this.people[this.index++], done: false });
+        }
+        return Promise.resolve({ done: true });
+      }
+    };
+  }
+};
+async function printPeople(){
+    for await (const person of generatePerson) {
+        console.log(person);
+   }
+}
+printPeople();</code></div>
+
+                <p>
+                    Поскольку объект <span class="b">generatePerson</span> реализует метод <span class="b">[Symbol.asyncIterator]()</span>, то мы его можем перебрать с омощью цикла 
+                    <span class="b">for-await-of</span>. Соответственно при каждом обращении в цикле метод <code>next()</code> будет возращать промис с очередным элементом из массива people. 
+                    И в итоге мы получим следующий консольный вывод:
+                </p>
+
+                <pre class="brower">Tom
+Sam
+Bob
+</pre>
+
+                <p>Стоит отметить, что мы НЕ можем использовать для перебора объекта с асинхронным итератором обычный цикл <span class="b">for-of</span>.</p>
+
+                <p>Еще один простейший пример - получение чисел:</p>
+                <div class="code-block"><code>const generateNumber = {
+  [Symbol.asyncIterator]() {
+    return {
+      current: 0,
+      end: 10,
+      next() {
+        if (this.current <= this.end) {
+          return Promise.resolve({ value: this.current++, done: false });
+        }
+        return Promise.resolve({ done: true });
+      }
+    };
+  }
+};
+async function printNumbers(){
+    for await (const n of generateNumber) {
+        console.log(n);
+   }
+}
+printNumbers();</code></div>
+
+                <p>Здесь асинхронный итератор объекта <code>generateNumber</code> возвращает числа от 0 до 10.</p>
+
+                <p>Еще пример:</p>
+
                 <div class="code-block"><code>const asyncIterable = {
     [Symbol.asyncIterator]() {
         return {
@@ -12840,17 +13038,17 @@ fetchWithRetry('https://api.example.com/unstable');</code></div>
     }
 };
 
-// Использование с for await...of
+<code class="comment">// Использование с for await...of</code>
 async function printNumbers() {
     for await (const num of asyncIterable) {
-        console.log(num); // 0, 1, 2, 3, 4, 5 (с задержкой)
+        console.log(num); <code class="comment">// 0, 1, 2, 3, 4, 5 (с задержкой)</code>
     }
 }
 
 printNumbers();</code></div>
 
-                <h3>Асинхронный генератор</h3>
-                <div class="code-block"><code>// Определение асинхронного генератора
+                <h2 id="ch17-async-generator">📜 Асинхронный генератор</h2>
+                <div class="code-block"><code><code class="comment">// Определение асинхронного генератора</code>
 async function* generateNumbers() {
     for (let i = 0; i &lt;= 5; i++) {
         await new Promise(resolve => setTimeout(resolve, 500));
@@ -12858,10 +13056,10 @@ async function* generateNumbers() {
     }
 }
 
-// Использование
+<code class="comment">// Использование</code>
 async function printNumbers() {
     for await (const num of generateNumbers()) {
-        console.log(num); // 0, 1, 2, 3, 4, 5 (с задержкой)
+        console.log(num); <code class="comment">// 0, 1, 2, 3, 4, 5 (с задержкой)</code>
     }
 }
 
