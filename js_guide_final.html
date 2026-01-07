@@ -647,9 +647,28 @@
                                 <li class="nav-subitem" data-target="ch17-practical-exapm">📜 Практические примеры</li>
                                 <li class="nav-subitem" data-target="ch17-async-iterator">📜 Асинхронные итераторы</li>
                                 <li class="nav-subitem" data-target="ch17-async-generator">📜 Асинхронный генератор</li>
+                                <li class="nav-subitem" data-target="ch17-mistakes-best-practices">📜 Частые ошибки и лучшие практики</li>
+                                <li class="nav-subitem" data-target="ch17-comparative-table">📜 Сравнительная таблица подходов</li>
+                                <li class="nav-subitem" data-target="ch17-real-examp">📜 Реальные примеры использования</li>
+                                <li class="nav-subitem" data-target="ch17-debug">📜 Отладка асинхронного кода</li>
+                                <li class="nav-subitem" data-target="ch17-perfomance">📜 Производительность и оптимизация</li>
+                                <li class="nav-subitem" data-target="ch17-conclusion">📜 Заключение</li>
                             </ul>
                         </li>
-                        <li class="nav-item" data-target="ch18">Глава 18. AJAX</li>
+                        <li class="nav-item has-subitems" data-target="ch18"><span class="ch-emoj"></span> Глава 18. AJAX
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch18-intro">📜 Что такое AJAX?</li>
+                                <li class="nav-subitem" data-target="ch18-xhr">📜 Объект XMLHttpRequest</li>
+                                <li class="nav-subitem" data-target="ch18-xhr-methods">📜 Основные методы XMLHttpRequest</li>
+                                <li class="nav-subitem" data-target="ch18-xhr-props">📜 Основные свойства XMLHttpRequest</li>
+                                <li class="nav-subitem" data-target="ch18-xhr-events">📜 События и обработчики событий XMLHttpRequest</li>
+                                <li class="nav-subitem" data-target="ch18-execution">📜 Процесс выполнения ajax-запроса</li>
+                                <li class="nav-subitem" data-target="ch18-local-web-server">📜 Создание простого web-сервера</li>
+                                <li class="nav-subitem" data-target="ch18-query-exec">📜 Выполнение ajax-запроса</li>
+                                <li class="nav-subitem" data-target="ch18-simple-get">📜 Простой GET-запрос</li>
+                                <li class="nav-subitem" data-target="ch18-post-query">📜 POST-запрос с отправкой данных</li>
+                            </ul>
+                        </li>
                         <li class="nav-item" data-target="ch19">Глава 19. Fetch API</li>
                         <li class="nav-item" data-target="ch20">Глава 20. WebSocket</li>
                     </ul>
@@ -13048,6 +13067,107 @@ async function printNumbers() {
 printNumbers();</code></div>
 
                 <h2 id="ch17-async-generator">📜 Асинхронный генератор</h2>
+
+                <p>Асинхронные итераторы открывают нам путь к созданию асинхронных генераторов. Асинхронные генераторы позволяют нам использовать оператор <span class="b">await</span> и получать и возвращать данные асинхронным образом.</p>
+                <p>Для определения асинхронного генератора перед функцией генератора ставится оператор <span class="b">async</span></p>
+
+                <div class="code-block"><code>async function* название_функции_генератора(){
+    yield возвращаемое_значение;
+}</code></div>
+
+                <p>Рассмотрим простейший генератор:</p>
+                <div class="code-block"><code>async function* generatePersonAsync(){
+    yield "Tom";    
+}</code></div>
+
+                <p>Здесь определен асинхронный генератор <code class="b">generatePersonAsync</code>, в котором возвращается одно значение - строка "Tom".</p>
+                <p>
+                    Особенностью асинхронного генератора является то, что при обращении к его методу <span class="b">next()</span> возвращается объект Promise. 
+                    А полученный объект Promise, в свою очередь, возвращает объект с двумя свойствами <code>{ value, done }</code>, где <code>value</code> собственно хранит возвращаемое 
+                    значение, а <code>done</code> указывает, доступны ли в генераторе еще данные.
+                </p>
+
+                <p>Например, возьмем выше определенный асинхронный генератор:</p>
+                <div class="code-block"><code>async function* generatePersonAsync(){
+    yield "Tom";    
+}
+const personGenerator = generatePersonAsync();
+personGenerator.next(); <code class="comment">// Promise</code></code></div>
+
+                <p>Здесь с помощью метода <code>next()</code> получаем промис. Далее через метод <code>then()</code> мы можем получить из промиса объект:</p>
+
+                <div class="code-block"><code>const personGenerator = generatePersonAsync();
+personGenerator.next()
+    .then(data => console.log(data));    <code class="comment">// {value: "Tom", done: false}</code></code></div>
+
+                <p>И при обращении к свойству <code>value</code> полученного из промиса получить сами данные:</p>
+
+                <div class="code-block"><code>const personGenerator = generatePersonAsync();
+personGenerator.next()
+    .then(data => console.log(data.value));  <code class="comment">// Tom</code></code></div>
+
+                <p>С помощью оператора <span class="b">await</span> из метода <code>next()</code> генератора мы можем получить данные:</p>
+
+                <div class="code-block"><code>async function* generatePersonAsync(){
+    yield "Tom";
+    yield "Sam";
+    yield "Bob";
+}
+async function printPeopleAsync(){
+    const personGenerator = generatePersonAsync();
+    while(!(person = await personGenerator.next()).done){
+        console.log(person.value);
+    }
+}
+ 
+printPeopleAsync();</code></div>
+
+                <p>Консольный вывод:</p>
+                <pre class="browser">Tom
+Sam
+Bob
+</pre>
+
+                <p>Поскольку асинхронный генератор представляет асинхронный итератор, то данные генератора также можно получить через цикл <span class="b">for-await-of</span>:</p>
+
+                <div class="code-block"><code>async function* generatePersonAsync(){
+    yield "Tom";
+    yield "Sam";
+    yield "Bob";
+}
+async function printPeopleAsync(){
+    const personGenerator = generatePersonAsync();
+    for await(person of personGenerator){
+        console.log(person);
+    }
+}
+ 
+printPeopleAsync();
+<code class="comment">// Tom</code>
+<code class="comment">// Sam</code>
+<code class="comment">// Bob</code></code></div>
+
+                <h3>await в асинхронных генераторах</h3>
+
+                <p>
+                    Главным преимуществом асинхронным генераторов является то, что мы можем использовать в них оператор <span class="b">await</span> и соответственно 
+                    получать данные из источников данных, которые используют асинхронный API.
+                </p>
+                <div class="code-block"><code>async function* generatePersonAsync(people){
+    for(const person of people)
+        yield await new Promise(resolve => setTimeout(() => resolve(person), 2000));
+}
+async function printPeopleAsync(people){
+    for await (const item of generatePersonAsync(people)) {
+        console.log(item); 
+    }
+}
+printPeopleAsync(["Tom", "Sam", "Bob"]);</code></div>
+
+                <p>Здесь для имитации получения данных из асинхронного источника данных применяется промис, который через 2000 секуд возвращает один из элементов массива, который передается в функцию генератора:</p>
+                <div class="code-block"><code>yield await new Promise(resolve => setTimeout(() => resolve(person), 2000));</code></div>
+
+
                 <div class="code-block"><code><code class="comment">// Определение асинхронного генератора</code>
 async function* generateNumbers() {
     for (let i = 0; i &lt;= 5; i++) {
@@ -13081,7 +13201,7 @@ printNumbers();</code></div>
     }
 }
 
-// Использование
+<code class="comment">// Использование</code>
 async function loadAllPages() {
     for await (const pageData of fetchPages('/api/items')) {
         console.log(`Страница получена:`, pageData.items.length, 'элементов');
@@ -13090,7 +13210,7 @@ async function loadAllPages() {
 
 loadAllPages();</code></div>
 
-                <h2>Частые ошибки и лучшие практики</h2>
+                <h2 id="ch17-mistakes-best-practices">📜 Частые ошибки и лучшие практики</h2>
 
                 <div class="info-box danger">
                     <div class="info-box-title">❌ Частые ошибки</div>
@@ -13165,7 +13285,7 @@ async function loadUser(id) {
     }
 }</code></div>
 
-                <h2>Сравнительная таблица подходов</h2>
+                <h2 id="ch17-comparative-table">📜 Сравнительная таблица подходов</h2>
                 
                 <table>
                     <thead>
@@ -13198,14 +13318,14 @@ async function loadUser(id) {
                     </tbody>
                 </table>
 
-                <h2>Реальные примеры использования</h2>
+                <h2 id="ch17-real-examp">📜 Реальные примеры использования</h2>
 
                 <h3>Пример 5: Загрузка и обработка изображений</h3>
                 <div class="code-block"><code>async function loadAndProcessImages(urls) {
     try {
         console.log('Загрузка изображений...');
         
-        // Загружаем все изображения параллельно
+        <code class="comment">// Загружаем все изображения параллельно</code>
         const imagePromises = urls.map(url =&gt; 
             fetch(url).then(r =&gt; r.blob())
         );
@@ -13214,7 +13334,7 @@ async function loadUser(id) {
         
         console.log(`Загружено ${images.length} изображений`);
         
-        // Обрабатываем изображения
+        <code class="comment">// Обрабатываем изображения</code>
         images.forEach((blob, index) =&gt; {
             const img = document.createElement('img');
             img.src = URL.createObjectURL(blob);
@@ -13264,7 +13384,7 @@ loadAndProcessImages(imageUrls);</code></div>
     }
 }
 
-// Использование
+<code class="comment">// Использование</code>
 const queue = new AsyncQueue();
 
 queue.add(async () =&gt; {
@@ -13286,17 +13406,17 @@ queue.add(async () =&gt; {
     }
     
     async get(key, fetchFunction) {
-        // Проверяем кэш
+        <code class="comment">// Проверяем кэш</code>
         if (this.cache.has(key)) {
             console.log(`Взято из кэша: ${key}`);
             return this.cache.get(key);
         }
         
-        // Загружаем данные
+        <code class="comment">// Загружаем данные</code>
         console.log(`Загрузка: ${key}`);
         const value = await fetchFunction();
         
-        // Сохраняем в кэш
+        <code class="comment">// Сохраняем в кэш</code>
         this.cache.set(key, value);
         return value;
     }
@@ -13306,7 +13426,7 @@ queue.add(async () =&gt; {
     }
 }
 
-// Использование
+<code class="comment">// Использование</code>
 const cache = new AsyncCache();
 
 async function getUserData(userId) {
@@ -13316,11 +13436,11 @@ async function getUserData(userId) {
     });
 }
 
-// Первый вызов - загрузит с сервера
-await getUserData(1); // "Загрузка: user_1"
+<code class="comment">// Первый вызов - загрузит с сервера</code>
+await getUserData(1); <code class="comment">//</code> "Загрузка: user_1"
 
-// Второй вызов - возьмёт из кэша
-await getUserData(1); // "Взято из кэша: user_1"</code></div>
+<code class="comment">// Второй вызов - возьмёт из кэша</code>
+await getUserData(1); <code class="comment">// "Взято из кэша: user_1"</code></code></div>
 
                 <h3>Пример 8: Прогресс загрузки</h3>
                 <div class="code-block"><code>async function downloadWithProgress(url) {
@@ -13331,11 +13451,11 @@ await getUserData(1); // "Взято из кэша: user_1"</code></div>
             throw new Error(`HTTP ${response.status}`);
         }
         
-        // Получаем размер файла
+        <code class="comment">// Получаем размер файла</code>
         const contentLength = response.headers.get('content-length');
         const total = parseInt(contentLength, 10);
         
-        // Читаем поток данных
+        <code class="comment">// Читаем поток данных</code>
         const reader = response.body.getReader();
         let loaded = 0;
         const chunks = [];
@@ -13348,12 +13468,12 @@ await getUserData(1); // "Взято из кэша: user_1"</code></div>
             chunks.push(value);
             loaded += value.length;
             
-            // Вычисляем прогресс
+            <code class="comment">// Вычисляем прогресс</code>
             const progress = Math.round((loaded / total) * 100);
             console.log(`Загружено: ${progress}%`);
         }
         
-        // Собираем все части в один массив
+        <code class="comment">// Собираем все части в один массив</code>
         const allChunks = new Uint8Array(loaded);
         let position = 0;
         for (const chunk of chunks) {
@@ -13372,11 +13492,11 @@ await getUserData(1); // "Взято из кэша: user_1"</code></div>
 downloadWithProgress('https://example.com/large-file.zip');</code></div>
 
                 <h3>Пример 9: Отмена асинхронной операции (AbortController)</h3>
-                <div class="code-block"><code>// Создаём контроллер отмены
+                <div class="code-block"><code><code class="comment">// Создаём контроллер отмены</code>
 const controller = new AbortController();
 const signal = controller.signal;
 
-// Функция с возможностью отмены
+<code class="comment">// Функция с возможностью отмены</code>
 async function fetchWithCancel(url, signal) {
     try {
         const response = await fetch(url, { signal });
@@ -13391,10 +13511,10 @@ async function fetchWithCancel(url, signal) {
     }
 }
 
-// Запускаем запрос
+<code class="comment">// Запускаем запрос</code>
 const dataPromise = fetchWithCancel('https://api.example.com/slow', signal);
 
-// Отменяем через 2 секунды
+<code class="comment">// Отменяем через 2 секунды</code>
 setTimeout(() =&gt; {
     controller.abort();
     console.log('Отправлен сигнал отмены');
@@ -13410,7 +13530,7 @@ await dataPromise;</code></div>
         const batch = items.slice(i, i + batchSize);
         console.log(`Обработка партии ${i / batchSize + 1}`);
         
-        // Обрабатываем партию параллельно
+        <code class="comment">// Обрабатываем партию параллельно</code>
         const batchResults = await Promise.all(
             batch.map(item =&gt; processFn(item))
         );
@@ -13421,7 +13541,7 @@ await dataPromise;</code></div>
     return results;
 }
 
-// Использование
+<code class="comment">// Использование</code>
 const userIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 async function loadUser(id) {
@@ -13429,11 +13549,11 @@ async function loadUser(id) {
     return await response.json();
 }
 
-// Загружаем по 3 пользователя одновременно
+<code class="comment">// Загружаем по 3 пользователя одновременно</code>
 const users = await processInBatches(userIds, 3, loadUser);
 console.log(`Загружено ${users.length} пользователей`);</code></div>
 
-                <h2>Отладка асинхронного кода</h2>
+                <h2 id="ch17-debug">📜 Отладка асинхронного кода</h2>
 
                 <div class="info-box note">
                     <div class="info-box-title">💡 Советы по отладке</div>
@@ -13447,15 +13567,15 @@ console.log(`Загружено ${users.length} пользователей`);</c
                 </div>
 
                 <h3>Отслеживание необработанных ошибок</h3>
-                <div class="code-block"><code>// Глобальный обработчик необработанных промисов
+                <div class="code-block"><code><code class="comment">// Глобальный обработчик необработанных промисов</code>
 window.addEventListener('unhandledrejection', (event) =&gt; {
     console.error('Необработанная ошибка промиса:', event.reason);
     console.error('Промис:', event.promise);
     
-    // Можно отправить на сервер для логирования
-    // sendErrorToServer(event.reason);
+    <code class="comment">// Можно отправить на сервер для логирования</code>
+    <code class="comment">// sendErrorToServer(event.reason);</code>
     
-    // Предотвращаем стандартное поведение
+    <code class="comment">// Предотвращаем стандартное поведение</code>
     event.preventDefault();
 });</code></div>
 
@@ -13481,7 +13601,7 @@ window.addEventListener('unhandledrejection', (event) =&gt; {
 
 loggedFetch('https://api.example.com/data');</code></div>
 
-                <h2>Производительность и оптимизация</h2>
+                <h2 id="ch17-perfomance">📜 Производительность и оптимизация</h2>
 
                 <div class="info-box success">
                     <div class="info-box-title">✅ Оптимизация асинхронного кода</div>
@@ -13504,25 +13624,25 @@ loggedFetch('https://api.example.com/data');</code></div>
     };
 }
 
-// Асинхронная функция поиска
+<code class="comment">// Асинхронная функция поиска</code>
 async function search(query) {
     const response = await fetch(`/api/search?q=${query}`);
     return await response.json();
 }
 
-// Обёртка с debounce
+<code class="comment">// Обёртка с debounce</code>
 const debouncedSearch = debounce(async (query) =&gt; {
     console.log('Поиск:', query);
     const results = await search(query);
     displayResults(results);
 }, 300);
 
-// При вводе в поле поиска
+<code class="comment">// При вводе в поле поиска</code>
 searchInput.addEventListener('input', (e) =&gt; {
     debouncedSearch(e.target.value);
 });</code></div>
 
-                <h2>Заключение</h2>
+                <h2 id="ch17-conclusion">📜 Заключение</h2>
 
                 <div class="info-box note">
                     <div class="info-box-title">📚 Основные выводы</div>
@@ -13537,29 +13657,29 @@ searchInput.addEventListener('input', (e) =&gt; {
                 </div>
 
                 <h3>Шпаргалка по выбору метода</h3>
-                <div class="code-block"><code>// Одна операция
+                <div class="code-block"><code><code class="comment">// Одна операция</code>
 const result = await fetch('/api/data');
 
-// Несколько независимых операций → Promise.all()
+<code class="comment">// Несколько независимых операций → Promise.all()</code>
 const [users, posts] = await Promise.all([
     fetch('/api/users'),
     fetch('/api/posts')
 ]);
 
-// Нужен первый успешный → Promise.any()
+<code class="comment">// Нужен первый успешный → Promise.any()</code>
 const fastest = await Promise.any([
     fetch('/api/server1'),
     fetch('/api/server2'),
     fetch('/api/server3')
 ]);
 
-// Нужен первый завершившийся → Promise.race()
+<code class="comment">// Нужен первый завершившийся → Promise.race()</code>
 const result = await Promise.race([
     fetch('/api/data'),
     timeout(5000)
 ]);
 
-// Нужны все результаты (успех и ошибки) → Promise.allSettled()
+<code class="comment">// Нужны все результаты (успех и ошибки) → Promise.allSettled()</code>
 const results = await Promise.allSettled([
     fetch('/api/endpoint1'),
     fetch('/api/endpoint2'),
@@ -13571,7 +13691,7 @@ const results = await Promise.allSettled([
             <section class="chapter" id="ch18">
                 <h1>Глава 18. AJAX-запросы и XMLHttpRequest</h1>
                 
-                <h2>Что такое AJAX?</h2>
+                <h2 id="ch18-intro">📜 Что такое AJAX?</h2>
                 <p><strong>AJAX</strong> (Asynchronous JavaScript And XML) — это технология для отправки запросов к серверу из клиентского кода JavaScript <strong>без перезагрузки страницы</strong>.</p>
 
                 <div class="info-box note">
@@ -13587,11 +13707,11 @@ const results = await Promise.allSettled([
                     <li><strong>Интерактивность</strong> — возможность создавать SPA (Single Page Applications)</li>
                 </ul>
 
-                <h2>Объект XMLHttpRequest</h2>
-                <p>Одним из основных способов для отправки AJAX-запросов является использование объекта <code>XMLHttpRequest</code>.</p>
+                <h2 id="ch18-xhr">📜 Объект XMLHttpRequest</h2>
+                <p>Одним из основных способов для отправки AJAX-запросов является использование объекта <span class="b">XMLHttpRequest</span>.</p>
 
                 <h3>Создание объекта</h3>
-                <div class="code-block"><code>// Создание объекта XMLHttpRequest
+                <div class="code-block"><code><code class="comment">// Создание объекта XMLHttpRequest</code>
 const xhr = new XMLHttpRequest();</code></div>
 
                 <div class="info-box warning">
@@ -13599,7 +13719,7 @@ const xhr = new XMLHttpRequest();</code></div>
                     <p>XMLHttpRequest — это старый API для AJAX-запросов. В современной разработке рекомендуется использовать <strong>Fetch API</strong> (см. главу 19), который проще и мощнее. Однако XMLHttpRequest всё ещё поддерживается во всех браузерах и используется в legacy-коде.</p>
                 </div>
 
-                <h2>Основные методы XMLHttpRequest</h2>
+                <h2 id="ch18-xhr-methods">📜 Основные методы XMLHttpRequest</h2>
 
                 <table>
                     <thead>
@@ -13610,7 +13730,7 @@ const xhr = new XMLHttpRequest();</code></div>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><code>open(method, url, async)</code></td>
+                            <td><code>open(method, url[, async[, user[, password]]])</code></td>
                             <td>Инициализирует запрос</td>
                         </tr>
                         <tr>
@@ -13619,7 +13739,7 @@ const xhr = new XMLHttpRequest();</code></div>
                         </tr>
                         <tr>
                             <td><code>setRequestHeader(header, value)</code></td>
-                            <td>Устанавливает заголовок запроса</td>
+                            <td>Устанавливает значение value для заголовка header, который будет отправляться в запросе</td>
                         </tr>
                         <tr>
                             <td><code>abort()</code></td>
@@ -13633,29 +13753,49 @@ const xhr = new XMLHttpRequest();</code></div>
                             <td><code>getResponseHeader(header)</code></td>
                             <td>Возвращает конкретный заголовок</td>
                         </tr>
+                        <tr>
+                            <td><code>overrideMimeType(mime)</code></td>
+                            <td>переопределяет MIME-тип, возвращаемый сервером</td>
+                        </tr>
+                        <tr>
+                            <td><code>getResponseHeader(header)</code></td>
+                            <td>Возвращает конкретный заголовок</td>
+                        </tr>
                     </tbody>
                 </table>
 
                 <h3>Метод open()</h3>
-                <p>Инициализирует запрос. Принимает параметры:</p>
+
+                <p>Эта функция инициализирует запрос. Принимает пять параметров, из которых первые два являются обязательными:</p>
+
                 <ul>
                     <li><code>method</code> — тип запроса ("GET", "POST", "PUT", "DELETE" и т.д.)</li>
-                    <li><code>url</code> — адрес ресурса</li>
-                    <li><code>async</code> — асинхронный режим (true по умолчанию)</li>
-                    <li><code>user</code> — имя пользователя для аутентификации (опционально)</li>
-                    <li><code>password</code> — пароль для аутентификации (опционально)</li>
+                    <li><code>url</code> — адрес ресурса  к которому отправляется запрос</li>
+                    <li><code>async</code> — асинхронный режим (true по умолчанию)
+                        <p><code>async</code>: логическое значение, которое указывает, будет ли запрос асинхронным. Если значение <code>true</code> (значение по умолчанию), то запрос асинхронный</p>
+                        <p>
+                            Синхронный и асинхронный режим отличаются тем, что запрос в синхронном режиме пока запрос не выполнится, остальной код javascript не может выполняться. 
+                            Если запрос отправляется в асинхронном режиме, то параллельно с выполнением запроса можно выполнять также и другой код javascript. 
+                            И в большинстве случаев, как правило, используется именно асинхронный режим.
+                        </p>
+                    </li>
+                    <li><code>user</code> — имя пользователя для аутентификации (опционально), которое применяется при его аутентификации на сервере (то есть для определения, какой именно пользователь осуществил запрос), по умолчанию равно null
+                    </li>
+                    <li><code>password</code> — пароль для аутентификации (опционально,  по умолчанию равно null)</li>
                 </ul>
 
-                <div class="code-block"><code>// GET-запрос
+                <div class="code-block"><code><code class="comment">// GET-запрос</code>
 xhr.open("GET", "/api/users");
 
-// POST-запрос
+<code class="comment">// POST-запрос</code>
 xhr.open("POST", "/api/users");
 
-// Синхронный запрос (НЕ РЕКОМЕНДУЕТСЯ!)
+<code class="comment">// Синхронный запрос (НЕ РЕКОМЕНДУЕТСЯ!)</code>
 xhr.open("GET", "/api/users", false);</code></div>
 
-                <h2>Основные свойства XMLHttpRequest</h2>
+                <h2 id="ch18-xhr-props">📜 Основные свойства XMLHttpRequest</h2>
+
+                <p>В дополнение к методам объект XMLHttpRequest предоставляет ряд свойств, которые позволяют настроить отправку запроса или извлечт полученные от сервера данные:</p>
 
                 <table>
                     <thead>
@@ -13666,36 +13806,50 @@ xhr.open("GET", "/api/users", false);</code></div>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><code>readyState</code></td>
+                            <td><code class="b">readyState</code></td>
                             <td>Состояние запроса (0-4)</td>
                         </tr>
                         <tr>
-                            <td><code>status</code></td>
-                            <td>HTTP код ответа (200, 404, 500 и т.д.)</td>
+                            <td><code class="b">status</code></td>
+                            <td>HTTP код ответа (200, 404, 500 и т.д.)
+                                <p>
+                                    содержит статусный код ответа HTTP, который пришел от сервера. С помощью статусного кода можно судить об успешности запроса или об ошибках, которые могли бы возникнуть при его 
+                                    выполнении. Например, статусный код 200 указывает на то, что запрос прошел успешно. Код 403 говорит о необходимости авторизации для выполнения запроса, 
+                                    а код 404 сообщает, что ресурс не найден и так далее.
+                                </p>
+                            </td>
                         </tr>
                         <tr>
-                            <td><code>statusText</code></td>
-                            <td>Текст статуса ("OK", "Not Found")</td>
+                            <td><code class="b">statusText</code></td>
+                            <td>Текст статуса ("200 OK", "Not Found")</td>
                         </tr>
                         <tr>
-                            <td><code>response</code></td>
-                            <td>Тело ответа (тип зависит от responseType)</td>
+                            <td><code class="b">response</code></td>
+                            <td>Тело ответа (тип зависит от responseType)
+                                <p>
+                                    Возвращает ответ сервера. Ответ может представлять объекты <code>ArrayBuffer</code>, <code>Blob</code>, 
+                                    <code>Document</code>, объект JSON, строку или <code>null</code> (если запрос еще не завершен или завершился неудачно)
+                                </p>
+                            </td>
                         </tr>
                         <tr>
-                            <td><code>responseText</code></td>
-                            <td>Ответ в виде текста</td>
+                            <td><code class="b">responseText</code></td>
+                            <td>Возвращает ответа сервера в виде строки или значения <code>null</code> (если запрос еще не завершен или завершился неудачно)</td>
                         </tr>
                         <tr>
-                            <td><code>responseXML</code></td>
-                            <td>Ответ в виде XML-документа</td>
+                            <td><code class="b">responseXML</code></td>
+                            <td>Возвращает объект <code>Document</code> (документ HTML/XML), если ответ от сервера в формате XML/HTML</td>
                         </tr>
                         <tr>
-                            <td><code>responseType</code></td>
+                            <td><code class="b">responseType</code></td>
                             <td>Тип ответа ("", "text", "json", "blob", "document")</td>
                         </tr>
                         <tr>
-                            <td><code>timeout</code></td>
-                            <td>Таймаут запроса в миллисекундах</td>
+                            <td><code class="b">timeout</code></td>
+                            <td>
+                                Устанавливает тайм-аут - время в миллисекундах, во время которого может выполняться запрос. Если это время истекло, а 
+                                запрос еще не завершен, то запрос прерывается
+                            </td>                 
                         </tr>
                     </tbody>
                 </table>
@@ -13738,60 +13892,297 @@ xhr.open("GET", "/api/users", false);</code></div>
                     </tbody>
                 </table>
 
-                <h2>События XMLHttpRequest</h2>
+                <h3>Типы ответа responseType</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Тип ответа</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="b">""</code></td>
+                            <td>Пустая строка</td>
+                        </tr>
+                        <tr>
+                            <td><code class="b">"arraybuffer"</code></td>
+                            <td>ответ представляет объект ArrayBuffer, который содержит бинарные данные</td>
+                        </tr>
+                        <tr>
+                            <td><code class="b">"blob"</code></td>
+                            <td>ответ представляет объект Blob, который содержит бинарные данные</td>
+                        </tr>
+                        <tr>
+                            <td><code class="b">"document"</code></td>
+                            <td>ответ представляет объект Document (документ HTML/XML)</td>
+                        </tr>
+                        <tr>
+                            <td><code class="b">"json"</code></td>
+                            <td>ответ представляет данные в формате json</td>
+                        </tr>
+                        <tr>
+                            <td><code class="b">"text"</code></td>
+                            <td>ответ представляет текст</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+
+                <h2 id="ch18-xhr-events">📜 События и обработчики событий XMLHttpRequest</h2>
+
+                <p>Для отслеживания состояния запроса можно применять события XMLHttpRequest:</p>
 
                 <table>
                     <thead>
                         <tr>
                             <th>Событие</th>
                             <th>Когда происходит</th>
+                            <th>Свойство для установки</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><code>loadstart</code></td>
-                            <td>Начало запроса</td>
+                            <td><code class="b">loadstart</code></td>
+                            <td>После запуска запроса.</td>
+                            <td><code>onloadstart</code></td>
                         </tr>
                         <tr>
-                            <td><code>progress</code></td>
-                            <td>Во время загрузки данных</td>
+                            <td><code class="b">progress</code></td>
+                            <td>При выполнении запроса.</td>
+                            <td><code>onprogress</code></td>
                         </tr>
                         <tr>
-                            <td><code>load</code></td>
+                            <td><code class="b">load</code></td>
                             <td>Успешное завершение запроса</td>
+                            <td><code>onload</code></td>
                         </tr>
                         <tr>
-                            <td><code>loadend</code></td>
+                            <td><code class="b">loadend</code></td>
                             <td>Завершение запроса (успех или ошибка)</td>
+                            <td><code>onloadend</code></td>
                         </tr>
                         <tr>
-                            <td><code>error</code></td>
+                            <td><code class="b">error</code></td>
                             <td>Ошибка сети</td>
+                            <td><code>onerror</code></td>
                         </tr>
                         <tr>
-                            <td><code>abort</code></td>
+                            <td><code class="b">abort</code></td>
                             <td>Запрос прерван</td>
+                            <td><code>onabort</code></td>
                         </tr>
                         <tr>
-                            <td><code>timeout</code></td>
+                            <td><code class="b">timeout</code></td>
                             <td>Превышен таймаут</td>
+                            <td><code>ontimeout</code></td>
                         </tr>
                         <tr>
-                            <td><code>readystatechange</code></td>
+                            <td><code class="b">readystatechange</code></td>
                             <td>Изменение readyState</td>
+                            <td><code>onreadystatechange</code></td>
                         </tr>
                     </tbody>
                 </table>
 
-                <h2>Простой GET-запрос</h2>
+                <h2 id="ch18-execution">📜 Процесс выполнения ajax-запроса</h2>
+
+                <p>В общем случае процесс выполнения ajax-запроса с помощью <span class="b">XMLHttpRequest</span> выглядит следующим образом:</p>
+
+                <ol>
+                    <li>Создается объект XMLHttpRequest
+                        <div class="code-block"><code>const request = new XMLHttpRequest();</code></div>
+                    </li>
+                    <li>Устанавливается обработчик событий загрузки (например, через свойство onload), который будет вызываться после завершения HTTP-запроса
+                        <div class="code-block"><code>request.onload = (event) => { console.log("request finished");}</code></div>
+                    </li>
+                    <li>
+                        <p>
+                            Запускается HTTP-запрос с помощью метода <span class="b">open()</span>. Методу передается метод HTTP, который будет использоваться для 
+                            запроса (например, GET или POST), URL-адрес, к которому должен быть отправлен запрос, и при необходимости другие необязательные аргументы
+                        </p>
+                        <div class="code-block"><code>request.open("GET", "http://localhost/hello");</code></div>
+                    </li>
+                    <li>
+                        <p>
+                            При необходимости производиться дополнительная конфигурация HTTP-запроса. Например, с помощью метода <code>setRequestHeader()</code> можно определить заголовки, которые будут отправляться вместе 
+                            с запросом. Однако важно выполнить эту настройку после предыдущего шага, то есть после вызова метода <code>open()</code>, но перед следующим шагом, 
+                            то есть перед вызовом метода <code>send()</code>
+                        </p>
+                        <div class="code-block"><code>request.setRequestHeader("Accept", "text/plain"); <code class="comment">// установка заголовка на прием данных</code></code></div>
+                    </li>
+                    <li>
+                        <p>
+                            Непосредственно отправляется HTTP-запрос с помощью вызова метода <span class="b">send()</span>. При желании в этот метод можно передать данные для 
+                            отправки на сервер
+                        </p>
+                        <div class="code-block"><code>request.send()</code></div>
+                    </li>
+                </ol>
+
+                <h2 id="ch18-local-web-server">📜 Создание простого web-сервера</h2>
+                
+                <p>
+                    Поскольку Ajax предполагает взаимодействие клиента и сервера, то для работы с Ajax нам потребуется некоторый сетевой ресурс, к которому 
+                    мы будем обращаться.  Для эмуляции сетевого ресурса используем локальный веб-сервер. В данном случае воспользуемся самым простым вариантом - Node.js.
+                </p>
+                <p>
+                    Итак, создадим на жестком диске папку для файлов веб-сервера. Например, в моем случае это папка <span class="b">C:\app</span>. Далее в этой папке 
+                    определим файл сервера. Пусть он будет называться <span class="b">server.js</span> и будет иметь следующий код:
+                </p>
+
+                <div class="code-block"><code>const http = require("http");
+const fs = require("fs");
+    
+http.createServer(function(request, response){
+      
+    if(request.url == "/hello"){
+        response.end("Hello METANIT.COM");
+    }
+    else{
+        fs.readFile("index.html", (error, data) => response.end(data));
+    }
+}).listen(3000, ()=>console.log("Сервер запущен по адресу http://localhost:3000"));</code></div>
+
+                <p>Вкратце пробежимся по коду. Сначала подключаются пакеты с функциональностью, которую мы собираемся использовать:</p>
+                <div class="code-block"><code>const http = require("http");  <code class="comment">// для обработки входящих запросов</code>
+ const fs = require("fs");      <code class="comment">// для чтения с жесткого диска файла index.html</code></code></div>
+
+                <p>
+                    Для создания сервера применяется функция <span class="b">http.createServer()</span>. В эту функцию передается функция-обработчик, которая вызывается каждый раз, когда к серверу приходит запрос. 
+                    Эта функция имеет два параметра: <code>request</code> (содержит данные запроса) и <code>response</code> (управляет отправкой ответа).
+                </p>
+
+                <p>
+                    В функции-обработчике с помощью свойства <code>request.url</code> мы можем узнать, к какому ресурсу на сервере пришел запрос. Так, в данном случае, 
+                    если пришел запрос по пути "/hello" (условно к ресурсу "/hello"), то оправляем в ответ с помощью метода <code>response.end()</code> текст "XMLHttpRequest на METANIT.COM":
+                </p>
+
+                <div class="code-block"><code>if(request.url == "/hello"){
+    response.end("Hello METANIT.COM");
+}</code></div>
+
+                <p>Если запрос пришел к какому-то другому ресурсу, то отправляем файл <span class="b">index.html</span>, который мы дальше определим:</p>
+                <div class="code-block"><code>else{
+    fs.readFile("index.html", (error, data) => response.end(data));
+}</code></div>
+
+                <p>
+                    Для считывания файлов применяется встроенная функция <span class="b">fs.readFile()</span>. Первый параметр функции - адрес файла 
+                    (в данном случае предполагается, что файл index.html находится в одной папке с файлом сервера server.js). Второй параметр - функция, которая вызывается после считывания файла 
+                    и получет его содержимое через свой второй параметр data. Затем считанное содежимое также может быть отпавлено с помощью функции <code>response.end(data)</code>.
+                </p>
+                <p>В конце с помощью функции <span class="b">listen()</span> запускаем веб-сервер на 3000 порту. То есть сервер будет запускаться по адресу http://localhost:3000/</p>
+
+                <h2 id="ch18-query-exec">📜 Выполнение ajax-запроса</h2>
+
+                <p>Теперь в папке сервера определим простенький файл <span class="b">index.html</span>:</p>
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+&lt;script>
+    const xhr = new XMLHttpRequest();
+    <code class="comment"><code class="comment">// GET-запрос к ресурсу /hello</code></code>
+    xhr.open("GET", "/hello");
+    
+    <code class="comment"><code class="comment">// обработчик получения ответа сервера</code></code>
+    xhr.onload = () => {
+        if (xhr.status == 200) {                <code class="comment">// если код ответа 200</code>
+            console.log(xhr.responseText);      <code class="comment">// выводим полученный ответ на консоль браузера</code>
+        } else {                                <code class="comment">// иначе выводим текст статуса</code>
+            console.log("Server response: ", xhr.statusText);
+        }
+    };
+    xhr.send();     <code class="comment">// выполняем запрос</code>
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>Здесь в метод <span class="b">xhr.open()</span> в качестве типа запроса передается тип "GET", а в качестве адреса ресурса - "/hello".</p>
+
+                <div class="code-block"><code>xhr.open("GET", "/hello");</code></div>
+
+                <p>Для отслеживания завершения запроса устанавливаем обработчик для события <code>load</code> с помощью свойства <code>xhr.onload</code>:</p>
+                <div class="code-block"><code>xhr.onload = () => {
+    if (xhr.status == 200) {                <code class="comment">// если код ответа 200</code>
+        console.log(xhr.responseText);      <code class="comment">// выводим полученный ответ на консоль браузера</code>
+    } else {                                <code class="comment">// иначе выводим текст статуса</code>
+        console.log("Server response: ", xhr.statusText);
+    }
+};</code></div>
+
+                <p>
+                    В данном случае в качестве обработчика события выступает лямбда-выражение. И когда запрос завершится, сработает данный обработчик. Если запрос был успешно обрабатан, то по умолчанию 
+                    сервер посылает статусный код 200. Как мы помним из кода сервера, при обращении по адресу "/hello" сервер посылает клиенту строку. 
+                    И чтобы получить данную строку, обращаемся к свойству <code>xhr.responseText</code>. Если же в процессе обращения к серверу возникла какая-то ошибка или статусный код не 200, 
+                    то с помощью свойства <code>xhr.statusText</code> выводит текст статуса ответа.
+                </p>
+
+                <p>И в конце собственно выполняем запрос:</p>
+                <div class="code-block"><code>xhr.send();     <code class="comment">// выполняем запрос</code></code></div>
+
+                <p>Таким образом, при загрузке данной веб-страницы будет выполняться ajax-запрос к серверу.</p>
+
+                <p>Теперь в консоли перейдем к папке сервера с помощью команды <span class="b">cd</span> и запустим сервер с помощью команды <span class="b">node server.js</span></p>
+
+                <pre class="sh">C:\app&gt;node server.js
+Сервер запущен по адресу http://localhost:3000</pre>
+
+                <p>После запуска сервера мы можем перейти в браузере по адресу http://localhost:3000, нам отобразится страница, в javascript-коде которой произойдет обращение к ресурсу "/hello":</p>
+                <p>В итоге при обращении к ресурсу "/hello" сервер отправит отправит строку "XMLHttpRequest на METANIT.COM", которую мы сможем получить на веб-странице.</p>
+
+                <p>В примере выше применялся относительный путь, но также можно было бы использовать абсолютный путь с указанием протокола, адреса сервера и порта:</p>
+
+                <div class="code-block"><code>xhr.open("GET", "http://localhost:3000/hello");</code></div>
+
+                <p>
+                    Вместо события <code>load</code> мы также могли бы обрабатывать событие <span class="b">readystatechange</span> 
+                    объекта XMLHttpRequest, которое возникает каждый раз, когда изменяется значение свойства <span class="b">readyState</span>:
+                </p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+&lt;script>
+    const xhr = new XMLHttpRequest();
+    <code class="comment">// GET-запрос к ресурсу /hello</code>
+    xhr.open("GET", "/hello");
+    
+    <code class="comment">// обработчик получения ответа сервера</code>
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState == 4) {                  <code class="comment">// если запрос завершен</code>
+            if (xhr.status == 200) {                <code class="comment">// если код ответа 200</code>
+                console.log(xhr.responseText);      <code class="comment">// выводим полученный ответ на консоль браузера</code>
+            } else {                                <code class="comment">// иначе выводим текст статуса</code>
+                console.log("Server response: ", xhr.statusText);
+            }
+        }
+    };
+    xhr.send();     <code class="comment">// выполняем запрос</code>
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>Здесь в обработчике события сначала проверяет состояние запроса - если код состояния равен 4, то обрабатывает ответ от сервера. Остальная логика та же, что и предыдущем случае.</p>
+
+
+                <h2 id="ch18-simple-get">📜 Простой GET-запрос</h2>
 
                 <h3>Вариант 1: С событием load</h3>
                 <div class="code-block"><code>const xhr = new XMLHttpRequest();
 
-// Настраиваем запрос
+<code class="comment">// Настраиваем запрос</code>
 xhr.open("GET", "/api/users");
 
-// Обработчик успешного завершения
+<code class="comment">// Обработчик успешного завершения</code>
 xhr.onload = () => {
     if (xhr.status === 200) {
         console.log("Ответ:", xhr.responseText);
@@ -13800,12 +14191,12 @@ xhr.onload = () => {
     }
 };
 
-// Обработчик ошибки сети
+<code class="comment">// Обработчик ошибки сети</code>
 xhr.onerror = () => {
     console.log("Ошибка сети");
 };
 
-// Отправляем запрос
+<code class="comment">// Отправляем запрос</code>
 xhr.send();</code></div>
 
                 <h3>Вариант 2: С событием readystatechange</h3>
@@ -13813,9 +14204,9 @@ xhr.send();</code></div>
 
 xhr.open("GET", "/api/users");
 
-// Отслеживаем изменение состояния
+<code class="comment">// Отслеживаем изменение состояния</code>
 xhr.onreadystatechange = () => {
-    if (xhr.readyState === 4) { // DONE
+    if (xhr.readyState === 4) { <code class="comment">// DONE</code>
         if (xhr.status === 200) {
             console.log("Успех:", xhr.responseText);
         } else {
@@ -13831,7 +14222,7 @@ xhr.send();</code></div>
                     <p>Используйте событие <code>load</code> вместо <code>readystatechange</code> — это современный подход, код получается чище и проще.</p>
                 </div>
 
-                <h2>POST-запрос с отправкой данных</h2>
+                <h2 id="ch18-post-query">📜 POST-запрос с отправкой данных</h2>
 
                 <h3>Отправка текста</h3>
                 <div class="code-block"><code>const xhr = new XMLHttpRequest();
@@ -13844,7 +14235,7 @@ xhr.onload = () => {
     }
 };
 
-// Отправляем простой текст
+<code class="comment">//</code> Отправляем простой текст
 xhr.send("Tom");</code></div>
 
                 <h3>Отправка JSON</h3>
@@ -13857,7 +14248,7 @@ xhr.send("Tom");</code></div>
 const xhr = new XMLHttpRequest();
 xhr.open("POST", "/api/users");
 
-// Указываем, что отправляем JSON
+<code class="comment">//</code> Указываем, что отправляем JSON
 xhr.setRequestHeader("Content-Type", "application/json");
 
 xhr.onload = () => {
@@ -13867,15 +14258,15 @@ xhr.onload = () => {
     }
 };
 
-// Преобразуем объект в JSON и отправляем
+<code class="comment">//</code> Преобразуем объект в JSON и отправляем
 xhr.send(JSON.stringify(user));</code></div>
 
                 <h3>Отправка FormData</h3>
-                <div class="code-block"><code>// Создаём объект FormData
+                <div class="code-block"><code><code class="comment">//</code> Создаём объект FormData
 const formData = new FormData();
 formData.append("name", "Tom");
 formData.append("age", 39);
-formData.append("photo", fileInput.files[0]); // Файл
+formData.append("photo", fileInput.files[0]); <code class="comment">//</code> Файл
 
 const xhr = new XMLHttpRequest();
 xhr.open("POST", "/api/users");
