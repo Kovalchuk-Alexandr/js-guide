@@ -675,6 +675,15 @@
                                 <li class="nav-subitem" data-target="ch18-headers-setup">📜 Установка заголовков</li>
                                 <li class="nav-subitem" data-target="ch18-tracking-download-progress">📜 Отслеживание прогресса загрузки</li>
                                 <li class="nav-subitem" data-target="ch18-timeout-cansel">📜 Таймаут и отмена запроса</li>
+                                <li class="nav-subitem" data-target="ch18-ajax-promise">📜 Promise-обёртка для XMLHttpRequest</li>
+                                <li class="nav-subitem" data-target="ch18-ajax-uni-func">📜 Универсальная функция для AJAX</li>
+                                <li class="nav-subitem" data-target="ch18-response-handling">📜 Обработка различных типов ответов</li>
+                                <li class="nav-subitem" data-target="ch18-practical-examp">📜 Практические примеры</li>
+                                <li class="nav-subitem" data-target="ch18-ajax-security">📜 Безопасность AJAX-запросов</li>
+                                <li class="nav-subitem" data-target="ch18-ajax-debug">📜 Отладка AJAX-запросов</li>
+                                <li class="nav-subitem" data-target="ch18-ajax-optimisation">📜 Оптимизация AJAX-запросов</li>
+                                <li class="nav-subitem" data-target="ch18-conclusion">📜 Заключение</li>
+                                <li class="nav-subitem" data-target="ch18-switch-to-fetch">📜 Переход на Fetch API</li>
                             </ul>
                         </li>
                         <li class="nav-item" data-target="ch19">Глава 19. Fetch API</li>
@@ -15763,9 +15772,90 @@ setTimeout(() => {
     xhr.abort();
 }, 1000);</code></div>
 
-                <h2>Promise-обёртка для XMLHttpRequest</h2>
+                <h2 id="ch18-ajax-promise">📜 Promise-обёртка для XMLHttpRequest</h2>
 
-                <p>Для удобства работы можно обернуть XMLHttpRequest в Promise:</p>
+                <p>
+                    Как видно из примеров прошлых тем для создания ajax-запросов используются фактически повторяющиеся вызовы, которые отличаются лишь деталями - 
+                    строкой запроса, функциями обработки ответа. И вполне было бы не плохо создать для всех действий, связанных с асинхронным ajax-запросом, создать какую-то общую 
+                    абстракцию и затем использовать ее при следующих обращениях к серверу.
+                </p>
+                <p>
+                    Для создания дополнительного уровня абстракции в данном случае удобно применять объект <span class="b">Promise</span>, который обертывает 
+                    асинхронную операцию в один объект, который позволяет определить действия, выполняющиеся при успешном или неудачном выполнении этой операции.
+                </p>
+                <p>Инкапсулируем асинхронный запрос в объект Promise:</p>
+                <div class="code-block"><code>function get(url) {
+    return new Promise((succeed, fail) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", url);
+        xhr.addEventListener("load", () => {
+            if (xhr.status >=200 && xhr.status < 400)
+                succeed(xhr.response);
+            else
+                fail(new Error(`Request failed: ${xhr.statusText}`));
+        });
+        xhr.addEventListener("error", () => fail(new Error("Network error")));
+        xhr.send();
+  });
+}</code></div>
+
+                <p>
+                    Метод get получает в качестве параметра адрес ресурса сервера и возвращает объект Promise. Конструктор Promise в качестве параметра принимает 
+                    функцию обратного вызова, которая в свою очередь принимает два параметра - две функции: одна выполняется при успешной обработке запроса, а вторая - 
+                    при неудачной.
+                </p>
+
+                <p>Допустим, в качестве сервера выступает следующее простенькое приложение на Node.js:</p>
+                <div class="code-block"><code>const http = require("http");
+const fs = require("fs");
+     
+http.createServer(function(request, response){
+       
+    if(request.url == "/hello"){
+        response.end("XMLHttpRequest на METANIT.COM");
+    }
+    else{
+        fs.readFile("index.html", (_error, data) => response.end(data));
+    }
+}).listen(3000, ()=>console.log("Сервер запущен по адресу http://localhost:3000"));
+</code></div>
+
+                <p>Теперь вызовем метод get для осуществления запроса к серверу:</p>
+                <div class="code-block"><code>get("http://localhost:3000/hello")
+    .then(response =>  console.log(response))
+    .catch(error => console.error(error));</code></div>
+
+                <p>
+                    Для обработки результата объекта Promise вызывается метод <span class="b">then()</span>, который принимает два параметра: функцию, вызываемую при успешном 
+                    выполнении запроса, и функцию, которая вызывается при неудачном выполнении запроса.
+                </p>
+                <p>В данном случае функция в первом вызове метода then получает ответ сервера и выводит его на консоль.</p>
+                <p>Для обработки ошибок мы мы можем использовать метод <span class="b">catch()</span>, в который передается функция обработки ошибок.</p>
+
+                <h4>Подобным образом через Promise можно было бы отправлять данные на сервер:</h4>
+
+                <div class="code-block"><code>function post(url, data) {
+    return new Promise((succeed, fail) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", url);
+        xhr.addEventListener("load", () => {
+            if (xhr.status >=200 && xhr.status &lt; 400)
+                succeed(xhr.response);
+            else
+                fail(new Error(`Request failed: ${xhr.statusText}`));
+        });
+        xhr.addEventListener("error", () => fail(new Error("Network error")));
+        xhr.send(data);
+  });
+}
+post("http://localhost:3000/user", "Tom")
+    .then(response =>  console.log(response))
+    .catch(error => console.error(error));</code></div>
+
+                <p>В даннном случае по адресу "http://localhost:3000/user" будет отправляться строка "Tom".</p>
+
+
+                <h4>Для удобства работы можно обернуть XMLHttpRequest в Promise:</h4>
 
                 <div class="code-block"><code><code class="comment">// GET-запрос с Promise</code>
 function get(url) {
@@ -15815,18 +15905,18 @@ get("/api/users")
     });
 }
 
-<code class="comment">//</code> Использование
+<code class="comment">// Использование</code>
 post("/api/users", { name: "Tom", age: 37 })
     .then(response => console.log("Создан:", response))
     .catch(error => console.error(error));</code></div>
 
-                <h2>Универсальная функция для AJAX</h2>
+                <h2 id="ch18-ajax-uni-func">📜 Универсальная функция для AJAX</h2>
 
                 <div class="code-block"><code>function ajax(options) {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         
-        <code class="comment">//</code> Параметры по умолчанию
+        <code class="comment">// Параметры по умолчанию</code>
         const method = options.method || "GET";
         const url = options.url;
         const data = options.data || null;
@@ -15835,12 +15925,12 @@ post("/api/users", { name: "Tom", age: 37 })
         
         xhr.open(method, url);
         
-        // Устанавливаем заголовки
+        <code class="comment">// Устанавливаем заголовки</code>
         Object.keys(headers).forEach(key => {
             xhr.setRequestHeader(key, headers[key]);
         });
         
-        // Таймаут
+        <code class="comment">// Таймаут</code>
         if (timeout) {
             xhr.timeout = timeout;
             xhr.ontimeout = () => reject(new Error("Timeout"));
@@ -15860,7 +15950,7 @@ post("/api/users", { name: "Tom", age: 37 })
     });
 }
 
-// Использование
+<code class="comment">// Использование</code>
 ajax({
     method: "POST",
     url: "/api/users",
@@ -15874,18 +15964,18 @@ ajax({
 .then(response => console.log(response))
 .catch(error => console.error(error));</code></div>
 
-                <h2>Обработка различных типов ответов</h2>
+                <h2 id="ch18-response-handling">📜 Обработка различных типов ответов</h2>
 
                 <div class="code-block"><code>const xhr = new XMLHttpRequest();
 
 xhr.open("GET", "/api/file");
 
-// Устанавливаем тип ответа
-xhr.responseType = "blob"; // 'blob', 'arraybuffer', 'document', 'json', 'text'
+<code class="comment">// Устанавливаем тип ответа</code>
+xhr.responseType = "blob"; <code class="comment">// 'blob', 'arraybuffer', 'document', 'json', 'text'</code>
 
 xhr.onload = () => {
     if (xhr.status === 200) {
-        // Для blob - создаём ссылку на скачивание
+        <code class="comment">//</code> Для blob - создаём ссылку на скачивание
         const blob = xhr.response;
         const url = URL.createObjectURL(blob);
         
@@ -15959,7 +16049,7 @@ xhr.send();</code></div>
                     <p>Для новых проектов рекомендуется использовать <strong>Fetch API</strong> (глава 19), который предоставляет более чистый и современный интерфейс для работы с AJAX-запросами.</p>
                 </div>
 
-                <h2>Практические примеры</h2>
+                <h2 id="ch18-practical-examp">📜 Практические примеры</h2>
 
                 <h3>Пример 1: Динамическая подгрузка контента</h3>
                 <div class="code-block"><code>&lt;nav&gt;
@@ -16011,7 +16101,7 @@ searchInput.addEventListener('input', () => {
         return;
     }
     
-    // Отменяем предыдущий запрос
+    <code class="comment">// Отменяем предыдущий запрос</code>
     if (currentXHR) {
         currentXHR.abort();
     }
@@ -16070,7 +16160,7 @@ uploadBtn.addEventListener('click', () => {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/api/upload");
     
-    // Прогресс отправки
+    <code class="comment">// Прогресс отправки</code>
     xhr.upload.onprogress = (e) => {
         if (e.lengthComputable) {
             const percent = (e.loaded / e.total) * 100;
@@ -16111,7 +16201,7 @@ uploadBtn.addEventListener('click', () => {
 &lt;/form&gt;
 
 &lt;script&gt;
-// Загрузка комментариев
+<code class="comment">// Загрузка комментариев</code>
 function loadComments() {
     const xhr = new XMLHttpRequest();
     xhr.open("GET", "/api/comments");
@@ -16126,7 +16216,7 @@ function loadComments() {
     xhr.send();
 }
 
-// Отображение комментариев
+<code class="comment">// Отображение комментариев</code>
 function displayComments(comments) {
     const commentsDiv = document.getElementById('comments');
     const html = comments.map(comment => `
@@ -16140,7 +16230,7 @@ function displayComments(comments) {
     commentsDiv.innerHTML = html;
 }
 
-// Отправка комментария
+<code class="comment">// Отправка комментария</code>
 const form = document.getElementById('commentForm');
 form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -16154,14 +16244,14 @@ form.addEventListener('submit', (e) => {
     xhr.onload = () => {
         if (xhr.status === 201) {
             form.reset();
-            loadComments(); // Перезагружаем список
+            loadComments(); <code class="comment">// Перезагружаем список</code>
         }
     };
     
     xhr.send(formData);
 });
 
-// Загружаем комментарии при загрузке страницы
+<code class="comment">// Загружаем комментарии при загрузке страницы</code>
 loadComments();
 &lt;/script&gt;</code></div>
 
@@ -16173,7 +16263,7 @@ loadComments();
 let currentPage = 1;
 let isLoading = false;
 
-// Загрузка постов
+<code class="comment">// Загрузка постов</code>
 function loadPosts(page) {
     if (isLoading) return;
     
@@ -16196,7 +16286,7 @@ function loadPosts(page) {
     xhr.send();
 }
 
-// Отображение постов
+<code class="comment">// Отображение постов</code>
 function displayPosts(posts) {
     const postsDiv = document.getElementById('posts');
     
@@ -16211,36 +16301,36 @@ function displayPosts(posts) {
     });
 }
 
-// Отслеживаем прокрутку
+<code class="comment">// Отслеживаем прокрутку</code>
 window.addEventListener('scroll', () => {
     const scrollHeight = document.documentElement.scrollHeight;
     const scrollTop = document.documentElement.scrollTop;
     const clientHeight = document.documentElement.clientHeight;
     
-    // Если прокрутили почти до конца
+    <code class="comment">// Если прокрутили почти до конца</code>
     if (scrollTop + clientHeight >= scrollHeight - 100) {
         currentPage++;
         loadPosts(currentPage);
     }
 });
 
-// Загружаем первую страницу
+<code class="comment">// Загружаем первую страницу</code>
 loadPosts(1);
 &lt;/script&gt;</code></div>
 
-                <h2>Безопасность AJAX-запросов</h2>
+                <h2 id="ch18-ajax-security">📜 Безопасность AJAX-запросов</h2>
 
                 <div class="info-box danger">
                     <div class="info-box-title">🔒 CORS (Cross-Origin Resource Sharing)</div>
                     <p>По умолчанию браузеры блокируют AJAX-запросы к другим доменам из-за политики Same-Origin Policy. Сервер должен явно разрешить кросс-доменные запросы через заголовки CORS:</p>
-                    <div class="code-block"><code>// На сервере (например, Node.js)
+                    <div class="code-block"><code><code class="comment">// На сервере (например, Node.js)</code>
 response.setHeader('Access-Control-Allow-Origin', '*');
 response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
 response.setHeader('Access-Control-Allow-Headers', 'Content-Type');</code></div>
     </div>
 
                 <h3>CSRF (Cross-Site Request Forgery) защита</h3>
-                <div class="code-block"><code>// Добавляем CSRF-токен в запросы
+                <div class="code-block"><code><code class="comment">// Добавляем CSRF-токен в запросы</code>
 const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
 const xhr = new XMLHttpRequest();
@@ -16249,10 +16339,10 @@ xhr.setRequestHeader("X-CSRF-Token", csrfToken);
 xhr.send(data);</code></div>
 
                 <h3>XSS (Cross-Site Scripting) защита</h3>
-                <div class="code-block"><code>// ❌ ОПАСНО: вставка HTML напрямую
+                <div class="code-block"><code><code class="comment">// ❌ ОПАСНО: вставка HTML напрямую</code>
 element.innerHTML = xhr.responseText;
 
-// ✅ БЕЗОПАСНО: экранирование HTML
+<code class="comment">// ✅ БЕЗОПАСНО: экранирование HTML</code>
 function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
@@ -16261,15 +16351,16 @@ function escapeHtml(text) {
 
 element.innerHTML = escapeHtml(xhr.responseText);
 
-// ✅ ЕЩЁ БЕЗОПАСНЕЕ: использование textContent
+<code class="comment">// ✅ ЕЩЁ БЕЗОПАСНЕЕ: использование textContent</code>
 element.textContent = xhr.responseText;</code></div>
 
-                <h2>Отладка AJAX-запросов</h2>
+
+                <h2 id="ch18-ajax-debug">📜 Отладка AJAX-запросов</h2>
 
                 <h3>Логирование в консоль</h3>
                 <div class="code-block"><code>const xhr = new XMLHttpRequest();
 
-// Логируем все события
+<code class="comment">// Логируем все события</code>
 xhr.addEventListener('loadstart', () => console.log('loadstart'));
 xhr.addEventListener('progress', (e) => console.log('progress', e.loaded, e.total));
 xhr.addEventListener('load', () => console.log('load', xhr.status, xhr.responseText));
@@ -16295,7 +16386,7 @@ console.log('Запрос отправлен');</code></div>
                     </ul>
                 </div>
 
-                <h2>Оптимизация AJAX-запросов</h2>
+                <h2 id="ch18-ajax-optimisation">📜 Оптимизация AJAX-запросов</h2>
 
                 <h3>Debounce для поисковых запросов</h3>
                 <div class="code-block"><code>function debounce(func, delay) {
@@ -16327,13 +16418,13 @@ searchInput.addEventListener('input', (e) => {
                 <div class="code-block"><code>const cache = new Map();
 
 function cachedRequest(url) {
-    // Проверяем кэш
+    <code class="comment">// Проверяем кэш</code>
     if (cache.has(url)) {
         console.log('Из кэша:', url);
         return Promise.resolve(cache.get(url));
     }
     
-    // Выполняем запрос
+    <code class="comment">// Выполняем запрос</code>
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.open("GET", url);
@@ -16341,7 +16432,7 @@ function cachedRequest(url) {
         
         xhr.onload = () => {
             if (xhr.status === 200) {
-                // Сохраняем в кэш
+                <code class="comment">// Сохраняем в кэш</code>
                 cache.set(url, xhr.response);
                 resolve(xhr.response);
             } else {
@@ -16354,15 +16445,15 @@ function cachedRequest(url) {
     });
 }
 
-// Использование
+<code class="comment">// Использование</code>
 cachedRequest('/api/users')
     .then(data => console.log(data));
 
-// Повторный запрос возьмёт данные из кэша
+<code class="comment">// Повторный запрос возьмёт данные из кэша</code>
 cachedRequest('/api/users')
     .then(data => console.log(data));</code></div>
 
-                <h2>Заключение</h2>
+                <h2 id="ch18-conclusion">📜 Заключение</h2>
 
                 <div class="info-box note">
                     <div class="info-box-title">📚 Основные выводы</div>
@@ -16377,10 +16468,10 @@ cachedRequest('/api/users')
                     </ul>
                 </div>
 
-                <h3>Переход на Fetch API</h3>
+                <h2 id="ch18-switch-to-fetch">📜 Переход на Fetch API</h2>
                 <p>Сравнение XMLHttpRequest и Fetch для одной и той же задачи:</p>
 
-                <div class="code-block"><code>// XMLHttpRequest
+                <div class="code-block"><code><code class="comment">// XMLHttpRequest</code>
 const xhr = new XMLHttpRequest();
 xhr.open("GET", "/api/users");
 xhr.responseType = "json";
@@ -16391,7 +16482,7 @@ xhr.onload = () => {
 };
 xhr.send();
 
-// Fetch API (проще и современнее)
+<code class="comment">// Fetch API (проще и современнее)</code>
 fetch("/api/users")
     .then(response => response.json())
     .then(data => console.log(data))
@@ -16435,13 +16526,13 @@ fetch("/api/users")
                 </div>
 
                 <h2>Базовый синтаксис</h2>
-                <div class="code-block"><code>// Простейший GET-запрос
+                <div class="code-block"><code><code class="comment">// Простейший GET-запрос</code>
 fetch(url)
     .then(response => response.json())
     .then(data => console.log(data))
     .catch(error => console.error(error));
 
-// С дополнительными опциями
+<code class="comment">// С дополнительными опциями</code>
 fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -16453,10 +16544,10 @@ fetch(url, {
                 <h2>Простой GET-запрос</h2>
 
                 <h3>С Promise</h3>
-                <div class="code-block"><code>// Запрос к API
+                <div class="code-block"><code><code class="comment">// Запрос к API</code>
 fetch('/api/users')
     .then(response => {
-        // Проверяем статус ответа
+        <code class="comment">// Проверяем статус ответа</code>
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -16547,13 +16638,13 @@ getUsers();</code></div>
                 <div class="code-block"><code>async function checkResponse() {
     const response = await fetch('/api/users');
     
-    console.log('OK:', response.ok);           // true/false
-    console.log('Статус:', response.status);   // 200, 404...
-    console.log('Текст:', response.statusText); // "OK"
+    console.log('OK:', response.ok);            <code class="comment">// true/false</code>
+    console.log('Статус:', response.status);    <code class="comment">// 200, 404...</code>
+    console.log('Текст:', response.statusText); <code class="comment">// "OK"</code>
     console.log('URL:', response.url);
     console.log('Редирект:', response.redirected);
     
-    // Получаем данные
+    <code class="comment">//</code> Получаем данные
     if (response.ok) {
         const data = await response.json();
         console.log(data);
