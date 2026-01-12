@@ -695,6 +695,9 @@
                                 <li class="nav-subitem" data-target="ch19-simple-get">📜 Простой GET-запрос</li>
                                 <li class="nav-subitem" data-target="ch19-response">📜 Объект Response</li>
                                 <li class="nav-subitem" data-target="ch19-response-methods">📜 Методы получения данных из Response</li>
+                                <li class="nav-subitem" data-target="ch19-post-send">📜 POST-запросы и отправка данных</li>
+                                <li class="nav-subitem" data-target="ch19-request-config">📜 Настройка запроса (параметр init)</li>
+                                <li class="nav-subitem" data-target="ch19-use-headings">📜 Работа с заголовками</li>
                                 <li class="nav-subitem" data-target="ch19-practical-examp">📜 Практические примеры</li>
                             </ul>
                         </li>
@@ -16857,23 +16860,23 @@ http.createServer(function(request, response){
 &lt;script>
     fetch("/hello")
         .then(response => {
-            console.log(response.status);       // 200
-            console.log(response.statusText);   // OK
-            console.log(response.url);          // http://localhost:3000/hello
+            console.log(response.status);       <code class="comment">// 200</code>
+            console.log(response.statusText);   <code class="comment">// OK</code>
+            console.log(response.url);          <code class="comment">// http://localhost:3000/hello</code>
         });
 &lt;/script>
 &lt;/body>
 &lt;/html></code></div>
 
-                <p>Аналогичный пример с async/await:</p>
+                <h4>Аналогичный пример с async/await:</h4>
 
                 <div class="code-block"><code>getResponse();
 async function getResponse() {
  
     const response = await fetch("/hello");
-    console.log(response.status);       // 200
-    console.log(response.statusText);   // OK
-    console.log(response.url);          // http://localhost:3000/hello
+    console.log(response.status);       <code class="comment">// 200</code>
+    console.log(response.statusText);   <code class="comment">// OK</code>
+    console.log(response.url);          <code class="comment">// http://localhost:3000/hello</code>
 }</code></div>
 
                 <p>
@@ -16883,7 +16886,7 @@ async function getResponse() {
 
                 <div class="code-block"><code>fetch("/hello").then(response => {
     if(response.ok){
-        // обработка ответа
+        <code class="comment">// обработка ответа</code>
     }
 });</code></div>
 
@@ -16896,7 +16899,7 @@ async function getResponse() {
     console.log('URL:', response.url);
     console.log('Редирект:', response.redirected);
     
-    <code class="comment">//</code> Получаем данные
+    <code class="comment">// Получаем данные</code>
     if (response.ok) {
         const data = await response.json();
         console.log(data);
@@ -16940,9 +16943,9 @@ keep-alive : timeout=5
                 
                 <div class="code-block"><code>fetch("/hello").then(response => {
      
-    const headerTitle = "date";     // название заголовка
-    if(response.headers.has(headerTitle)){  // если заголовок есть
-        console.log(response.headers.get(headerTitle));     // получаем его значение
+    const headerTitle = "date";                          <code class="comment">// название заголовка</code>
+    if(response.headers.has(headerTitle)){               <code class="comment">// если заголовок есть</code>
+        console.log(response.headers.get(headerTitle));  <code class="comment">// получаем его значение</code>
     }
 });</code></div>
 
@@ -16969,8 +16972,8 @@ http.createServer(function(request, response){
                 <p>Получим этот заголовок на веб-странице:</p>
                 <div class="code-block"><code>fetch("/hello").then(response => {
      
-    console.log(response.headers.get("Content-Type"));      // null - заголовок не установлен
-    console.log(response.headers.get("Secret-Code"));       // 124
+    console.log(response.headers.get("Content-Type"));      <code class="comment">// null - заголовок не установлен</code>
+    console.log(response.headers.get("Secret-Code"));       <code class="comment">// 124</code>
 });</code></div>
 
                 <p>Если заголовок не установлен, то метод <code>response.headers.get()</code> возвращает null.</p>
@@ -16989,12 +16992,12 @@ const fs = require("fs");
 http.createServer(function(request, response){
       
     if(request.url == "/hello"){
-        response.statusCode = 302; // 302 - код временной переадресации
-        response.setHeader("Location", "/newpage"); // переадресация на адрес localhost:3000/newpage
+        response.statusCode = 302;                  <code class="comment">// 302 - код временной переадресации</code>
+        response.setHeader("Location", "/newpage"); <code class="comment">// переадресация на адрес localhost:3000/newpage</code>
         response.end();
     }
     else if(request.url == "/newpage"){
-        response.setHeader("Secret-Code", "New Page Code: 567"); // для теста устанавливаем заголовок
+        response.setHeader("Secret-Code", "New Page Code: 567"); <code class="comment">//для теста устанавливаем заголовок</code>
         response.end("This is a new page");
     }
     else{
@@ -17020,6 +17023,12 @@ New Page Code: 567	</pre>
 
 
                 <h2 id="ch19-response-methods">📜 Методы получения данных из Response</h2>
+
+                <p>
+                    Все данные, которые отправил сервер, доступны в объекте <span class="b">Response</span> через свойство <span class="b">body</span>, которое представляет 
+                    объект <span class="b">ReadableStream</span>, но гораздо проще воспользоваться одним из методов объекта <span class="b">Response</span>. Интерфейс <span class="b">Response</span> предоставляет следующие методы:
+                </p>
+
 
                 <table>
                     <thead>
@@ -17055,6 +17064,21 @@ New Page Code: 567	</pre>
                             <td>Promise&lt;FormData&gt;</td>
                             <td>Данные формы</td>
                         </tr>
+                        <tr>
+                            <td><code>response.clone()</code></td>
+                            <td>Promise&lt;Response Object&gt;</td>
+                            <td>Копия текущего объекта</td>
+                        </tr>
+                        <tr>
+                            <td><code>response.error()</code></td>
+                            <td>Promise&lt;Response Object&gt;</td>
+                            <td>новый объект Response, ассоциированный с возникшей ошибкой сети</td>
+                        </tr>
+                        <tr>
+                            <td><code>response.redirect()</code></td>
+                            <td>новый объект Response</td>
+                            <td>новый объект Response с другим адресом URL</td>
+                        </tr>
                     </tbody>
                 </table>
 
@@ -17063,132 +17087,303 @@ New Page Code: 567	</pre>
                     <p>После вызова любого метода чтения (json(), text() и т.д.), свойство <code>bodyUsed</code> становится true, и повторно прочитать тело уже нельзя.</p>
                 </div>
 
-                <h3>Получение JSON</h3>
-                <div class="code-block"><code>async function getUsers() {
-    const response = await fetch('/api/users');
-    const users = await response.json();
-    return users;
-}</code></div>
+                <h3>Получение ответа в виде текста/HTML</h3>
 
-                <h3>Получение текста/HTML</h3>
                 <div class="code-block"><code>async function getHTML() {
     const response = await fetch('/pages/about.html');
     const html = await response.text();
     document.getElementById('content').innerHTML = html;
 }</code></div>
 
+                <p>Для получения ответа в виде текста применяется метод <span class="b">text()</span>. Например, сервер на Node.js отправляет в ответ клиенту некоторый текст:</p>
+                <div class="code-block"><code>const http = require("http");
+const fs = require("fs");
+    
+http.createServer(function(request, response){
+      
+    if(request.url == "/hello"){
+        response.end("Fetch на METANIT.COM");
+    }
+    else{
+        fs.readFile("index.html", (error, data) => response.end(data));
+    }
+}).listen(3000, ()=>console.log("Сервер запущен по адресу http://localhost:3000"));
+</code></div>
+
+                <p>В данном случае при обращении по адресу "/hello" сервер будет отправлять в ответ клиенту строку текста "Fetch на METANIT.COM".</p>
+                
+                <p>На странице index.html с помощью метода <span class="b">text()</span> получим эту строку</p>
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+&lt;script>
+fetch("/hello")
+    .then(response => response.text())
+    .then(responseText => console.log(responseText));
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>
+                    Для получения отправленного текста у объекта response вызывается метод response.text(), который возвращает Promise. И чтобы получить собственно 
+                    текст ответа, подсоединяем второй метод then(), в котором в функции-колбеке получаем текст ответа:
+                </p>
+                <div class="code-block"><code>then(responseText => console.log(responseText));</code></div>
+
+                <p>Либо можно использовать async/await</p>
+                <div class="code-block"><code>getText();
+async function getText() {
+    <code class="comment">// получаем объект ответа</code>
+    const response = await fetch("/hello");
+    <code class="comment">// из объекта ответа извлекаем текст ответа</code>
+    const responseText = await response.text();
+    console.log(responseText);
+}</code></div>
+
+
+                <h3>Получение ответа в виде JSON</h3>
+                <div class="code-block"><code>async function getUsers() {
+    const response = await fetch('/api/users');
+    const users = await response.json();
+    return users;
+}</code></div>
+
+                <p>Пусть сервер отправляет некоторый json-объект:</p>
+                <div class="code-block"><code>const http = require("http");
+const fs = require("fs");
+    
+http.createServer(function(request, response){
+      
+    if(request.url == "/user"){
+        const user = {name: "Tom", age: 37};
+        response.end(JSON.stringify(user));
+    }
+    else{
+        fs.readFile("index.html", (error, data) => response.end(data));
+    }
+}).listen(3000, ()=>console.log("Сервер запущен по адресу http://localhost:3000"));</code></div>
+
+                <p>В данном случае сервер при обращении по адресу "/user" отправляет объект user в виде кода json.</p>
+                <p>Получим этот объект:</p>
+                <div class="code-block"><code>fetch("/user")
+    .then(response => response.json())
+    .then(user => console.log(user.name, " - ", user.age));</code></div>
+
+                <p>
+                    Метод <span class="b">json()</span> возвращает объект Promise, поэтому во втором методе <code>then()</code> можно получить собственно отправленный объект json и 
+                    обратиться к его свойствам:
+                </p>
+                <div class="code-block"><code>.then(user => console.log(user.name, "-", user.age));</code></div>
+
+                <h4>Тот же пример с применением async/await:</h4>
+                <div class="code-block"><code>getUser();
+async function getUser() {
+    <code class="comment">// получаем объект ответа</code>
+    const response = await fetch("/user");
+    <code class="comment">// из объекта ответа извлекаем json</code>
+    const user = await response.json();
+    console.log(user.name, "-", user.age);
+}</code></div>
+
+                <h4>Отправка набора данных</h4>
+                
+                <p>Аналогичым образом можно получать набор объектов в формате json. Допустим, сервер на node.js отправляет массив объектов:</p>
+                <div class="code-block"><code>const http = require("http");
+const fs = require("fs");
+    
+http.createServer(function(request, response){
+      
+    if(request.url == "/users.json"){
+        const users = [
+            {name: "Tom", age: 37},
+            {name: "Sam", age: 25},
+            {name: "Bob", age: 41}
+        ];
+        response.end(JSON.stringify(users));
+    }
+    else{
+        fs.readFile("index.html", (error, data) => response.end(data));
+    }
+}).listen(3000, ()=>console.log("Сервер запущен по адресу http://localhost:3000"));
+</code></div>
+
+                <p>Получим эти данные на веб-странице:</p>
+                <div class="code-block"><code>fetch("/users.json")
+    .then(response => response.json())
+    .then(users => users.forEach(user=> console.log(user.name, " - ", user.age)));
+     
+<code class="comment">// аналог с async/await</code>
+getUsers();
+async function getUsers() {
+ 
+    const response = await fetch("/users.json");
+    const users = await response.json();
+    users.forEach(user=> console.log(user.name, " - ", user.age))
+}</code></div>
+
+
+                <h4>Отправка файла json</h4>
+
+                <p>Пусть в папке сервера определен файл <span class="b">users.json</span> со следующим содержимым:</p>
+                <div class="code-block"><code>[
+    {"name": "Tom", "age": 37},
+    {"name": "Sam", "age": 25},
+    {"name": "Bob", "age": 41}
+]</code></div>
+
+                <p>В случае с сервером node.js мы могли бы в качестве варианта отправить данный файл следующим образом:</p>
+                <div class="code-block"><code>const http = require("http");
+const fs = require("fs");
+    
+http.createServer(function(request, response){
+      
+    if(request.url == "/users.json"){
+        fs.readFile("users.json", (error, data) => response.end(data));
+    }
+    else{
+        fs.readFile("index.html", (error, data) => response.end(data));
+    }
+}).listen(3000, ()=>console.log("Сервер запущен по адресу http://localhost:3000"));</code></div>
+
+                <p>
+                    В зависимости от конкретной технологии сервера отправка файлов может отличаться. Здесь же, как и в случае с отправкой файла index.html, считываем данные из файла users.json с 
+                    помощью функции <code>fs.readFile()</code> и отправляем в ответ.
+                </p>
+                <p>На стороне клиента был бы тот же код, что и в предыдущем случае:</p>
+                <div class="code-block"><code>fetch("/users.json")
+    .then(response => response.json())
+    .then(users => users.forEach(user=> console.log(user.name, " - ", user.age)));</code></div>
+    
+
                 <h3>Получение изображения (Blob)</h3>
                 <div class="code-block"><code>async function loadImage() {
     const response = await fetch('/images/photo.jpg');
     const blob = await response.blob();
     
-    // Создаём URL для blob
+    <code class="comment">// Создаём URL для blob</code>
     const imageUrl = URL.createObjectURL(blob);
     
-    // Отображаем изображение
+    <code class="comment">// Отображаем изображение</code>
     const img = document.createElement('img');
     img.src = imageUrl;
     document.body.appendChild(img);
     
-    // Освобождаем память (опционально)
+    <code class="comment">// Освобождаем память (опционально)</code>
     img.onload = () => URL.revokeObjectURL(imageUrl);
 }</code></div>
+
+                <p>С помощью метода <span class="b">blob()</span> можно загрузить бинарные данные. Рассмотрим на примере изображений. Допустим, на сервере есть файл <span class="b">forest.png</span></p>
+                <p>Пусть сервер node.js отправляет данный файл при обращении по адресу "forest.png":</p>
+
+                <div class="code-block"><code>const http = require("http");
+const fs = require("fs");
+    
+http.createServer(function(request, response){
+      
+    if(request.url == "/forest.png"){
+        fs.readFile("forest.png", (error, data) => response.end(data));
+    }
+    else{
+        fs.readFile("index.html", (error, data) => response.end(data));
+    }
+}).listen(3000, ()=>console.log("Сервер запущен по адресу http://localhost:3000"));</code></div>
+
+                <p>На веб-странице index.html для обращения к серверу определим следующий код:</p>
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+ &lt;img />
+&lt;script>
+    const img = document.querySelector("img");
+    fetch("/forest.png")
+        .then(response => response.blob())
+        .then(data => img.src = URL.createObjectURL(data));
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>Для показа изображения на веб-странице определен элемент <code>&lt;img &gt;</code></p>
+                <p>
+                    Метод <span class="b">blob()</span> возвращает объект Promise, который получает данные ответа в виде объекта <span class="b">Blob</span>. И во 
+                    втором методе <code>then()</code> получаем этот объект:
+                </p>
+
+                <div class="code-block"><code>then(data => img.src = URL.createObjectURL(data));</code></div>
+
+                <p>
+                    Здесь нам надо для html-элемента <code>&lt;img &gt;</code> в качестве источника изображения установить полученный файл. Для этого вызывается функция 
+                    <span class="b">URL.createObjectURL()</span>, в которую передается объект Blob. Эта функция создает адрес URL, на который проецируется загруженный файл. 
+                    Соответственно после выполнения запроса html-элемент <code>&lt;img &gt;</code> отобразит загруженное изображение:
+                </p>
+
+                <h4>Аналогичый пример с применением async/await:</h4>
+
+                <div class="code-block"><code>const img = document.querySelector("img");
+getImage();
+async function getImage() {
+    const response = await fetch("/forest.png");
+    const imgBlob = await response.blob();
+    img.src = URL.createObjectURL(imgBlob);
+}</code></div>
+
+                <p>Подобным образом можно получать и использовать другие типы файлов, например, аудио и видеофайлы.</p>
 
                 <h3>Получение бинарных данных</h3>
                 <div class="code-block"><code>async function loadBinary() {
     const response = await fetch('/data/file.bin');
     const buffer = await response.arrayBuffer();
     
-    // Работаем с бинарными данными
+    <code class="comment">// Работаем с бинарными данными</code>
     const view = new Uint8Array(buffer);
     console.log('Первый байт:', view[0]);
 }</code></div>
 
-                <h2>POST-запросы и отправка данных</h2>
+                <h2 id="ch19-post-send">📜 POST-запросы и отправка данных</h2>
 
-                <h3>Отправка JSON</h3>
-                <div class="code-block"><code>async function createUser(userData) {
-    try {
-        const response = await fetch('/api/users', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData)
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-        
-        const newUser = await response.json();
-        console.log('Создан пользователь:', newUser);
-        return newUser;
-    } catch (error) {
-        console.error('Ошибка:', error);
-        return null;
-    }
-}
+                <h2 id="ch19-request-config">Настройка запроса (параметр init)</h2>
 
-// Использование
-createUser({
-    name: 'Tom',
-    age: 37,
-    email: 'tom@example.com'
-});</code></div>
+                <p>Функция <span class="b">fetch()</span> может дополнительно принимать опции запроса в виде второго необязательного параметра:</p>
 
-                <h3>Отправка FormData</h3>
-                <div class="code-block"><code>async function uploadForm() {
-    const formData = new FormData();
-    formData.append('name', 'Tom');
-    formData.append('age', 37);
-    formData.append('photo', fileInput.files[0]);
-    
-    const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData
-        // Content-Type устанавливается автоматически!
-    });
-    
-    const result = await response.json();
-    console.log(result);
-}</code></div>
+                <div class="code-block"><code>fetch(resource [, init])</code></div>
 
-                <h3>Отправка формы HTML</h3>
-                <div class="code-block"><code>&lt;form id="userForm"&gt;
-    &lt;input name="name" placeholder="Имя" /&gt;
-    &lt;input name="age" type="number" placeholder="Возраст" /&gt;
-    &lt;button type="submit"&gt;Отправить&lt;/button&gt;
-&lt;/form&gt;
+                <p>Параметр <code>init</code> представляет сложный объект, который может имеет большой набор опций:</p>
 
-&lt;script&gt;
-const form = document.getElementById('userForm');
+                <ul>
+                    <li><span class="b">method</span>: метод запроса, например, GET, POST, PUT и т.д.</p></li>
+                    <li><span class="b">headers</span>: устанавливаемые в запросе заголовки</li>
+                    <li><span class="b">body</span>: тело запроса - данные, которые добавляются в запрос.</li>
+                    <li><span class="b">mode</span>: режим запроса, например, <code>cors</code>, <code>no-cors</code> и <code>same-origin</code></li>
+                    <li><span class="b">credentials</span>: определяет действия с учетными данными (куки, данные HTTP-аутентификации и сертификаты клиента TLS). Принимает одно из следующих значений:
+                        <ul>
+                            <li><code>omit</code>: учетные данные исключаются из запроса, а любые учетные данные, присланные в ответе от сервера, игнорируются<p></p></li>
+                            <li><code>same-origin</code>: учетные данные включаются только в те запросы и принимаются в ответах только на те запросы, адрес которых принадлежит к тому же домену, что и адрес клиента.</li>
+                            <li><code>include</code>: учетные данные включаются в любые запросы и принимаются в ответах на любые запросы</li>
+                        </ul>
+                    </li>
+                    <li><span class="b">cache</span>: устанавливает принцип взаимодействия с кэшем браузера. Возможные значения: <code>default, no-store, reload, no-cache, force-cache</code> и <code>only-if-cached</code></li>
+                    <li><span class="b">redirect</span>: устанавливает, как реагировать на редиректы. Может принимать следующие значения:</p>
+                        <ul>
+                            <li><code>follow</code>: автоматически применять редирект</li>
+                            <li><code>error</code>: при редиректе генерировать ошибку</li>
+                            <li><code>manual</code>: обрабатывать ответ в другом контексте</li>
+                        </ul>
+                    </li>
+                    <li><span class="b">referrer</span>: определяет реферера запроса</li>
+                    <li><span class="b">referrerPolicy</span>: определяет политику реферера - как информация о реферере будет передаваться в запросе. Может принимать следующие значения: <code>no-referrer, no-referrer-when-downgrade, same-origin, origin, strict-origin, origin-when-cross-origin, strict-origin-when-cross-origin</code> и <code>unsafe-url</code></li>
+                    <li><span class="b">integrity</span>: содержит контрольное значение ресурса</li>
+                    <li><span class="b">keepalive</span>: позволяет запросу существовать дольше, чем время жизни веб-страницы.</li>
+                    <li><span class="b">signal</span>: предоставляет объект <code>AbortSignal</code> и позволяет отменить выполнение запроса.</li>
+                </ul>
 
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    // Создаём FormData из формы
-    const formData = new FormData(form);
-    
-    try {
-        const response = await fetch('/api/users', {
-            method: 'POST',
-            body: formData
-        });
-        
-        if (response.ok) {
-            const result = await response.json();
-            console.log('Успех:', result);
-            form.reset();
-        }
-    } catch (error) {
-        console.error('Ошибка:', error);
-    }
-});
-&lt;/script&gt;</code></div>
-
-                <h2>Настройка запроса (параметр init)</h2>
-
+                <br>
                 <p>Второй параметр <code>fetch(url, init)</code> принимает объект с настройками:</p>
 
                 <table>
@@ -17262,10 +17457,44 @@ form.addEventListener('submit', async (e) => {
     return data;
 }</code></div>
 
-                <h2>Работа с заголовками</h2>
+                <p></p>
+                <h4>Пример настройки опций:</h4>
+
+                <div class="code-block"><code>fetch("/user", {
+        method: "GET",
+        headers: { "Accept": "application/json" }
+    })
+    .then(response => response.json())
+    .then(user => console.log(user));</code></div>
+
+                <p>В данном случае устанавливаем метод запроса - "GET" и заголовок "Accept" - его значение "application/json" говорит, что клиент принимает данные в формате json.</p>
+
+                <h2 id="ch19-use-headings">📜 Работа с заголовками</h2>
+
+                <p>Стоит отметить, что свойство <code>headers</code> представляет объект <span class="b">Headers</span>. Мы можем применять методы данного объекта для установки заголовков:</p>
+
+                <div class="code-block"><code>const myHeaders = new Headers();
+myHeaders.append("Accept", "application/json");
+fetch("/user", {
+        method: "GET",
+        headers: myHeaders
+    })
+    .then(response => response.json())
+    .then(user => console.log(user));</code></div>
+
+                <p>Метод <span class="b">append()</span> добавляет определенный заголовок, название которого передается через первый параметр, а значение заголовка - через второй параметр.</p>
+                <p>
+                    Также можно использовать метод <span class="b">set()</span> для установки заголовка, а если заголовок уже ранее добавлен, то метод <code>set()</code> заменяет его значение. 
+                    Если же надо удалить ранее добавленный заголовок, то можно использовать метод <span class="b">delete()</span>, который получает имя удаляемого заголовка:
+                </p>
+
+                <div class="code-block"><code>const myHeaders = new Headers();
+myHeaders.append("Accept", "application/json"); <code class="comment">// добавляем заголовок Accept</code>
+myHeaders.set("Accept", "text/xml");            <code class="comment">// Изменяем значение заголовка</code>
+myHeaders.delete("Accept");                     <code class="comment">// Удаляем заголовок</code></code></div>
 
                 <h3>Установка заголовков</h3>
-                <div class="code-block"><code>// Вариант 1: объект
+                <div class="code-block"><code><code class="comment">// Вариант 1: объект</code>
 fetch('/api/users', {
     headers: {
         'Content-Type': 'application/json',
@@ -17273,7 +17502,7 @@ fetch('/api/users', {
     }
 });
 
-// Вариант 2: объект Headers
+<code class="comment">//</code> Вариант 2: объект Headers
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 headers.append('Authorization', 'Bearer token');
@@ -17284,21 +17513,226 @@ fetch('/api/users', { headers });</code></div>
                 <div class="code-block"><code>async function getHeaders() {
     const response = await fetch('/api/users');
     
-    // Получаем конкретный заголовок
+    <code class="comment">// Получаем конкретный заголовок</code>
     const contentType = response.headers.get('Content-Type');
     console.log('Content-Type:', contentType);
     
-    // Проверяем наличие заголовка
+    <code class="comment">// Проверяем наличие заголовка</code>
     if (response.headers.has('X-Custom-Header')) {
         console.log('Кастомный заголовок присутствует');
     }
     
-    // Перебираем все заголовки
+    <code class="comment">// Перебираем все заголовки</code>
     for (const [key, value] of response.headers) {
         console.log(`${key}: ${value}`);
     }
 }</code></div>
 
+                <h3>Отправка данных в запросе</h3>
+
+                <p>
+                    Для отправки данных в запросе в функции <span class="b">fetch()</span> в рамках второго параметра применяется опция <span class="b">body</span>. 
+                    Эти данные могут представлять типы <code>Blob, BufferSource, FormData, URLSearchParams, USVString</code> и <code>ReadableStream</code>. Стоит учитывать, что в запросах с методом <code>GET</code> и <code>HEAD</code> 
+                    для запроса нельзя установить эту опцию.
+                </p>
+
+                <p>Для тестирования отправки определим простейший сервер на node.js, который принимает данные:</p>
+
+                <div class="code-block"><code>const http = require("http");
+const fs = require("fs");
+ 
+http.createServer(async (request, response) => {
+      
+    if(request.url == "/user"){
+         
+          const buffers = [];   <code class="comment">// буфер для получаемых данных</code>
+ 
+         <code class="comment">// получаем данные из запроса в буфер</code>
+          for await (const chunk of request) {
+            buffers.push(chunk);
+          }
+        <code class="comment">// получаем строковое представление ответа</code>
+        let userName = Buffer.concat(buffers).toString();
+        userName = userName + " Smith";
+        response.end(userName);
+    }
+    else{
+        fs.readFile("index.html", (error, data) => response.end(data));
+    }
+}).listen(3000, ()=>console.log("Сервер запущен по адресу http://localhost:3000"));
+</code></div>
+
+                <p>
+                    В данном случае при обращении по адресу "/user" сервер получает все отправленные данные. Объект запроса предоставляет итератор для извлечения данные. И в коде сервера 
+                    эти данные передаются в специальный массив-буфер:
+                </p>
+                <div class="code-block"><code>for await (const chunk of request){
+    buffers.push(chunk);
+}</code></div>
+    
+                <p>Затем с помощью метода <code>Buffer.concat()</code> объединяем все полученные данные и формируем из них строку:</p>
+                <div class="code-block"><code>let userName = Buffer.concat(buffers).toString();</code></div>
+
+                <p>
+                    В данном случае мы предполагаем, что на сервер отправляется простая строка с текстом. Пусть она представляет некоторое имя пользователя. И для примера 
+                    к этому имени добавляется фамилия и измененное имя отправляется обратно клиенту:
+                </p>
+                <div class="code-block"><code>userName = userName + " Smith";
+response.end(userName);</code></div>
+
+                <p>Теперь определим на странице index.html код для отправки данных на этот сервер:</p>
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+&lt;script>
+    fetch("/user", { method: "POST", body: "Tom" })
+        .then(response => response.text())
+        .then(userName => console.log(userName));
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>
+                    Для отправки применяется метод POST. А в качестве отправляемых данных выступает простая строка "Tom". Таким образом, мы отправляем простой текст. 
+                    И поскольку сервер в ответ также отправляет текст, то для получения ответа здесь применяется метод <code>response.text()</code>. 
+                    И при запуске данной веб-страницы будет выполняться отправка данных на сервер, и в консоли браузера мы сможем лицезреть полученный от сервера ответ:
+                </p>
+
+
+                <h3>Отправка JSON</h3>
+
+                <p>Подобным образом можно отправлять более сложные по структуре данные. Например, рассмотрим отправку json. Для этого на строне node.js определим следующий сервер:</p>
+
+                <div class="code-block"><code>const http = require("http");
+const fs = require("fs");
+ 
+http.createServer(async (request, response) => {
+      
+    if(request.url == "/user"){
+         
+          const buffers = [];
+          for await (const chunk of request) {
+            buffers.push(chunk);
+          }
+         
+        const data = Buffer.concat(buffers).toString();
+        const user = JSON.parse(data); <code class="comment">// парсим строку в json</code>
+         
+        <code class="comment">// изменяем данные полученного объекта</code>
+        user.name = user.name + " Smith";
+        user.age += 1;
+        <code class="comment">// отправляем измененый объект обратно клиенту</code>
+        response.end(JSON.stringify(user));
+    }
+    else{
+        fs.readFile("index.html", (error, data) => response.end(data));
+    }
+}).listen(3000, ()=>console.log("Сервер запущен по адресу http://localhost:3000"));</code></div>
+
+                <p>
+                    В данном случае на сервера ожидаем, что мы получим объект в формате json, который имеет два свойства - name и age. Для примера сервер меняет значения этих свойств и 
+                    отправляет измененный объект обратно клиенту.
+                </p>
+                <p>На веб-странице установим объект json для отправки и получим обратно данные с помощью метода <code>respose.json()</code>:</p>
+
+                <div class="code-block"><code>fetch("/user", { 
+        method: "POST", 
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({
+            name: "Tom",
+            age: 37
+        })
+    })
+    .then(response => response.json())
+    .then(user => console.log(user.name, "-", user.age));</code></div>
+
+                <h4>Другой пример:</h4>
+
+                <div class="code-block"><code>async function createUser(userData) {
+    try {
+        const response = await fetch('/api/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        
+        const newUser = await response.json();
+        console.log('Создан пользователь:', newUser);
+        return newUser;
+    } catch (error) {
+        console.error('Ошибка:', error);
+        return null;
+    }
+}
+
+<code class="comment">// Использование</code>
+createUser({
+    name: 'Tom',
+    age: 37,
+    email: 'tom@example.com'
+});</code></div>
+
+                <h3>Отправка FormData</h3>
+                <div class="code-block"><code>async function uploadForm() {
+    const formData = new FormData();
+    formData.append('name', 'Tom');
+    formData.append('age', 37);
+    formData.append('photo', fileInput.files[0]);
+    
+    const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+        <code class="comment">// Content-Type устанавливается автоматически!</code>
+    });
+    
+    const result = await response.json();
+    console.log(result);
+}</code></div>
+
+                <h3>Отправка формы HTML</h3>
+                <div class="code-block"><code>&lt;form id="userForm"&gt;
+    &lt;input name="name" placeholder="Имя" /&gt;
+    &lt;input name="age" type="number" placeholder="Возраст" /&gt;
+    &lt;button type="submit"&gt;Отправить&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+const form = document.getElementById('userForm');
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Создаём FormData из формы
+    const formData = new FormData(form);
+    
+    try {
+        const response = await fetch('/api/users', {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Успех:', result);
+            form.reset();
+        }
+    } catch (error) {
+        console.error('Ошибка:', error);
+    }
+});
+&lt;/script&gt;</code></div>
+
+ 
                 <h2>Различные типы HTTP-запросов</h2>
 
                 <h3>GET — получение данных</h3>
