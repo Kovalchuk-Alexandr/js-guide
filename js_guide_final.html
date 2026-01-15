@@ -718,9 +718,37 @@
                                 <li class="nav-subitem" data-target="ch19-rest-client">📜 Создание клиента для REST API</li>
                                 <li class="nav-subitem" data-target="ch19-xhr-vs-fetch">📜 Сравнение: XMLHttpRequest vs Fetch</li>
                                 <li class="nav-subitem" data-target="ch19-cors-processing">📜 Обработка CORS</li>
+                                <li class="nav-subitem" data-target="ch19-credentials">📜 Credentials (cookies и авторизация)</li>
+                                <li class="nav-subitem" data-target="ch19-fetch-timeout">📜 Timeout для Fetch</li>
+                                <li class="nav-subitem" data-target="ch19-interceptors">📜 Интерцепторы запросов</li>
+                                <li class="nav-subitem" data-target="ch19-net-monitoring">📜 Мониторинг состояния сети</li>
+                                <li class="nav-subitem" data-target="ch19-service-worker">📜 Service Worker и кэширование</li>
+                                <li class="nav-subitem" data-target="ch19-best-practices">📜 Лучшие практики</li>
+                                <li class="nav-subitem" data-target="ch19-mistakes">📜 Типичные ошибки и их решения</li>
+                                <li class="nav-subitem" data-target="ch19-conclusion">📜 Заключение</li>
                             </ul>
                         </li>
-                        <li class="nav-item" data-target="ch20">Глава 20. WebSocket</li>
+                        <li class="nav-item has-subitems" data-target="ch20"><span class="ch-emoj"></span> Глава 20. WebSocket
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch20-intro">📜 Введение</li>
+                                <li class="nav-subitem" data-target="ch20-websocket-api">📜 WebSocket API</li>
+                                <li class="nav-subitem" data-target="ch20-creating-connection">📜 Создание WebSocket подключения</li>
+                                <li class="nav-subitem" data-target="ch20-events">📜 События WebSocket</li>
+                                <li class="nav-subitem" data-target="ch20-basic-examp">📜 Базовый пример WebSocket</li>
+                                <li class="nav-subitem" data-target="ch20-ready-state">📜 Состояния WebSocket (readyState)</li>
+                                <li class="nav-subitem" data-target="ch20-data-send">📜 Отправка данных на сервер</li>
+                                <li class="nav-subitem" data-target="ch20-get-data">📜 Получение данных</li>
+                                <li class="nav-subitem" data-target="ch20-close-connection">📜 Закрытие соединения</li>
+                                <li class="nav-subitem" data-target="ch20-reconnecting">📜 Переподключение при обрыве</li>
+                                <li class="nav-subitem" data-target="ch20-practical-examp-chat">📜 Практический пример: Чат</li>
+                                <li class="nav-subitem" data-target="ch20-server-interaction">📜 Взаимодействие с сервером</li>
+                                <li class="nav-subitem" data-target="ch20-sse">📜 Server-Sent Events (SSE)</li>
+
+                                <li class="nav-subitem" data-target="ch19-best-practices">📜 Лучшие практики</li>
+                                <li class="nav-subitem" data-target="ch19-mistakes">📜 Типичные ошибки и их решения</li>
+                                <li class="nav-subitem" data-target="ch19-conclusion">📜 Заключение</li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
 
@@ -18800,15 +18828,15 @@ async function getUsers() {
 
                 <div class="code-block"><code><code class="comment">// Простой CORS-запрос</code>
 fetch('https://api.example.com/users', {
-    mode: 'cors' // По умолчанию
+    mode: 'cors' <code class="comment">// По умолчанию</code>
 })
     .then(response => response.json())
     .then(data => console.log(data));
 
-// С credentials (cookies)
+<code class="comment">// С credentials (cookies)</code>
 fetch('https://api.example.com/users', {
     mode: 'cors',
-    credentials: 'include' // Отправлять cookies
+    credentials: 'include' <code class="comment">// Отправлять cookies</code>
 })
     .then(response => response.json())
     .then(data => console.log(data));</code></div>
@@ -18837,24 +18865,24 @@ fetch('https://api.example.com/users', {
                     </tbody>
                 </table>
 
-                <h2>Credentials (cookies и авторизация)</h2>
+                <h2 id="ch19-credentials">📜 Credentials (cookies и авторизация)</h2>
 
-                <div class="code-block"><code>// omit - не отправлять cookies (по умолчанию для кросс-доменных)
+                <div class="code-block"><code><code class="comment">// omit - не отправлять cookies (по умолчанию для кросс-доменных)</code>
 fetch('/api/users', {
     credentials: 'omit'
 });
 
-// same-origin - отправлять cookies только на свой домен
+<code class="comment">// same-origin - отправлять cookies только на свой домен</code>
 fetch('/api/users', {
     credentials: 'same-origin'
 });
 
-// include - всегда отправлять cookies (даже кросс-доменные)
+<code class="comment">// include - всегда отправлять cookies (даже кросс-доменные)</code>
 fetch('https://api.example.com/users', {
     credentials: 'include'
 });</code></div>
 
-                <h2>Timeout для Fetch</h2>
+                <h2 id="ch19-fetch-timeout">📜 Timeout для Fetch</h2>
 
                 <p>Fetch не имеет встроенного timeout, но его можно реализовать через AbortController:</p>
 
@@ -18863,13 +18891,13 @@ fetch('https://api.example.com/users', {
         const controller = new AbortController();
         const signal = controller.signal;
         
-        // Таймер для отмены
+        <code class="comment">// Таймер для отмены</code>
         const timeoutId = setTimeout(() => {
             controller.abort();
             reject(new Error('Timeout'));
         }, timeout);
         
-        // Выполняем запрос
+        <code class="comment">// Выполняем запрос</code>
         fetch(url, { ...options, signal })
             .then(response => {
                 clearTimeout(timeoutId);
@@ -18886,16 +18914,16 @@ fetch('https://api.example.com/users', {
     });
 }
 
-// Использование
+<code class="comment">// Использование</code>
 try {
     const response = await fetchWithTimeout('/api/slow', {}, 3000);
     const data = await response.json();
     console.log(data);
 } catch (error) {
-    console.error(error.message); // "Timeout"
+    console.error(error.message); <code class="comment">// "Timeout"</code>
 }</code></div>
 
-                <h2>Интерцепторы запросов</h2>
+                <h2 id="ch19-interceptors">📜 Интерцепторы запросов</h2>
 
                 <p>Создание обёртки с автоматической обработкой токенов и ошибок:</p>
 
@@ -18905,27 +18933,27 @@ try {
         this.responseInterceptors = [];
     }
     
-    // Добавить перехватчик запроса
+    <code class="comment">// Добавить перехватчик запроса</code>
     addRequestInterceptor(interceptor) {
         this.requestInterceptors.push(interceptor);
     }
     
-    // Добавить перехватчик ответа
+    <code class="comment">// Добавить перехватчик ответа</code>
     addResponseInterceptor(interceptor) {
         this.responseInterceptors.push(interceptor);
     }
     
     async fetch(url, options = {}) {
-        // Применяем перехватчики запроса
+        <code class="comment">// Применяем перехватчики запроса</code>
         let modifiedOptions = { ...options };
         for (const interceptor of this.requestInterceptors) {
             modifiedOptions = await interceptor(url, modifiedOptions);
         }
         
-        // Выполняем запрос
+        <code class="comment">// Выполняем запрос</code>
         let response = await fetch(url, modifiedOptions);
         
-        // Применяем перехватчики ответа
+        <code class="comment">// Применяем перехватчики ответа</code>
         for (const interceptor of this.responseInterceptors) {
             response = await interceptor(response);
         }
@@ -18934,10 +18962,10 @@ try {
     }
 }
 
-// Использование
+<code class="comment">// Использование</code>
 const api = new FetchInterceptor();
 
-// Добавляем токен к каждому запросу
+<code class="comment">// Добавляем токен к каждому запросу</code>
 api.addRequestInterceptor((url, options) => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -18949,50 +18977,50 @@ api.addRequestInterceptor((url, options) => {
     return options;
 });
 
-// Автоматически обрабатываем 401 (не авторизован)
+<code class="comment">// Автоматически обрабатываем 401 (не авторизован)</code>
 api.addResponseInterceptor(async (response) => {
     if (response.status === 401) {
-        // Перенаправляем на логин
+        <code class="comment">// Перенаправляем на логин</code>
         window.location.href = '/login';
     }
     return response;
 });
 
-// Теперь все запросы идут через перехватчики
+<code class="comment">// Теперь все запросы идут через перехватчики</code>
 const response = await api.fetch('/api/users');
 const data = await response.json();</code></div>
 
-                <h2>Мониторинг состояния сети</h2>
+                <h2 id="ch19-net-monitoring">📜 Мониторинг состояния сети</h2>
 
-                <div class="code-block"><code>// Проверка соединения
+                <div class="code-block"><code><code class="comment">// Проверка соединения</code>
 if (!navigator.onLine) {
     console.log('Нет соединения с интернетом');
 }
 
-// Отслеживание изменения состояния
+<code class="comment">// Отслеживание изменения состояния</code>
 window.addEventListener('online', () => {
     console.log('Соединение восстановлено');
-    // Повторить неудавшиеся запросы
+    <code class="comment">// Повторить неудавшиеся запросы</code>
 });
 
 window.addEventListener('offline', () => {
     console.log('Соединение потеряно');
 });</code></div>
 
-                <h2>Service Worker и кэширование</h2>
+                <h2 id="ch19-service-worker">📜 Service Worker и кэширование</h2>
 
-                <div class="code-block"><code>// В Service Worker (sw.js)
+                <div class="code-block"><code><code class="comment">// В Service Worker (sw.js)</code>
 self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request)
             .then(response => {
-                // Возвращаем из кэша или делаем запрос
+                <code class="comment">// Возвращаем из кэша или делаем запрос</code>
                 return response || fetch(event.request);
             })
     );
 });</code></div>
 
-                <h2>Лучшие практики</h2>
+                <h2 id="ch19-best-practices">📜 Лучшие практики</h2>
 
                 <div class="info-box success">
                     <div class="info-box-title">✅ Рекомендации по использованию Fetch</div>
@@ -19013,7 +19041,7 @@ self.addEventListener('fetch', (event) => {
     const baseURL = 'https://api.example.com';
     const timeout = options.timeout || 10000;
     
-    // Создаём AbortController для timeout
+    <code class="comment">// Создаём AbortController для timeout</code>
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
     
@@ -19029,13 +19057,13 @@ self.addEventListener('fetch', (event) => {
         
         clearTimeout(timeoutId);
         
-        // Проверяем статус
+        <code class="comment">// Проверяем статус</code>
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
             throw new Error(errorData.message || `HTTP ${response.status}`);
         }
         
-        // Возвращаем данные
+        <code class="comment">// Возвращаем данные</code>
         return await response.json();
     } catch (error) {
         clearTimeout(timeoutId);
@@ -19047,7 +19075,7 @@ self.addEventListener('fetch', (event) => {
     }
 }
 
-// Использование
+<code class="comment">// Использование</code>
 try {
     const users = await apiRequest('/users');
     console.log(users);
@@ -19055,7 +19083,7 @@ try {
     console.error('Ошибка:', error.message);
 }</code></div>
 
-                <h2>Типичные ошибки и их решения</h2>
+                <h2 id="ch19-mistakes">📜 Типичные ошибки и их решения</h2>
 
                 <div class="info-box danger">
                     <div class="info-box-title">❌ Частые ошибки</div>
@@ -19100,7 +19128,7 @@ fetch('/api/users', {
 });</code></div>
                 </div>
 
-                <h2>Заключение</h2>
+                <h2 id="ch19-conclusion">📜 Заключение</h2>
 
                 <div class="info-box note">
                     <div class="info-box-title">📚 Основные выводы</div>
@@ -19117,18 +19145,18 @@ fetch('/api/users', {
                 </div>
 
                 <h3>Шпаргалка по Fetch</h3>
-                <div class="code-block"><code>// GET-запрос
+                <div class="code-block"><code><code class="comment">// GET-запрос</code>
 const data = await fetch('/api/users')
     .then(r => r.ok ? r.json() : Promise.reject(`HTTP ${r.status}`));
 
-// POST с JSON
+<code class="comment">// POST с JSON</code>
 await fetch('/api/users', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name: 'Tom' })
 });
 
-// С async/await и обработкой ошибок
+<code class="comment">// С async/await и обработкой ошибок</code>
 async function getUsers() {
     try {
         const response = await fetch('/api/users');
@@ -19140,7 +19168,7 @@ async function getUsers() {
     }
 }
 
-// С timeout и отменой
+<code class="comment">// С timeout и отменой</code>
 const controller = new AbortController();
 setTimeout(() => controller.abort(), 5000);
 
@@ -19173,7 +19201,7 @@ try {
             <section class="chapter" id="ch20">
                 <h1>Глава 20. WebSocket API и Server-Sent Events</h1>
                 
-                <h2>Введение в коммуникацию реального времени</h2>
+                <h2 id="ch20-intro">📜 Введение в коммуникацию реального времени</h2>
                 <p>Стандартные HTTP-запросы (AJAX, Fetch) работают по модели <strong>"запрос-ответ"</strong>: клиент отправляет запрос, сервер отвечает, и соединение закрывается. Для приложений реального времени (чаты, онлайн-игры, уведомления) нужны другие технологии.</p>
 
                 <div class="info-box note">
@@ -19185,8 +19213,13 @@ try {
                     </ul>
                 </div>
 
-                <h2>WebSocket API</h2>
+                <h2 id="ch20-websocket-api">📜 WebSocket API</h2>
+                
                 <p><strong>WebSocket</strong> — это протокол полнодуплексной связи через единое TCP-соединение. Позволяет серверу и клиенту обмениваться данными в режиме реального времени.</p>
+                <p>
+                    <span class="b">Web Socket API</span> позволяет организовать соединение между клиентом и сервером, благодаря которому клиент и сервер могут отправлять данные друг 
+                    другу в любое время.
+                </p>
 
                 <h3>Преимущества WebSocket</h3>
                 <ul>
@@ -19196,12 +19229,17 @@ try {
                     <li><strong>Real-time</strong> — идеально для чатов, игр, уведомлений</li>
                 </ul>
 
-                <h2>Создание WebSocket подключения</h2>
+                <h2 id="ch20-creating-connection">📜 Создание WebSocket подключения</h2>
 
-                <div class="code-block"><code>// Создаём WebSocket соединение
+                <p>Для создания подключения через Web Soket API применяется конструктор <span class="b">WebSocket()</span>, в который передается адрес подключения.</p>
+
+                <div class="code-block"><code>const connection = new WebSocket("ws://example.com/test");</code></div>
+
+
+                <div class="code-block"><code><code class="comment">// Создаём WebSocket соединение</code>
 const socket = new WebSocket('ws://localhost:9000');
 
-// Для защищённого соединения используйте wss://
+<code class="comment">// Для защищённого соединения используйте wss://</code>
 const secureSocket = new WebSocket('wss://example.com/socket');</code></div>
 
                 <div class="info-box warning">
@@ -19213,7 +19251,11 @@ const secureSocket = new WebSocket('wss://example.com/socket');</code></div>
                     </ul>
                 </div>
 
-                <h2>События WebSocket</h2>
+                <h2 id="ch20-events">📜 События WebSocket</h2>
+
+                <h3>Управление жизненным циклом соединения</h3>
+
+                <p>Для управления подключением для WebSocket определено следующие события:</p>
 
                 <table>
                     <thead>
@@ -19247,29 +19289,29 @@ const secureSocket = new WebSocket('wss://example.com/socket');</code></div>
                     </tbody>
                 </table>
 
-                <h2>Базовый пример WebSocket</h2>
+                <h2 id="ch20-basic-examp">📜 Базовый пример WebSocket</h2>
 
-                <div class="code-block"><code>// Создаём соединение
+                <div class="code-block"><code><code class="comment">// Создаём соединение</code>
 const socket = new WebSocket('ws://localhost:9000');
 
-// Соединение открыто
+<code class="comment">// Соединение открыто</code>
 socket.onopen = (event) => {
     console.log('Соединение установлено');
-    // Отправляем сообщение серверу
+    <code class="comment">// Отправляем сообщение серверу</code>
     socket.send('Hello Server!');
 };
 
-// Получено сообщение от сервера
+<code class="comment">// Получено сообщение от сервера</code>
 socket.onmessage = (event) => {
     console.log('Сообщение от сервера:', event.data);
 };
 
-// Ошибка
+<code class="comment">// Ошибка</code>
 socket.onerror = (error) => {
     console.error('WebSocket ошибка:', error);
 };
 
-// Соединение закрыто
+<code class="comment">// Соединение закрыто</code>
 socket.onclose = (event) => {
     console.log('Соединение закрыто');
     console.log('Код:', event.code);
@@ -19277,7 +19319,22 @@ socket.onclose = (event) => {
     console.log('Чистое закрытие:', event.wasClean);
 };</code></div>
 
-                <h2>Состояния WebSocket (readyState)</h2>
+                <p>Или так:</p>
+                <div class="code-block"><code>const connection = new WebSocket("ws://example.com/test");
+<code class="comment">// если соединение успешно установлено</code>
+connection.onopen = (event) => {  
+    console.log("Connection opened");
+};
+<code class="comment">// если возникла ошибка</code>
+connection.onerror = (error) => {
+    console.log(`WebSocket Error: ${error}`);
+};
+<code class="comment">// если соединение закрыто</code>
+connection.onclose = (event) => {
+    console.log("Connection closed");
+};</code></div>
+
+                <h2 id="ch20-ready-state">📜 Состояния WebSocket (readyState)</h2>
 
                 <table>
                     <thead>
@@ -19313,51 +19370,99 @@ socket.onclose = (event) => {
 
                 <div class="code-block"><code>const socket = new WebSocket('ws://localhost:9000');
 
-// Проверяем состояние
-console.log(socket.readyState); // 0 (CONNECTING)
+<code class="comment">// Проверяем состояние</code>
+console.log(socket.readyState); <code class="comment">// 0 (CONNECTING)</code>
 
 socket.onopen = () => {
-    console.log(socket.readyState); // 1 (OPEN)
+    console.log(socket.readyState); <code class="comment">// 1 (OPEN)</code>
     
-    // Проверка перед отправкой
+    <code class="comment">// Проверка перед отправкой</code>
     if (socket.readyState === WebSocket.OPEN) {
         socket.send('Сообщение');
     }
 };</code></div>
 
-                <h2>Отправка данных</h2>
+                <h2 id="ch20-data-send">📜 Отправка данных на сервер</h2>
+
+                <p>
+                    Для отправки данных на сервер применяется метод <span class="b">send()</span> объекта WebSocket. В качестве параметра в метод можно передать 
+                    строки, бинарные данные (BLOB), объекты ArrayBuffer, типизированные массивы. Естественно отправка данных возможна только после успешной установки соединения. Например, отправка строки:
+                </p>
 
                 <h3>Отправка текста</h3>
+
+                <div class="code-block"><code><code class="comment">// если установлено соединение, отправляем строку</code>
+connection.onopen = (event) => {  
+    connection.send("Hello METANIT.COM");
+};</code></div>
+
                 <div class="code-block"><code>socket.send('Hello Server!');</code></div>
 
                 <h3>Отправка JSON</h3>
+
+                <p>Или к примеру, если мы хотим отправить объект в формате JSON, то в начале его надо преобразовать в данный формат:</p>
                 <div class="code-block"><code>const data = {
     type: 'message',
     text: 'Hello',
     user: 'Alice'
 };
-
+<code class="comment">// отправляем объект в формате json</code>
 socket.send(JSON.stringify(data));</code></div>
 
                 <h3>Отправка бинарных данных</h3>
-                <div class="code-block"><code>// ArrayBuffer
+                <div class="code-block"><code><code class="comment">// ArrayBuffer</code>
 const buffer = new ArrayBuffer(8);
 socket.send(buffer);
 
-// Blob
+<code class="comment">// Blob</code>
 const blob = new Blob(['Hello'], { type: 'text/plain' });
 socket.send(blob);</code></div>
 
-                <h2>Получение данных</h2>
+                <h2 id="ch20-get-data">📜 Получение данных</h2>
+
+                <p>
+                    Когда приходят данные с сервера, у объекта <code>WebSocket</code> срабатывает событие <span class="b">message</span>, для установки обработчика которого можно использовать 
+                    свойство <span class="b">onmessage</span>.
+                </p>
+                <p>
+                    В обработчик события <span class="b">message</span> передается объект типа <span class="b">MessageEvent</span>. Этот объект предоставляет ряд свойств, 
+                    которые позволяют извлечь данные ответа сервера:
+                </p>
+                <ul>
+                    <li><span class="b">data</span>: возвращает полученные данные</li>
+                    <li><span class="b">origin</span>: хранит адрес отправителя</li>
+                    <li><span class="b">lastEventId</span>: хранит уникальный идентификатор события в виде строки.</li>
+                    <li><span class="b">source</span>: возвращает объект <code>MessageEventSource</code>, который может быть объектом WindowProxy, MessagePort или ServiceWorker и который представляет отправителя полученных данных.</li>
+                    <li><span class="b">ports</span>: возвращает массив объектов <code>MessagePort</code>, которые хранят использованные для отправки порты</li>
+                </ul>
+
+                <p>
+                    Ключевое свойство тут, конечно, <span class="b">data</span>, которое представляет полученные данные. Оно может представлять строку или бинарные данные. 
+                    Если присланы бинарные данные, то свойство <span class="b">data</span> может представлять тип <code>ArrayBuffer</code>, либо <code>Blob</code>. Пример получения 
+                    данных:
+                </p>
+
+                <div class="code-block"><code>connection.onmessage = (event) =>{ 
+    console.log(event.data);
+};</code></div>
+
+                <p>
+                    Если клиент получает бинарные данные, то с помощью свойства <span class="b">binaryType</span> объекта WebSocket можно указать, какого именно типа мы хотим 
+                    данные с помощью значений <code>"blob"</code> (для получения данных в виде объекта Blob) и <code>"arraybuffer"</code> (для получения данных в виде ArrayBuffer). Например:
+                </p>
+                <div class="code-block"><code>const connection = new WebSocket("ws://example.com/test");
+ connection.binaryType = "arraybuffer";</code></div>
+
+                <h4>Пример:</h4>
 
                 <div class="code-block"><code>socket.onmessage = (event) => {
     const data = event.data;
     
-    // Если данные - строка
+    <code class="comment">// Если данные - строка</code>
     if (typeof data === 'string') {
         console.log('Текст:', data);
         
-        // Попытка распарсить JSON
+        <code class="comment">// Попытка распарсить JSON</code>
         try {
             const json = JSON.parse(data);
             console.log('JSON:', json);
@@ -19365,32 +19470,32 @@ socket.send(blob);</code></div>
             console.log('Обычный текст');
         }
     }
-    // Если данные - Blob
+    <code class="comment">// Если данные - Blob</code>
     else if (data instanceof Blob) {
         console.log('Blob размером', data.size, 'байт');
         
-        // Читаем Blob
+        <code class="comment">// Читаем Blob</code>
         const reader = new FileReader();
         reader.onload = () => {
             console.log('Содержимое:', reader.result);
         };
         reader.readAsText(data);
     }
-    // Если данные - ArrayBuffer
+    <code class="comment">// Если данные - ArrayBuffer</code>
     else if (data instanceof ArrayBuffer) {
         console.log('ArrayBuffer размером', data.byteLength, 'байт');
     }
 };</code></div>
 
-                <h2>Закрытие соединения</h2>
+                <h2 id="ch20-close-connection">📜 Закрытие соединения</h2>
 
-                <div class="code-block"><code>// Закрыть соединение
+                <div class="code-block"><code><code class="comment">// Закрыть соединение</code>
 socket.close();
 
-// С кодом и причиной
+<code class="comment">// С кодом и причиной</code>
 socket.close(1000, 'Работа завершена');
 
-// Обработка закрытия
+<code class="comment">// Обработка закрытия</code>
 socket.onclose = (event) => {
     if (event.wasClean) {
         console.log('Соединение закрыто чисто');
@@ -19444,7 +19549,7 @@ socket.onclose = (event) => {
                     </tbody>
                 </table>
 
-                <h2>Переподключение при обрыве</h2>
+                <h2 id="ch20-reconnecting">📜 Переподключение при обрыве</h2>
 
                 <div class="code-block"><code>class ReconnectingWebSocket {
     constructor(url, options = {}) {
@@ -19479,7 +19584,7 @@ socket.onclose = (event) => {
             console.log('Соединение закрыто');
             if (this.onclose) this.onclose(event);
             
-            // Переподключаемся
+            <code class="comment">// Переподключаемся</code>
             if (this.reconnectAttempts &lt; this.maxReconnectAttempts) {
                 this.reconnectAttempts++;
                 console.log(`Переподключение (попытка ${this.reconnectAttempts})...`);
@@ -19499,12 +19604,12 @@ socket.onclose = (event) => {
     }
     
     close() {
-        this.maxReconnectAttempts = 0; // Отключаем переподключение
+        this.maxReconnectAttempts = 0; <code class="comment">// Отключаем переподключение</code>
         this.socket.close();
     }
 }
 
-// Использование
+<code class="comment">// Использование</code>
 const ws = new ReconnectingWebSocket('ws://localhost:9000', {
     reconnectInterval: 3000,
     maxReconnectAttempts: 5
@@ -19514,7 +19619,7 @@ ws.onopen = () => console.log('Подключено!');
 ws.onmessage = (event) => console.log('Сообщение:', event.data);
 ws.send('Hello!');</code></div>
 
-                <h2>Практический пример: Чат</h2>
+                <h2 id="ch20-practical-examp-chat">📜 Практический пример: Чат</h2>
 
                 <div class="code-block"><code>&lt;div id="chat"&gt;
     &lt;div id="messages"&gt;&lt;/div&gt;
@@ -19528,19 +19633,19 @@ const messagesDiv = document.getElementById('messages');
 const messageInput = document.getElementById('messageInput');
 const sendBtn = document.getElementById('sendBtn');
 
-// Соединение установлено
+<code class="comment">// Соединение установлено</code>
 socket.onopen = () => {
     console.log('Подключено к чату');
     addMessage('Система', 'Вы подключились к чату', 'system');
 };
 
-// Получено сообщение
+<code class="comment">// Получено сообщение</code>
 socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
     addMessage(data.user, data.text, 'received');
 };
 
-// Отправка сообщения
+<code class="comment">// Отправка сообщения</code>
 function sendMessage() {
     const text = messageInput.value.trim();
     if (!text) return;
@@ -19551,16 +19656,16 @@ function sendMessage() {
         timestamp: Date.now()
     };
     
-    // Отправляем на сервер
+    <code class="comment">// Отправляем на сервер</code>
     socket.send(JSON.stringify(message));
     
-    // Отображаем у себя
+    <code class="comment">// Отображаем у себя</code>
     addMessage('Вы', text, 'sent');
     
     messageInput.value = '';
 }
 
-// Добавление сообщения в чат
+<code class="comment">// Добавление сообщения в чат</code>
 function addMessage(user, text, type) {
     const messageEl = document.createElement('div');
     messageEl.className = `message ${type}`;
@@ -19572,19 +19677,149 @@ function addMessage(user, text, type) {
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
-// События кнопки и Enter
+<code class="comment">// События кнопки и Enter</code>
 sendBtn.addEventListener('click', sendMessage);
 messageInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessage();
 });
 
-// Закрытие соединения
+<code class="comment">// Закрытие соединения</code>
 socket.onclose = () => {
     addMessage('Система', 'Соединение потеряно', 'system');
 };
 &lt;/script&gt;</code></div>
 
-                <h2>Server-Sent Events (SSE)</h2>
+                <h2 id="ch20-server-interaction">📜 Взаимодействие с сервером</h2>
+
+                <p>
+                    Напишем небольшой пример взаимодействия клиента и сервера с помощью WebSocket. Прежде всего создадим код сервера. В качестве технологии сервера будем использовать 
+                    Node.js, как ниболее простой вариант, тем более он использует тот же JavaScript. Соответственно прежде всего надо установить Node.js. Однако можно выбрать любую другую серверную технологию.
+                </p>
+                <p>
+                    Мы могли бы написать весь код работы с WebSocket с нуля, но это не самая простая задача, и для демонстрации мы будем использовать имеющуюся специальную библиотеку - 
+                    <span class="b">ws</span>. Так, создадим файл <span class="b">server.js</span> и определим в нем следующий код:
+                </p>
+
+                <div class="code-block"><code>const WebSocket = require("ws");
+const server = new WebSocket.Server({port: 9000});
+ 
+server.on("connection", onConnect);
+ 
+<code class="comment">// обработчик подключения клиента</code>
+<code class="comment">// параметр - подключенный клиент</code>
+function onConnect(client) {
+  console.log("Connection opened");
+   
+    <code class="comment">// обрабатываем входящие сообщения от клиента</code>
+    client.on("message", function(message) {
+        <code class="comment">// для диагностики сообщения клиента на консоль</code>
+        console.log("Client message:", message.toString());
+         
+        client.send("Hello Client");    <code class="comment">// отправка сообщения клиенту</code>
+    });
+    <code class="comment">// закрытие подключения</code>
+    client.on("close", function() {
+        console.log("Connection closed");
+    });
+}
+ 
+console.log("Сервер запущен на 9000 порту");
+</code></div>
+
+                <p>Для создания сервера WebSocket вызываем функцию Server из библиотеки <code>ws</code>:</p>
+                <div class="code-block"><code>const WebSocket = require("ws");
+ const server = new WebSocket.Server({port: 9000});</code></div>
+
+                <p>
+                    Далее с помощью метода <code>on()</code> добавляем серверу для события <code>"connection"</code>, которое срабатывает при подключении нового клиента, обработчик - 
+                    функцию <span class="b">onConnect</span>.
+                </p>
+
+                <div class="code-block"><code>server.on("connection", onConnect);</code></div>
+
+                <p>В обработчик события в качестве параметра передается объект, через который можно взамодействовать с клиентом:</p>
+                <div class="code-block"><code>function onConnect(client) &#0123; </code></div>
+
+                <p>В этом обработчике устанавливаем для подключенного клиента событие "message", которое срабатывает, когда клинет присылает на сервер данные:</p>
+                <div class="code-block"><code>client.on("message", function(message) {
+    <code class="comment">// для диагностики сообщения клиента на консоль</code>
+    console.log("Client message:", message.toString());
+    client.send("Hello Client");       <code class="comment">// отправка сообщения клиенту</code>
+});</code></div>
+
+                <p>
+                    В функцию-обработчик события "message" передаются присланные от клиента данные (здесь параметр message). Внутри функции-обработчика выводим эти данные на консоль и 
+                    с помощью метода <code>send()</code> посылаем клиенту некоторый ответ. Таким образом сервер получит от клиента данные и пошлет ему обратно ответ.
+                </p>
+                <p>Также устанавливается обработчик события "close" для обработчик закрытия подключения.</p>
+                <p>
+                    Проблема с библиотекой <code>"ws"</code> заключается в том, что это не встроенная в <code>Node.js</code> библиотека, а сторонняя библиотека. Поэтому нам ее надо установить. Для этого перейдем в консоли к папке, 
+                    где находится файл <span class="b">server.js</span>, и далее в консоли выполним следующую команду
+                </p>
+
+                <pre class="sh">npm install ws</pre>
+                
+                <p>Эта команда установит библиотеку <code>ws</code>.</p>
+
+                <p>Теперь определим код клиента. Пусть это будет следующая страница <span class="b">index.html</span>:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+&lt;script>
+    const connection = new WebSocket("ws://localhost:9000");
+    <code class="comment">// если соединение успешно установлено</code>
+    connection.onopen = (event) => {  
+        console.log("Connection opened");
+        connection.send("Hello Server");
+    };
+    <code class="comment">// если возникла ошибка</code>
+    connection.onerror = (error) => {
+        console.log(`WebSocket Error: ${error}`);
+    };
+    <code class="comment">// если соединение закрыто</code>
+    connection.onclose = (event) => {
+        console.log("Connection closed");
+    };
+    <code class="comment">// получаем ответ сервера</code>
+    connection.onmessage = (event) =>{ 
+        console.log("Server response:", event.data);
+    };
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>В целом код работы с WebSocket был рассмотрен ранее. Отмечу основные моменты. При открытии подключения отправляем на сервер строку "Hello Server"</p>
+                <div class="code-block"><code>connection.send("Hello Server");</code></div>
+
+                <p>А при получении ответа сервера выводим полученные данные на консоль:</p>
+                <div class="code-block"><code>connection.onmessage = (event) =>{ 
+    console.log(event.data);
+};</code></div>
+
+                <p>Перейдем в консоли к папке, где располагается файл сервера - <span class="b">server.js</span> и выполним в консоли команду</p>
+                <pre class="sh">node server.js</pre>
+
+                <p>
+                    Эта команда запустит сервер. И после этого кинем нашу веб-страницу <span class="b">index.html</span> в браузер и посмотрим на его консольный вывод. В итоге 
+                    консольный вывод сервера будет следующим:
+                </p>
+                
+                <pre class="sh">C:\app&gt; node server.js
+Сервер запущен на 9000 порту
+Connection opened
+Client message: Hello Server
+</pre>
+
+                <p>А консольный вывод клиента - веб-страницы <span class="b">index.html</span> следующим:</p>
+                <pre class="sh">Connection opened
+Server response: Hello Client</pre>
+
+                <h2 id="ch20-sse">📜 Server-Sent Events (SSE)</h2>
                 <p><strong>Server-Sent Events (SSE)</strong> — это технология, позволяющая серверу отправлять обновления клиенту через HTTP. В отличие от WebSocket, коммуникация <strong>однонаправленная</strong>: только сервер → клиент.</p>
 
                 <h3>Когда использовать SSE</h3>
