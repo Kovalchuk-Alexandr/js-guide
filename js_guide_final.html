@@ -768,6 +768,7 @@
                                 <li class="nav-subitem" data-target="ch21-locales">📜 Локали (Locales)</li>
                                 <li class="nav-subitem" data-target="ch21-date-time">📜 Intl.DateTimeFormat — локализация дат и времени</li>
                                 <li class="nav-subitem" data-target="ch21-number-format">📜 Intl.NumberFormat — Форматирование чисел</li>
+                                <li class="nav-subitem" data-target="ch21-list-format">📜 Intl.ListFormat — Форматирование списков</li>
                                 
                                 <li class="nav-subitem" data-target="ch21-comparison">📜 Сравнение технологий</li>
                                 <li class="nav-subitem" data-target="ch21-conclusion">📜 Заключение</li>
@@ -20956,71 +20957,78 @@ console.log(now.toLocaleTimeString("en-US"));   <code class="comment">// 2:30:45
 
                 <h2 id="ch21-number-format">📜 Intl.NumberFormat — Форматирование чисел</h2>
 
-                <h3>Базовое использование</h3>
-                <div class="code-block"><code>const number = 1234567.89;
+                <p>
+                    В разных культурах используются различные подходы к отображению чисел. Например, в одних культурах (в частности, в США, Великобритании) 
+                    в качестве разделителя целой и дробной части применяется точка, а в других культурах - запятая. Аналогично разделителем между разрядами может служить как точка, 
+                    так и запятая. И объект <span class="b">Intl.NumberFormat</span> позволяет нам локализовать числительные под нужную культуру.
+                </p>
+                <p>Конструктор <span class="b">Intl.NumberFormat</span> может принимать два параметра:</p>
 
-// Русский формат (пробелы как разделители)
-const ruNumber = new Intl.NumberFormat("ru").format(number);
-console.log(ruNumber); // 1 234 567,89
+                <div class="code-block"><code>Intl.NumberFormat([locales[, options]])</code></div>
 
-// Американский формат (запятые как разделители)
-const usNumber = new Intl.NumberFormat("en-US").format(number);
-console.log(usNumber); // 1,234,567.89
+                <p>Параметр <span class="b">locales</span> представляет код языка в формате BCP 47 или набор языковых кодов.</p>
+                <p>Параметр <span class="b">options</span> представляет дополнительный набор опций:</p>
 
-// Немецкий формат (точки как разделители)
-const deNumber = new Intl.NumberFormat("de-DE").format(number);
-console.log(deNumber); // 1.234.567,89</code></div>
+                <ul>
+                    <li><span class="b">localeMatcher</span>: алгоритм поиска соответствий. Может принимать два значения: <code>"lookup"</code> и <code>"best fit"</code>. Значение по умолчанию - <code>"best fit"</code>.</li>
+                    <li><span class="b">compactDisplay</span>: применяется, если параметр <code>notation</code> равен <code>"compact"</code>. Возможные значения: <code>"long"</code> и <code>"short"</code> (значение по умолчанию)</li>
+                    <li><span class="b">currency</span>: задает валюту, которая применяется для форматирования. 
+                    В качестве значения принимает код валюты в формате ISO 4217, например, "USD" (доллар США), "EUR" (евро) и т.д. Этот параметр необходимо обязательно указать, 
+                    если параметр <code>style</code> имеет значение <code>"currency"</code>.</li>
+                    <li><span class="b">currencyDisplay</span>: указывает, как отображать валюту. Возможные значения:
+                        <ul>
+                            <li><code>"symbol"</code>: применяется символ валюты (например, € для евро). Значение по умолчанию</li>
+                            <li><code>"narrowSymbol"</code>: применяется сокращенное обозначение валюты (например, "$100" вместо "US$100")</li>
+                            <li><code>"code"</code>: применяется код валюты</li>
+                            <li><code>"name"</code>: применяется локализованное название валюты (например, "dollar")</li>
+                        </ul>
+                    </li>
+                    <li><span class="b">currencySign</span>: знак перед числительным, которое представляет валюту. Может принимать значения <code>"standard"</code> 
+                    (значение по умолчанию) и <code>"accounting"</code></li>
+                    <li><span class="b">notation</span>: задает тип форматирования. Возможные значения:
+                        <ul>
+                            <li><code>"standard"</code>: применяется для форматирования обычных чисел. Значение по умолчанию</li>
+                            <li><code>"scientific"</code>: возвращает порядок величины для форматируемого числа</li>
+                            <li><code>"engineering"</code>: возвращает значение в экспоненциальной нотации</li>
+                            <li><code>"compact"</code>: для представления экспоненциальной записи применяется строка</li>
+                        </ul>
+                    </li>
+                    <li><span class="b">numberingSystem</span>: числовая система. Возможные значения: <code> "arab", "arabext", " bali", "beng", "deva", "fullwide", " gujr", "guru", "hanidec", "khmr", " knda", "laoo", "latn", "limb", "mlym", " mong", "mymr", "orya", "tamldec", " telu", "thai", "tibt"</code></li>
+                    <li><span class="b">signDisplay</span>: указывает, нужно ли отображать знак перед числом. Возможные значения:
+                        <ul>
+                            <li><code>"auto"</code>: знак отображается только для отрицательных чисел. Значение по умолчанию</li>
+                            <li><code>"never"</code>: знак никогда не отображается</li>
+                            <li><code>"always"</code>: знак отображается всегда</li>
+                            <li><code>"exceptZero"</code>: знак отображается для всех чисел, кроме нуля</li>
+                        </ul>
+                    </li>
+                    <li><span class="b">style</span>: тип форматирования. Возможные значения:
+                        <ul>
+                            <li><code>"decimal"</code>: для форматирования обычных чисел. Значение по умолчанию</li>
+                            <li><code>"currency"</code>: для форматирования валюты</li>
+                            <li><code>"percent"</code>: для форматирования процентов</li>
+                            <li><code>"unit"</code>: для форматирования единиц измерения</li>
+                        </ul>
+                    </li>
+                    <li><span class="b">unit</span>: устанавливает единицу измерения. Применяемые единицы измерения можно найти в <a href="https://tc39.es/proposal-unified-intl-numberformat/section6/locales-currencies-tz_proposed_out.html#sec-issanctionedsimpleunitidentifier" rel="nofollow">следующей таблице</a>.</li>
 
-                <h3>Форматирование валют</h3>
-                <div class="code-block"><code>const amount = 1234.56;
+                    <li><span class="b">unitDisplay</span>: тип отображения единиц измерения. Возможные значения:
+                        <ul>
+                            <li><code>"long"</code>: полная форма (например, <code>16 litres</code>)</li>
+                            <li><code>"short"</code>: сокращенная форма (например, <code>16 l</code>). Значение по умолчанию</li>
+                            <li><code>"narrow"</code>: сжатая форма (например, <code>16l</code>)</li>
+                        </ul>
+                    </li>
 
-// Рубли
-const rub = new Intl.NumberFormat("ru", {
-    style: "currency",
-    currency: "RUB"
-}).format(amount);
-console.log(rub); // 1 234,56 ₽
+                    <li><span class="b">useGrouping</span>: указывает, надо ли использовать разделитель для разрядов числа. Может принимать значения <code>true</code> 
+                    (использовать разделители - значение по умолчанию) и <code>false</code> (не использовать разделители)</li>
 
-// Доллары
-const usd = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD"
-}).format(amount);
-console.log(usd); // $1,234.56
-
-// Евро
-const eur = new Intl.NumberFormat("de-DE", {
-    style: "currency",
-    currency: "EUR"
-}).format(amount);
-console.log(eur); // 1.234,56 €</code></div>
-
-                <h3>Процентыи единицы измерения</h3>
-                <div class="code-block"><code>// Проценты
-const percent = new Intl.NumberFormat("ru", {
-    style: "percent"
-}).format(0.75);
-console.log(percent); // 75 %
-
-// Минимум/максимум знаков после запятой
-const precise = new Intl.NumberFormat("ru", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 4
-}).format(123.4);
-console.log(precise); // 123,40
-
-// Единицы измерения (ES2020+)
-const speed = new Intl.NumberFormat("ru", {
-    style: "unit",
-    unit: "kilometer-per-hour"
-}).format(120);
-console.log(speed); // 120 км/ч
-
-const storage = new Intl.NumberFormat("en", {
-    style: "unit",
-    unit: "gigabyte"
-}).format(256);
-console.log(storage); // 256 GB</code></div>
+                    <li><span class="b">minimumIntegerDigits</span>: минимальное количество цифр в числе. Возможные значения: от 1 (значение по умолчанию) до 21</li>
+                    <li><span class="b">minimumFractionDigits</span>: минимальное количество цифр в дробной части числа. Возможные значения: от 0 (значение по умолчанию) до 20</li>
+                    <li><span class="b">maximumFractionDigits</span>: максимальное количество цифр в дробной части числа. Возможные значения: от 0 до 20</li>
+                    <li><span class="b">minimumSignificantDigits</span>: минимальное количество цифр в целой части числа. Возможные значения: от 1 (значение по умолчанию) до 21</li>
+                    <li><span class="b">maximumSignificantDigits</span>: максимальное количество цифр в целой части числа. Возможные значения: от 1 (значение по умолчанию) до 21</li>
+                </ul>
 
                 <h3>Опции NumberFormat</h3>
                 <table>
@@ -21065,11 +21073,246 @@ console.log(storage); // 256 GB</code></div>
                     </tbody>
                 </table>
 
-                <h2>Intl.ListFormat — Форматирование списков</h2>
+                <p>
+                    Для форматирования числа объект <span class="b">Intl.NumberFormat</span> предоставляет метод <span class="b">format()</span>, в который передается форматируемое 
+                    число и который возвращает отформатированное число в виде строки.
+                </p>
+
+                <p>Локализуем число <code>5500,67</code> на разные языки:</p>
+                <div class="code-block"><code>const amount = 5500.67;
+ 
+const en = new Intl.NumberFormat("en").format(amount);
+const ru = new Intl.NumberFormat("ru").format(amount);
+const de = new Intl.NumberFormat("de").format(amount);
+ 
+console.log(en);    <code class="comment">// 5,500.67</code>
+console.log(ru);    <code class="comment">// 5 500,67</code>
+console.log(de);    <code class="comment">// 5.500,67</code></code></div>
+
+                <p>По умолчанию для форматирования чисел применяется параметр <code>{style: "decimal"}</code>. Также мы могли бы его явно применить:</p>
+                <div class="code-block"><code>const amount = 5500.67;
+ 
+const ru = new Intl.NumberFormat("ru", {style: "decimal"}).format(amount);
+<code class="comment">// то же самое, что и</code>
+<code class="comment">// const ru = new Intl.NumberFormat("ru").format(amount);</code>
+ 
+console.log(ru);    <code class="comment">// 5 500,67</code></code></div>
+
+                <h3>Базовое использование</h3>
+                <div class="code-block"><code>const number = 1234567.89;
+
+<code class="comment">// Русский формат (пробелы как разделители)</code>
+const ruNumber = new Intl.NumberFormat("ru").format(number);
+console.log(ruNumber); <code class="comment">// 1 234 567,89</code>
+
+<code class="comment">// Американский формат (запятые как разделители)</code>
+const usNumber = new Intl.NumberFormat("en-US").format(number);
+console.log(usNumber); <code class="comment">// 1,234,567.89</code>
+
+<code class="comment">// Немецкий формат (точки как разделители)</code>
+const deNumber = new Intl.NumberFormat("de-DE").format(number);
+console.log(deNumber); <code class="comment">// 1.234.567,89</code></code></div>
+
+                <h3>Форматирование валют</h3>
+
+                <p>Для форматирования валюты применяется параметр <code>style: "currency"</code>, при этом также надо указать параметр <code>currency</code>, которому передается код валюты:</p>
+                <div class="code-block"><code>const value = 85.1;
+ 
+const en = new Intl.NumberFormat("en", {style: "currency", currency: "USD"}).format(value);
+const ru = new Intl.NumberFormat("ru", {style: "currency", currency: "USD"}).format(value);
+const tr = new Intl.NumberFormat("tr", {style: "currency", currency: "USD"}).format(value);
+ 
+console.log(en);    <code class="comment">// $85.10</code>
+console.log(ru);    <code class="comment">// 85,10 $</code>
+console.log(tr);    <code class="comment">// $85,10</code></code></div>
+
+                <h4>Вывод нескольких валют:</h4>
+                <div class="code-block"><code>const value = 85.1;
+ 
+const usd = new Intl.NumberFormat("ru", {style: "currency", currency: "USD"}).format(value);
+const euro = new Intl.NumberFormat("ru", {style: "currency", currency: "EUR"}).format(value);
+const rub = new Intl.NumberFormat("ru", {style: "currency", currency: "RUB"}).format(value);
+ 
+console.log(usd);   <code class="comment">// 85,10 $</code>
+console.log(euro);  <code class="comment">// 85,10 €</code>
+console.log(rub);   <code class="comment">// 85,10 ₽</code></code></div>
+
+                <p>По умолчанию выводится символ валюты, однако значение <code>currencyDisplay: "name"</code> позволяет вывести локализованное название валюты:</p>
+                <div class="code-block"><code>const value = 85;
+ 
+const usd = new Intl.NumberFormat("ru", {
+    style: "currency", 
+    currency: "USD",
+    currencyDisplay: "name", 
+    minimumFractionDigits: 0
+}).format(value);
+
+const euro = new Intl.NumberFormat("ru", {
+    style: "currency", 
+    currency: "EUR",
+    currencyDisplay: "name"
+}).format(value);
+
+const rub = new Intl.NumberFormat("ru", {
+    style: "currency", 
+    currency: "RUB",
+    currencyDisplay: "name"
+}).format(value);
+ 
+console.log(usd);   <code class="comment">// 85 долларов США</code>
+console.log(euro);  <code class="comment">// 85,00 евро</code>
+console.log(rub);   <code class="comment">// 85,00 российского рубля</code></code></div>
+
+                <h4>Еще пример:</h4>
+                <div class="code-block"><code>const amount = 1234.56;
+
+<code class="comment">// Рубли</code>
+const rub = new Intl.NumberFormat("ru", {
+    style: "currency",
+    currency: "RUB"
+}).format(amount);
+console.log(rub); <code class="comment">// 1 234,56 ₽</code>
+
+<code class="comment">// Доллары</code>
+const usd = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD"
+}).format(amount);
+console.log(usd); <code class="comment">// $1,234.56</code>
+
+<code class="comment">// Евро</code>
+const eur = new Intl.NumberFormat("de-DE", {
+    style: "currency",
+    currency: "EUR"
+}).format(amount);
+console.log(eur); <code class="comment">// 1.234,56 €</code></code></div>
+
+                <h3>Форматирование процентов</h3>
+
+                <p>В разных культурах может отличаться написание процентов. Для локализации процентов применяется значение <code>"percent"</code></p>
+                <div class="code-block"><code>const value = 0.851;
+ 
+const en = new Intl.NumberFormat("en", {style: "percent"}).format(value);
+const ru = new Intl.NumberFormat("ru", {style: "percent"}).format(value);
+const tr = new Intl.NumberFormat("tr", {style: "percent"}).format(value);
+ 
+console.log(en);    <code class="comment">// 85%</code>
+console.log(ru);    <code class="comment">// 85 %</code>
+console.log(tr);    <code class="comment">// %85</code></code></div>
+
+                <h4>Вывод дробной части</h4>
+
+                <p>Однако в примере выше мы видим, что теряется дробная часть. Чтобы исправить положение, мы можем использовать параметр <code>minimumFractionDigits</code>, который задает количество знаков в дробной части:</p>
+                <div class="code-block"><code>const value = 0.851;
+ 
+const en = new Intl.NumberFormat("en", {style: "percent", minimumFractionDigits: 2}).format(value);
+const ru = new Intl.NumberFormat("ru", {style: "percent", minimumFractionDigits: 2}).format(value);
+ 
+console.log(en);    <code class="comment">// 85.10%</code>
+console.log(ru);    <code class="comment">// 85,10 %</code></code></div>
+
+                <h4>Еще пример:</h4>
+                
+                <div class="code-block"><code><code class="comment">// Проценты</code>
+const percent = new Intl.NumberFormat("ru", {
+    style: "percent"
+}).format(0.75);
+console.log(percent); <code class="comment">// 75 %</code>
+
+<code class="comment">// Минимум/максимум знаков после запятой</code>
+const precise = new Intl.NumberFormat("ru", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 4
+}).format(123.4);
+console.log(precise); <code class="comment">// 123,40</code>
+
+<code class="comment">// Единицы измерения (ES2020+)</code>
+const speed = new Intl.NumberFormat("ru", {
+    style: "unit",
+    unit: "kilometer-per-hour"
+}).format(120);
+console.log(speed); <code class="comment">// 120 км/ч</code>
+
+const storage = new Intl.NumberFormat("en", {
+    style: "unit",
+    unit: "gigabyte"
+}).format(256);
+console.log(storage); <code class="comment">// 256 GB</code></code></div>
+
+                <h3>Форматирование единиц измерения</h3>
+
+                <p>
+                    Для форматирования единиц измерения применяется значение <code>style: "unit"</code>. При этом также необходимо указать название единицы измерения с 
+                    помощью параметра <code>unit</code>:
+                </p>
+
+                <div class="code-block"><code>const value = 85;
+ 
+const en = new Intl.NumberFormat("en", {style: "unit", unit: "liter"}).format(value);
+const ru = new Intl.NumberFormat("ru", {style: "unit", unit: "liter"}).format(value);
+const zh = new Intl.NumberFormat("zh", {style: "unit", unit: "liter"}).format(value);
+ 
+console.log(en);    <code class="comment">// 85 L</code>
+console.log(ru);    <code class="comment">// 85 л</code>
+console.log(zh);    <code class="comment">// 85升</code></code></div>
+
+                <p>По умолчанию применяет сокращенная форма наименования валюты. С помощью значения <code>unitDisplay: "long"</code> можно задать вывод полного наименования:</p>
+                <div class="code-block"><code>const value = 85;
+ 
+const longLiter = new Intl.NumberFormat("ru", {
+    style: "unit", 
+    unit: "liter", 
+    unitDisplay: "long"
+}).format(value);
+
+const shortLiter = new Intl.NumberFormat("ru", {
+    style: "unit", 
+    unit: "liter", 
+    unitDisplay: "short"
+}).format(value);
+ 
+console.log(longLiter);     <code class="comment">// 85 литров</code>
+console.log(shortLiter);    <code class="comment">// 85 л</code></code></div>
+
+                <h4>Еще несколько примеров с форматированием разных единиц измерения:</h4>
+                <div class="code-block"><code>const value = 85;
+ 
+const kilobyte = new Intl.NumberFormat("ru", {
+    style: "unit", 
+    unit: "kilobyte", 
+    unitDisplay: "long"
+}).format(value);
+
+const meter = new Intl.NumberFormat("ru", {
+    style: "unit", 
+    unit: "meter", 
+    unitDisplay: "long"
+}).format(value);
+
+const gram = new Intl.NumberFormat("ru", {
+    style: "unit", 
+    unit: "gram", 
+    unitDisplay: "long"
+}).format(value);
+ 
+console.log(kilobyte);  <code class="comment">// 85 килобайт</code>
+console.log(meter);     <code class="comment">// 85 метров</code>
+console.log(gram);      <code class="comment">// 85 грамм</code></code></div>
+
+                <h3>Метод toLocaleString типа Number</h3>
+                
+                <p>Стоит отметить, что у типа Number есть метод <span class="b">toLocaleString()</span>, который принимает локаль и который локализует в эту локаль число:</p>
+                <div class="code-block"><code>const num = 1007.56;
+console.log(num.toLocaleString("en"));  <code class="comment">// 1,007.56</code>
+console.log(num.toLocaleString("de"));  <code class="comment">// 1.007,56</code>
+console.log(num.toLocaleString("ru"));  <code class="comment">// 1 007,56</code></code></div>
+
+
+                <h2 id="ch21-list-format">📜 Intl.ListFormat — Форматирование списков</h2>
 
                 <div class="code-block"><code>const items = ["яблоки", "бананы", "апельсины"];
 
-// Русский (и)
+<code class="comment">// Русский (и)</code>
 const ruList = new Intl.ListFormat("ru").format(items);
 console.log(ruList); // яблоки, бананы и апельсины
 
