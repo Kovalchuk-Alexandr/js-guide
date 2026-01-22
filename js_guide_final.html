@@ -769,8 +769,10 @@
                                 <li class="nav-subitem" data-target="ch21-date-time">📜 Intl.DateTimeFormat — локализация дат и времени</li>
                                 <li class="nav-subitem" data-target="ch21-number-format">📜 Intl.NumberFormat — Форматирование чисел</li>
                                 <li class="nav-subitem" data-target="ch21-list-format">📜 Intl.ListFormat — Форматирование списков</li>
-                                
-                                <li class="nav-subitem" data-target="ch21-comparison">📜 Сравнение технологий</li>
+                                <li class="nav-subitem" data-target="ch21-names">📜 Intl.DisplayNames — Локализация названий</li>
+                                <li class="nav-subitem" data-target="ch21-compare-sort">📜 Intl.Collator — Сравнение и сортировка строк</li>
+                                <li class="nav-subitem" data-target="ch21-relative-time">📜 Intl.RelativeTimeFormat — Относительное время</li>
+                                <li class="nav-subitem" data-target="ch21-examples">📜 Практические примеры</li>
                                 <li class="nav-subitem" data-target="ch21-conclusion">📜 Заключение</li>
                             </ul>
                         </li>
@@ -21310,102 +21312,362 @@ console.log(num.toLocaleString("ru"));  <code class="comment">// 1 007,56</code>
 
                 <h2 id="ch21-list-format">📜 Intl.ListFormat — Форматирование списков</h2>
 
+                <p>
+                    Объект <span class="b">Intl.ListFormat</span> позволяет форматировать списки в соответствии с некоторыми локализационными настройками. Его 
+                    конструктор может принимать два параметра:
+                </p>
+
+                <div class="code-block"><code>Intl.ListFormat([locales[, options]])</code></div>
+
+                <p>Параметр <span class="b">locales</span> представляет код языка в формате BCP 47 или набор языковых кодов.</p>
+                <p>Параметр <span class="b">options</span> представляет дополнительный набор опций:</p>
+
+                <ul>
+                    <li><span class="b">localeMatcher</span>: алгоритм поиска соответствий. Может принимать два значения: <code>"lookup"</code> и <code>"best fit"</code>. Значение по умолчанию - <code>"best fit"</code>.</li>
+                    <li><span class="b">style</span>: длина форматируемой строки. Возможные значения: <code>"long"</code> 
+                    (например, <code>A, B, and C</code>), <code>"short"</code> или <code>"narrow"</code> (например, <code>A, B,C</code>). Значение по умолчанию - <code>"long"</code></li>
+                    <li><span class="b">type</span>: формат выходной строки. Возможные значения: <code>"conjunction"</code> (предпоследний и последний элементы в списке 
+                    соединяются союзом "и" ("and") - <code>A, B и C</code>), <code>"disjunction"</code> (предпоследний и последний элементы в списке 
+                    соединяются союзом "или" ("or") - <code>A, B или C</code>), <code>"unit"</code> (применяется для списков с числовыми значениями и добавляет к ним единицы измерения). 
+                    Значение по умолчанию - <code>"conjunction"</code></li>
+                </ul>
+
+                <p>Для форматирования списка данный объект предоставляет метод <span class="b">format()</span>, в который передается форматируемый список. Метод возвращает отформатированный локализованный список в виде строки.</p>
+
+                <p>Рассмотрим несколько примеров. Добавим союз "И":</p>
+                <div class="code-block"><code>const people = ["Tom", "Bob", "Sam"];
+const andList = new Intl.ListFormat("ru").format(people); <code class="comment">// { style:"long", type: "conjunction" }</code>,
+console.log(andList);   <code class="comment">// Tom, Bob и Sam</code></code></div>
+
+                <p>
+                    В данном случае используется локализация с учетом русскоязычной культуры и для этого в качестве параметра <code>locales</code> в конструктор 
+                    <code>Intl.ListFormat</code> передаем код языка <code>ru</code>. В итоге из массива <code>["Tom", "Bob", "Sam"]</code> получаем строку 
+                    <code>Tom, Bob и Sam</code>. В данном случае для второго параметра - <code>options</code> использовались настройки по умолчанию. Однако мы можем их задать и явным образом:
+                </p>
+                <div class="code-block"><code>const people = ["Tom", "Bob", "Sam"];
+const andList = new Intl.ListFormat("ru" , { style:"long", type: "conjunction" }).format(people);
+console.log(andList);   <code class="comment">// Tom, Bob и Sam</code></code></div>
+
+                <p>В этом случае мы получим тот же самый результат, так как опция <code>type: "conjunction"</code> предполагает использование союза "и".</p>
+                
+                <p>Теперь используем союз "или":</p>
+                <div class="code-block"><code>const people = ["Tom", "Bob", "Sam"];
+const orList = new Intl.ListFormat("ru", { style:"short", type: "disjunction" }).format(people);
+console.log(orList);<code class="comment">// Tom, Bob или Sam</code>
+</code></div>
+
+                <p>При этом мы не ограничены одной языковой культурой. Так, локализуем список в ряд других языков:</p>
+
+                <div class="code-block"><code>const people = ["Tom", "Bob", "Sam"];
+ 
+<code class="comment">// английский язык</code>
+const enList = new Intl.ListFormat("en" , { style:"long", type: "conjunction" }).format(people);
+console.log(enList);    <code class="comment">// Tom, Bob, and Sam</code>
+ 
+<code class="comment">// немецкий язык</code>
+const deList = new Intl.ListFormat("de" , { style:"long", type: "conjunction" }).format(people);
+console.log(deList);    <code class="comment">// Tom, Bob und Sam</code>
+ 
+<code class="comment">// французский язык</code>
+const frList = new Intl.ListFormat("fr" , { style:"long", type: "conjunction" }).format(people);
+console.log(frList);    <code class="comment">// Tom, Bob et Sam</code>
+ 
+<code class="comment">// китайский язык</code>
+const zhList = new Intl.ListFormat("zh" , { style:"long", type: "conjunction" }).format(people);
+console.log(zhList);    <code class="comment">// Tom、Bob和Sam</code></code></div>
+
+                <h4>Еще пример:</h4>
+
                 <div class="code-block"><code>const items = ["яблоки", "бананы", "апельсины"];
 
 <code class="comment">// Русский (и)</code>
 const ruList = new Intl.ListFormat("ru").format(items);
-console.log(ruList); // яблоки, бананы и апельсины
+console.log(ruList); <code class="comment">// яблоки, бананы и апельсины</code>
 
-// Английский (and)
+<code class="comment">// Английский (and)</code>
 const enList = new Intl.ListFormat("en").format(items);
-console.log(enList); // яблоки, бананы, and апельсины
+console.log(enList); <code class="comment">// яблоки, бананы, and апельсины</code>
 
-// Разные стили
+<code class="comment">// Разные стили</code>
 const longList = new Intl.ListFormat("ru", {
     style: "long",
-    type: "conjunction" // "и"
+    type: "conjunction" <code class="comment">// "и"</code>
 }).format(items);
-console.log(longList); // яблоки, бананы и апельсины
+console.log(longList); <code class="comment">// яблоки, бананы и апельсины</code>
 
 const orList = new Intl.ListFormat("ru", {
-    type: "disjunction" // "или"
+    type: "disjunction" <code class="comment">// "или"</code>
 }).format(items);
-console.log(orList); // яблоки, бананы или апельсины</code></div>
+console.log(orList); <code class="comment">// яблоки, бананы или апельсины</code></code></div>
 
-                <h2>Intl.DisplayNames — Локализация названий</h2>
+                <h2 id="ch21-names">📜 Intl.DisplayNames — Локализация названий</h2>
 
-                <h3>Названия стран</h3>
+                <p>
+                    Объект <span class="b">Intl.DisplayNames</span> позволяет локализовать названия, в частности, названия стран и регионов, языков, некоторых других наименований. 
+                    Его конструктор может принимать два параметра:
+                </p>
+                <div class="code-block"><code>Intl.DisplayNames([locales[, options]])</code></div>
+
+                <p>Параметр <span class="b">locales</span> представляет код языка в формате BCP 47 или набор языковых кодов.</p>
+                <p>Параметр <span class="b">options</span> представляет дополнительный набор опций:</p>
+
+                <ul>
+                    <li><span class="b">localeMatcher</span>: алгоритм поиска соответствий. Может принимать два значения: <code>"lookup"</code> и <code>"best fit"</code>. Значение по умолчанию - <code>"best fit"</code>.</li>
+                    <li><span class="b">style</span>: длина форматируемой строки. Возможные значения: <code>"long"</code>, <code>"short"</code> и <code>"narrow"</code> (например, <code>A, B,C</code>). Значение по умолчанию - <code>"long"</code></li>
+                    <li><span class="b">type</span>: тип названий, которые будут локализованы. Возможные значения:
+                        <ul>
+                            <li><code>"language"</code>: возвращает название языка</li>
+                            <li><code>"region"</code>: возвращает название страны/региона</li>
+                            <li><code>"script"</code>: возвращает название письменного скрипта</li>
+                            <li><code>"currency"</code>: возвращает название валюты</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <span class="b">fallback</span>: задает альтернативнй вариант. Возможные значения: <code>"code"</code> и <code>"none"</code>. 
+                        <code>"code"</code> задает код, который определяет локализуемое название.
+                    </li>
+                </ul>
+
+                <p>
+                    Какое именно название будет локализоваться, задается с помощью метода <span class="b">of()</span>. В этот метод передается код названия. 
+                    Метод возвращает локализованное наименование.
+                </p>
+                <p>Рассмотрим несколько примеров:</p>
+                <div class="code-block"><code>const USAInEnglish = new Intl.DisplayNames("en", {type: "region"}).of("US");
+const USAInRussian = new Intl.DisplayNames("ru", {type: "region"}).of("US");
+ 
+console.log(USAInEnglish);  <code class="comment">// United States</code>
+console.log(USAInRussian);  <code class="comment">// Соединенные Штаты</code></code></div>
+
+                <p>
+                    Здесь получаем два названия для одной и той же страны - США. Для константы USAInEnglish применяет код культуры "en", то есть мы будем получать 
+                    название на английском. Параметр <code>type: "region"</code> указывает, что мы хотим получить название страны.региона. Далее у соданного объекта вызываем 
+                    метод <span class="b">of()</span>, в который передается значение "US" - это код, который означает, что мы хотим получить название для USA. 
+                    В итоге мы получим название USA на английском языке - "United States".
+                </p>
+                <p>А константа USAInRussian также получает название страны по коду "US", только на русском языке.</p>
+
+
+                <h3>Названия региона</h3>
+
+                <p>
+                    Для получения названия региона (это может быть название страны или название географического региона) применяется параметр <code>type: "region"</code>. 
+                    Для получения названия региона в метод <span class="b">of()</span> передается код региона. В качестве кода региона может выступать код 
+                    <a href="https://www.iso.org/iso-3166-country-codes.html" rel="nofollow">ISO-3166</a> из двух букв (например, US, RU, DE и т.д.) или 
+                    трехчисловой код <a href="https://unstats.un.org/unsd/methodology/m49/" rel="nofollow">UN M49</a>.
+                </p>
+                <p>Например, используем код "DE" для получения названия Германии на разных языках:</p>
+
+                <div class="code-block"><code>const GermanyInEnglish = new Intl.DisplayNames("en", {type: "region"}).of("DE");
+const GermanyInRussian = new Intl.DisplayNames("ru", {type: "region"}).of("DE");
+const GermanyInGerman = new Intl.DisplayNames("de", {type: "region"}).of("DE");
+ 
+console.log(GermanyInEnglish);  <code class="comment">// Germany</code>
+console.log(GermanyInRussian);  <code class="comment">// Германия</code>
+console.log(GermanyInGerman);   <code class="comment">// Deutschland</code></code></div>
+
+                <h4>Другой пример:</h4>
+
                 <div class="code-block"><code>const regions = new Intl.DisplayNames(["ru"], { type: "region" });
 
-console.log(regions.of("US")); // США
-console.log(regions.of("DE")); // Германия
-console.log(regions.of("FR")); // Франция
-console.log(regions.of("CN")); // Китай
+console.log(regions.of("US")); <code class="comment">// США</code>
+console.log(regions.of("DE")); <code class="comment">// Германия</code>
+console.log(regions.of("FR")); <code class="comment">// Франция</code>
+console.log(regions.of("CN")); <code class="comment">// Китай</code>
 
-// На английском
+<code class="comment">// На английском</code>
 const regionsEN = new Intl.DisplayNames(["en"], { type: "region" });
-console.log(regionsEN.of("RU")); // Russia</code></div>
+console.log(regionsEN.of("RU")); <code class="comment">// Russia</code></code></div>
+
+
+                <h3>Получение название письменности</h3>
+
+                <p>
+                    Для получения названия письменного скрипта применяется значение <code>type: "script"</code>. 
+                    Для получения названия письменности в метод <span class="b">of()</span> передается четырехбуквенный код <a href="https://unicode.org/iso15924/iso15924-codes.html" rel="nofollow">ISO-15924</a>. 
+                    Например:
+                </p>
+                <div class="code-block"><code>const CyrlInEnglish = new Intl.DisplayNames("en", {type: "script"}).of("Cyrl");
+const CyrlInRussian = new Intl.DisplayNames("ru", {type: "script"}).of("Cyrl");
+ 
+console.log(CyrlInEnglish); <code class="comment">// Cyrillic</code>
+console.log(CyrlInRussian); <code class="comment">// кириллица</code></code></div>
+
 
                 <h3>Названия языков</h3>
+
+                <p>
+                    Для получения названия языка применяется значение <code>type: "language"</code>, а в метод <span class="b">of()</span> передается код языка в формате <code>languageCode[-scriptCode][-regionCode](-variant)</code>, 
+                    где компонент <code>languageCode</code> представляет двухбуквенный код языка в формате ISO 639-1 или трехбуквенный код в формате ISO 639-2. Необязательные 
+                    компоненты <code>scriptCode</code> и <code>regionCode</code> - выше рассмотренные коды письменности и региона соответственно.
+                </p>
+                <p>Например:</p>
+                <div class="code-block"><code>const enRussian = new Intl.DisplayNames("en", {type: "language"}).of("ru");
+const ruRussian = new Intl.DisplayNames("ru", {type: "language"}).of("ru");
+const deRussian = new Intl.DisplayNames("de", {type: "language"}).of("ru");
+ 
+console.log(enRussian); <code class="comment">// Russian</code>
+console.log(ruRussian); <code class="comment">// русский</code>
+console.log(deRussian); <code class="comment">// Russisch</code></code></div>
+
+                <p>Используем код языка вместе с кодом региона:</p>
+                <div class="code-block"><code>const ruLang = new Intl.DisplayNames("ru", {type: "language"});
+const enUS = ruLang.of("en-US");
+const enGB = ruLang.of("en-GB");
+ 
+console.log(enUS);  <code class="comment">// американский английский</code>
+console.log(enGB);  <code class="comment">// британский английский</code></code></div>
+
+                <h4>Еще прмер:</h4>
                 <div class="code-block"><code>const languages = new Intl.DisplayNames(["ru"], { type: "language" });
 
-console.log(languages.of("en")); // английский
-console.log(languages.of("de")); // немецкий
-console.log(languages.of("fr")); // французский
-console.log(languages.of("ja")); // японский</code></div>
+console.log(languages.of("en")); <code class="comment">// английский</code>
+console.log(languages.of("de")); <code class="comment">// немецкий</code>
+console.log(languages.of("fr")); <code class="comment">// французский</code>
+console.log(languages.of("ja")); <code class="comment">// японский</code></code></div>
 
                 <h3>Названия валют</h3>
+
+                <p>
+                    Для получения названия валюты применяется значение <code>type: "currency"</code>, а в метод <span class="b">of()</span> передается трехбуквенный 
+                    код <a href="https://www.iso.org/iso-4217-currency-codes.html" rel="nofollow">ISO 4217</a>. Например:
+                </p>
+
+                <div class="code-block"><code>const ruLang = new Intl.DisplayNames("ru", {type: "currency"});
+const usd = ruLang.of("USD");
+const euro = ruLang.of("EUR");
+const ruble = ruLang.of("RUB");
+ 
+console.log(usd);       <code class="comment">// доллар США</code>
+console.log(euro);      <code class="comment">// евро</code>
+console.log(ruble);     <code class="comment">// российский рубль</code></code></div>
+
+                <h4>Или так:</h4>
+
                 <div class="code-block"><code>const currencies = new Intl.DisplayNames(["ru"], { type: "currency" });
 
-console.log(currencies.of("USD")); // доллар США
-console.log(currencies.of("EUR")); // евро
-console.log(currencies.of("RUB")); // российский рубль
-console.log(currencies.of("GBP")); // фунт стерлингов</code></div>
+console.log(currencies.of("USD")); <code class="comment">// доллар США</code>
+console.log(currencies.of("EUR")); <code class="comment">// евро</code>
+console.log(currencies.of("RUB")); <code class="comment">// российский рубль</code>
+console.log(currencies.of("GBP")); <code class="comment">// фунт стерлингов</code></code></div>
 
-                <h2>Intl.Collator — Сравнение и сортировка строк</h2>
+                <h2 id="ch21-compare-sort">📜 Intl.Collator — Сравнение и сортировка строк</h2>
+
+                <p>
+                    Для сравнения строк с учетом языка применяется тип <span class="b">Collator</span>. Для этого тип <code>Collator</code> предоставляет метод 
+                    <span class="b">compare()</span>, который в качестве параметров принимает две строки:
+                </p>
+                <div class="code-block"><code>collator.compare(string1, string2)</code></div>
+
+                <p>Метод <code>compare</code> возвращает одно из трех числовых значений:</p>
+
+                <ul> 
+                    <li><span class="b">1</span>, если первая строка "больше", чем вторая (первая строка расположена после второй строки в лексикографическом порядке).</li> 
+                    <li><span class="b">-1</span>, если вторая строка "больше" первой (первая строка располагается до второй строки)</li>
+                    <li><span class="b">0</span>, если обе строки равны</li>
+                </ul>
+
+                <p>Пример сравнения:</p>
+                <div class="code-block"><code>const collator = new Intl.Collator("ru-RU");
+console.log(collator.compare("б", "А"));     <code class="comment">// 1</code>
+console.log(collator.compare("б", "Б"));     <code class="comment">// -1</code>
+console.log(collator.compare("б", "В"));     <code class="comment">// -1</code>
+console.log(collator.compare("б", "б"));     <code class="comment">// 0</code>
+ 
+console.log(collator.compare("мир", "миг")); <code class="comment">// 1</code>
+console.log(collator.compare("мир", "миф")); <code class="comment">// -1</code>
+console.log(collator.compare("мир", "мир")); <code class="comment">// 0</code></code></div>
+
+                <h3>Настройка сравнения</h3>
+
+                <p>
+                    Принцип сравнения строк определяется объектом конфигурации, который передается в конструктор <code>Int.Colator</code> в качестве второго параметра и который 
+                    определяет следующие свойства:
+                </p>
+
+                <ul>
+                    <li>
+                        <span class="b">localeMatcher</span>: представляет используемый алгоритм выбора локали. Может принимать два значения: "lookup" и "best fit" (значение по умолчанию). Значение 
+                        <code>lookup</code> предполагает использование <a href="https://datatracker.ietf.org/doc/html/rfc4647#section-3.4" rel="nofollow">алгоритма</a>, 
+                        определенного в стандарте. Значение <code>best fit</code> использует локаль, которую предоставляет среда выполнения
+                    </li>
+                    <li><span class="b">usage</span>: указывает, будет ли сравнение строк использоваться для сортировки или для поиска строк. 
+                    Возможные значения — сортировка и поиск соответственно. Возможные значения: "sort" (для поиска) и "search" (для сортировки - значение по умолчанию)</li>
+                    <li><span class="b">sensitivity</span>: указывает, какие символы следует считать неравными. Возможные значения:
+                        <ul>
+                            <li><code>"base"</code>: строки считаются неравными, если они различаются по базовым буквам. Например: a ≠ b, a = á, a = A.</li>
+                            <li><code>"accent"</code>: строки считаются неравными, если они различаются по базовым буквам или диакритическим знакам. Например: a ≠ b, a ≠ á, a = A.</li>
+                            <li><code>"case"</code>: строки считаются неравными, если они различаются по базовым буквам или регистру. Например: a ≠ b, a = á, a ≠ A.</li>
+                            <li><code>"variant"</code>: строки считаются неравными, если они различаются по базовым буквам, регистру или диакритическим знакам. Например: a ≠ b, a ≠ á, a ≠ A. Значение по умолчанию</li>
+                        </ul>
+                    </li>
+                    <li><span class="b">ignorePunctuation</span>: надо ли игнорировать пунктуацию. Принимает значения true (пунктуация игнорируется) и false (не игнорируется, значение по умолчанию)</li>
+                    <li><span class="b">numeric</span>: указывает, надо ли сравнивать строки как числа (например, "1" &lt; "5" &lt; "10"). Принимает значения 
+                    <code>true</code> и <code>false</code> (значение по умолчанию)</li>
+                    <li><span class="b">caseFirst</span>: указывает, надо ли учитывать регистр первой буквы. Принимает значения 
+                    <code>true</code> и <code>false</code> (значение по умолчанию)</li>
+                </ul>
+
+                <p>Например, не будем учитывать регистр при сравнении:</p>
+                <div class="code-block"><code>const standardCollator = new Intl.Collator("ru-RU");
+console.log(standardCollator.compare("Дом", "дом"));   <code class="comment">// 1 - строки не равны</code>
+ 
+const baseCollator = new Intl.Collator("ru-RU", {sensitivity: "base"});
+console.log(baseCollator.compare("Дом", "дом"));       <code class="comment">// 0 - строки равны</code></code></div>
+
+                <h3>Сортировка строк</h3>
+
+                <p>
+                    Метод <code>compare()</code> удобно использовать для сортировки массива строк. В частности, метод sort() у объекта массива 
+                    принимает функцию сортировки или сравнения, которая затем сравнивает элементы соответствующего массива попарно и, таким образом, выполняет сортировку:
+                </p>
+                <div class="code-block"><code>const collator = new Intl.Collator("en", {usage: "sort"});
+const people = ["Tom", "Bob", "Sam", "Alice", "Kate"];
+people.sort(collator.compare);  <code class="comment">// сортируем массив</code>
+console.log(people);            <code class="comment">//  ["Alice", "Bob", "Kate", "Sam", "Tom"]</code></code></div>
 
                 <h3>Проблема обычной сортировки</h3>
                 <div class="code-block"><code>const names = ["Яна", "Алексей", "Ёлка", "Борис", "Виктор"];
 
-// Обычная сортировка (неправильно для русского)
+<code class="comment">// Обычная сортировка (неправильно для русского)</code>
 console.log(names.sort());
-// ["Алексей", "Борис", "Виктор", "Яна", "Ёлка"] - Ё в конце!
+<code class="comment">// ["Алексей", "Борис", "Виктор", "Яна", "Ёлка"] - Ё в конце!</code>
 
-// С учётом локали (правильно)
+<code class="comment">// С учётом локали (правильно)</code>
 console.log(names.sort(new Intl.Collator("ru").compare));
-// ["Алексей", "Борис", "Виктор", "Ёлка", "Яна"] - Ё после Е!</code></div>
+<code class="comment">// ["Алексей", "Борис", "Виктор", "Ёлка", "Яна"] - Ё после Е!</code></code></div>
 
                 <h3>Сравнение строк</h3>
                 <div class="code-block"><code>const collator = new Intl.Collator("ru");
 
-// Сравнение (возвращает -1, 0 или 1)
-console.log(collator.compare("яблоко", "апельсин")); // 1 (я &gt; а)
-console.log(collator.compare("ёлка", "дом"));        // 1 (ё &gt; д)
-console.log(collator.compare("кот", "кот"));         // 0 (равны)
+<code class="comment">// Сравнение (возвращает -1, 0 или 1)</code>
+console.log(collator.compare("яблоко", "апельсин")); <code class="comment">// 1 (я &gt; а)</code>
+console.log(collator.compare("ёлка", "дом"));        <code class="comment">// 1 (ё &gt; д)</code>
+console.log(collator.compare("кот", "кот"));         <code class="comment">// 0 (равны)</code>
 
-// Сортировка массива
+<code class="comment">// Сортировка массива</code>
 const words = ["яблоко", "ёлка", "дом", "апельсин"];
 console.log(words.sort(collator.compare));
-// ["апельсин", "дом", "ёлка", "яблоко"]</code></div>
+<code class="comment">// ["апельсин", "дом", "ёлка", "яблоко"]</code></code></div>
 
-                <h2>Intl.RelativeTimeFormat — Относительное время</h2>
+                <h2 id="ch21-relative-time">📜 Intl.RelativeTimeFormat — Относительное время</h2>
 
                 <div class="code-block"><code>const rtf = new Intl.RelativeTimeFormat("ru", { numeric: "auto" });
 
-console.log(rtf.format(-1, "day"));    // вчера
-console.log(rtf.format(0, "day"));     // сегодня
-console.log(rtf.format(1, "day"));     // завтра
-console.log(rtf.format(2, "day"));     // через 2 дня
-console.log(rtf.format(-2, "hour"));   // 2 часа назад
-console.log(rtf.format(3, "week"));    // через 3 недели
-console.log(rtf.format(-1, "month"));  // в прошлом месяце
+console.log(rtf.format(-1, "day"));    <code class="comment">// вчера</code>
+console.log(rtf.format(0, "day"));     <code class="comment">// сегодня</code>
+console.log(rtf.format(1, "day"));     <code class="comment">// завтра</code>
+console.log(rtf.format(2, "day"));     <code class="comment">// через 2 дня</code>
+console.log(rtf.format(-2, "hour"));   <code class="comment">// 2 часа назад</code>
+console.log(rtf.format(3, "week"));    <code class="comment">// через 3 недели</code>
+console.log(rtf.format(-1, "month"));  <code class="comment">// в прошлом месяце</code>
 
-// Английский
+<code class="comment">//</code> Английский
 const rtfEN = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
-console.log(rtfEN.format(-1, "day"));  // yesterday
-console.log(rtfEN.format(1, "day"));   // tomorrow</code></div>
+console.log(rtfEN.format(-1, "day"));  <code class="comment">// yesterday</code>
+console.log(rtfEN.format(1, "day"));   <code class="comment">// tomorrow</code></code></div>
 
-                <h2>Практические примеры</h2>
+                <h2 id="ch21-examples">📜 Практические примеры</h2>
 
                 <h3>Пример 1: Мультиязычный интерфейс</h3>
                 <div class="code-block"><code>class i18n {
@@ -21434,19 +21696,19 @@ console.log(rtfEN.format(1, "day"));   // tomorrow</code></div>
     }
 }
 
-// Использование
+<code class="comment">// Использование</code>
 const ru = new i18n("ru");
 const en = new i18n("en-US");
 
 const now = new Date();
-console.log(ru.formatDate(now));        // 15 ноября 2025 г.
-console.log(en.formatDate(now));        // November 15, 2025
+console.log(ru.formatDate(now));        <code class="comment">// 15 ноября 2025 г.</code>
+console.log(en.formatDate(now));        <code class="comment">// November 15, 2025</code>
 
-console.log(ru.formatNumber(1234567));  // 1 234 567
-console.log(en.formatNumber(1234567));  // 1,234,567
+console.log(ru.formatNumber(1234567));  <code class="comment">// 1 234 567</code>
+console.log(en.formatNumber(1234567));  <code class="comment">// 1,234,567</code>
 
-console.log(ru.formatCurrency(100));    // 100,00 ₽
-console.log(en.formatCurrency(100));    // $100.00</code></div>
+console.log(ru.formatCurrency(100));    <code class="comment">// 100,00 ₽</code>
+console.log(en.formatCurrency(100));    <code class="comment">// $100.00</code></code></div>
 
                 <h3>Пример 2: Относительное время для постов</h3>
                 <div class="code-block"><code>function getRelativeTime(date, locale = "ru") {
@@ -21469,11 +21731,11 @@ console.log(en.formatCurrency(100));    // $100.00</code></div>
     }
 }
 
-// Использование
-const postDate = new Date(Date.now() - 2 * 60 * 60 * 1000); // 2 часа назад
-console.log(getRelativeTime(postDate)); // 2 часа назад</code></div>
+<code class="comment">//</code> Использование
+const postDate = new Date(Date.now() - 2 * 60 * 60 * 1000); <code class="comment">// 2 часа назад</code>
+console.log(getRelativeTime(postDate)); <code class="comment">                    // 2 часа назад</code></code></div>
 
-                <h2>Заключение</h2>
+                <h2 id="ch21-conclusion">📜 Заключение</h2>
 
                 <div class="info-box note">
                     <div class="info-box-title">📚 Основные выводы</div>
