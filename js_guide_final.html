@@ -781,7 +781,13 @@
                                 <li class="nav-subitem" data-target="ch22-intro">📜 Введение в модули</li>
                                 <li class="nav-subitem" data-target="ch22-connection">📜 Подключение модулей в HTML</li>
                                 <li class="nav-subitem" data-target="ch22-server">📜 Создание и запуск сервера</li>
+                                <li class="nav-subitem" data-target="ch22-import-module">📜 Импорт модуля</li>
                                 <li class="nav-subitem" data-target="ch22-export">📜 Export — Экспорт</li>
+                                <li class="nav-subitem" data-target="ch22-import">📜 Import — Импорт</li>
+                                <li class="nav-subitem" data-target="ch22-export-default">📜 Export Default — Экспорт по умолчанию</li>
+                                <li class="nav-subitem" data-target="ch22-reexport">📜 Реэкспорт (Re-export)</li>
+                                <li class="nav-subitem" data-target="ch22-aliases">📜 Использование псевдонимов</li>
+                                <li class="nav-subitem" data-target="ch22-dynamic">📜 Динамический импорт</li>
                                 <li class="nav-subitem" data-target="ch22-examples">📜 Практические примеры</li>
                                 <li class="nav-subitem" data-target="ch22-conclusion">📜 Заключение</li>
                             </ul>
@@ -21934,9 +21940,78 @@ http.createServer(function(request, response){
                     результат работы модуля main.js.
                 </p>
 
+                <h2 id="ch22-import-module">📜 Импорт модуля</h2>
+
+                <p>Для импорта одного модуля в другом модуле достаточно прописать оператор <span class="b">import</span> и передать ему путь к импортируемому модулю:</p>
+                <div class="code-block"><code>import "путь_к_модулю";</code></div>
+
+                <p>Например, пусть у нас будет следующий модуль <span class="b">message.js</span></p>
+                <div class="code-block"><code>const messageText = "Hello METANIT.COM";
+console.log(messageText);</code></div>
+
+                <p>Фактически этот модуль выглядит как обычный скрипт, который определяет переменную и выводит ее значение на консоль с помощью функции <code>console.log()</code>.</p>
+                <p>И определим в той же папке файл <span class="b">main.js</span>, в котором подключим выше определенный модуль <span class="b">message.js</span>:</p>
+                <div class="code-block"><code>import "./message.js";</code></div>
+
+                <p>
+                    Здесь мы просто испортируем модуль <code>message.js</code>. В данном случае предполагается что оба модуля - main.js и message.js будут находиться в одной папке, поэтому при импорте указан путь "./message.js", 
+                    где "./" указывает на ту же папку, где расположен файл main.js.
+                </p>
+                <p>Пусть у нас есть html-страница <span class="b">index.html</span>, на которой подключается файл <span class="b">main.js</span>:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+&lt;script type="module" src="main.js">&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>В итоге при выполнении страницы в браузере в его консоли мы увидим результат работы компонентов подключенного модуля:</p>
+
+                <pre class="browser">Hello METANIT.COM</pre>
+
+                <p>
+                    При таком подключении будут выполняться все вызовы функций модуля <code>message.js</code>, однако все определенные и не экспортируемые компоненты в этом 
+                    модуле из вне будут недоступны. Так, мы не можем в модуле <code>main.js</code> написать так:
+                </p>
+                <div class="code-block"><code>import "./message.js";
+ 
+ console.log(messageText);   <code class="comment">// Ошибка ReferenceError: messageText is not defined</code>
+</code></div>
+
+                <p>
+                    Хотя мы и подключили модуль <code>message.js</code>, но его переменная <code>messageText</code> нам недоступна. Так как она не экспортируется, и соотвестветвенно здесь 
+                    мы ее не можем импортировать и использовать.
+                </p>
+                <p>
+                    Такой способ импорта может показаться бессмысленным. Тем не менее мы можем воспользоваться преимуществами модуля, например, возможностью использовать 
+                    выражения <span class="b">await</span> без определения асинхронных функций. Например, изменим модуль <span class="b">message.js</span> следующим образом:
+                </p>
+
+                <div class="code-block"><code>const sum = (x, y)=>Promise.resolve(x + y);
+  
+const value = await sum(5, 3);
+console.log("Результат асинхронной операции:", value);</code></div>
+
+                <p>
+                    Для простоты здесь определена константа <code>sum</code>, которая представляет промис для вычисления суммы двух чисел. И модуль позволяет использовать 
+                    нам выражения <span class="b">await</span> верхнего уровня для получения результата из промиса без определения и вызова асинхронной функции.
+                </p>
+
                 <h2 id="ch22-export">📜 Export — Экспорт</h2>
 
                 <h3>1. Именованный экспорт (Named Export)</h3>
+
+                <p>
+                    Для того, чтобы какие-то компоненты модуля (переменные/константы/функции/классы) модуля можно было подключить и использовать в другом модулей, 
+                    их надо экспортировать. Мы можем экспортировать какждый компонент по отдельности. Для этого перед определением компонента указывается ключевое слово <span class="b">export</span>. 
+                    Например, пусть у нас будет следующий модуль <span class="b">message.js</span>
+                </p>
+
                 <p>Экспортируем отдельные компоненты с помощью <code>export</code>:</p>
 
                 <div class="code-block"><code><code class="comment">// message.js</code>
@@ -21959,10 +22034,16 @@ export class Messenger {
     }
 }</code></div>
 
+                <p>
+                    Здесь экспортируются переменная <code>welcome</code>, константа <code>hello</code>, функция <code>sayHello()</code> и класс <code>Messenger</code>. 
+                    Стоит отметить, что нам необзательно экспортировать все компоненты модуля, какие-то компоненты мы можем не экспортировать и использовать только внутри этого модуля.
+                </p>
+
+
                 <h3>2. Экспорт списком</h3>
                 <p>Альтернативный способ — экспорт в конце файла:</p>
 
-                <div class="code-block"><code>// message.js
+                <div class="code-block"><code><code class="comment">// message.js</code>
 
 let welcome = "Welcome";
 const hello = "Hello";
@@ -21977,11 +22058,11 @@ class Messenger {
     }
 }
 
-// Экспортируем всё сразу
+<code class="comment">// Экспортируем всё сразу</code>
 export { welcome, hello, sayHello, Messenger };</code></div>
 
                 <h3>3. Экспорт с переименованием (as)</h3>
-                <div class="code-block"><code>// message.js
+                <div class="code-block"><code><code class="comment">// message.js</code>
 
 function sayHello() {
     console.log("Hello!");
@@ -21991,83 +22072,149 @@ function sayGoodbye() {
     console.log("Goodbye!");
 }
 
-// Экспортируем с другими именами
+<code class="comment">// Экспортируем с другими именами</code>
 export { 
     sayHello as greet, 
     sayGoodbye as bye 
 };</code></div>
 
-                <h2>Import — Импорт</h2>
+                <h2 id="ch22-import">📜 Import — Импорт</h2>
 
                 <h3>1. Именованный импорт</h3>
-                <div class="code-block"><code>// main.js
 
-// Импортируем конкретные компоненты
+                <p>
+                    Все имортируемые компоненты мы можем подключить по отдельности. Для этого после оператора <span class="b">import</span> в фигурных 
+                    скобках указываются названия подключаемых компонентов- переменных/констант/функций/классов. Затем после оператора <span class="b">from</span> указывается модуль, из которого идет импорт.
+                </p>
+                <div class="code-block"><code>import {компонент1, компонент2, ... компонентN} from "путь_к_модулю";</code></div>
+
+                <p>Например, импортируем в модуле <span class="b">main.js</span> экспортируемые компоненты модуля <span class="b">message.js</span>:</p>
+
+                <div class="code-block"><code>import {sayHello, welcome, Messenger} from "./message.js";
+ 
+sayHello();
+ 
+const telegram = new Messenger();
+telegram.send(welcome);</code></div>
+
+                <p>
+                    Итак, здесь подключаются из модуля message.js переменная <code>welcome</code>, функция <code>sayHello()</code> и класс <code>Messenger</code>. При этом нам необязательно 
+                    подключать все компоненты модуля. Мы можем подключить только те компоненты, которые нам непосредственно нужны и которые мы собираемся использовать.
+                </p>
+                <p>В итоге при выполнении страницы в браузере в его консоли мы увидим результат работы компонентов подключенного модуля main.js:</p>
+                <pre class="browser">Hello METANIT.COM
+Sending message: Welcome</pre>
+
+                <h4>Или так:</h4>
+
+                <div class="code-block"><code><code class="comment">// main.js</code>
+
+<code class="comment">// Импортируем конкретные компоненты</code>
 import { hello, sayHello, Messenger } from './message.js';
 
-console.log(hello);           // "Hello"
-sayHello();                   // "Hello METANIT.COM"
+console.log(hello);           <code class="comment">// "Hello"</code>
+sayHello();                   <code class="comment">// "Hello METANIT.COM"</code>
 
 const telegram = new Messenger();
-telegram.send("Hi!");         // "Sending message: Hi!"</code></div>
+telegram.send("Hi!");         <code class="comment">// "Sending message: Hi!"</code></code></div>
 
                 <h3>2. Импорт всего модуля (* as)</h3>
-                <div class="code-block"><code>// main.js
 
-// Импортируем всё под одним именем
-import * as Message from './message.js';
+                <p>
+                    Если в подключаемом модуля очень много компонентов, и мы собираемся использовать все возможности модуля, то 
+                    перечислять все подключаемые компоненты может быть утомительно. В этом случае мы можем подключить весь функционал модуля в виде:
+                </p>
 
-console.log(Message.hello);
-Message.sayHello();
+                <div class="code-block"><code>import * as псевдоним_модуля from "модуль";</code></div>
 
-const messenger = new Message.Messenger();
+                <p>
+                    После оператора <code>import</code> идет знак звездочки, который указывает, что надо подключить все экспортируемые компоненты. А после оператора 
+                    <span class="b">as</span> идет псевдоним модуля, с которым будет сопоставляться подключаемый модуль.
+                </p>
+
+                <p>Например, подключим в файле <span class="b">main.js</span> весь модуль <span class="b">message.js</span></p>
+
+                <div class="code-block"><code><code class="comment">// main.js</code>
+
+<code class="comment">// Импортируем всё под одним именем</code>
+import * as MessageModule from './message.js';
+
+console.log(MessageModule.hello);
+MessageModule.sayHello();
+
+const messenger = new MessageModule.Messenger();
 messenger.send("Hello");</code></div>
 
-                <h3>3. Импорт с переименованием (as)</h3>
-                <div class="code-block"><code>// main.js
+                <p>
+                    В даном случае подключаемый модуль <code>message.js</code> сопоставляется с идентификатором <code>MessageModule</code>. В качестве псевдонима модуля может выстуать произвольное название. 
+                    И далее мы можем обращаться ко всем экспортируемым компонентам модуля через псевдним модуля, например, обращении к функции sayHello: <code>MessageModule.sayHello()</code>
+                </p>
 
-// Импортируем с другим именем
+                <h3>3. Импорт с переименованием (as)</h3>
+
+                <div class="code-block"><code><code class="comment">// main.js</code>
+
+<code class="comment">//</code> Импортируем с другим именем
 import { sayHello as greet, hello as greeting } from './message.js';
 
-console.log(greeting);  // "Hello"
-greet();                // "Hello METANIT.COM"</code></div>
+console.log(greeting);  <code class="comment">// "Hello"</code>
+greet();                <code class="comment">// "Hello METANIT.COM"</code></code></div>
 
                 <h3>4. Простой импорт (без привязки)</h3>
-                <div class="code-block"><code>// message.js
+                <div class="code-block"><code><code class="comment">// message.js</code>
 console.log("Module loaded!");
 
-// main.js
-import './message.js';  // Просто выполнит код модуля
-// Выведет: "Module loaded!"</code></div>
+<code class="comment">// main.js</code>
+import './message.js';  <code class="comment">// Просто выполнит код модуля</code>
+<code class="comment">// Выведет: "Module loaded!"</code></code></div>
 
                 <div class="info-box note">
                     <div class="info-box-title">💡 Когда использовать простой импорт</div>
                     <p>Используется для модулей, которые выполняют инициализацию или побочные эффекты (polyfills, стили, глобальные настройки).</p>
                 </div>
 
-                <h2>Export Default — Экспорт по умолчанию</h2>
+                <h2 id="ch22-export-default">📜 Export Default — Экспорт по умолчанию</h2>
+
+                <p>
+                    При экспорте мы можем указать компонент, который будет экспортироваться по умолчанию с помощью оператора <span class="b">default</span>. Например, 
+                    определим следующий модуль <span class="b">message.js</span>:
+                </p>
+
+                <div class="code-block"><code>export default function sayHello() {
+  console.log("Hello from sayHello function");
+}</code></div>
+
+                <p>Чтобы сделать экспорт по умолчанию, после оператора <span class="b">export</span> указывается оператор <span class="b">default</span>.</p>
+                <p>Теперь импортируем эту функцию в модуле <span class="b">main.js</span>:</p>
+                <div class="code-block"><code>import sayHello from "./message.js";
+ 
+sayHello();</code></div>
+
+                <p>Для импорта компонента по умолчанию достаточно после оператора <span class="b">import</span> прописать имя этого компонента.</p>
+                <p>Преимущество экспорта по умолчанию заключается в том, что при импорте модуля не нужно знать, как экспортируемый компонент называется внутри модуля.</p>
+
 
                 <p>В модуле может быть <strong>один</strong> экспорт по умолчанию. Импортируется без фигурных скобок.</p>
 
                 <h3>1. Функция по умолчанию</h3>
-                <div class="code-block"><code>// message.js
+                <div class="code-block"><code><code class="comment">// message.js</code>
 
 export default function sayHello() {
     console.log("Hello from sayHello function");
 }
 
-// main.js
+<code class="comment">// main.js</code>
 
-// Импортируем без фигурных скобок
+<code class="comment">// Импортируем без фигурных скобок</code>
 import sayHello from './message.js';
-// Можем назвать как угодно
+<code class="comment">// Можем назвать как угодно</code>
 import greet from './message.js';
 
-sayHello();  // "Hello from sayHello function"
-greet();     // "Hello from sayHello function"</code></div>
+sayHello();  <code class="comment">// "Hello from sayHello function"</code>
+greet();     <code class="comment">// "Hello from sayHello function"</code></code></div>
 
                 <h3>2. Класс по умолчанию</h3>
-                <div class="code-block"><code>// User.js
+                <div class="code-block"><code><code class="comment">// User.js</code>
 
 export default class User {
     constructor(name) {
@@ -22079,15 +22226,15 @@ export default class User {
     }
 }
 
-// main.js
+<code class="comment">// main.js</code>
 
 import User from './User.js';
 
 const user = new User('Alice');
-user.greet();  // "Hello, Alice!"</code></div>
+user.greet();  <code class="comment">// "Hello, Alice!"</code></code></div>
 
                 <h3>3. Объект по умолчанию</h3>
-                <div class="code-block"><code>// config.js
+                <div class="code-block"><code><code class="comment">// config.js</code>
 
 export default {
     apiUrl: 'https://api.example.com',
@@ -22095,15 +22242,18 @@ export default {
     debug: true
 };
 
-// main.js
+<code class="comment">// main.js</code>
 
 import config from './config.js';
 
-console.log(config.apiUrl);  // "https://api.example.com"
-console.log(config.timeout); // 5000</code></div>
+console.log(config.apiUrl);  <code class="comment">// "https://api.example.com"</code>
+console.log(config.timeout); <code class="comment">// 5000</code></code></div>
 
                 <h3>4. Комбинирование default и named exports</h3>
-                <div class="code-block"><code>// message.js
+
+                <p>Модуль может одновременно экспортировать отдельные компоненты и компонент по умолчанию:</p>
+
+                <div class="code-block"><code><code class="comment">// message.js</code>
 
 export const hello = "Hello";
 export const welcome = "Welcome";
@@ -22112,26 +22262,94 @@ export default function sayHello() {
     console.log("Hello METANIT.COM");
 }
 
-// main.js
+export class Messenger {
+    send(text){
+        console.log("Sending message:", text);
+    }
+}
 
-// Импорт default и named одновременно
-import sayHello, { hello, welcome } from './message.js';
+<code class="comment">// main.js</code>
 
-sayHello();        // "Hello METANIT.COM"
-console.log(hello); // "Hello"</code></div>
+<code class="comment">// Импорт default и named одновременно</code>
+import sayHello, { hello, welcome, Messenger } from './message.js';
 
-                <h2>Реэкспорт (Re-export)</h2>
+sayHello();         <code class="comment">// "Hello METANIT.COM"</code>
+console.log(hello); <code class="comment">// "Hello"</code></code></div>
+
+                <p>Здесь экспортируются все компоненты, однако только функция <span class="b">sayHello</span> экспортируется по умолчанию. Это определение модуля также эквивалентно следующему определению, где компоненты экспортируются через список:</p>
+
+                <div class="code-block"><code>let welcome = "Welcome";
+const hello = "Hello";
+ 
+function sayHello() {
+  console.log("Hello METANIT.COM");
+}
+ 
+class Messenger {
+    send(text){
+        console.log("Sending message:", text);
+    }
+}
+ 
+export {welcome, hello, sayHello as default, Messenger}</code></div>
+
+                <p>При импорте такого модуля, все компоненты, за исключением компонента по умолчанию, необходимо импортировать по отдельности:</p>
+
+                <div class="code-block"><code>import sayHello, {welcome, Messenger} from "./message.js";
+ 
+sayHello();
+ 
+const telegram = new Messenger();
+telegram.send(welcome);</code></div>
+
+                <h3>Экспорт и импорт по умолчанию всего модуля</h3>
+
+                <p>
+                    Стоит учитывать, что при экспорте по умолчанию мы можем только один раз использовать оператор <span class="b">default</span>. Мы не можем по отдельности экспортировать 
+                    по умолчанию сразу два компонента. Однако мы можем экспортировать по умолчанию сразу набор компонентов как единое целое. Например, 
+                    определим следующий модуль <span class="b">message.js</span>:
+                </p>
+
+                <div class="code-block"><code>let welcome = "Welcome";
+const hello = "Hello";
+ 
+function sayHello() {
+  console.log("Hello METANIT.COM");
+}
+ 
+class Messenger {
+    send(text){
+        console.log("Sending message:", text);
+    }
+}
+ 
+export default {welcome, hello, sayHello, Messenger}</code></div>
+
+                <p>Теперь импортируем функционал модуля message.js в модуле <span class="b">main.js</span>:</p>
+                <div class="code-block"><code>import MessageModule from "./message.js";
+ 
+MessageModule.sayHello();
+ 
+const telegram = new MessageModule.Messenger();
+telegram.send(MessageModule.welcome);</code></div>
+
+                <p>
+                    В данном случае весь экспортированный список компонентов будет сопоставляться с названием <code>MessageModule</code>, которое фактически будет 
+                    представлять модуль. И далее через этот идентификатор можно обратиться к конкреному компоненту, используя имя компонента: <code>MessageModule.sayHello();</code>
+                </p>
+
+                <h2 id="ch22-reexport">📜 Реэкспорт (Re-export)</h2>
 
                 <p>Можно экспортировать импортированные компоненты из другого модуля:</p>
 
-                <div class="code-block"><code>// user.js
+                <div class="code-block"><code><code class="comment">// user.js</code>
 export class User {
     constructor(name) {
         this.name = name;
     }
 }
 
-// admin.js
+<code class="comment">//</code> admin.js
 export class Admin extends User {
     constructor(name, role) {
         super(name);
@@ -22139,30 +22357,95 @@ export class Admin extends User {
     }
 }
 
-// index.js (barrel export)
+<code class="comment">// index.js (barrel export)</code>
 
-// Реэкспорт из других модулей
+<code class="comment">// Реэкспорт из других модулей</code>
 export { User } from './user.js';
 export { Admin } from './admin.js';
 
-// Или всё сразу
+<code class="comment">// Или всё сразу</code>
 export * from './user.js';
 export * from './admin.js';
 
-// main.js
+<code class="comment">// main.js</code>
 
-// Импортируем всё из одного места
+<code class="comment">// Импортируем всё из одного места</code>
 import { User, Admin } from './index.js';
 
 const user = new User('Alice');
 const admin = new Admin('Bob', 'Moderator');</code></div>
 
-                <h2>Динамический импорт (Dynamic Import)</h2>
+                <h2 id="ch22-aliases">📜 Использование псевдонимов при экспорте и импорте</h2>
+
+                <p>
+                    С помощью оператора <span class="b">as</span> экспортируемым/импортируемым компонентам модуля можно назначить псевдоним. Затем для использования подобных компонентов применяется 
+                    не их непосредственное имя, а их псевдоним.
+                </p>
+
+                <h3>Псевдонимы в экспорте</h3>
+
+                <p>Определим следующий модуль <span class="b">message.js</span>:</p>
+                <div class="code-block"><code>let welcome = "Welcome";
+const hello = "Hello";
+ 
+function sayHello() {
+  console.log("Hello METANIT.COM");
+}
+ 
+class Messenger {
+    send(text){
+        console.log("Sending message:", text);
+    }
+}
+ 
+export {welcome as simpleMessage, hello, sayHello as printMessage, Messenger}</code></div>
+
+                <p>Здесь все компоненты модуля экспортируются в виде списка, в котором можно определить для компонента псевдним в виде:</p>
+                <div class="code-block"><code>компонент as псевдним</code></div>
+
+                <p>Так, для константы <code>welcome</code> определен псевдоним <code>simpleMessage</code>, а для функции <code>sayHello</code> определен псевдоним <code>printMessage()</code>.</p>
+
+                <p>В этом случае при импорте модуля message.js данные компоненты будут доступны через свои псевднимы:</p>
+                <div class="code-block"><code>import {simpleMessage, printMessage, Messenger} from "./message.js";
+ 
+printMessage();
+ 
+const telegram = new Messenger();
+telegram.send(simpleMessage);</code></div>
+
+                <h3>Псевдонимы при импорте</h3>
+
+                <p>
+                    Подобным образом можно указать псевдонимы и при импорте. Это может быть актуально, если имя импортируемого компонента довольно велико, и мы хотим установить 
+                    для него более краткий псевдоним. Вторая причина: в модуле уже есть компоненты с таким именем, и чтобы избежать двойственности 
+                    для одноименных компонентов подключаемого модуля установливаются псевдонимы. Третья причина - мы хотим дать компонентам более описательные выразительные имена.
+                </p>
+                <p>Рассмотрим небольшой пример:</p>
+
+                <div class="code-block"><code>import {simpleMessage as messageText, printMessage as printHello, Messenger} from "./message.js";
+ 
+const printMessage = ()=>console.log("Hello from main module");
+ 
+printHello();
+printMessage();
+ 
+const telegram = new Messenger();
+telegram.send(messageText);</code></div>
+
+                <p>Здесь в модуле импортируемой константе <code>simpleMessage</code> назначается псевдним <code>messageText</code>: <code>simpleMessage as messageText</code></p>
+
+                <p>
+                    Кроме того, здесь определена функция <span class="b">printMessage()</span>. Однако из модуля также импортируется компонент с таким же именем. И чтобы избежать двойственности, 
+                    импортируемому компоненту назначается псевдним <code>printHello</code>: <code>printMessage as printHello</code>
+                </p>
+                <p>Далее для обращения к импортированным компонентам с псевднимами используются их псевдонимы.</p>
+
+                <h2 id="ch22-dynamic">📜 Динамический импорт (Dynamic Import)</h2>
 
                 <p>Импорт модулей в любом месте кода с помощью <code>import()</code> как функции:</p>
 
                 <h3>Базовое использование</h3>
-                <div class="code-block"><code>// Динамическая загрузка модуля
+                <div class="code-block"><code><code class="comment">// Динамическая загрузка модуля</code>
 import('./message.js')
     .then(module => {
         module.sayHello();
