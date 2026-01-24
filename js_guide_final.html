@@ -789,6 +789,8 @@
                                 <li class="nav-subitem" data-target="ch22-aliases">📜 Использование псевдонимов</li>
                                 <li class="nav-subitem" data-target="ch22-dynamic">📜 Динамический импорт</li>
                                 <li class="nav-subitem" data-target="ch22-examples">📜 Практические примеры</li>
+                                <li class="nav-subitem" data-target="ch22-modules-scripts">📜 Практические примеры</li>
+                                <li class="nav-subitem" data-target="ch22-best-practiсes">📜 Лучшие практики</li>
                                 <li class="nav-subitem" data-target="ch22-conclusion">📜 Заключение</li>
                             </ul>
                         </li>
@@ -22442,6 +22444,81 @@ telegram.send(messageText);</code></div>
 
                 <h2 id="ch22-dynamic">📜 Динамический импорт (Dynamic Import)</h2>
 
+                <p>
+                    Модули можно загружать динамически в любом месте другого модуля. В этом случае надо помнить, что модуль загружается асинхронно, а результат функции 
+                    <span class="b">import</span> будет представлять объект Promise, результатом которого собственно и будет загружаемый модуль.
+                </p>
+                <div class="code-block"><code>import("путь_к_модулю").then((module) =&ggt; {
+    <code class="comment">// действия с модулем</code>
+  });</code></div>
+
+                <p>Также можно использовать оператор <span class="b">await</span> для получения объекта модуля:</p>
+
+                <div class="code-block"><code>let module = await import("путь_к_модулю");</code></div>
+
+                <p>Например, пусть у нас определен следующий модуль <span class="b">message.js</span>:</p>
+                <div class="code-block"><code>export const hello = "Hello Work!";
+ 
+export default function sayHello() {
+  console.log("Hello METANIT.COM");
+}</code></div>
+
+                <p>Здесь экспортируются константа <code>hello</code> и функция <code>sayHello()</code>, причем функция экспортируется по умолчанию.</p>
+                <p>Динамически подключим этот модуль в другой модуль <span class="b">main.js</span>:</p>
+
+                <div class="code-block"><code>console.log("Main module starts");
+ 
+import("./message.js").then((module) => {
+     
+    module.default();
+    console.log(module.hello);
+});
+ 
+console.log("Main module ends");</code></div>
+
+                <p>Здесь функция в методе <code>then()</code> в качестве параметра получает загруженный модуль. Далее мы можем обращаться к компонентам модуля по имени. Например, обращение к константе <code>hello</code></p>
+                <div class="code-block"><code>module.hello</code></div>
+
+                <p>
+                    Однако если какой-то компонент экспортируется по умолчанию, то для обращения к нему применяется ключевое слово <span class="b">default</span>. Так, поскольку 
+                    функция <code>sayHello()</code> экспортируется по умолчанию, то выражение:
+                </p>
+                <div class="code-block"><code>module.default();</code></div>
+
+                <p>фактически будет представлять вызов данной функции.</p>
+
+                <p>Консольный вывод программы:</p>
+                <pre class="browser">Main module starts
+Main module ends
+Hello METANIT.COM
+Hello Work!</pre>
+
+                <p>Также в данном случае можно было бы применить оператор <span class="b">await</span> для получения загруженного модуля:</p>
+
+                <div class="code-block"><code>console.log("Main module starts");
+ 
+const module = await import("./message.js");
+ 
+module.default();
+console.log(module.hello);
+ 
+console.log("Main module ends");</code></div>
+
+                <p>
+                    Динамческая загрузка модулей открывает нам возможность загружать модули в различных ситуациях, в том числе и в функциях, циклических и условных конструкциях и в других 
+                    частях пограммы. Например, мы могли бы загружать модуль в зависимости от условия:
+                </p>
+                <div class="code-block"><code>const hour = new Date().getHours();
+if(hour < 17){
+    const module = await import("./message.js");
+    console.log(module.hello);
+}
+else{
+    console.log("Go home");
+}</code></div>
+
+                <p>В данном случае получаем текущий час. И если он меньше 17, то загружаем модуль и выводим значение константы hello из загруженного модуля. Иначе выводим некоторую строку.</p>
+
                 <p>Импорт модулей в любом месте кода с помощью <code>import()</code> как функции:</p>
 
                 <h3>Базовое использование</h3>
@@ -22472,18 +22549,18 @@ loadModule();</code></div>
                 <div class="code-block"><code>const userAge = 16;
 
 if (userAge &lt; 18) {
-    // Загружаем модуль только для несовершеннолетних
+    <code class="comment">// Загружаем модуль только для несовершеннолетних</code>
     const module = await import('./teen.js');
     console.log(module.hello);
 } else {
-    // Загружаем модуль для взрослых
+    <code class="comment">// Загружаем модуль для взрослых</code>
     const module = await import('./adult.js');
     console.log(module.hello);
 }</code></div>
 
                 <h3>Загрузка по клику</h3>
                 <div class="code-block"><code>button.addEventListener('click', async () => {
-    // Загружаем модуль только когда нужно
+    <code class="comment">// Загружаем модуль только когда нужно</code>
     const module = await import('./heavy-feature.js');
     module.initialize();
 });</code></div>
@@ -22498,7 +22575,7 @@ if (userAge &lt; 18) {
                     </ul>
                 </div>
 
-                <h2>Практические примеры</h2>
+                <h2 id="ch22-examples">📜 Практические примеры</h2>
 
                 <h3>Пример 1: Структура проекта с модулями</h3>
                 <div class="code-block"><code>project/
@@ -22514,7 +22591,7 @@ if (userAge &lt; 18) {
 │   └── api/
 │       └── client.js
 
-// utils/math.js
+<code class="comment">// utils/math.js</code>
 export function sum(a, b) {
     return a + b;
 }
@@ -22523,12 +22600,12 @@ export function multiply(a, b) {
     return a * b;
 }
 
-// utils/string.js
+<code class="comment">// utils/string.js</code>
 export function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-// components/Button.js
+<code class="comment">// components/Button.js</code>
 export default class Button {
     constructor(text) {
         this.text = text;
@@ -22541,19 +22618,19 @@ export default class Button {
     }
 }
 
-// main.js
+<code class="comment">// main.js</code>
 import { sum, multiply } from './utils/math.js';
 import { capitalize } from './utils/string.js';
 import Button from './components/Button.js';
 
-console.log(sum(5, 3));           // 8
-console.log(capitalize('hello')); // "Hello"
+console.log(sum(5, 3));           <code class="comment">// 8</code>
+console.log(capitalize('hello')); <code class="comment">// "Hello"</code>
 
 const btn = new Button('Click me');
 document.body.appendChild(btn.render());</code></div>
 
                 <h3>Пример 2: API клиент</h3>
-                <div class="code-block"><code>// api/client.js
+                <div class="code-block"><code><code class="comment">// api/client.js</code>
 
 const API_URL = 'https://api.example.com';
 
@@ -22576,15 +22653,15 @@ export async function createUser(userData) {
     return await response.json();
 }
 
-// main.js
+<code class="comment">// main.js</code>
 
 import { getUsers, createUser } from './api/client.js';
 
-// Получаем пользователей
+<code class="comment">// Получаем пользователей</code>
 const users = await getUsers();
 console.log(users);
 
-// Создаём пользователя
+<code class="comment">// Создаём пользователя</code>
 const newUser = await createUser({
     name: 'Tom',
     age: 37
@@ -22592,21 +22669,21 @@ const newUser = await createUser({
 console.log(newUser);</code></div>
 
                 <h3>Пример 3: Конфигурация приложения</h3>
-                <div class="code-block"><code>// config/development.js
+                <div class="code-block"><code><code class="comment">// config/development.js</code>
 export default {
     apiUrl: 'http://localhost:3000',
     debug: true,
     logLevel: 'verbose'
 };
 
-// config/production.js
+<code class="comment">// config/production.js</code>
 export default {
     apiUrl: 'https://api.production.com',
     debug: false,
     logLevel: 'error'
 };
 
-// config/index.js
+<code class="comment">// config/index.js</code>
 const env = process.env.NODE_ENV || 'development';
 
 let config;
@@ -22618,13 +22695,13 @@ if (env === 'production') {
 
 export default config.default;
 
-// main.js
+<code class="comment">// main.js</code>
 import config from './config/index.js';
 
 console.log('API URL:', config.apiUrl);
 console.log('Debug:', config.debug);</code></div>
 
-                <h2>Модули vs Скрипты</h2>
+                <h2 id="ch22-modules-scripts">📜 Модули vs Скрипты</h2>
 
                 <table>
                     <thead>
@@ -22673,7 +22750,7 @@ console.log('Debug:', config.debug);</code></div>
                     </tbody>
                 </table>
 
-                <h2>Лучшие практики</h2>
+                <h2 id="ch22-best-practiсes">📜 Лучшие практики</h2>
 
                 <div class="info-box success">
                     <div class="info-box-title">✅ Рекомендации</div>
@@ -22689,31 +22766,31 @@ console.log('Debug:', config.debug);</code></div>
                 </div>
 
                 <h3>Структура модуля</h3>
-                <div class="code-block"><code>// ✅ ХОРОШО: четкая структура
+                <div class="code-block"><code><code class="comment">//</code> ✅ ХОРОШО: четкая структура
 
-// 1. Импорты
+<code class="comment">// 1. Импорты</code>
 import { helper } from './utils.js';
 import config from './config.js';
 
-// 2. Константы
+<code class="comment">// 2. Константы</code>
 const API_URL = 'https://api.example.com';
 
-// 3. Приватные функции (не экспортируются)
+<code class="comment">// 3. Приватные функции (не экспортируются)</code>
 function privateHelper() {
-    // ...
+    <code class="comment">// ...</code>
 }
 
-// 4. Публичные функции (экспортируются)
+<code class="comment">// 4. Публичные функции (экспортируются)</code>
 export function publicFunction() {
-    // ...
+    <code class="comment">// ...</code>
 }
 
-// 5. Экспорт по умолчанию (если есть)
+<code class="comment">// 5. Экспорт по умолчанию (если есть)</code>
 export default class MainClass {
-    // ...
+    <code class="comment">// ...</code>
 }</code></div>
 
-                <h2>Заключение</h2>
+                <h2 id="ch22-conclusion">📜 Заключение</h2>
 
                 <div class="info-box note">
                     <div class="info-box-title">📚 Основные выводы</div>
