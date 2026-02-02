@@ -812,14 +812,29 @@
                                 <li class="nav-subitem" data-target="ch23-transform">📜 Трансформации</li>
                                 <li class="nav-subitem" data-target="ch23-shadows">📜 Добавление теней</li>
                                 <li class="nav-subitem" data-target="ch23-pixels-edit">📜 Редактирование пикселей</li>
+                                <li class="nav-subitem" data-target="ch23-mouse-drawing">📜 Рисование мышью</li>
+                                <li class="nav-subitem" data-target="ch23-state-store">📜 Сохранение и восстановление состояния canvas</li>
                                 <li class="nav-subitem" data-target="ch23-simple-animation">📜 Простая анимация</li>
-                                
-                                <li class="nav-subitem" data-target="ch22-examples">📜 Практические примеры</li>
-                                <li class="nav-subitem" data-target="ch22-best-practiсes">📜 Лучшие практики</li>
-                                <li class="nav-subitem" data-target="ch22-conclusion">📜 Заключение</li>
+                                <li class="nav-subitem" data-target="ch23-example">📜 Практические пример: простая игра</li>
+                                <li class="nav-subitem" data-target="ch23-conclusion">📜 Заключение</li>
                             </ul>
                         </li>
-                        <li class="nav-item" data-target="ch24">Глава 24. IndexedDB</li>
+                        <li class="nav-item has-subitems" data-target="ch24"><span class="ch-emoj"></span> Глава 24. IndexedDB
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch24-intro">📜 Введение в IndexedDB</li>
+                                <li class="nav-subitem" data-target="ch24-open-create">📜 Создание и открытие базы данных</li>
+                                <li class="nav-subitem" data-target="ch24-db-managing">📜 Управление базой данных в IndexedDB</li>
+                                <li class="nav-subitem" data-target="ch24-db-request">📜 Выполнение запросов к базе данных</li>
+                                <li class="nav-subitem" data-target="ch24-add-data">📜 Добавление данных</li>
+                                <li class="nav-subitem" data-target="ch24-get-data">📜 Получение данных</li>
+                                <li class="nav-subitem" data-target="ch24-update-data">📜 Обновление данных</li>
+                                <li class="nav-subitem" data-target="ch24-delete-data">📜 Удаление данных</li>
+                                <li class="nav-subitem" data-target="ch24-task-manager">📜 Полный пример: Менеджер задач</li>
+
+                                <li class="nav-subitem" data-target="ch23-example">📜 Практические пример: простая игра</li>
+                                <li class="nav-subitem" data-target="ch23-conclusion">📜 Заключение</li>
+                            </ul>
+                        </li>
                         <li class="nav-item" data-target="ch25">Глава 25. Drag & Drop</li>
                         <li class="nav-item" data-target="ch26">Глава 26. File API</li>
                         <li class="nav-item" data-target="ch27">Глава 27. Web Workers</li>
@@ -24491,19 +24506,19 @@ img.onload = function() {
                  
     context.drawImage(img, 0, 0);
     const imageData = context.getImageData(0,0, 100, 100);
-    const red = imageData.data[0];      // компонента красного цвета
-    const green = imageData.data[1];    // компонента зеленого цвета
-    const blue = imageData.data[2];     // компонента синего цвета
-    const alpha = imageData.data[3];    // компонента прозрачности
+    const red = imageData.data[0];      <code class="comment">// компонента красного цвета</code>
+    const green = imageData.data[1];    <code class="comment">// компонента зеленого цвета</code>
+    const blue = imageData.data[2];     <code class="comment">// компонента синего цвета</code>
+    const alpha = imageData.data[3];    <code class="comment">// компонента прозрачности</code>
 };</code></div>
 
                 <p>В данном случае мы получаем информацию о самом первом пикселе, который находится в самом верхнем левом углу, то есть имеет координаты <code>x = 0</code> и <code>y = 0</code>.</p>
                 <p>Чтобы получить информацию о втором пикселе, который имеет координаты <code>x = 1</code> и <code>y = 0</code>, нам надо получить следующие четыре значения из массива <code>data</code>:</p>
 
-                <div class="code-block"><code>imageData.data[4];  // компонента красного цвета
-imageData.data[5];  // компонента зеленого цвета
-imageData.data[6];  // компонента синего цвета
-imageData.data[7];  // компонента прозрачности</code></div>
+                <div class="code-block"><code>imageData.data[4];  <code class="comment">// компонента красного цвета</code>
+imageData.data[5];  <code class="comment">// компонента зеленого цвета</code>
+imageData.data[6];  <code class="comment">// компонента синего цвета</code>
+imageData.data[7];  <code class="comment">// компонента прозрачности</code></code></div>
 
                 <p>И так далее мы можем получить информацию обо всех пикселях.</p>
 
@@ -24544,11 +24559,11 @@ putImageData(imageData, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight)</code><
         let red, green, blue, grayscale;
                     
         for (let i = 0; i &lt; imageData.data.length; i += 4) {
-            red = imageData.data[i];        // получаем компоненту красного цвета
-            green = imageData.data[i + 1];  // получаем компоненту зеленого цвета
-            blue = imageData.data[i + 2];   // получаем компоненту синего цвета
-            grayscale = red * 0.3 + green * 0.59 + blue * 0.11; // получаем серый фон
-            imageData.data[i] = grayscale;  // установка серого цвета
+            red = imageData.data[i];        <code class="comment">// получаем компоненту красного цвета</code>
+            green = imageData.data[i + 1];  <code class="comment">// получаем компоненту зеленого цвета</code>
+            blue = imageData.data[i + 2];   <code class="comment">// получаем компоненту синего цвета</code>
+            grayscale = red * 0.3 + green * 0.59 + blue * 0.11; <code class="comment">// получаем серый фон</code>
+            imageData.data[i] = grayscale;  <code class="comment">// установка серого цвета</code>
             imageData.data[i + 1] = grayscale;
             imageData.data[i + 2] = grayscale;
         }   
@@ -24562,11 +24577,11 @@ putImageData(imageData, dx, dy, dirtyX, dirtyY, dirtyWidth, dirtyHeight)</code><
                 <div class="code-block"><code>let red, green, blue, grayscale;
                   
 for (let i = 0; i &lt; imageData.data.length; i += 4) {
-    red = imageData.data[i];            // получаем компоненту красного цвета
-    green = imageData.data[i + 1];      // получаем компоненту зеленого цвета
-    blue = imageData.data[i + 2];       // получаем компоненту синего цвета
-    grayscale = red * 0.3 + green * 0.59 + blue * 0.11; // получаем серый фон
-    imageData.data[i] = grayscale;      // установка серого цвета
+    red = imageData.data[i];            <code class="comment">// получаем компоненту красного цвета</code>
+    green = imageData.data[i + 1];      <code class="comment">// получаем компоненту зеленого цвета</code>
+    blue = imageData.data[i + 2];       <code class="comment">// получаем компоненту синего цвета</code>
+    grayscale = red * 0.3 + green * 0.59 + blue * 0.11; <code class="comment">// получаем серый фон</code>
+    imageData.data[i] = grayscale;      <code class="comment">// установка серого цвета</code>
     imageData.data[i + 1] = grayscale;
     imageData.data[i + 2] = grayscale;
 }  </code></div>
@@ -24617,7 +24632,7 @@ img.onload = function() {
     for (let i = 0; i < newImageData.data.length; i++) {
                  
         newImageData.data[i] = imageData.data[i];
-        // если это альфа-компонента
+        <code class="comment">// если это альфа-компонента</code>
         if( (i+1)%4===0){
                          
             newImageData.data[i] = 120;
@@ -24632,29 +24647,251 @@ img.onload = function() {
                     полупрозрачным.
                 </p>
 
-                <h2 id="ch23-simple-animation">📜 Простая анимация</h2>
+                <h2 id="ch23-mouse-drawing">📜 Рисование мышью</h2>
+
+                <p>Ранее мы рассматривали в основном статическую графику на <code>canvas</code>. Но мы также можем создавать фигуры динамически, просто рисуя указателем мыши.</p>
+                <p>Для этого определим следующую страницу:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+&lt;canvas id="canvas" width="400" height="250"
+    style="background-color:#eee; border: 1px solid #ccc; margin:10px;">&lt;/canvas>
+&lt;script>
+    const canvas = document.getElementById("canvas");
+    const context = canvas.getContext("2d");
+    
+    const w = canvas.width;
+    const h=canvas.height;
+    
+    const mouse = { x:0, y:0};    <code class="comment">// координаты мыши</code>
+    let draw = false;
+                
+    <code class="comment">// нажатие мыши</code>
+    canvas.addEventListener("mousedown", function(e){
+        
+        mouse.x = e.pageX - this.offsetLeft;
+        mouse.y = e.pageY - this.offsetTop;
+        draw = true;
+        context.beginPath();
+        context.moveTo(mouse.x, mouse.y);
+    });
+    <code class="comment">// перемещение мыши</code>
+    canvas.addEventListener("mousemove", function(e){
+        
+        if(draw==true){
+        
+            mouse.x = e.pageX - this.offsetLeft;
+            mouse.y = e.pageY - this.offsetTop;
+            context.lineTo(mouse.x, mouse.y);
+            context.stroke();
+        }
+    });
+    
+    <code class="comment">// отпускаем мышь</code>
+    canvas.addEventListener("mouseup", function(e){
+        
+        mouse.x = e.pageX - this.offsetLeft;
+        mouse.y = e.pageY - this.offsetTop;
+        context.lineTo(mouse.x, mouse.y);
+        context.stroke();
+        context.closePath();
+        draw = false;
+    });
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>
+                    Для обработки движения мыши для элемента canvas определены три обработчика - нажатия мыши, перемещения и отпускания мыши. При нажатии мыши мы устанавливаем 
+                    переменную <code>draw</code> равным <code>true</code>. То есть идет рисование. Также при нажатии мы фиксируем точку, с которой будет идти рисование.
+                </p>
+
+                <p>
+                    При перемещении мыши получаем точку, на которую переместился указатель, и рисуем линию. При отпускании указателя закрываем графический путь методом 
+                    <code>context.closePath()</code> и сбрасываем переменную <code>draw</code> в <code>false</code>.
+                </p>
+
+                <h2 id="ch23-state-store">📜 Сохранение и восстановление состояния canvas</h2>
+
+                <p>
+                    Когда применяются такие методы, как <span class="b">fillRect()</span> или <span class="b">fillText()</span>, может потребоваться заранее настроить цвет заливки, 
+                    шрифт и ряд других свойств глобально для всего объекта. Чтобы сохранить эти настройки, объект контекста предоставляет метод <span class="b">save()</span>. 
+                    Каждый раз, когда вызывается этот метод, текущие настройки canvas помещаются в стек и сохраняются. Чтобы в последующем обратно получить сохраненные настройки, применяется метод <span class="b">restore()</span>. 
+                    Подобное сохранение-восстановление настроек может быть полезно, когда нам необходимо применять к части фигур глобальные общие настройки, а к другой части фигур - локальные.
+                </p>
+                <p>Например, определим следующую страницу:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+&lt;canvas id="canvas" width="400" height="250">&lt;/canvas>
+&lt;script>
+const canvas = document.getElementById("canvas");
+const context = canvas.getContext("2d");
+ 
+<code class="comment">// Рисуем прямоугольник с настройками по умолчанию  </code>
+<code class="comment">// Цвет заливки по умолчанию - черный</code>
+context.fillRect(0, 0, 150, 150); 
+<code class="comment">// Сохраняем текущее состояние (назовем его состояние 1)</code>
+context.save();                      
+ 
+<code class="comment">// Изменяем настройки - устанавливаем в качестве цвета заливки - зеленый</code>
+context.fillStyle = "#7ed6df";        
+context.fillRect(15, 15, 120, 120); <code class="comment">// рисуем прямоугольник с новыми настройками</code>
+<code class="comment">// Сохраняем текущее состояние (назовем его состояние 2)</code>
+context.save();
+ 
+<code class="comment">// Изменяем настройки - устанавливаем в качестве цвета заливки - красный</code>
+context.fillStyle = "#ff7979";
+context.fillRect(30, 30, 90, 90);   <code class="comment">// Рисуем прямоугольник с новыми настройками</code>
+ 
+context.restore();      <code class="comment">// Загружаем предыдущее состояние (состояние 2) </code>
+context.fillRect(45, 45, 60, 60);   <code class="comment">// Рисуем прямоугольник с предыдущими настройками (зеленый цвет)</code>
+ 
+context.restore();      <code class="comment">// Загружаем предыдущее состояние (состояние 1)</code>
+context.fillRect(60, 60, 30, 30);   <code class="comment">// Рисуем прямоугольник с предыдущими настройками (черный цвет)</code>
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="250" height="251" xml:space="preserve" version="1.1" viewBox="0 0 250 251">
+                    <image width="250" height="251" xlink:href="data:image/png;base64,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"/>
+                </svg>
+
+                <p>
+                    Здесь сначала создается квадрат высотой 150 пикселей и шириной 150 пикселей с использованием настроек по умолчанию (цвет заливки по умолчанию черный). 
+                    Вызвав <code>save()</code>, мы сохранием эти значения по умолчанию в стек. Затем цвет заливки устанавливается на значение <code>"#7ed6df"</code> (оттенок зеленого цвета), и 
+                    создается квадрат немного меньшего размера (смещением по горизонтали и вертикали). Повторный вызов <code>save()</code> также сохранит эти настройки в стек. 
+                    Далее цвет фона устанавливается в <code>"#ff7979"</code> (разновидность красного), и снова рисуется квадрат меньшего размера.
+                </p>
+                <p>
+                    Затем вызов <code>restore()</code> загружает настройки, которые были последними сохранены в стеке, то есть те, в которых цвет заливки был установлен на 
+                    зеленый (поэтому созданный впоследствии квадрат имеет этот цвет). Таким же образом второй вызов функции <code>restore()</code> затем загрузит начальные настройки, где применяется черный цвет.
+                </p>
+
+
+                <h2 id="ch23-simple-animation">📜 Простая анимация на canvas</h2>
+
+                <p>Сочетание отрисовки различных фигур на <code>canvas</code> с приминением функции <span class="b">requestAnimationFrame()</span> позволяет создать анимацию содержимого элемента canvas.</p>
+                <p>Анимация сама по себе предполагает последовательную смену кадров, причем каждый анимации кадр нужно нарисовать самостоятельно. В общем случае чтобы создать анимацию, следует выполнить следующие шаги:</p>
+
+                <ol>
+                    <li>Очистка области рисования</li>
+                    <li>Опциональное сохранение состояния</li>
+                    <li>Рисование отдельного кадра</li>
+                    <li>Опциональная загрузка состояния</li>
+                </ol>
+
+                <p>
+                    Эти шаги обычно инкапсулируются в функцию, которая затем вызывается через равные промежутки времени (для каждого кадра анимации). Для выполнения функции 
+                    применяется метод <span class="b">requestAnimationFrame()</span>, который специально предназначен для работы с анимацией внутри веб-страницы.
+                </p>
+
+                <p>Например, определим следующую страницу:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+&lt;canvas id="canvas" width="400" height="250" 
+           style="background-color: #eee; border-color: #ccc;">&lt;/canvas>
+&lt;script>
+    const canvas = document.getElementById("canvas");
+    const context = canvas.getContext("2d");
+    let x = 0;
+    let step = 1;
+    function draw() {
+        context.clearRect(0,0,400,250);   <code class="comment">// очистка области рисования </code> 
+        console.log(x);
+        context.fillStyle = "red";  
+        context.fillRect(x,10,40,40);      <code class="comment">// отрисовка прямоугольника</code> 
+        if(x >= 360) step = -1;
+        if(x &lt;= 0) step = 1;
+        x += step;
+        window.requestAnimationFrame(draw);
+    }
+    draw();
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>
+                    Здесь функция <span class="b">draw()</span> содержит код, который отрисовывает прямоугольник. Первый вызов функции вызывает отрисовку первого кадра анимации. 
+                    В конце вызова функции вызывается метод <span class="b">requestAnimationFrame</span>, которому передается эта же функциия draw, что фактически запускает анимацию. 
+                    Таким образом, функция <span class="b">draw()</span> фактически постоянно вызывает саму себя для рисования нового кадра анимации. Суть же анимации заключается в том, что меняем х-координату прямоугольника. 
+                    При каждой отрисовке прямоугольник отображается на новой позиции, за счет чего возникает иллюзия его движения.
+                </p>
+                <p>Аналогичным образом можно анимировать целые композиции фигур:</p>
+
+                <div class="code-block"><code>const canvas = document.getElementById("canvas");
+const context = canvas.getContext("2d");
+function draw() {
+    context.clearRect(0,0,500,300);   <code class="comment">// очистка области рисования </code> 
+    const time = new Date();  
+    <code class="comment">//</code> угол для вращения прямоугольников 
+    const angle = ((2*Math.PI)/6)*time.getSeconds() + ((2*Math.PI)/6000)*time.getMilliseconds(); 
+    context.fillStyle = "red";   
+    context.save();                   
+    context.translate(150,150);       
+    context.rotate(angle);           
+    context.translate(0,25);         
+    context.fillRect(5,5,20,20);      <code class="comment">// красный прямоугольник</code> 
+    context.restore();       
+ 
+    context.fillStyle = "yellow";   
+    context.save();                   
+    context.translate(150,150);       
+    context.rotate(angle);           
+    context.translate(0,50);         
+    context.fillRect(5,5,20,20);      <code class="comment">// желтый прямоугольник</code>
+    context.restore();              
+ 
+    context.fillStyle = "green";  
+    context.save();                  
+    context.translate(150,150);       
+    context.rotate(angle);           
+    context.translate(0,75);         
+    context.fillRect(5,5,20,20);      <code class="comment">// зеленый прямоугольник</code>
+    context.restore();                 
+    window.requestAnimationFrame(draw);
+}
+draw();</code></div>
+
+                <h4>Простой пример:</h4>
 
                 <div class="code-block"><code>let x = 0;
 
 function animate() {
-    // Очистка canvas
+    <code class="comment">// Очистка canvas</code>
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Рисуем объект
+    <code class="comment">// Рисуем объект</code>
     ctx.fillStyle = 'red';
     ctx.fillRect(x, 100, 50, 50);
     
-    // Изменяем позицию
+    <code class="comment">// Изменяем позицию</code>
     x += 2;
     if (x &gt; canvas.width) x = -50;
     
-    // Следующий кадр
+    <code class="comment">// Следующий кадр</code>
     requestAnimationFrame(animate);
 }
 
-animate(); // Запуск анимации</code></div>
+animate(); <code class="comment">// Запуск анимации</code></code></div>
 
-                <h2>Практический пример: Простая игра</h2>
+                <h2 id="ch23-example">📜 Практический пример: Простая игра</h2>
 
                 <div class="code-block"><code>&lt;canvas id="game" width="400" height="400"&gt;&lt;/canvas&gt;
 
@@ -24662,23 +24899,23 @@ animate(); // Запуск анимации</code></div>
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 
-// Игрок
+<code class="comment">// Игрок</code>
 let player = { x: 175, y: 350, width: 50, height: 50, speed: 5 };
 
-// Враг
+<code class="comment">// Враг</code>
 let enemy = { x: 175, y: 0, width: 50, height: 50, speed: 2 };
 
-// Управление
+<code class="comment">// Управление</code>
 let keys = {};
 window.addEventListener('keydown', (e) => keys[e.key] = true);
 window.addEventListener('keyup', (e) => keys[e.key] = false);
 
 function update() {
-    // Движение игрока
+    <code class="comment">// Движение игрока</code>
     if (keys['ArrowLeft'] && player.x &gt; 0) player.x -= player.speed;
     if (keys['ArrowRight'] && player.x &lt; 350) player.x += player.speed;
     
-    // Движение врага
+    <code class="comment">// Движение врага</code>
     enemy.y += enemy.speed;
     if (enemy.y &gt; 400) {
         enemy.y = -50;
@@ -24687,15 +24924,15 @@ function update() {
 }
 
 function draw() {
-    // Очистка
+    <code class="comment">// Очистка</code>
     ctx.fillStyle = '#EEE';
     ctx.fillRect(0, 0, 400, 400);
     
-    // Игрок (синий)
+    <code class="comment">// Игрок (синий)</code>
     ctx.fillStyle = 'blue';
     ctx.fillRect(player.x, player.y, player.width, player.height);
     
-    // Враг (красный)
+    <code class="comment">// Враг (красный)</code>
     ctx.fillStyle = 'red';
     ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
 }
@@ -24709,7 +24946,7 @@ function gameLoop() {
 gameLoop();
 &lt;/script&gt;</code></div>
 
-                <h2>Заключение</h2>
+                <h2 id="ch23-conclusion">📜 Заключение</h2>
 
                 <div class="info-box note">
                     <div class="info-box-title">📚 Основные выводы</div>
@@ -24730,8 +24967,11 @@ gameLoop();
             <section class="chapter" id="ch24">
                 <h1>Глава 24. IndexedDB API</h1>
                 
-                <h2>Введение в IndexedDB</h2>
-                <p><strong>IndexedDB</strong> — это встроенная в браузер NoSQL база данных для хранения больших объёмов структурированных данных. В отличие от localStorage, IndexedDB позволяет хранить сложные объекты, индексировать данные и выполнять транзакционные операции.</p>
+                <h2 id="ch24-intro">📜 Введение в IndexedDB</h2>
+                <p><strong>IndexedDB</strong> — это встроенная в браузер <code>NoSQL база данных</code> для хранения больших объёмов структурированных данных. В отличие от <code>localStorage</code>, <code>IndexedDB</code> 
+                    позволяет хранить сложные объекты, индексировать данные и выполнять транзакционные операции.
+                    Основная идея <code>IndexedDB</code> заключается в хранении объектов под определенными ключами.
+                </p>
 
                 <div class="info-box note">
                     <div class="info-box-title">💡 Преимущества IndexedDB</div>
@@ -24745,7 +24985,7 @@ gameLoop();
                     </ul>
                 </div>
 
-                <h2>Основные концепции</h2>
+                <h3>Основные концепции</h3>
 
                 <table>
                     <thead>
@@ -24782,52 +25022,543 @@ gameLoop();
                     </tbody>
                 </table>
 
-                <h2>Создание и открытие базы данных</h2>
+                <h2 id="ch24-open-create">📜 Создание и открытие базы данных  IndexDB</h2>
 
-                <div class="code-block"><code>// Открываем или создаём БД
+                <p>Для обращения к функциональности IndexedDB применяется свойство <span class="b">indexedDB</span> объекта <span class="b">window</span>:</p>
+                <div class="code-block"><code>const dbFactory = window.indexedDB;
+console.log(dbFactory);    <code class="comment">// IDBFactory{}</code></code></div>
+
+                <p>
+                    Это свойство представляет объект типа <span class="b">IDBFactory</span>, который предоставляет функционал для работы с базой данных. 
+                    В частности, с помощью его метода <span class="b">open()</span> можно открыть базу данных.
+                </p>
+
+                <div class="code-block"><code>open(name)
+ open(name, version)</code></div>
+
+                <p>
+                    В качестве параметра в метод <span class="b">open()</span> передается имя базы данных. В качестве второго необязательного параметра можно передать 
+                    номер версии базы данных, который по сути определяет схему базы данных, используемую для хранения объектов.
+                </p>
+
+                <div class="code-block"><code>const request = indexedDB.open("test"); <code class="comment">// подключаемся к бд test</code></code></div>
+
+                <p>В этом коде мы пытаемся подключить к базе данных <code>"test"</code>. Причем не важно, что изначально такой базы данных нет - если она отсутствует, она автоматически создается.</p>
+                <p>
+                    Возвращаемое значение метода <code>open()</code> — это объект типа <span class="b">IDBOpenDBRequest</span>. Можно сказать, что это объект запроса 
+                    на открытие соответствующей базы данных.
+                </p>
+                <p>
+                    Для обращения к самой базе данных у объекта <code>IDBOpenDBRequest</code> можно обработать событие <span class="b">success</span>. Оно возникает при успешном 
+                    открытии базы данных. Для установки обработчика этого события можно использовать свойство <span class="b">onsuccess</span>:
+                </p>
+
+                <div class="code-block"><code>const request = indexedDB.open("test"); <code class="comment">// подключаемся к бд test</code>
+<code class="comment">// при удачном открытии срабатывает событие success</code>
+<code class="comment">// обрабатываем это событие</code>
+request.onsuccess = (event) => {  
+    const database = event.target.result;  <code class="comment">// обращаемся к базе данных  </code>
+    console.log(database.name);            <code class="comment">// "Test"  </code>
+};</code></div>
+
+                <p>Внутри обработчика события через свойство <code>event.target.result</code> мы можем получить базу данных, которая представляет объект <span class="b">IDBDatabase</span></p>
+
+
+                <div class="code-block"><code><code class="comment">// Открываем или создаём БД</code>
 const request = indexedDB.open('myDatabase', 1);
 
-// При создании/обновлении версии
+<code class="comment">// При создании/обновлении версии</code>
 request.onupgradeneeded = (event) => {
     const db = event.target.result;
     console.log('База данных создана/обновлена');
     
-    // Создаём хранилище (если не существует)
+    <code class="comment">// Создаём хранилище (если не существует)</code>
     if (!db.objectStoreNames.contains('users')) {
         const store = db.createObjectStore('users', { 
-            keyPath: 'id',      // Ключ
-            autoIncrement: true // Автоинкремент
+            keyPath: 'id',      <code class="comment">// Ключ</code>
+            autoIncrement: true <code class="comment">// Автоинкремент</code>
         });
         console.log('Хранилище "users" создано');
     }
 };
 
-// При успешном открытии
+<code class="comment">// При успешном открытии</code>
 request.onsuccess = (event) => {
     const db = event.target.result;
     console.log('База данных открыта');
     console.log('Версия:', db.version);
 };
 
-// При ошибке
+<code class="comment">// При ошибке</code>
 request.onerror = (event) => {
     console.error('Ошибка:', event.target.error);
 };</code></div>
 
-                <h2>Добавление данных</h2>
+                <h3>Обработка ошибок при открыти базы данных</h3>
+
+                <p>
+                    Однако при попытке отрыть базу данных также может возникнуть ошибка - событие <span class="b">error</span>, например, когда у пользователя нет разрешений в браузере для доступа к базе данных. В этом 
+                    случае мы можем определеть обработчик события error через свойство <span class="b">onerror</span>:
+                </p>
+
+                <div class="code-block"><code>const request = indexedDB.open("test");  <code class="comment">// подключаемся к бд test</code>
+<code class="comment">// обрабатываем ошибку</code>
+request.onerror = (event) => {
+    const error = event.target.error;     <code class="comment">// Получаем информацию об ошибке  </code>
+    console.error(error.message);
+};</code></div>
+
+                <h3>Отслеживание создания базы данных</h3>
+
+                <p>
+                    При открытии базы данных, если она отсутствует, то она автоматически создается. Поэтому в этом плане неважно, есть у нас база данных или нет. Однако иногда бывает необходимо 
+                    отследить создание базы данных. В этом случае мы можем использовать событие <span class="b">upgradeneeded</span>, которое вызывается всякий раз, когда либо 
+                    запрошенная база данных еще не существует и поэтому создается, либо когда запрошенная база данных еще не существует в этой конкретной версии. 
+                    В обоих случаях вызываемый обработчик событий получает в качестве параметра объект типа <code>IDBVersionChangeEvent</code>. 
+                    Этот объект позволяет получить старую и новую версию бд. Для установки 
+                    обработчика события можно использовать свойство <code>onupgradeneeded</code>:
+                </p>
+
+                <div class="code-block"><code>request.onupgradeneeded = (event) => { 
+    console.log(event.oldVersion);         <code class="comment">// старая версия базы данных </code>
+    console.log(event.newVersion);         <code class="comment">// новая версия базы данных </code>
+    const database = event.target.result;  <code class="comment">// обращаемся к самой бд</code>
+};</code></div>
+
+                <p>Поскольку этот обработчик вызывается при создании базы данных, то он представляет удобное место для выполнения различной настройки и инициализации бд, в частности, для создания ее хранилищ.</p>
+
+                <h3>Получение баз данных</h3>
+
+                <p>
+                    Метод <span class="b">databases()</span> объекта <code>IDBFactory</code> позволяет получить список всех имеющихся баз данных. Этот метод возвращает promise, из 
+                    которого можно получить данные в виде массива, где каждый элемент представляет объект с двумя свойствами - <code>name</code> (имя базы данных) и 
+                    <code>version</code> (версия базы данных):
+                </p>
+
+                <div class="code-block"><code>const promise = indexedDB.databases();
+promise.then((databases) => console.log(databases));</code></div>
+
+                <p>Например, вывод в моем случае:</p>
+
+                <pre class="sh">(2) [{…}, {…}]
+0: {name: 'test', version: 1}
+1: {name: 'test2', version: 1}
+length: 2
+[[Prototype]]: Array(0)</pre>
+
+                <p>В данном случае видно, что у меня две базы данных - test и test2, у каждой из которых версия 1.</p>
+
+                <h3>Удаление базы данных</h3>
+
+                <p>Для удаления базы данных у объекта <code>IDBFactory</code> применяется метод <span class="b">deleteDatabase()</span>, в который передается имя удаляемой базы данных:</p>
+
+                <div class="code-block"><code>indexedDB.deleteDatabase("test2");</code></div>
+
+                <p>
+                    Стоит отметить, что этот метод в качестве результата возвращает объект <span class="b">IDBOpenDBRequest</span> (который упоминался выше). Соответственно мы можем обработать 
+                    события <code>success</code> и <code>error</code>, чтобы определить, успешно ли произошло удаление или произошла ошибка:
+                </p>
+
+                <div class="code-block"><code>const DBDeleteRequest = indexedDB.deleteDatabase("test2");
+ 
+DBDeleteRequest.onerror = (event) => {
+  console.error("Error deleting database.");
+};
+ 
+DBDeleteRequest.onsuccess = (event) => {
+  console.log("Database deleted successfully");
+ 
+  console.log(event.result); <code class="comment">// должно быть undefined</code>
+};</code></div>
+
+                <p>Если база данных была успешно удалена, то свойство <code>result</code> аргумента в обработчике события <code>success</code> будет не установлено.</p>
+
+                <h2 id="ch24-db-managing">📜 Управление базой данных в IndexedDB</h2>
+
+                <p>
+                    База данных в <span class="b">IndexedDB API</span> представлена интерфейсом <span class="b">IDBDatabase</span>, 
+                    который  обеспечивает соединение с базой данных, управление ее хранилищами и создание запросов к данным. Параметры базы данных можно получить с помощью следующих свойств IDBDatabase:
+                </p>
+
+                <ul>
+                    <li><span class="b">name</span>: возвращает имя подключенной базы данных</li>
+                    <li><span class="b">version</span>: возвращает номер версии базы данных. При создании базы данных этот атрибут представляет собой пустую строку.</li>
+                    <li><span class="b">objectStoreNames</span>: возвращает список имен хранилищ (объект DOMStringList), которые в данный момент имеются в подключенной базе данных</li>
+                </ul>
+
+                <p>Например, получим информацию о базе данных при подключении:</p>
+
+                <div class="code-block"><code>const request = indexedDB.open("test"); <code class="comment">//</code> подключаемся к бд test
+<code class="comment">// при удачном открытии срабатывает событие success</code>
+<code class="comment">// обрабатываем это событие</code>
+request.onsuccess = (event) => {  
+    const database = event.target.result;   <code class="comment">// обращаемся к базе данных </code> 
+    console.log(database.name);             <code class="comment">// имя базы данных - "Test"</code>  
+    console.log(database.version);          <code class="comment">// версия базы данных </code>
+    console.log(database.objectStoreNames); <code class="comment">// список хранилищ в базе данных</code>
+};</code></div>
+
+                <p>Кроме свойств объект <span class="b">IDBDatabase</span> предоставляет ряд методов для управления подключением и хранилищами:</p>
+
+                <ul>
+                    <li><span class="b">close()</span>: закрывает подключение к базе данных</li>
+                    <li><span class="b">createObjectStore()</span>: создает хранилище</li>
+                    <li><span class="b">deleteObjectStore()</span>: удаляет хранилище</li>
+                    <li><span class="b">transaction()</span>: возвращает объект транзакции - объект <span class="b">IDBTransaction</span>, который применяется для получения хранилища и последующего выполнения запроса к данным</li>
+                </ul>
+
+                <p>Стоит отметить, что создание хранилища возможно только при создании базы данных или при изменении ее версии. Удаление хранилища возможно только при изменении версии базы данных.</p>
+
+                <h3>Создание хранилища объектов</h3>
+
+                <p>Итак, для создания хранилища объектов применяется метод <span class="b">createObjectStore()</span>:</p>
+
+                <div class="code-block"><code>createObjectStore(name)
+ createObjectStore(name, options)</code></div>
+
+                <p>В этот метод передается имя хранилища. В качестве второго необязательного параметра также можно передать объект конфигурации хранилища. Этот объект может включать два свойства:</p>
+
+                <ul>
+                    <li><span class="b">keyPath</span>: задает название свойства-ключа объекта</li>
+                    <li><span class="b">autoIncrement</span>: при значении <code>true</code> значения ключей генерируются автоматически. По умолчанию значение <code>false</code> (ключи не генерируются)</li>
+                </ul>
+
+                <p>
+                    Комбинации этих параметров очень важны. В <span class="b">IndexedDB</span> каждый объект хранится под определенным ключом, который впоследствии можно использовать для доступа к объекту. 
+                    Что именно используется в качестве ключа, определяется различными комбинациями параметров конфигурации <code>keyPath</code> и <code>autoIncrement</code>:
+                </p>
+
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>keyPath</th>
+                            <th>autoIncrement</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Не указано</td>
+                            <td>false</td>
+                            <td>Хранилище объектов может хранить значения произвольного типа (в том числе значения примитивных типов как числа и строки). Однако ключ необходимо явно указывать каждый раз при добавлении нового объекта в базу данных</td>
+                        </tr>
+                        <tr>
+                            <td>Указано</td>
+                            <td>false</td>
+                            <td>Хранилище объектов может хранить только объекты (т.е. никаких примитивных типов данных). Однако эти объекты должны иметь свойство с тем же именем, которое указанно в параметре <code>keyPath</code></td>
+                        </tr>
+                        <tr>
+                            <td>Не указано</td>
+                            <td>true</td>
+                            <td>Хранилище объектов может хранить значения произвольного типа (в том числе значения примитивных типов). Ключи объектов генерируются автоматически при добавлении объектов. Однако также можно явным образом указать ключ для объекта</td>
+                        </tr>
+                        <tr>
+                            <td>Указано</td>
+                            <td>true</td>
+                            <td>
+                                Хранилище объектов может хранить только объекты (т.е. никаких примитивных типов данных). Ключи же называются также, как указано в параметре <code>keyPath</code>.
+                                 Если у объекта это свойство отсутствует, то значение ключа генерируется автоматически и добавляется к новому объекту. Если же свойство уже существует в объекте, то ключ не генерируется, а в качестве ключа используется уже сохраненное значение
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>Например, создадим в базе данных <code>test</code> хранилище с именем <code>"users"</code>:</p>
+
+                <div class="code-block"><code>const request = indexedDB.open("test", 2); <code class="comment">//</code> подключаемся к бд test
+ 
+<code class="comment">// обрабатываем создание базы данных или изменение версии</code>
+request.onupgradeneeded = (event) => { 
+    const db = event.target.result;  <code class="comment">// получаем бд</code>
+    <code class="comment">// создаем хранилище объектов users</code>
+    const objectStore = db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+
+    <code class="comment">// IDBObjectStore {name: "users", keyPath: "id", indexNames: DOMStringList, </code>
+    <code class="comment">//                 transaction: IDBTransaction, autoIncrement: true}</code>
+    console.log(objectStore);
+    console.log(db.objectStoreNames); <code class="comment">// список хранилищ в базе данных</code>
+};</code></div>
+
+                <p>
+                    В данном случае ключом объектов будет служить свойство "id", причем его значение будет генерироваться автоматически. Результатом метода  
+                    <span class="b">db.createObjectStore()</span> является объект созданного хранилища, который представляет тип <code>IDBObjectStore</code>.
+                </p>
+                <p>
+                    Следует учитывать, что, если при открытии базы данных увеличивается номер версии, хранилища старых версий сохранятся. 
+                    При попытке повторно создать уже существующее хранилище объектов, будет выдана ошибка.
+                </p>
+
+                <h3>Удаление хранилища</h3>
+
+                <p>Для удаления хранилища применяется метод <span class="b">deleteObjectStore()</span>, в который передается имя удаляемого хранилища:</p>
+
+                <div class="code-block"><code>const request = indexedDB.open("test", 3); <code class="comment">//</code> подключаемся к бд test
+ 
+<code class="comment">// обрабатываем изменение версии базы данных</code>
+request.onupgradeneeded = (event) => { 
+    const db = event.target.result;  <code class="comment">// получаем бд</code>
+    <code class="comment">// пересоздаем хранилище users - сначала удаляем</code>
+    db.deleteObjectStore("users");  
+    <code class="comment">// потом заново создаем</code>
+    db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+    console.log(db.objectStoreNames); <code class="comment">// список хранилищ в базе данных</code>
+};</code></div>
+
+                <h2 id="ch24-db-request">📜 Выполнение запросов к базе данных</h2>
+
+                <p>
+                    Все операции с базой данных <span class="b">IndexDB</span> инкапсулируются в транзакции, которые представляют тип <span class="b">IDBTransaction</span>. 
+                    Для создания объектов этого типа у объекта базы данных IDBDatabase вызывается метод <span class="b">transaction()</span>:
+                </p>
+                <div class="code-block"><code>transaction(storeNames)
+ transaction(storeNames, mode)</code></div>
+
+                <p>Этот метод принимает следующие параметры:</p>
+
+                <ul>
+                    <li>
+                        <span class="b">storeNames</span>: массив имен хранилищ объектов, к которым осуществляется доступ в транзакции.
+                        <div class="code-block"><code>const request = indexedDB.open("test", 3);        <code class="comment">// подключаемся к БД "test"</code>
+ 
+request.onsuccess = (event) => { 
+    const db = event.target.result;                <code class="comment">// получаем БД</code>
+    <code class="comment">// создаем транзакцию</code>
+    const transaction = db.transaction("users");   <code class="comment">// обращаемся к хранилищу "users"</code>
+    console.log(transaction);
+};</code></div>
+
+                        <p>Если надо задействовать несколько хранилищ, то они определяются в виде массива:</p>
+                        <div class="code-block"><code><code class="comment">// обращаемся к хранилищам "users" и "companies"</code>
+ const transaction = db.transaction(["users", "companies"]); </code></div>
+
+                        <p>Если надо указать все хранилища объектов базы данных, то можно 
+                        использовать свойство <code>IDBDatabase.objectStoreNames</code>:</p>
+                        <div class="code-block"><code>const transaction = db.transaction(db.objectStoreNames);</code></div>
+                    </li>
+                    <li><span class="b">mode</span>: необязательный параметр, устанавливает тип доступа к базе данных. Может принимать следующие значения:
+                        <ul>
+                            <li><code>readonly</code>: данные доступны только для чтения. Данное значение используется по умолчанию, если параметр <code>mode</code> не указан явным образом.</li>
+                            <li><code>readwrite</code>: данные доступны как для чтения, так и для записи</li>
+                            <li><code>versionchange</code>: разрешены чтение и запись, а также операции по удалению или созданию хранилищ и индексов объектов.</li>
+                        </ul>
+                        <p>Пример применения:</p>
+                        <div class="code-block"><code>const transaction = db.transaction("users", "readwrite");</code></div>
+                    </li>
+                </ul>
+
+                <p>С помощью свойств <code>IDBTransaction</code> можно получить некоторую информацию о транзакции:</p>
+
+                <ul>
+                    <li><span class="b">db</span>: объект базы данных (IDBDatabase)</li>
+                    <li><span class="b">error</span>: информация об ошибке в виде объекта <code>DOMException</code></li>
+                    <li><span class="b">mode</span>: режим доступа к базе данных, если не установлен, то по умолчанию <code>readonly</code></li>
+                    <li><span class="b">objectStoreNames</span>: список задействованных в транзакции хранилищ (объект <code>DOMStringList</code>), где каждое хранилище представляет объект <span class="b">IDBObjectStore</span></li>
+                </ul>
+
+                <p>Например, получение данных:</p>
+                <div class="code-block"><code>const request = indexedDB.open("test", 3);     <code class="comment">// подключаемся к БД "test"</code>
+ 
+request.onsuccess = (event) => { 
+    const db = event.target.result;             <code class="comment">// получаем бд</code>
+    <code class="comment">// создаем транзакцию</code>
+    const transaction = db.transaction(["users"], "readwrite");
+    console.log(transaction.db.name);           <code class="comment">// test </code>
+    console.log(transaction.mode);              <code class="comment">// readwrite</code>
+    console.log(transaction.objectStoreNames);  <code class="comment">// DOMStringList {0: "users", length: 1}</code>
+};</code></div>
+
+                <h3>Получение хранилища</h3>
+
+                <p>
+                    Для выполнения собственно операций с хранилищем в рамках транзакции применяются различные методы объекта <span class="b">IDBObjectStore</span>, который и представляет 
+                    собой хранилище. Для получения объекта <span class="b">IDBObjectStore</span> у объекта транзакции IDBTransaction вызывается метод 
+                    <span class="b">objectStore()</span>:
+                </p>
+                <div class="code-block"><code>const userStore = transaction.objectStore("users");   <code class="comment">//</code> получаем хранилище users</code></div>
+
+                <p>Следует отметить, что хранилище должны быть ранее создано с помощью метода <span class="b">createObjectStore()</span> объекта <code>IDBDatabase</code>. Создать хранилище, например, можно при создании или изменении версии базы данных:</p>
+
+                <div class="code-block"><code>const request = indexedDB.open("test", 5); <code class="comment">//</code> подключаемся к бд test
+ 
+<code class="comment">// при создании или изменении версии базы данных создаем в ней хранилище</code>
+request.onupgradeneeded = (event) => { 
+    const db = event.target.result;  <code class="comment">// получаем БД</code>
+    <code class="comment">// пересоздаем хранилище users - сначала удаляем, если оно существует</code>
+    db.deleteObjectStore("users");  
+    <code class="comment">// потом заново создаем</code>
+    const userStore = db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+    console.log(userStore); <code class="comment">// получаем хранилище</code>
+};
+<code class="comment">//</code> при открытии базы данных создаем транзакцию и получаем хранилище
+request.onsuccess = (event) => { 
+    const db = event.target.result;  <code class="comment">// получаем бд</code>
+    <code class="comment">// создаем транзакцию</code>
+    const transaction = db.transaction(["users"], "readwrite");
+    const userStore = transaction.objectStore("users");   <code class="comment">// получаем хранилище users</code>
+    console.log(userStore);
+};</code></div>
+
+                <p>Тип <span class="b">IDBObjectStore</span> предоставляет следующий ряд методов для операций над данными в хранилище:</p>
+
+                <ul>
+                    <li><span class="b">add()</span>: добавляет новые объекты в хранилище</li>
+                    <li><span class="b">clear()</span>: очищает хранилище (удаленяет все объекты)</li>
+                    <li><span class="b">count()</span>: возвращает общее количество объектов</li>
+                    <li><span class="b">createIndex()</span>: создает новый индекс</li>
+                    <li><span class="b">delete()</span>: удаляет из хранилища объект с определенным ключом</li>
+                    <li><span class="b">deleteIndex()</span>: удаляет указанный индекс</li>
+                    <li><span class="b">get()</span>: возвращает объект c указанным ключом</li>
+                    <li><span class="b">getKey()</span>: возвращает ключ объекта</li>
+                    <li><span class="b">getAll()</span>: возвращает все объекты из хранилища</li>
+                    <li><span class="b">getAllKeys()</span>: возвращает ключи объектов</li>
+                    <li><span class="b">index()</span>: возвращает индекс хранилища</li> 
+                    <li><span class="b">openCursor()</span>: используется для перебора хранилища объектов по первичному ключу с помощью курсора</li>
+                    <li><span class="b">openKeyCursor()</span>: возвращает курсор для перебора хранилища объектов</li>
+                    <li><span class="b">put()</span>: обновляет существующие объекты в хранилище</li>
+                </ul>
+
+                <h2 id="ch24-add-data">📜 Добавление данных (объектов в хранилище)</h2>
+
+                <p>Для добавления объектов в хранилище базы данных IndexDB применяется метод <span class="b">add()</span> объекта <code>IDBObjectStore</code></p>
+
+                <div class="code-block"><code>add(value)
+ add(value, key)</code></div>
+
+                <p>Первый параметр представляет добавляемое значение. Второй, необязательный параметр представляет свойства ключа - если не указан, то по умолчанию равен null.</p>
+                <p>Повторюсь, что надо ли указывать ключ, если указывать, то какой именно, зависит от параметров конфигурации, которые используются при создании хранилища:</p>
+
+                <ul>
+                    <li><span class="b">keyPath</span>: задает название свойства-ключа объекта</li>
+                    <li><span class="b">autoIncrement</span>: при значении <code>true</code> значения ключей генерируются автоматически. По умолчанию значение <code>false</code> (ключи не генерируются)</li>
+                </ul>
+
+                <p>Что именно и как используется в качестве ключа, определяется различными комбинациями параметров <code>keyPath</code> и <code>autoIncrement</code>:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>keyPath</th>
+                            <th>autoIncrement</th>
+                            <th>Описание</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Не указано</td>
+                            <td>false</td>
+                            <td>Хранилище объектов может хранить значения произвольного типа (в том числе значения примитивных типов как числа и строки). Однако ключ необходимо явно указывать каждый раз при добавлении нового объекта в базу данных</td>
+                        </tr>
+                        <tr>
+                            <td>Указано</td>
+                            <td>false</td>
+                            <td>Хранилище объектов может хранить только объекты (т.е. никаких примитивных типов данных). Однако эти объекты должны иметь свойство с тем же именем, которое указанно в параметре <code>keyPath</code></td>
+                        </tr>
+                        <tr>
+                            <td>Не указано</td>
+                            <td>true</td>
+                            <td>Хранилище объектов может хранить значения произвольного типа (в том числе значения примитивных типов). Ключи объектов генерируются автоматически при добавлении объектов. Однако также можно явным образом указать ключ для объекта</td>
+                        </tr>
+                        <tr>
+                            <td>Указано</td>
+                            <td>true</td>
+                            <td>
+                                Хранилище объектов может хранить только объекты (т.е. никаких примитивных типов данных). Ключи же называются также, как указано в параметре <code>keyPath</code>.
+                                 Если у объекта это свойство отсутствует, то значение ключа генерируется автоматически и добавляется к новому объекту. Если же свойство уже существует в объекте, то ключ не генерируется, а в качестве ключа используется уже сохраненное значение
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p>
+                    Результат метода <code>add()</code> представляет объект <span class="b">IDBRequest</span>. В случае успешного добавления у этого объекта срабатывает событие <span class="b">success</span>, 
+                    а его свойство <span class="b">result</span> содержит ключ добавленного объекта. В случае ошибки генерируется событие <span class="b">error</span> вместе с 
+                    исключением типа <code>DOMException</code>. Для обработки этих событий можно использовать соответственно свойства <span class="b">onsuccess</span> и 
+                    <span class="b">onerror</span>
+                </p>
+
+                <p>Например, добавим один объект:</p>
+
+                <div class="code-block"><code>const request = indexedDB.open("test", 5); <code class="comment">//</code> подключаемся к бд test
+ 
+<code class="comment">// при создании или изменении версии базы данных создаем в ней хранилище users</code>
+request.onupgradeneeded = (event) => { 
+    const db = event.target.result;  <code class="comment">// получаем БД</code>
+    <code class="comment">// ключом является свойство id, и оно автоматически инкрементируется</code>
+    db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+};
+<code class="comment">// при открытии базы данных добавляем в хранилище users 1 объект</code>
+request.onsuccess = (event) => { 
+    const db = event.target.result;                             <code class="comment">// получаем БД</code>
+    const transaction = db.transaction(["users"], "readwrite"); <code class="comment">// создаем транзакцию</code>
+    const userStore = transaction.objectStore("users");         <code class="comment">// получаем хранилище users</code>
+ 
+    const tom = {name: "Tom", age: 39};
+    const addRequest = userStore.add(tom);     <code class="comment">// добавляем объект tom в хранилище userStore</code>
+    addRequest.onsuccess = (event) => {
+        console.log("Данные успешно добавлены");
+        console.log("id добавленной записи:", addRequest.result); <code class="comment">// id добавленной записи: 1</code>
+    };
+};</code></div>
+
+                <p>
+                    Здесь  в базе данных <code>test</code> создано хранилище <code>"users"</code>, в котором в качестве ключа выступает свойство <code>id</code>, и это свойство автоматически инкрементируется при добавлении 
+                    каждого нового объекта. То есть добавляемый объект в принципе может не содержать подобное свойство.
+                </p>
+                <p>В данном случае добавляем один объект с двумя свойствами name и age:</p>
+
+                <div class="code-block"><code>const tom = {name: "Tom", age: 39};
+ const addRequest = userStore.add(tom);</code></div>
+
+                <p>При успешном добавлении addRequest.result содержит ключ - значение свойства id добавленного объекта</p>
+
+                <div class="code-block"><code>addRequest.onsuccess = (event) => {
+    console.log("Данные успешно добавлены");
+    console.log("id добавленной записи:", addRequest.result); <code class="comment">// id добавленной записи: 1</code>
+};</code></div>
+
+                <p>То же самое значение можно получить через параметр обработчика и его свойство <code>event.target.result</code></p>
+
+                <div class="code-block"><code>console.log("id добавленной записи:", event.target.result);</code></div>
+
+                <p>
+                    Стоит отметить, что добавление данных не происходит немедленно после вызова метода <code>add()</code>, а завершается лишь через некоторое время. Поэтому для отслеживания 
+                    операции применяется обработчик <code>onsuccess</code>.
+                </p>
+                <p>добавим еще несколько объектов:</p>
+
+                <div class="code-block"><code>const bob = {name: "Bob", age: 43};
+const sam = {name: "Sam", age: 28};
+userStore.add(bob);
+userStore.add(sam);</code></div>
+
+                <h3>Просмотр содержимого в браузере</h3>
+
+                <p>
+                    Стоит отметить, что современные браузеры позволяют нам просмотреть содержимое IndexDB через инструменты разработчика. Так, в Google Chrome подобная функциональность доступна на вкладке 
+                    <span class="b">Application</span> при выборе в левом меню пункта <span class="b">Storage/IndexDB</span>:
+                </p>
+
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500" height="449" xml:space="preserve" version="1.1" viewBox="0 0 500 449">
+                    <image width="500" height="449" xlink:href="data:image/png;base64,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"/>
+                </svg>
+
+                <p></p>
+
+                <h4>Еще пример:</h4>
 
                 <div class="code-block"><code>const request = indexedDB.open('myDatabase', 1);
 
 request.onsuccess = (event) => {
     const db = event.target.result;
     
-    // Создаём транзакцию
+    <code class="comment">// Создаём транзакцию</code>
     const transaction = db.transaction(['users'], 'readwrite');
     
-    // Получаем хранилище
+    <code class="comment">// Получаем хранилище</code>
     const store = transaction.objectStore('users');
     
-    // Добавляем данные
+    <code class="comment">// Добавляем данные</code>
     const addRequest = store.add({
         name: 'Tom',
         age: 37,
@@ -24843,26 +25574,157 @@ request.onsuccess = (event) => {
     };
 };</code></div>
 
-                <h2>Получение данных</h2>
+                <h2 id="ch24-get-data">📜 Получение данных из IndexDB</h2>
 
-                <h3>Получение одного объекта</h3>
-                <div class="code-block"><code>const transaction = db.transaction(['users'], 'readonly');
-const store = transaction.objectStore('users');
+                <h3>Получение всех объектов из БД</h3>
 
-// Получаем по ключу
-const getRequest = store.get(1);
+                <p>Для получения всех объектов из хранилища объект IDBObjectStore предоставляет метод <span class="b">getAll()</span></p>
 
-getRequest.onsuccess = () => {
-    const user = getRequest.result;
-    if (user) {
-        console.log('Имя:', user.name);
-        console.log('Возраст:', user.age);
-    } else {
-        console.log('Пользователь не найден');
+                <div class="code-block"><code>getAll()</code></div>
+
+                <p>
+                    Этот метод возвращает объект <span class="b">IDBRequest</span>. Если метод выполняется успешно, то для объекта <code>IDBRequest</code> генерируется событие <span class="b">success</span>, 
+                    а его свойство <span class="b">result</span> содержит массив полученных данных из хранилища. В случае возникновения ошибки у объекта <code>IDBRequest</code> срабатывает 
+                    событие <span class="b">error</span>, а его свойство <code>error</code> содержит информацию об ошибке. Для обработки этих событий можно использовать соответственно свойства <span class="b">onsuccess</span> и 
+                    <span class="b">onerror</span>
+                </p>
+
+                <p>Например, получим все объекты из хранилища "users":</p>
+
+                <div class="code-block"><code>const request = indexedDB.open("test", 5); <code class="comment">// подключаемся к БД "test"</code>
+ 
+<code class="comment">// при создании или изменении версии базы данных создаем в ней хранилище "users"</code>
+request.onupgradeneeded = (event) => { 
+    const db = event.target.result;  <code class="comment">// получаем БД</code>
+    <code class="comment">// ключом является свойство id, и оно автоматически инкрементируется</code>
+    const userStore = db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+    userStore.add({name: "Tom", age: 39});
+    userStore.add({name: "Bob", age: 43});
+    userStore.add({name: "Sam", age: 28});
+};
+<code class="comment">// при открытии базы данных получаем все данные</code>
+request.onsuccess = (event) => { 
+    const db = event.target.result;                             <code class="comment">// получаем бд</code>
+    const transaction = db.transaction(["users"], "readwrite"); <code class="comment">// создаем транзакцию</code>
+    const userStore = transaction.objectStore("users");         <code class="comment">// получаем хранилище users</code>
+ 
+    const getRequest = userStore.getAll();                      <code class="comment">// получаем все объекты</code>
+    getRequest.onsuccess = (e) => {
+        const users = getRequest.result;
+        console.log(users);
     }
+    getRequest.onerror = (e) => console.log(e.target.error.message); <code class="comment">// выводим сообщение об ошибке</code>
 };</code></div>
 
-                <h3>Получение всех объектов</h3>
+                <p>Здесь в обработчике <code>getRequest.onsuccess</code> получаем извлеченные данные в константу <code>users</code> и выводим их на консоль:</p>
+                <div class="code-block"><code>getRequest.onsuccess = (e) => {
+    const users = getRequest.result;
+    console.log(users);
+}</code></div>
+
+                <p>Так, в моем случае в хранилище содержатся три объекта со свойствами <code>id (ключ), name и age</code>:</p>
+
+                <pre class="browser">[
+    { name: "Tom", age: 39, id: 1},
+    { name: "Bob", age: 43, id: 2},
+    { name: "Sam", age: 28, id: 3}
+]</pre>
+
+                <p>Поскольку результат представляет массив, то мы можем использовать индексы и получить какие-то определенные элементы массива или перебрать массив:</p>
+
+                <div class="code-block"><code>getRequest.onsuccess = (e) => {
+    const users = getRequest.result;
+    for(user of users){
+        console.log(`Name: ${user.name}  Age: ${user.age}`);
+    }
+}</code></div>
+
+                <h3>Фильтрация по ключам</h3>
+
+                <p>Дополнительная версия метода <code>getAll()</code> позволяет отфильтровать объекты или выбрать только те объекты, которые соответствуют определенному диапазону ключей:</p>
+                <div class="code-block"><code>getAll(query)
+ getAll(query, count)</code></div>
+
+                <p>В качестве параметра <code>query</code> в метод передается ключ или объект <span class="b">IDBKeyRange</span>, который задает диапазон ключей. Дополнительно параметр <code>count</code> позволяет задать максимальное количество элементов в выборке.</p>
+
+                <p>Например, мы можем передать значение ключа:</p>
+                <div class="code-block"><code>const getRequest = userStore.getAll(2);   <code class="comment">// получаем объекты, у которых свойство ключа равно 2</code>
+getRequest.onsuccess = (e) => {
+    console.log(e.target.result);
+}</code></div>
+
+                <p>В данном случае получаем все элементы, у которых значение свойства-ключа равно 2.</p>
+
+                <p>Применение объекта <span class="b">IDBKeyRange</span> предоставляет дополнительные возможности с помощью ряда статических методов:</p>
+
+                <ul>
+                    <li><code>IDBKeyRange.bound()</code>: создает диапазон ключей, для которого задано минимальное и максимальное значения</li>
+                    <li><code>IDBKeyRange.only()</code>: создает диапазон ключей, который содержит только одно значение</li>
+                    <li><code>IDBKeyRange.lowerBound()</code>: создает диапазон ключей, для которого задано минимальное значение</li>
+                    <li><code>IDBKeyRange.upperBound()</code>: создает диапазон ключей, для которого задано максимальное значение</li>
+                </ul>
+
+                <p></p>
+                <p>Диапазоны ключей, которые создаются с помощью этих методов, можно описать следующей таблицей:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Диапазон</th>
+                            <th>Код</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Значение ключа &gt;= <code>x</code></td>
+                            <td><code>IDBKeyRange.lowerBound(x)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &gt; <code>x</code></td>
+                            <td><code>IDBKeyRange.lowerBound(x, true)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &lt;= <code>y</code></td>
+                            <td><code>IDBKeyRange.upperBound(y)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &lt; <code>y</code></td>
+                            <td><code>IDBKeyRange.upperBound(y, true)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &gt;= <code>x</code> &amp;&amp; &lt;= <code>y</code></td>
+                            <td><code>IDBKeyRange.bound(x, y)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &gt; <code>x</code> &lt; <code>y</code></td>
+                            <td><code>IDBKeyRange.bound(x, y, true, true)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &gt; <code>x</code> &amp;&amp; &lt;= <code>y</code></td>
+                            <td><code>IDBKeyRange.bound(x, y, true, false)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &gt;= <code>x</code> &amp;&amp;&lt; <code>y</code></td>
+                            <td><code>IDBKeyRange.bound(x, y, false, true)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа = <code>z</code></td>
+                            <td><code>IDBKeyRange.only(z)</code></td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+
+                <p>Например, получаем все объекты, у которых значение ключа не больше 2:</p>
+
+                <div class="code-block"><code>const getRequest = userStore.getAll(IDBKeyRange.upperBound(2));   
+getRequest.onsuccess = () => {
+    const users = getRequest.result;
+    console.log(users);
+}</code></div>
+
+                <h4>Еще пример:</h4>
+
                 <div class="code-block"><code>const transaction = db.transaction(['users'], 'readonly');
 const store = transaction.objectStore('users');
 
@@ -24876,16 +25738,86 @@ getAllRequest.onsuccess = () => {
     });
 };</code></div>
 
-                <h2>Обновление данных</h2>
+                <h3>Получение одного объекта по ключу</h3>
+
+                <p>Для получения одного объекта по ключу применяется метод <span class="b">get()</span>, в который передается ключ объекта:</p>
+                <div class="code-block"><code>get(key)</code></div>
+
+                <p>
+                    Результатом метода является объект <span class="b">IDBRequest</span>. В случае успешного добавления у этого объекта срабатывает событие <span class="b">success</span>, а его свойство <span class="b">result</span> будет 
+                    содержать объект с указанным ключом. В случае ошибки генерируется событие <span class="b">error</span> вместе с 
+                    исключением типа <code>DOMException</code>.
+                </p>
+
+                <p>Например, получим объект с ключом 1:</p>
+
+                <div class="code-block"><code>const request = indexedDB.open("test", 5); <code class="comment">// подключаемся к БД "test"</code>
+ 
+<code class="comment">// при создании или изменении версии базы данных создаем в ней хранилище "users"</code>
+request.onupgradeneeded = (event) => { 
+    const db = event.target.result;  <code class="comment">// получаем БД</code>
+    <code class="comment">// ключом является свойство id, и оно автоматически инкрементируется</code>
+    db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+};
+<code class="comment">// при открытии базы данных получаем один объект</code>
+request.onsuccess = (event) => { 
+    const db = event.target.result;  <code class="comment">// получаем БД</code>
+    const transaction = db.transaction(["users"], "readwrite");  <code class="comment">// создаем транзакцию</code>
+    const userStore = transaction.objectStore("users");          <code class="comment">// получаем хранилище users</code>
+ 
+    const getRequest = userStore.get(1);                         <code class="comment">// получаем объект по ключу 1</code>
+    getRequest.onsuccess = () => console.log(getRequest.result); <code class="comment">// выводим полученный объект</code>
+    getRequest.onerror = (e) =>  console.log(e.target.error.message); <code class="comment">// выводим сообщение об ошибке</code>
+};</code></div>
+
+                <p>Результат в моем случае:</p>
+
+                <pre class="browser">Object
+    age: 39
+    id: 1
+    name: "Tom"
+    [[Prototype]]: Object</pre>
+
+                <p>Также извлеченный объект мы можем получить через параметр обработчика события - через его свойство <code>event.target.result</code>:</p>
+
+                <div class="code-block"><code>const getRequest = userStore.get(1);   <code class="comment">// получаем объект по ключу 1</code>
+getRequest.onsuccess = (e) => {
+    const user = e.target.result;       <code class="comment">// полученный объект</code>
+    console.log(user.name);
+    console.log(user.age);
+}</code></div>
+
+                <p>Если мы попробуем найти объект с несуществующим ключом, то свойство <code>result</code>  будет равно <code>undefined</code></p>
+                
+                <h4>Еще пример:</h4>
+
+                <div class="code-block"><code>const transaction = db.transaction(['users'], 'readonly');
+const store = transaction.objectStore('users');
+
+<code class="comment">// Получаем по ключу</code>
+const getRequest = store.get(1);
+
+getRequest.onsuccess = () => {
+    const user = getRequest.result;
+    if (user) {
+        console.log('Имя:', user.name);
+        console.log('Возраст:', user.age);
+    } else {
+        console.log('Пользователь не найден');
+    }
+};</code></div>
+
+
+                <h2 id="ch24-update-data">📜 Обновление данных</h2>
 
                 <div class="code-block"><code>const transaction = db.transaction(['users'], 'readwrite');
 const store = transaction.objectStore('users');
 
-// Обновляем объект (по ключу)
+<code class="comment">// Обновляем объект (по ключу)</code>
 const updateRequest = store.put({
     id: 1,
     name: 'Tom',
-    age: 38,  // Изменили возраст
+    age: 38,  <code class="comment">// Изменили возраст</code>
     email: 'tom.updated@example.com'
 });
 
@@ -24893,13 +25825,13 @@ updateRequest.onsuccess = () => {
     console.log('Данные обновлены');
 };</code></div>
 
-                <h2>Удаление данных</h2>
+                <h2 id="ch24-delete-data">📜 Удаление данных</h2>
 
                 <h3>Удаление одной записи</h3>
                 <div class="code-block"><code>const transaction = db.transaction(['users'], 'readwrite');
 const store = transaction.objectStore('users');
 
-// Удаляем по ключу
+<code class="comment">// Удаляем по ключу</code>
 const deleteRequest = store.delete(1);
 
 deleteRequest.onsuccess = () => {
@@ -24910,14 +25842,15 @@ deleteRequest.onsuccess = () => {
                 <div class="code-block"><code>const transaction = db.transaction(['users'], 'readwrite');
 const store = transaction.objectStore('users');
 
-// Очистка всего хранилища
+<code class="comment">// Очистка всего хранилища</code>
 const clearRequest = store.clear();
 
 clearRequest.onsuccess = () => {
     console.log('Все записи удалены');
 };</code></div>
 
-                <h2>Полный пример: Менеджер задач</h2>
+
+                <h2 id="ch24-task-manager">📜 Полный пример: Менеджер задач</h2>
 
                 <div class="code-block"><code>class TaskManager {
     constructor() {
@@ -24938,7 +25871,7 @@ clearRequest.onsuccess = () => {
                         autoIncrement: true
                     });
                     
-                    // Создаём индекс для поиска по статусу
+                    <code class="comment">// Создаём индекс для поиска по статусу</code>
                     store.createIndex('status', 'status', { unique: false });
                 }
             };
@@ -25011,23 +25944,23 @@ clearRequest.onsuccess = () => {
     }
 }
 
-// Использование
+<code class="comment">// Использование</code>
 (async () => {
     const manager = new TaskManager();
     await manager.init();
     
-    // Добавить задачу
+    <code class="comment">// Добавить задачу</code>
     await manager.addTask('Купить молоко', 'В магазине на углу');
     await manager.addTask('Написать код', 'Глава 24 про IndexedDB');
     
-    // Получить все задачи
+    <code class="comment">// Получить все задачи</code>
     const tasks = await manager.getAllTasks();
     console.log('Задачи:', tasks);
     
-    // Обновить задачу
+    <code class="comment">// Обновить задачу</code>
     await manager.updateTask(1, { status: 'completed' });
     
-    // Удалить задачу
+    <code class="comment">// Удалить задачу</code>
     await manager.deleteTask(2);
 })();</code></div>
 
@@ -25242,7 +26175,7 @@ clearRequest.onsuccess = () => {
         
         const target = document.getElementById("target");
         target.addEventListener("dragover", (event) =&gt; {
-            event.preventDefault(); // Разрешаем сброс
+            event.preventDefault(); <code class="comment">//</code> Разрешаем сброс
             console.log("Dragover operation");
         });
         
