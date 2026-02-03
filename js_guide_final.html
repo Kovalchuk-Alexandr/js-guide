@@ -828,6 +828,7 @@
                                 <li class="nav-subitem" data-target="ch24-add-data">📜 Добавление данных</li>
                                 <li class="nav-subitem" data-target="ch24-get-data">📜 Получение данных</li>
                                 <li class="nav-subitem" data-target="ch24-update-data">📜 Обновление данных</li>
+                                <li class="nav-subitem" data-target="ch24-count">📜 Получение количества объектов</li>
                                 <li class="nav-subitem" data-target="ch24-delete-data">📜 Удаление данных</li>
                                 <li class="nav-subitem" data-target="ch24-task-manager">📜 Полный пример: Менеджер задач</li>
 
@@ -25808,7 +25809,61 @@ getRequest.onsuccess = () => {
 };</code></div>
 
 
-                <h2 id="ch24-update-data">📜 Обновление данных</h2>
+                <h2 id="ch24-update-data">📜 Обновление данных (объектов хранилища)</h2>
+
+                <p>Метод <span class="b">put()</span> интерфейса <code>IDBObjectStore</code> обновляет запись в базе данных или вставляет новую запись, если данный элемент еще не существует.</p>
+
+                <div class="code-block"><code>put(item)
+ put(item, key)</code></div>
+
+                <p>Первый параметр - <code>item</code> представляет значение, которое обновляется или добавляется в базу данных. Второй и необязательный параметр <code>key</code> представляет ключ, по которому надо обновить/добавить объект.</p>
+
+                <p>
+                    Метод <code>put()</code> возвращает объект <span class="b">IDBRequest</span>. В случае успешного обновления/добавления у объекта <code>IDBRequest</code> вызывается событие <span class="b">success</span>, а его свойство <span class="b">result</span> будет 
+                    содержать объект с указанным ключом. В случае ошибки генерируется событие <span class="b">error</span> вместе с 
+                    исключением типа <code>DOMException</code>. Для обработки этих событий можно использовать соответственно свойства <span class="b">onsuccess</span> и 
+                    <span class="b">onerror</span>
+                </p>
+                <p>Например, пусть хранилище <code>users</code> в базе данных <code>test</code> хранит следующие объекты:</p>
+
+                <pre class="browser">[
+    { name: "Tom", age: 39, id: 1},
+    { name: "Bob", age: 43, id: 2},
+    { name: "Sam", age: 28, id: 3}
+]
+</pre>
+
+                <p>Обновим объект в хранилище <code>"users"</code>, у которого ключ равен <code>1</code>:</p>
+
+                <div class="code-block"><code>const request = indexedDB.open("test", 5); <code class="comment">// подключаемся к БД "test"</code>
+ 
+<code class="comment">// при создании или изменении версии базы данных создаем в ней хранилище "users"</code>
+request.onupgradeneeded = (event) => { 
+    const db = event.target.result;  <code class="comment">// получаем БД</code>
+    <code class="comment">//</code> ключом является свойство id, и оно автоматически инкрементируется
+    db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+};
+<code class="comment">// при открытии базы данных изменяем в хранилище "users" 1 объект</code>
+request.onsuccess = (event) => { 
+    const db = event.target.result;                             <code class="comment">// получаем БД</code>
+    const transaction = db.transaction(["users"], "readwrite"); <code class="comment">// создаем транзакцию</code>
+    const userStore = transaction.objectStore("users");         <code class="comment">// получаем хранилище users</code>
+    <code class="comment">// получаем объект c id=1</code>
+    const getRequest = userStore.get(1);   
+    getRequest.onsuccess = () => {
+        const user = getRequest.result;
+        console.log(user);
+        <code class="comment">// меняем значения свойств</code>
+        user.name = "Tomas";
+        user.age = 22;
+        <code class="comment">// обновляем значения</code>
+        const updateRequest = userStore.put(user);
+        updateRequest.onsuccess = () =>  console.log("Data successfully updated"); 
+    };
+    getRequest.onerror = (e) =>  console.log(e.target.error.message); <code class="comment">// выводим сообщение об ошибке</code>
+};</code></div>
+
+                <h4>Другой пример:</h4>
 
                 <div class="code-block"><code>const transaction = db.transaction(['users'], 'readwrite');
 const store = transaction.objectStore('users');
@@ -25824,6 +25879,116 @@ const updateRequest = store.put({
 updateRequest.onsuccess = () => {
     console.log('Данные обновлены');
 };</code></div>
+
+                <h2 id="ch24-count">📜 Получение количества объектов</h2>
+
+                <p>Для получения количества данных, которые хранятся в хранилище базы данных, в <code>IndexDB</code> применяется метод <span class="b">count()</span> интерфейса <code>IDBObjectStore</code></p>
+
+                <div class="code-block"><code>count()
+ count(query)</code></div>
+
+                <p>Если параметр не передается, то метод возвращает общее количество записей хранилища.</p>
+                <p>
+                    Этот метод возвращает объект <span class="b">IDBRequest</span>. Если метод выполняется успешно, то для объекта IDBRequest генерируется событие <span class="b">success</span>, 
+                    а его свойство <span class="b">result</span> содержит количество объектов хранилища. В случае возникновения ошибки у объекта IDBRequest срабатывает 
+                    событие <span class="b">error</span>, а его свойство error содержит информацию об ошибке. Для обработки этих событий можно использовать соответственно свойства <span class="b">onsuccess</span> и 
+                    <span class="b">onerror</span>
+                </p>
+
+                <p>Например, получим общее количество объектов из хранилища <code>"users"</code> базы данных <code>test</code>:</p>
+
+                <div class="code-block"><code>onst request = indexedDB.open("test", 5); <code class="comment">//</code> подключаемся к бд test
+ 
+<code class="comment">// при создании или изменении версии базы данных создаем в ней хранилище "users"</code>
+request.onupgradeneeded = (event) => { 
+    const db = event.target.result;  <code class="comment">// получаем БД</code>
+    <code class="comment">// ключом является свойство id, и оно автоматически инкрементируется</code>
+    const userStore = db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+    <code class="comment">// добавление начальных данных</code>
+    userStore.add({name: "Tom", age: 39});
+    userStore.add({name: "Bob", age: 43});
+    userStore.add({name: "Sam", age: 28});
+};
+<code class="comment">// при открытии базы данных получаем количество объектов</code>
+request.onsuccess = (event) => { 
+    const db = event.target.result;                             <code class="comment">// получаем БД</code>
+    const transaction = db.transaction(["users"], "readwrite"); <code class="comment">// создаем транзакцию</code>
+    const userStore = transaction.objectStore("users");         <code class="comment">// получаем хранилище "users"</code>
+ 
+    const countRequest = userStore.count(); <code class="comment">// получаем количество объектов в БД</code>
+    <code class="comment">// при успешном получении выводим количество на консоль</code>
+    countRequest.onsuccess = () => console.log("users count:", countRequest.result);
+    countRequest.onerror = () =>  console.log(countRequest.error.message);
+};</code></div>
+
+                <p>И консоль выведет:</p>
+
+                <pre class="browser">users count: 3</pre>
+
+                <p>В качестве необязательного параметра <code>query</code> в метод <span class="b">count()</span> передается значение ключа или объект <span class="b">IDBKeyRange</span>, который задает диапазон ключей. Дополнительно параметр <code>count</code> позволяет задать максимальное количество элементов в выборке.</p>
+                <p>Для создания диапазона ключей применяются следуюшие статические методы интерфейса <span class="b">IDBKeyRange</span>:</p>
+
+                <ul>
+                    <li><code>IDBKeyRange.bound()</code>: создает диапазон ключей, для которого задано минимальное и максимальное значения</li>
+                    <li><code>IDBKeyRange.only()</code>: создает диапазон ключей, который содержит только одно значение</li>
+                    <li><code>IDBKeyRange.lowerBound()</code>: создает диапазон ключей, для которого задано минимальное значение</li>
+                    <li><code>IDBKeyRange.upperBound()</code>: создает диапазон ключей, для которого задано максимальное значение</li>
+                </ul>
+
+                <p>Диапазоны ключей, которые создаются с помощью этих методов, можно описать следующей таблицей:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Диапазон</th>
+                            <th>Код</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Значение ключа &gt;= <code>x</code></td>
+                            <td><code>IDBKeyRange.lowerBound(x)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &gt; <code>x</code></td>
+                            <td><code>IDBKeyRange.lowerBound(x, true)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &lt;= <code>y</code></td>
+                            <td><code>IDBKeyRange.lowerBound(y)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &lt; <code>y</code></td>
+                            <td><code>IDBKeyRange.upperBound(y, true)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &gt;= <code>x</code> &amp;&amp; &lt;= <code>y</code></td>
+                            <td><code>IDBKeyRange.bound(x, y)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &gt; <code>x</code> &lt; <code>y</code></td>
+                            <td><code>IDBKeyRange.bound(x, y, true, true)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &gt; <code>x</code> &amp;&amp; &lt;= <code>y</code></td>
+                            <td><code>IDBKeyRange.bound(x, y, true, false)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &gt;= <code>x</code> &amp;&amp;&lt; <code>y</code></td>
+                            <td><code>IDBKeyRange.bound(x, y, false, true)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа = <code>z</code></td>
+                            <td><code>IDBKeyRange.only(z)</code></td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+                
+               <p>Например, получаем все объекты, у которых значение ключа не больше 2:</p>
+
+               <div class="code-block"><code>const countRequest = userStore.count(IDBKeyRange.upperBound(2));
+ countRequest.onsuccess = () => console.log("users count:", countRequest.result);</code></div>
 
                 <h2 id="ch24-delete-data">📜 Удаление данных</h2>
 
@@ -34826,4 +34991,4 @@ setInterval(() =&gt; showSlide(currentSlide + 1), 3000);</code></div>
 
     </script>
 </body>
-</html>/html>
+</html>
