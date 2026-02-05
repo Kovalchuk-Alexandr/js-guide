@@ -830,13 +830,30 @@
                                 <li class="nav-subitem" data-target="ch24-update-data">📜 Обновление данных</li>
                                 <li class="nav-subitem" data-target="ch24-count">📜 Получение количества объектов</li>
                                 <li class="nav-subitem" data-target="ch24-delete-data">📜 Удаление данных</li>
+                                <li class="nav-subitem" data-target="ch24-cursors">📜 Курсоры</li>
                                 <li class="nav-subitem" data-target="ch24-task-manager">📜 Полный пример: Менеджер задач</li>
-
-                                <li class="nav-subitem" data-target="ch23-example">📜 Практические пример: простая игра</li>
-                                <li class="nav-subitem" data-target="ch23-conclusion">📜 Заключение</li>
+                                <li class="nav-subitem" data-target="ch24-conclusion">📜 Заключение</li>
                             </ul>
                         </li>
-                        <li class="nav-item" data-target="ch25">Глава 25. Drag & Drop</li>
+                        <li class="nav-item has-subitems" data-target="ch25"><span class="ch-emoj"></span> Глава 25. Drag & Drop
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch25-intro">📜 Введение в IndexedDB</li>
+                                <li class="nav-subitem" data-target="ch25-attr-draggable">📜 Атрибут draggable</li>
+                                <li class="nav-subitem" data-target="ch25-events">📜 События Drag-and-Drop</li>
+                                <li class="nav-subitem" data-target="ch25-drug-examp">📜 Базовый пример перетаскивания</li>
+                                <li class="nav-subitem" data-target="ch25-copying">📜 Копирование элемента</li>
+                                <li class="nav-subitem" data-target="ch25-move">📜 Полное перемещение элемента</li>
+                                <li class="nav-subitem" data-target="ch25-datetransfer">📜 Объект DataTransfer</li>
+                                <li class="nav-subitem" data-target="ch25-set-get">📜 Методы setData() и getData()</li>
+                                <li class="nav-subitem" data-target="ch25-operations-types">📜 Типы операций dropEffect/effectAllowed</li>
+                                <li class="nav-subitem" data-target="ch25-list-sorting">📜 Практический пример: сортировка списка</li>
+                                <li class="nav-subitem" data-target="ch25-drag-and-drop-files">📜 Перетаскивание файлов</li>
+                                <li class="nav-subitem" data-target="ch25-filereader">📜 Чтение содержимого файла</li>
+                                <li class="nav-subitem" data-target="ch25-custom-img">📜 Установка пользовательского изображения при перетаскивании</li>
+                                <li class="nav-subitem" data-target="ch25-canban">📜 Полный пример: канбан-доска</li>
+                                <li class="nav-subitem" data-target="ch25-conclusion">📜 Заключение</li>
+                            </ul>
+                        </li>
                         <li class="nav-item" data-target="ch26">Глава 26. File API</li>
                         <li class="nav-item" data-target="ch27">Глава 27. Web Workers</li>
                         <li class="nav-item" data-target="ch28">Глава 28. Web API</li>
@@ -25990,7 +26007,111 @@ request.onsuccess = (event) => {
                <div class="code-block"><code>const countRequest = userStore.count(IDBKeyRange.upperBound(2));
  countRequest.onsuccess = () => console.log("users count:", countRequest.result);</code></div>
 
-                <h2 id="ch24-delete-data">📜 Удаление данных</h2>
+                <h2 id="ch24-delete-data">📜 Удаление данных из хранилища</h2>
+
+                <p>Для удаления данных из хранилища в IndexDB применяются методы <span class="b">delete()</span> и <span class="b">clear()</span> объекта <code>IDBObjectStore</code></p>
+                <p>Метод <span class="b">delete()</span> удаляет все объекты по определенным ключам, которые передаются в качестве параметра:</p>
+
+                <div class="code-block"><code>delete(key)</code></div>
+
+                <p>Причем в качестве значения параметру можно передать конкретное значение либо диапазон ключей в виде объекта <span class="b">IDBKeyRange</span>.</p>
+
+                <p>
+                    Этот метод возвращает объект <span class="b">IDBRequest</span>. Если метод выполняется успешно, то для объекта IDBRequest генерируется событие 
+                    <span class="b">success</span>, а его свойство <span class="b">result</span> содержит значение <code>undefined</code>. В случае возникновения ошибки у объекта IDBRequest срабатывает 
+                    событие <span class="b">error</span>, а его свойство error содержит информацию об ошибке. Для обработки этих событий можно использовать соответственно свойства <span class="b">onsuccess</span> и 
+                    <span class="b">onerror</span>
+                </p>
+
+                <p>Например, удалим объект, у которого ключ равен 1:</p>
+
+                <div class="code-block"><code>const request = indexedDB.open("test", 5); <code class="comment">// подключаемся к БД "test"</code>
+ 
+<code class="comment">// при создании или изменении версии базы данных создаем в ней хранилище "users"</code>
+request.onupgradeneeded = (event) => { 
+    const db = event.target.result;  <code class="comment">// получаем БД</code>
+    <code class="comment">// ключом является свойство id, и оно автоматически инкрементируется</code>
+    const userStore = db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+    userStore.add({name: "Tom", age: 39});
+    userStore.add({name: "Bob", age: 43});
+    userStore.add({name: "Sam", age: 28});
+};
+<code class="comment">// при открытии базы данных удаляем из хранилища users 1 объект</code>
+request.onsuccess = (event) => { 
+    const db = event.target.result;                             <code class="comment">// получаем БД</code>
+    const transaction = db.transaction(["users"], "readwrite"); <code class="comment">// создаем транзакцию</code>
+    const userStore = transaction.objectStore("users");         <code class="comment">// получаем хранилище "users"</code>
+ 
+    <code class="comment">// удаляем все объекты, у которых ключ равен 1  </code> 
+    const deleteRequest = userStore.delete(1);
+    <code class="comment">// при успешном получении выводим уведомление количество на консоль</code>
+    deleteRequest.onsuccess = () => console.log("Successfully deleted", deleteRequest.result);
+    deleteRequest.onerror = () =>  console.log(deleteRequest.error);
+};</code></div>
+
+                <p>Для создания диапазона ключей применяются следуюшие статические методы интерфейса <span class="b">IDBKeyRange</span>:</p>
+
+                <ul>
+                    <li><code>IDBKeyRange.bound()</code>: создает диапазон ключей, для которого задано минимальное и максимальное значения</li>
+                    <li><code>IDBKeyRange.only()</code>: создает диапазон ключей, который содержит только одно значение</li>
+                    <li><code>IDBKeyRange.lowerBound()</code>: создает диапазон ключей, для которого задано минимальное значение</li>
+                    <li><code>IDBKeyRange.upperBound()</code>: создает диапазон ключей, для которого задано максимальное значение</li>
+                </ul>
+
+                <p>Диапазоны ключей, которые создаются с помощью этих методов, можно описать следующей таблицей:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Диапазон</th>
+                            <th>Код</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Значение ключа &gt;= <code>x</code></td>
+                            <td><code>IDBKeyRange.lowerBound(x)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &gt; <code>x</code></td>
+                            <td><code>IDBKeyRange.lowerBound(x, true)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &lt;= <code>y</code></td>
+                            <td><code>IDBKeyRange.lowerBound(y)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &lt; <code>y</code></td>
+                            <td><code>IDBKeyRange.upperBound(y, true)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &gt;= <code>x</code> &amp;&amp; &lt;= <code>y</code></td>
+                            <td><code>IDBKeyRange.bound(x, y)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &gt; <code>x</code> &lt; <code>y</code></td>
+                            <td><code>IDBKeyRange.bound(x, y, true, true)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &gt; <code>x</code> &amp;&amp; &lt;= <code>y</code></td>
+                            <td><code>IDBKeyRange.bound(x, y, true, false)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа &gt;= <code>x</code> &amp;&amp;&lt; <code>y</code></td>
+                            <td><code>IDBKeyRange.bound(x, y, false, true)</code></td>
+                        </tr>
+                        <tr>
+                            <td>Значение ключа = <code>z</code></td>
+                            <td><code>IDBKeyRange.only(z)</code></td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+
+                <p>Например, удалим все объекты, у которых значение ключа не больше 2:</p>
+
+                <div class="code-block"><code>const deleteRequest = userStore.delete(IDBKeyRange.upperBound(2));
+ deleteRequest.onsuccess = () => console.log("Successfully deleted");</code></div>
 
                 <h3>Удаление одной записи</h3>
                 <div class="code-block"><code>const transaction = db.transaction(['users'], 'readwrite');
@@ -26004,15 +26125,153 @@ deleteRequest.onsuccess = () => {
 };</code></div>
 
                 <h3>Удаление всех записей</h3>
+
+                <p>
+                    Для удаления абсолютно всех данных из хранилища базы данных применяется метод <span class="b">clear()</span>. Он не принимает никаких параметров и возвращает 
+                    объект <code>IDBRequest</code>. При успешном выполнении свойство <code>result</code> у IDBRequest также равно <code>undefined</code>
+                </p>
+
+                <div class="code-block"><code><code class="comment">// удаляем все объекты</code>
+const deleteRequest = userStore.clear();   
+deleteRequest.onsuccess = () => console.log("Successfully deleted");</code></div>
+
+                <h4>Полный вараиант:</h4>
+
                 <div class="code-block"><code>const transaction = db.transaction(['users'], 'readwrite');
 const store = transaction.objectStore('users');
 
-<code class="comment">// Очистка всего хранилища</code>
+<code class="comment"><code class="comment">// Очистка всего хранилища</code></code>
 const clearRequest = store.clear();
 
 clearRequest.onsuccess = () => {
     console.log('Все записи удалены');
 };</code></div>
+
+                <h2 id="ch24-cursors">📜 Курсоры</h2>
+
+                <p>
+                    Для получения объектов из хранилища базы данных также можно применять <span class="b">курсоры</span>. В контексте базы данных курсор представляет механизм прохода 
+                    по различным объектам в хранилище базы данных.
+                </p>
+
+                <p>Для создания курсора у объекта <code>IDBObjectStore</code> используется метод <span class="b">openCursor()</span>:</p>
+
+                <div class="code-block"><code>openCursor()
+openCursor(query)
+openCursor(query, direction)</code></div>
+
+                <p>
+                    В качестве необязательного параметра <code>query</code> в метод передается ключ или объект <span class="b">IDBKeyRange</span>, который задает диапазон 
+                    ключей. В этом случае курсор будет проходить только по объектам с этими ключами. Если данный параметр не указан, то курсор проходит по всем объектам.
+                </p>
+                
+                <p>Третий параметр - <code>direction</code> задает направление курсора и может принимать следующие значения:</p>
+
+                <ul>
+                    <li><span class="b">next</span>: курсор начинает проход по объектам в начале хранилища в порядке возрастания ключей. Курсор возвращает все записи из хранилища, в том числе дубликаты. Это значение по умолчанию</li>
+                    <li><span class="b">nextunique</span>: курсор начинает проход по объектам в начале хранилища в порядке возрастания ключей. 
+                    Курсор возвращает все записи из хранилища, кроме дубликатов</li>
+                    <li><span class="b">prev</span>: курсор начинает проход по объектам в начале хранилища в порядке убывания ключей. Курсор возвращает все записи из хранилища, в том числе дубликаты. Это значение по умолчанию</li>
+                    <li><span class="b">prevunique</span>: курсор начинает проход по объектам в начале хранилища в порядке убывания ключей. Курсор возвращает все записи из хранилища, кроме дубликатов</li>
+                </ul>
+
+                <p>
+                    Метод <code>openCursor()</code> возвращает объект <span class="b">IDBRequest</span>. При успешном получении курсора у IDBRequest срабатывает событие 
+                    <span class="b">success</span>, а его свойство <code>result</code> представляет либо значение <code>IDBCursorWithValue</code> (если курсор нашел объекты в хранилище), 
+                    либо <code>null</code> (если для курсора нет объектов). Если курсор не удалось получить, то генерируется событие <span class="b">error</span>, а свойство <code>error</code> объекта IDBRequest хранит информацию об ошибке. 
+                    Для обработки этих событий можно использовать соответственно свойства <span class="b">onsuccess</span> и 
+                    <span class="b">onerror</span>
+                </p>
+                <p>
+                    При успешном открытии курсора и наличии в хранилище объектов для перебора свойство <code>result</code> объекта IDBRequest хранит значение 
+                    <span class="b">IDBCursorWithValue</span> - это и есть непосредственно сам курсор:
+                </p>
+
+                <div class="code-block"><code>const request = indexedDB.open("test", 6); <code class="comment">// подключаемся к БД "test"</code>
+ 
+<code class="comment">// при создании или изменении версии базы данных создаем в ней хранилище "users"</code>
+request.onupgradeneeded = (event) => { 
+    const db = event.target.result;  <code class="comment">// получаем БД</code>
+    <code class="comment">// пересоздаем хранилище users - сначала удаляем, если оно существует</code>
+    db.deleteObjectStore("users");
+    <code class="comment">// ключом является свойство id, и оно автоматически инкрементируется</code>
+    const userStore = db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+    userStore.add({name: "Tom", age: 39});
+    userStore.add({name: "Bob", age: 43});
+    userStore.add({name: "Sam", age: 28});
+};
+<code class="comment">// при открытии базы данных получаем курсор</code>
+request.onsuccess = (event) => { 
+    const db = event.target.result;                       <code class="comment">// получаем БД</code>
+    const transaction = db.transaction(["users"]);        <code class="comment">// создаем транзакцию</code>
+    const userStore = transaction.objectStore("users");   <code class="comment">// получаем хранилище "users"</code>
+    const cursorRequest = userStore.openCursor();         <code class="comment">// получаем запрос на открытие курсора</code>
+    <code class="comment">// получаем курсор</code>
+    cursorRequest.onsuccess = () => {
+        const cursor = cursorRequest.result;    <code class="comment">// также можно получить через event.target.result</code>
+        console.log(cursor); 
+    }
+    cursorRequest.onerror = () =>  console.log(cursorRequest.error);
+};</code></div>
+
+                <p>При успешном получении курсора свойство <code>key</code> объекта <span class="b">IDBCursorWithValue</span> будет содержать ключ первого объекта из хранилища, а свойство <code>value</code> содержит сам объект:</p>
+
+                <div class="code-block"><code>request.onsuccess = (event) => { 
+    const db = event.target.result;                      <code class="comment">// получаем БД</code>
+    const transaction = db.transaction(["users"]);       <code class="comment">// создаем транзакцию</code>
+    const userStore = transaction.objectStore("users");  <code class="comment">// получаем хранилище users</code>
+    const cursorRequest = userStore.openCursor();        <code class="comment">// получаем запрос на открытие курсора</code>
+    <code class="comment">// получаем курсор</code>
+    cursorRequest.onsuccess = () => {
+        const cursor = cursorRequest.result;   <code class="comment">// также можно получить через event.target.result</code>
+        const user = cursor.value;             <code class="comment">// получаем значение, на которое указывает курсор</code>
+        console.log(user.id);                  <code class="comment">// он же cursor.key </code>
+        console.log(user.name); 
+        console.log(user.age); 
+    }
+};</code></div>
+
+                <p>
+                    Метод <span class="b">continue()</span> заставляет курсор перемещаться к следующей записи (если она есть), что, в свою очередь, приводит к 
+                    повторному выполнению обработчика <code>onsuccess</code> и так далее. Например, получим все объекты из хранилища users:
+                </p>
+
+                <div class="code-block"><code>const request = indexedDB.open("test", 6); <code class="comment">// подключаемся к БД "test"</code>
+ 
+<code class="comment">// при создании или изменении версии базы данных создаем в ней хранилище "users"</code>
+request.onupgradeneeded = (event) => { 
+    const db = event.target.result;         <code class="comment">// получаем БД</code>
+    <code class="comment">// пересоздаем хранилище users - сначала удаляем, если оно существует</code>
+    db.deleteObjectStore("users");
+    <code class="comment">// ключом является свойство id, и оно автоматически инкрементируется</code>
+    const userStore = db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
+    userStore.add({name: "Tom", age: 39});
+    userStore.add({name: "Bob", age: 43});
+    userStore.add({name: "Sam", age: 28});
+};
+<code class="comment">// при открытии базы данных </code>
+request.onsuccess = (event) => { 
+    const db = event.target.result;                      <code class="comment">// получаем БД</code>
+    const transaction = db.transaction(["users"]);       <code class="comment">// создаем транзакцию</code>
+    const userStore = transaction.objectStore("users");  <code class="comment">// получаем хранилище "users"</code>
+    const cursorRequest = userStore.openCursor();        <code class="comment">// получаем запрос на открытие курсора</code>
+    const users = [];                                    <code class="comment">// массив, в который считываем данные</code>
+    <code class="comment">// получаем курсор</code>
+    cursorRequest.onsuccess = () => {
+        const cursor = cursorRequest.result;  <code class="comment">// также можно получить через event.target.result</code>
+        if(cursor){                           <code class="comment">// если еще есть данные для чтения</code>
+            const user = cursor.value;
+            users.push(user);                 <code class="comment">// добавляем полученный объект в массив</code>
+            cursor.continue();                <code class="comment">// перемещаем курсор к новой записи</code>
+        }
+        else{
+            console.log(users);         <code class="comment">// если записей для чтения больше нет, выводит массив</code>
+        }
+    }
+    cursorRequest.onerror = () =>  console.log(cursorRequest.error);
+};</code></div>
+
+                <p>В данном случае, пока для считывания имеются данные, считываем их и добавляем в массив <code>users</code>. Когда все данные будут прочитаны выводим массив на консоль.</p>
 
 
                 <h2 id="ch24-task-manager">📜 Полный пример: Менеджер задач</h2>
@@ -26129,7 +26388,7 @@ clearRequest.onsuccess = () => {
     await manager.deleteTask(2);
 })();</code></div>
 
-                <h2>Сравнение: localStorage vs IndexedDB</h2>
+                <h2 id="ch24-conclusion">📜 Сравнение: localStorage vs IndexedDB</h2>
 
                 <table>
                     <thead>
@@ -26211,9 +26470,14 @@ clearRequest.onsuccess = () => {
             <section class="chapter" id="ch25">
                 <h1>Глава 25. Drag-and-Drop API</h1>
                 
-                <h2>Введение в Drag-and-Drop</h2>
-                <p>Drag-and-Drop API позволяет переносить различные элементы мышью на определенную позицию на веб-странице. При перемещении элементов у нас есть <strong>источник перемещения</strong> - элемент, который перемещаем мышью, и <strong>цель перемещения</strong> - целевая область на веб-странице (другой элемент), на которую надо переместить источник перемещения.</p>
+                <h2 id="ch25-intro">📜 Введение. Перетаскивание элементов с помощью Drag-and-Drop API</h2>
                 
+                <p>
+                    <span class="b">Drag-and-Drop API</span> позволяет переносить различные элементы мышью на определенную позицию на веб-странице. 
+                    При перемещении элементов у нас есть <span class="b">источник перемещения</span> - элемент, который перемещаем мышью, и <span class="b">цель перемещения</span> - 
+                    целевая область на веб-странице (другой элемент), на которую надо переместить источник перемещения.
+                </p>
+
                 <div class="info-box note">
                     <div class="info-box-title">💡 Основные понятия</div>
                     <ul>
@@ -26223,7 +26487,7 @@ clearRequest.onsuccess = () => {
                     </ul>
                 </div>
 
-                <h2>Атрибут draggable</h2>
+                <h2 id="ch25-attr-draggable">📜 Атрибут draggable</h2>
                 <p>Чтобы определить элемент на веб-странице, который можно перемещать (источник перетаскивания), нужно для этого элемента определить атрибут <code>draggable</code> со значением <code>true</code>. Теоретически в качестве перетаскиваемого элемента может выступать любой элемент веб-страницы.</p>
         
                 <div class="code-block"><code>&lt;div style="width:50px;height:50px; background-color: red;" draggable="true"&gt;&lt;/div&gt;</code></div>
@@ -26233,7 +26497,7 @@ clearRequest.onsuccess = () => {
                     <p>По умолчанию элементы <strong>не являются перетаскиваемыми</strong>. Только изображения, ссылки и выделенный текст можно перетаскивать без явного указания атрибута <code>draggable="true"</code>.</p>
                 </div>
 
-                <h2>События Drag-and-Drop</h2>
+                <h2 id="ch25-events">📜 События Drag-and-Drop</h2>
                 <p>После того, как элемент определен как перемещаемый, надо также определить действия, выполняемые при перемещении элемента. Во время операции перетаскивания запускается ряд различных событий:</p>
                 
                 <h3>События на перетаскиваемом элементе</h3>
@@ -26302,8 +26566,8 @@ clearRequest.onsuccess = () => {
                     <p>Обработчики всех выше перечисленных событий перемещения в качестве параметра получают объект типа <code>DragEvent</code>. Этот тип наследует свойства от <code>MouseEvent</code> и соответственно типа <code>Event</code>.</p>
                 </div>
 
-                <h2>Базовый пример перетаскивания</h2>
-                <p>Обработчик события <code>dragstart</code> определяется для перетаскиваемого элемента, а обработчики остальных событий определяются для области, на которую надо переместить элемент.</p>
+                <h2 id="ch25-drug-examp">📜 Базовый пример перетаскивания</h2>
+                <p>Обработчик события <span class="b">dragstart</span> определяется для перетаскиваемого элемента, а обработчики остальных событий определяются для области, на которую надо переместить элемент.</p>
                 
                 <div class="code-block"><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -26340,7 +26604,7 @@ clearRequest.onsuccess = () => {
         
         const target = document.getElementById("target");
         target.addEventListener("dragover", (event) =&gt; {
-            event.preventDefault(); <code class="comment">//</code> Разрешаем сброс
+            event.preventDefault(); <code class="comment">// Разрешаем сброс</code>
             console.log("Dragover operation");
         });
         
@@ -26351,42 +26615,70 @@ clearRequest.onsuccess = () => {
 &lt;/body&gt;
 &lt;/html&gt;</code></div>
 
+                <p>В данном случае перемещаемый элемент имеет идентификатор <code>source</code>, и для него регистрируется обработчик события <code>"dragstart"</code>. Оно будет возникать, когда мы захватим элемент указателем мыши и начнем перемещать.</p>
+                <p>
+                    Область, на которую перемещаем элемент, представляет другой элемент с идентификатором <code>target</code>. Для демонстрации для него регистрируем обработчики событий 
+                    <code>"dragover"</code> и <code>"drop"</code>. Событие <code>"dragover"</code> будет возникать, когда элемент <code>item</code> будет перемещаться поверх элемента <code>target</code>.
+                </p>
+
                 <div class="info-box warning">
                     <div class="info-box-title">⚠️ Важно: event.preventDefault()</div>
                     <p>Чтобы предупредить генерацию события <code>drop</code> во время перемещения, в обработчике события <code>dragover</code> <strong>обязательно</strong> нужно вызывать метод <code>event.preventDefault()</code>. Без этого событие <code>drop</code> не сработает!</p>
                 </div>
 
-                <h2>Копирование элемента</h2>
+                <p> Когда мы отпустим элемент <code>item</code> на элемент <code>target</code>, будет сгенерировано событие <code>"drop"</code>.</p>
+
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500" height="493" xml:space="preserve" version="1.1" viewBox="0 0 500 493">
+                    <image width="500" height="493" xlink:href="data:image/png;base64,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"/>
+                </svg>
+
+                <h2 id="ch25-copying">📜 Копирование элемента</h2>
                 <p>В предыдущем примере элемент пока никуда не перемещается. Чтобы реализовать реальное перемещение, нужно сохранить ссылку на перетаскиваемый элемент и добавить его копию на целевую область:</p>
                 
                 <div class="code-block"><code>&lt;script&gt;
-    let dragged = null; // Перемещенные данные
+    let dragged = null; <code class="comment">// Перемещенные данные</code>
     
-    // Источник перемещения
+    <code class="comment">// Источник перемещения</code>
     const source = document.getElementById("source");
     
-    // В обработчике устанавливаем ссылку на перетаскиваемый элемент
+    <code class="comment">// В обработчике устанавливаем ссылку на перетаскиваемый элемент</code>
     source.addEventListener("dragstart", (e) =&gt; {
         dragged = e.target;
     });
     
-    // Целевая область перемещения
+    <code class="comment">// Целевая область перемещения</code>
     const target = document.getElementById("target");
     
-    // Предупреждаем событие drop
+    <code class="comment">// Предупреждаем событие drop</code>
     target.addEventListener("dragover", (e) =&gt; {
         e.preventDefault();
     });
     
-    // Копируем перетаскиваемый элемент и помещаем его копию на целевую область
+    <code class="comment">// Копируем перетаскиваемый элемент и помещаем его копию на целевую область</code>
     target.addEventListener("drop", (e) =&gt; {
         e.target.appendChild(dragged.cloneNode());
     });
 &lt;/script&gt;</code></div>
 
-                <p>Здесь при начале перетаскивания мы сохраняем перемещаемый объект в переменную <code>dragged</code>. При окончании перетаскивания помещаем <strong>копию</strong> элемента source на элемент target с помощью метода <code>cloneNode()</code>.</p>
+                <p>Здесь при начале перетаскивания мы сохраняем перемещаемый объект в переменную <code>dragged</code>.</p>
 
-                <h2>Полное перемещение элемента</h2>
+                <div class="code-block"><code>source.addEventListener("dragstart", (e) => dragged = e.target);</code></div>
+
+                <p>При окончании перетаскивания помещаем <strong>копию</strong> элемента source на элемент target с помощью метода <code>cloneNode()</code>.</p>
+                
+                <div class="code-block"><code>target.addEventListener("drop", (e) => e.target.appendChild(dragged.cloneNode()));</code></div>
+
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="459" height="499" xml:space="preserve" version="1.1" viewBox="0 0 459 499">
+                  <image width="459" height="499" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcsAAAHzCAMAAAB49ca1AAADAFBMVEX////8DRvMzMz7+/zOz9D5+vvR0dH29/fU1dby8vLa29vv8PHu7u7d3t7r7Ozh4uLn6Ojk5eX3+PjR09QAZQBhAHgAbgBlAGQAcgBEAFwAbwBuAHcAbABhAG8AZABcAHMAZABhAHIAZwByAGQAbwAtAHAAYwBwAG8AeQAtADEAbQBkAG8ALgBuAHAAZwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAG9UADQdtp22rUAAAAAAAABAAAAAABLhVHseHcAAI8AAAAAADAAAAAAAAAAAABLhagAAHcAAAAAAAAAAAAAAAB0AAB22rYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQgkSOMHcACUAAowAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAAD4AAAJPc8AABIAAAAVAAAAEgBAhZCOMAnoCUAJPc+jAAAAAAC0AAAAj+xMPvawuXcAd00AAAAAAAAAAAAAAAAAAAAAAABQjgCOFRp2zA6P7VgO6QAAdswAAAAAAAAAAABewAB2zA8AAGAABQCAAAAAAAAQAIAAAMAwAAAAAAsAAAAAAgAAAAAAAABwAG6OMABwCUAAj+0AAAAAAAAwAAAJQI4AAAAPoAAAds8AAAAAAAAAAAAAAAAAAAAAABgAAAD4AAAAj+wAAEAAAABIAAAAj+1EQGgAAAkMAKM3R9B0AAAAAWJLR0QAiAUdSAAAAAlwSFlzAAAOxAAADsQBlSsOGwAABIpJREFUeNrt3cGSmlAQQNFJUEABEf3/fw28BVXusoipru5zVr1N3yp9b2YCPz8AAAAAAAAAAADAP/TrP7BlLdFSSy211FJLtERLLbXUUkst0RIttdRSS7RESy211FJLLdESLbXUUksttURLLbXUUkst0RIttdRSSy21REu01FJLLdESLbXUUksttURLtNRSSy211BIttdRSSy21REu01FJLLbXUEi3RUksttURLtNRSSy211BIt0VJLLbXUUku01FJLLbXUEi3RUksttdRSS7RESy211BIt0VJLLbXUUku0REsttdRSSy3RUksttdRSS7RESwAAAAAAAAAAAAAAAMjpd7MPXRsu+3RtU79PQ5vGj+nWpvs+Tec0t2nZp0eb1n16tmk7p+c+bee0tumxT0ub5n26t2k6p9s+jW0aPqa+Tdd9urSpS/jP0LJ8S59N0T4ptdRSSy2J1xKA7+k6O8hSxDetcyxaoqWWWlZq2fe2F4siABG9XnaQpYhzrDsJWqKlllpWavl+214sigBENAx2kKWIc6w7CVqipZZaVmo5jrYXiyIAEU2THWQp4hzrToKWaKmllpVa3u+2F4siABHNsx1kKeIc606ClmippZaVWi6L7cWiCEBEj4cdZCniHOtOgpZoqaWWlVquq+3FoghARM+nHWQp4hzrToKWaKmllpVabpvtxaIIgE9nvlnEOdadBC3RUkstK7X0+8toFAGIyF9j5iniHOtOgpZoqaWWlVp6XkE0igBE5OlreYo4x7qToCVaaqllpZbeTxKNIgARedtiniLOse4kaImWWmpZqeU02V4sigBENI52kKWIc6w7CVqipZZaVmo5DLYXiyIAEb3fdpCliHOsOwlaoqWWWlZq+XrZXiyKAETU93aQpYhzrDsJWqKlllpWatl1theLIgC5vmlxjkVLLbXUEi1xGgXIyE9y8xTxTesci5ZoqaWWlVr6W+doFAGIyP/czFPEOdadBC3RUkstK7X0bMNoFAGIyJPa8xRxjnUnQUu01FLLSi29yzQaRQAimiY7yFLEOdadBC3RUkstK7W8320vFkUAIppnO8hSxDnWnQQt0VJLLSu1XBbbi0URgIgeDzvIUsQ51p0ELdFSSy0rtVxX24tFEYCInk87yFLEOdadBC3RUkstK7XcNtuLRREAn858s4hzrDsJWqKlllpWaun3l9EoAhCRv8bMU8Q51p0ELdFSSy0rtfS8gmgUAYjI09fyFHGOdSdBS7TUUstKLb2fJBpFACLytsU8RZxj3UnQEi211LJSy2myvVgUAYhoHO0gSxHnWHcStERLLbWs1HIYbC8WRQAier/tIEsR51h3ErRESy21rNTy9bK9WBQBiKjv7SBLEedYdxK0REsttazUsutsLxZFAHJ90+Ici5Zaalmp5eG41rThsk/XNh0/rR/aNH5MtzYdz2ybzmlu0/H8/kebjjc4Ptu0ndPxFuTtnNY2HW/IWdp0PDP13qbpnG77NLZp+Jj6Nl336dKmLuE/Q8viLQEAAAAAAAAAAAAAAAAAAAAAAAAA/tofaylI4YTFbqIAAAAASUVORK5CYII="/>
+                </svg>
+
+                <p>Таким образом, при перетаскивании на область target будут добавляться копии элемента source:</p>
+
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="466" height="475" xml:space="preserve" version="1.1" viewBox="0 0 466 475">
+                    <image width="466" height="475" xlink:href="data:image/png;base64,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"/>
+                </svg>
+
+                <h2 id="ch25-move">📜 Полное перемещение элемента</h2>
                 <p>Если нужно не копировать, а полностью переместить элемент, нужно сначала удалить его из текущего контейнера, а затем добавить на целевую область:</p>
                 
                 <div class="code-block"><code>&lt;script&gt;
@@ -26402,14 +26694,28 @@ clearRequest.onsuccess = () => {
         e.preventDefault();
     });
     
-    // Полностью перемещаем элемент
+    <code class="comment">// Полностью перемещаем элемент</code>
     target.addEventListener("drop", (e) =&gt; {
-        // Удаляем элемент из родительского контейнера
+        <code class="comment">// Удаляем элемент из родительского контейнера</code>
         dragged.parentNode.removeChild(dragged);
-        // Добавляем на целевую область
+        <code class="comment">// Добавляем на целевую область</code>
         e.target.appendChild(dragged);
     });
 &lt;/script&gt;</code></div>
+
+                <p>Здесь в обработчике <code>"drop"</code> сначала удаляем перетаскиваемый элемент из родительского контейнера (в данном случае элемента <code>body</code>), а затем добавляем его на целевую область:</p>
+
+                <div class="code-block"><code>target.addEventListener("drop", (e) => {
+    dragged.parentNode.removeChild(dragged);
+    e.target.appendChild(dragged);
+});</code></div>
+
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="405" xml:space="preserve" version="1.1" viewBox="0 0 400 405">
+                    <image width="400" height="405" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGVCAMAAADnrFdNAAADAFBMVEX7AAP29/i+vr7X2Nj8IS7V1dX8nKLt7e38DRv8SFP9ubzIx8fv8PD7Fhnf4OH7BhTExMT7AAz7P0H////m5+j9t7zPz9De3+D+wcXj5OTz8/THx8j9qa37Fhfb29v3+PjMzMzW19jn6Onv7/D9oab+vMD8JzTP0ND+zM/8EyHHyMjIyMcALgBuAHAAZwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAG9UADQdtp22rUAAAAAAAABAAAAAABLhVHseHcAAI8AAAAAADAAAAAAAAAAAABLhagAAHcAAAAAAAAAAAAAAAB0AAB22rYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQgkSR8HcACUAAowAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQAAAD4AAAJPc8AABoAAAATAAAAGgBAhZCR8AnoCUAJPc+jAAAAAAC0AAAAj+xMPvawuXcAd00AAAAAAAAAAAAAAAAAAAAAAABQjgCOFRp2zA6P7VgO6QAAdswAAAAAAAAAAABewAB2zA8AAGAABQCAAAAAAAAQAIAAAMBEAAAAAAsAAAAAAgAAAAAAAABwAG6R8ABwCUAAj+0AAAAAAADwAAAJQJEAAACCHQAAd1AAAAAAAAAAAAAAAAAAAAAAABgAAAD4AAAAj+wAAEAAAABIAAAAj+1EMVAAAAkMAKNeKOTGAAAAAWJLR0QTDLtclgAAAAlwSFlzAAAOxAAADsQBlSsOGwAABqRJREFUeNrt3WF30zYYhuGknQljXZvRrp3N5piywdj+//+bFSJIm67gHL85srnuL/WpJSN8Y+t9guwsrlEUC6eAEBBCCAghBIQQAkIIASH4diFN1bZt3W/U/c921W+kn23T79lu9L9YtY+b3O03qXOT1V6TJh/lc+f7B00OOh8OYfPU8fNhr/PgmoPOXz/+pn1+/HnP3eapwX3l+AeDa4cJWa279bpLB1n3pM5d2kjnNP1Me+q0UfUbVdro/+RlavLPKnXu+dDvucydc5MmNemavc7t/p517twtd00OOq+b3OTx4M7y4NZ5cLe5yd3e+D913jwx/k+Dy02q5svxmyp3Phh/9fT40z/PB2fuJg8ujf9s12SQkJUbRyTdYCGNkxZJNVTImSukqCukaV0hodS1slcOASGzFaLKiq6yKlXWxHMIIYQQ4pY1GSHXfMTSNMpeOQQjCnHLKuuWZVJX9hJCCCEgpFCGfrgIOQSETEhIc+k/qEIZushBMFRlqbIImdIV4pZVlpCmMqmHMvRxBMghIGRKwdAcUtYcosoSDAkhhBAcHQxrk3ooq5WyVw7BiELcsWIZvHLRpB6LR9qUvSBk1kIunLSS5pDrd85ZUVUWBEM8J6Spl05LJEM/y5JDlL2EEDIlIW5ZZQmx6iQYKxflEBAy52BoDonl8lKVJYeAEMEQJwqGXsYfi5fxyyEYVYg7ViyDVy52jIRi5aIcAjnEFYJTzSHebF1YlQXBEM8Jae6dlVAGr1w0qRcWDAlR9hIiGE5HyDsfLsYyeOWix0PkEBAyoWBo5WIsVi7KISBEMMSphFi5GIyVi3IICJmxECsXg7FyUQ4BIYIhThYM+YjFy/jlEIwqxC0rFi/jL4zbW0LkEMghM75CfLgYyuBH2jbOmRwCQiYjxCKHYIYuclBlySGEECIY4lghHkcIxsv45RAQMmMhF1YuxnJ+rsqSQ0DIZLDYeurBsHbOQrFyUQ4BITMWYlJX9hJCCCE4Wog5pCwhvvJI2QtCJiRkYwqJZfDL+E3qyt7vCt+OIIdgVCFWnZR1y4IcAkImJMTq92CGrn5XZQmGhBAiGOJYIZ5TD8bL+OUQEDJjIT5cDMbzIXIICCEEpxLizdbBeKRNDsGoQtyyYvEyflUWCCEEJxPiw8VYBq9c5EMOASHTEWKRQzBexq/sBSFzFuKWVZYQjyME42X8cggImXMw/GAOKWoOUWXJIYQQQgiODoa1r4sOxcpFOQSjChFDYhm+cpGRUDzSpuzFqEJcIYUJeWMOKWoOUWUVVmVBMMRzQpraPSuU+3tlrxwCQgRDnEaIlYvBWLkoh4CQOQdDc0hZc4gqSw4hhBDBEEcHw0uTeig3N8peOQQjCnHHimX4ysULJy0SX04sh4AQQnCqOcSbrQursiAY4jkhm9pZCWXoU7gmdVUWIYRMSYj/oCpMiJfxFxYMIYeAkOkIsXIxGCsX5RAQMuOy1y2rsCvEN+wEM/QbdiCHgJAJCfG+rNKqLGWvHEIIIRMSIhiWJcTKxWC8jF8OwahCxJBYBj/SZlJX9hJCCCEgpEysXJRDQMiMhVjkEMzQRQ6CoSpLlUXIpK6QrlunPm3aSCu1u7TRW2r6n9uj1Wmj2jXp+lviMjXpVunxq75ptWuy7VztmjR9k3V6OKtOTc7z8dOear/z7XLXZNv5312T9Aenzt8wuG2TPLg3l7sm+fjdh81ucOd740+D+2l7/O34m93x7/YGd5H2fB7/dnDd/uDy+NMQ7vb/8tvBpRbr/fEPEVK1VZWOVlc9aQJq00aTBld92rNtcpebrHZN2odNdp1zkyY3Odjz5fjt485pJA+aXOTj953ffmnSbO8E/a8Oxn//9Pj/b3D7x6+qm9z5IjdZPjv+3PnmYPxv029SxZQHp+yVQ0AIISCEEBBCCAgBIYSAEEJACCEghBCUKuTV6x8jeP23k32ckBeLq1/G52rxq5N9nJA/Fx9fjs/HxV9ONiGEEEIIIYQQQgghhIAQQkAIIYQQQgghhBBCCCEghBAQQgghhBBCCCGEEEIIIYQQAkIIIYQQQgghhBBCCCGEEEJACCGEEEIIIYQQQgghhBBCCAghhBBCCCGEEEIIIYQQQggBIYQQQgghhBBCCCGEEEIIISCEEEIIIYQQQgghhBBCCCEEhBBCCCGEEEIIIYQQQgghhIAQQgg5UsiLxcur8Xm5eOVkHyfk9z/e/zA+73/+zck+TggIASGEgBBCQAghIIQQEAJCCAEhhIAQQkAIISAEhBTIfxEm0xc+HN/bAAAAAElFTkSuQmCC"/>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="311" xml:space="preserve" version="1.1" viewBox="0 0 400 311">
+                    <image width="400" height="311" xlink:href="data:image/png;base64,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"/>
+                </svg>
 
                 <div class="info-box success">
                     <div class="info-box-title">✅ Копирование vs Перемещение</div>
@@ -26419,8 +26725,42 @@ clearRequest.onsuccess = () => {
                     </ul>
                 </div>
 
-                <h2>Объект DataTransfer</h2>
-                <p>При перетаскивании элементов в обработчик событий перетаскивания передается объект типа <code>DragEvent</code>. Этот тип наследует свойства от <code>MouseEvent</code> и соответственно типа <code>Event</code>, но в дополнение к ним также определяет свойство <strong>dataTransfer</strong>. Это свойство представляет перетаскиваемые данные в виде объекта <code>DataTransfer</code>.</p>
+                <h2 id="ch25-datetransfer">📜 Установка и получение перетаскиваемых данных с помощью объекта DataTransfer</h2>
+
+                <p>
+                    При перетаскивании элементов в обработчик событий перетаскивания передается объект типа <span class="b">DragEvent</span>. Этот тип наследует свойства от 
+                    <code>MouseEvent</code> и соответственно типа <code>Event</code>, но в дополнение к ним также определяет свойство <span class="b">dataTransfer</span>. Это свойство 
+                    представляет перетаскиваемые данные в виде объекта <span class="b">DataTransfer</span>.
+                </p>
+
+                <p>Тип <code>DataTransfer</code> определяет ряд свойств, которые позволяют получить информацию о получаемых данных или настроить их перетаскивание:</p>
+
+                <ul>
+                    <li><span class="b">dropEffect</span>: получает или устанавливает тип операции перетаскивания. Может принимать значения:
+                        <ul>
+                            <li><code>copy</code>: создается <span class="b">копия</span> перетаскиваемых данных, и эта копия помещается на новую позицию</li>
+                            <li><code>move</code>: данные полностью перемещаются на новую позицию</li>
+                            <li><code>link</code>: создается ссылка на источник данных</li>
+                            <li><code>none</code>: данные не перетскиваются</li>
+                        </ul>
+                    </li>
+                    <li><span class="b">effectAllowed</span>: устанавливает возможные типы операций. Может принимать следующие значения
+                        <ul>
+                            <li><code>none</code>: элемент не перетаскивается</li>
+                            <li><code>copy</code>: элемент может копироваться на новую позицию</li>
+                            <li><code>copyLink</code>: допустимо копирование элемента или создание ссылки на него</li>
+                            <li><code>copyMove</code>: допустимо копирование или перемещение элемента</li>
+                            <li><code>link</code>: допустимо создание ссылки на перетаскиваемый элемент</li>
+                            <li><code>linkMove</code>: допустимо перемещение элемента или создание ссылки на него</li>
+                            <li><code>move</code>: допустимо перемещение элемента на новую позицию</li>
+                            <li><code>all</code>: все операции допустимы</li>
+                            <li><code>uninitialized</code>: значение по умолчанию, если это свойство не установлено. Эквивалентно <code>all</code></li>
+                        </ul>
+                    </li>
+                    <li><span class="b">files</span>: содержит список всех локальных файлов, доступных для передачи данных. Если операция перетаскивания не предполагает перетаскивание файлов, это свойство представляет собой пустой список.</li>
+                    <li><span class="b">items</span>: предоставляет объект DataTransferItemList, который представляет собой список всех данных перетаскивания.</li>
+                    <li><span class="b">types</span>: массив строк, задающих форматы, заданные в событии перетаскивания.</li>
+                </ul>
 
                 <h3>Свойства DataTransfer</h3>
                 <table>
@@ -26455,6 +26795,13 @@ clearRequest.onsuccess = () => {
                 </table>
 
                 <h3>Методы DataTransfer</h3>
+
+                <ul>
+                    <li><p><span class="b">clearData()</span>: удаляет данные, связанные с объектом DataTransfer</p></li>
+                    <li><p><span class="b">getData(format)</span>: извлекает данные объекта DataTransfer. В качестве параметра передается формат данных. Возвращаются данные указанного формата. Если данные указанного формата не установлены, возвращает пустую строку</p></li>
+                    <li><p><span class="b">setData(format, data)</span>: устанавливает для объекта DataTransfer данные data, которые относятся к формату format. Если в DataTransfer уже есть данные указанного формата, то новые данные заменяют те, которые имелись ранее.</p></li>
+                    <li><p><span class="b">setDragImage(imgElement, xOffset, yOffset)</span>: устанавливает изображение, применяемое при перетаскивании. Первый параметр - imgElement представляет элемент <code>&lt;img&gt;</code>, используемый в качестве источника изображения. А параметры xOffset, yOffset задают соответственно смещения внутри изображения по оси x и y</p></li>
+                </ul>
                 <table>
                     <thead>
                         <tr>
@@ -26482,7 +26829,7 @@ clearRequest.onsuccess = () => {
                     </tbody>
                 </table>
 
-                <h2>Использование setData() и getData()</h2>
+                <h2 id="ch25-set-get">📜 Использование setData() и getData()</h2>
                 <p>Методы <code>setData()</code> и <code>getData()</code> позволяют нам легко установить и получить нужные данные при перетаскивании элементов.</p>
                 
                 <div class="code-block"><code>&lt;!DOCTYPE html&gt;
@@ -26515,10 +26862,10 @@ clearRequest.onsuccess = () => {
     &lt;script&gt;
         const items = document.getElementsByClassName("item");
         
-        // Устанавливаем обработчик перетаскивания элемента
+        <code class="comment">// Устанавливаем обработчик перетаскивания элемента</code>
         for (item of items) {
             item.addEventListener("dragstart", (e) =&gt; {
-                // В качестве перетаскиваемых данных устанавливаем HTML-код элемента
+                <code class="comment">// В качестве перетаскиваемых данных устанавливаем HTML-код элемента</code>
                 e.dataTransfer.setData("text/html", e.target.outerHTML);
             });
         }
@@ -26526,7 +26873,7 @@ clearRequest.onsuccess = () => {
         const target = document.getElementById("target");
         target.addEventListener("dragover", (e) =&gt; e.preventDefault());
         
-        // При заходе и выходе из целевой области меняем класс
+        <code class="comment">// При заходе и выходе из целевой области меняем класс</code>
         target.addEventListener("dragenter", (e) =&gt; {
             e.target.classList.add("dragover");
         });
@@ -26535,7 +26882,7 @@ clearRequest.onsuccess = () => {
             e.target.classList.remove("dragover");
         });
         
-        // При отпускании элемента добавляем его на целевую область
+        <code class="comment">// При отпускании элемента добавляем его на целевую область</code>
         target.addEventListener("drop", (e) =&gt; {
             e.srcElement.innerHTML += e.dataTransfer.getData("text/html");
             e.target.classList.remove("dragover");
@@ -26545,31 +26892,67 @@ clearRequest.onsuccess = () => {
 &lt;/html&gt;</code></div>
 
                 <h3>Разбор примера</h3>
+                <p>Перетаскиваемые элементы здесь определены с классом <code>item</code> - это синий и красный квадраты. Перетаскивание осуществляется на элемент <code>&lt;div id="target"&gt;</code></p>
                 <p><strong>1. Установка данных при dragstart:</strong></p>
-                <div class="code-block"><code>item.addEventListener("dragstart", (e) =&gt; {
-    // Устанавливаем HTML-код элемента как перетаскиваемые данные
-    e.dataTransfer.setData("text/html", e.target.outerHTML);
-});</code></div>
+                <p>
+                    Сначала регистрируется обработчик события <span class="b">dragstart</span> для всех перемещаемых элементов item. В этом обработчике через параметр 
+                    и его свойство <code>dataTransfer</code> можно получить объект <span class="b">DataTransfer</span>:
+                </p>
+
+                <div class="code-block"><code>const items = document.getElementsByClassName("item");
+<code class="comment">// устанавливаем обработчик перетаскивания элемента</code>
+for (item of items) {  
+    item.addEventListener("dragstart", (e) => { 
+        <code class="comment">// в качестве перетаскиваемых данных устанавливаем html-код элемента</code>
+        e.dataTransfer.setData("text/html", e.target.outerHTML);  
+    });
+}</code></div>
+
+                <p>
+                    Объект <span class="b">DataTransfer</span> представляет данные, которые перетаскиваются. Эти данные 
+                    можно определить с помощью метода <span class="b">setData()</span>:
+                </p>
+
+                <div class="code-block"><code>e.dataTransfer.setData("text/html", event.target.outerHTML);</code></div>
         
-                <p>Здесь <code>e.target</code> представляет перемещаемый элемент (у которого установлен атрибут <code>draggable</code>). А <code>e.target.outerHTML</code> представляет HTML-код этого элемента.</p>
+                <p>
+                    Здесь <code>e.target</code> представляет перемещаемый элемент (у которого установлен атрибут <code>draggable</code>). А <code>e.target.outerHTML</code> 
+                    представляет html-код этого элемента. То есть таким образом мы будем перемещать html-код, а перемещаемое содержимое будет иметь тип <code>"text/html"</code>
+                </p>
 
                 <p><strong>2. Получение данных при drop:</strong></p>
+                <p>
+                    На целевой области перетаскивания (в элементе target) эти данные затем можно получить с помощью метода getData(). В примере выше это делается в обработчике события 
+                    <span class="b">drop</span>, когда пользователь отпустил перетаскиваемый элемент на целевую область:
+                </p>
+
                 <div class="code-block"><code>target.addEventListener("drop", (e) =&gt; {
-    // Получаем HTML-код и добавляем в целевую область
+    <code class="comment">// Получаем HTML-код и добавляем в целевую область</code>
     e.srcElement.innerHTML += e.dataTransfer.getData("text/html");
     e.target.classList.remove("dragover");
 });</code></div>
 
+                <p>В данном случае мы берем перетаскиваемые данные (html-код элемента) и добавляем их в элемент <code>target</code>.</p>
+
                 <p><strong>3. Визуальная обратная связь:</strong></p>
-                <div class="code-block"><code>// При входе в целевую область добавляем класс
+
+                <p>Кроме того, для визуального эффекта, когда перетаскиваемый элемент пересекает границу целевой области, переключаем класс <code>loading</code>:</p>
+                
+                <div class="code-block"><code><code class="comment">// При входе в целевую область добавляем класс</code>
 target.addEventListener("dragenter", (e) =&gt; {
     e.target.classList.add("dragover");
 });
 
-// При выходе из целевой области удаляем класс
+<code class="comment">// При выходе из целевой области удаляем класс</code>
 target.addEventListener("dragleave", (e) =&gt; {
     e.target.classList.remove("dragover");
 });</code></div>
+
+                <p>Таким образом, мы сможем перемещать элементы <code>item</code> на элемент <code>target</code>:</p>
+
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="400" height="430" xml:space="preserve" version="1.1" viewBox="0 0 400 430">
+                    <image width="400" height="430" xlink:href="data:image/png;base64,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"/>
+                </svg>
 
                 <div class="info-box note">
                     <div class="info-box-title">💡 Форматы данных</div>
@@ -26582,7 +26965,7 @@ target.addEventListener("dragleave", (e) =&gt; {
                     </ul>
                 </div>
 
-                <h2>Типы операций dropEffect</h2>
+                <h2 id="ch25-operations-types">📜 Типы операций dropEffect</h2>
                 <p>Свойство <code>dropEffect</code> определяет тип операции перетаскивания:</p>
                 
                 <table>
@@ -26617,7 +27000,7 @@ target.addEventListener("dragleave", (e) =&gt; {
                     </tbody>
                 </table>
 
-                <h2>Типы операций effectAllowed</h2>
+                <h2>📜 Типы операций effectAllowed</h2>
                 <p>Свойство <code>effectAllowed</code> устанавливает возможные типы операций:</p>
         
                 <table>
@@ -26667,7 +27050,7 @@ target.addEventListener("dragleave", (e) =&gt; {
                     </tbody>
                 </table>
 
-                <h2>Практический пример: сортировка списка</h2>
+                <h2 id="ch25-list-sorting">📜 Практический пример: сортировка списка</h2>
                 <div class="code-block"><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
@@ -26737,7 +27120,7 @@ target.addEventListener("dragleave", (e) =&gt; {
                 if (e.target.classList.contains('list-item')) {
                     e.target.classList.remove('drag-over');
                     
-                    // Вставляем перетаскиваемый элемент перед целевым
+                    <code class="comment">// Вставляем перетаскиваемый элемент перед целевым</code>
                     const list = document.getElementById('sortableList');
                     list.insertBefore(draggedItem, e.target);
                 }
@@ -26757,7 +27140,7 @@ target.addEventListener("dragleave", (e) =&gt; {
                     </ul>
                 </div>
 
-                <h2>Перетаскивание файлов</h2>
+                <h2 id="ch25-drag-and-drop-files">📜 Перетаскивание файлов</h2>
                 <p>Drag-and-Drop API также позволяет перетаскивать файлы из файловой системы на веб-страницу. Для этого используется свойство <code>files</code> объекта <code>DataTransfer</code>.</p>
         
                 <div class="code-block"><code>&lt;!DOCTYPE html&gt;
@@ -26808,10 +27191,10 @@ target.addEventListener("dragleave", (e) =&gt; {
             e.preventDefault();
             dropZone.classList.remove('dragover');
             
-            // Получаем список файлов
+            <code class="comment">// Получаем список файлов</code>
             const files = e.dataTransfer.files;
             
-            // Выводим информацию о файлах
+            <code class="comment">// Выводим информацию о файлах</code>
             let info = '&lt;h3&gt;Загружено файлов: ' + files.length + '&lt;/h3&gt;';
             
             for (let i = 0; i &lt; files.length; i++) {
@@ -26841,7 +27224,7 @@ target.addEventListener("dragleave", (e) =&gt; {
                     </ul>
                 </div>
 
-                <h2>Чтение содержимого файла</h2>
+                <h2 id="ch25-filereader">📜 Чтение содержимого файла</h2>
                 <p>Для чтения содержимого перетаскиваемых файлов используется <code>FileReader</code> API:</p>
                 
                 <div class="code-block"><code>&lt;script&gt;
@@ -26850,42 +27233,42 @@ target.addEventListener("dragleave", (e) =&gt; {
         
         const files = e.dataTransfer.files;
         
-        // Обрабатываем первый файл
+        <code class="comment">// Обрабатываем первый файл</code>
         if (files.length &gt; 0) {
             const file = files[0];
             const reader = new FileReader();
             
-            // Обработчик загрузки файла
+            <code class="comment">// Обработчик загрузки файла</code>
             reader.onload = (event) =&gt; {
                 console.log('Содержимое файла:', event.target.result);
                 fileInfo.innerHTML = '&lt;pre&gt;' + event.target.result + '&lt;/pre&gt;';
             };
             
-            // Читаем файл как текст
+            <code class="comment">// Читаем файл как текст</code>
             reader.readAsText(file);
             
-            // Альтернативы:
-            // reader.readAsDataURL(file); // для изображений
-            // reader.readAsArrayBuffer(file); // для бинарных данных
+            <code class="comment">// Альтернативы:</code>
+            // reader.readAsDataURL(file);     <code class="comment">// для изображений</code>
+            // reader.readAsArrayBuffer(file); <code class="comment">// для бинарных данных</code>
         }
     });
 &lt;/script&gt;</code></div>
 
-                <h2>Установка пользовательского изображения при перетаскивании</h2>
+                <h2 id="ch25-custom-img">📜 Установка пользовательского изображения при перетаскивании</h2>
                 <p>Метод <code>setDragImage()</code> позволяет установить пользовательское изображение, отображаемое при перетаскивании:</p>
                 
                 <div class="code-block"><code>&lt;script&gt;
     const source = document.getElementById('source');
     
     source.addEventListener('dragstart', (e) =&gt; {
-        // Создаем изображение для перетаскивания
+        <code class="comment">// Создаем изображение для перетаскивания</code>
         const img = new Image();
         img.src = 'icon.png';
         
-        // Устанавливаем изображение со смещением (50px, 50px)
+        <code class="comment">// Устанавливаем изображение со смещением (50px, 50px)</code>
         e.dataTransfer.setDragImage(img, 50, 50);
         
-        // Устанавливаем данные
+        <code class="comment">// Устанавливаем данные</code>
         e.dataTransfer.setData('text/plain', 'Перетаскиваемый элемент');
     });
 &lt;/script&gt;</code></div>
@@ -26899,7 +27282,7 @@ target.addEventListener("dragleave", (e) =&gt; {
                     </ul>
                 </div>
 
-                <h2>Полный пример: канбан-доска</h2>
+                <h2 id="ch25-canban">📜 Полный пример: канбан-доска</h2>
                 <div class="code-block"><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
@@ -26960,7 +27343,7 @@ target.addEventListener("dragleave", (e) =&gt; {
     &lt;script&gt;
         let draggedCard = null;
         
-        // Обработчики для карточек
+        <code class="comment">// Обработчики для карточек</code>
         document.addEventListener('dragstart', (e) =&gt; {
             if (e.target.classList.contains('card')) {
                 draggedCard = e.target;
@@ -26975,7 +27358,7 @@ target.addEventListener("dragleave", (e) =&gt; {
             }
         });
         
-        // Обработчики для колонок
+        <code class="comment">// Обработчики для колонок</code>
         document.addEventListener('dragover', (e) =&gt; {
             if (e.target.classList.contains('column')) {
                 e.preventDefault();
@@ -27000,7 +27383,7 @@ target.addEventListener("dragleave", (e) =&gt; {
                 e.preventDefault();
                 e.target.classList.remove('drag-over');
                 
-                // Перемещаем карточку в новую колонку
+                <code class="comment">// Перемещаем карточку в новую колонку</code>
                 e.target.appendChild(draggedCard);
                 
                 console.log(`Карточка перемещена в: ${e.target.dataset.status}`);
@@ -27010,7 +27393,7 @@ target.addEventListener("dragleave", (e) =&gt; {
 &lt;/body&gt;
 &lt;/html&gt;</code></div>
 
-                <h2>Советы и лучшие практики</h2>
+                <h2 id="ch25-conclusion">📜 Советы и лучшие практики</h2>
                 
                 <div class="info-box success">
                     <div class="info-box-title">✅ Рекомендации</div>
@@ -27131,12 +27514,12 @@ target.addEventListener("dragleave", (e) =&gt; {
     
     &lt;script&gt;
         function printFiles(e) {
-            const files = e.target.files; // получаем все выбранные файлы
+            const files = e.target.files; <code class="comment">// получаем все выбранные файлы</code>
             let output = "";
             
             for (let i = 0; i &lt; files.length; i++) {
-                // Перебираем все выбранные файлы
-                const file = files[i]; // Получаем файл
+                <code class="comment">// Перебираем все выбранные файлы</code>
+                const file = files[i]; <code class="comment">// Получаем файл</code>
                 console.log(file);
                 
                 output += "&lt;li&gt;&lt;p&gt;&lt;strong&gt;" + file.name + "&lt;/strong&gt;&lt;/p&gt;";
@@ -27209,7 +27592,7 @@ target.addEventListener("dragleave", (e) =&gt; {
     &lt;script&gt;
         function printFiles(e) {
             e.preventDefault();
-            const files = e.dataTransfer.files; // получаем все выбранные файлы
+            const files = e.dataTransfer.files; <code class="comment">//</code> получаем все выбранные файлы
             let output = "";
             
             for (let i = 0; i &lt; files.length; i++) {
