@@ -882,7 +882,12 @@
                                 <li class="nav-subitem" data-target="ch27-types-conclusion">📜 Типы Web Workers</li>
                             </ul>
                         </li>
-                        <li class="nav-item" data-target="ch28">Глава 28. Web API</li>
+                        <li class="nav-item has-subitems" data-target="ch28"><span class="ch-emoj"></span> Глава 28. Дополнительные Web API
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch28-geolocation">📜 Geolocation API</li>
+                                <li class="nav-subitem" data-target="ch28-types-conclusion">📜 Типы Web Workers</li>
+                            </ul>
+                        </li>
                         <li class="nav-item" data-target="ch29">Глава 29. Паттерны</li>
                     </ul>
                 </div>
@@ -28865,6 +28870,136 @@ function fibonacci(n) {
 
             <!-- ГЛАВА 28: Web Speech API -->
             <section class="chapter" id="ch28">
+                <h1>Глава 28. Дополнительные Web API</h1>
+
+                <h2 id="ch28-geolocation">📜 Geolocation API</h2>
+
+                <p>
+                    С помощью <span class="b">Geolocation API</span> мы можем получить в коде JavaScript данные о географическом положении пользователя. Для работы с Geolocation API 
+                    объект <code>navigator</code> определяет свойство <span class="b">geolocation</span>, которое представляет тип <span class="b">Geolocation</span>. 
+                    Для получения положения у объекта Geolocation применяется метод <span class="b">getCurrentPosition()</span>:
+                </p>
+
+                <div class="code-block"><code>getCurrentPosition(success)
+ getCurrentPosition(success, error)
+ getCurrentPosition(success, error, options)</code></div>
+
+                <p>Метод может принимать до трех параметров:</p>
+                <ul>
+                    <li><code>success</code>: функция, которая вызывается при успешном определении координат пользователя</li>
+                    <li><code>error</code>: функция, которая вызывается при возникновении ошибки</li>
+                    <li><code>options</code>: дополнительные параметры конфигурации</li>
+                </ul>
+
+                <p>
+                    Поскольку позиция определяется асинхронно, то в качестве перевого параметра <code>success</code> в метод передается функция обратного вызова, 
+                    которая вызывается, как только позиция будет успешно определена. В качестве параметра в эту функцию обратного вызова передается объект <span class="b">GeolocationPosition</span>. 
+                    Его свойство <code>coords</code> представляет тип <code>GeolocationCoordinates</code>, свойства которого собственно и хранят координаты пользователя:
+                </p>
+
+                <ul>
+                    <li><code>latitude</code>: географическая широта</li>
+                    <li><code>longitude</code>: географическая долгота</li>
+                    <li><code>altitude</code>: высота над уровнем моря в метрах</li>
+                    <li><code>speed</code>: скорость, с которой перемещается пользователь (например, если он идет или перемещается на транспорте)</li>
+                    <li><code>accuracy</code>: точность определения широты и долготы в метрах</li>
+                    <li><code>altitudeAccuracy</code>: точность определения высоты над уровнем моря в метрах</li>
+                    <li><code>heading</code>: куда направлено устройство пользователя. 
+                        <code>0&deg;</code> (градусов) соответствует северу, а направление определяется по часовой стрелке (это означает, что восток равен <code>90&deg;</code>, (градусам) а запад — <code>270&deg; </code>градусам). 
+                        Если скорость (свойство <code>speed</code>) равна <code>0</code>, это свойство равно <code>NaN</code>. Если устройство не может предоставить информацию о направлении, 
+                        это свойство равно нулю.
+                    </li>
+                </ul>
+
+                <p>Например, получим геоданные пользователя:</p>
+
+                <div class="code-block"><code>function success(position) {
+    console.log("Широта: ", position.coords.latitude);
+    console.log("Долгота: ", position.coords.longitude);
+    console.log("Высота: ", position.coords.altitude);
+    console.log("Скорость перемещения: ", position.coords.speed);
+    console.log("Точность: ", position.coords.aaccuracy);
+    console.log("Направление: ", position.coords.heading);
+};
+navigator.geolocation.getCurrentPosition(success);</code></div>
+
+                <p>
+                    При этом надо учитывать, что в браузерах действует политика безопасности, которая при обращении к методу <code>geolocation.getCurrentPosition()</code> 
+                    отображает пользователю сообщение, в котором пользователь может подтвердить отправку географических координат.
+                </p>
+
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500" height="276" xml:space="preserve" version="1.1" viewBox="0 0 500 276">
+                  <image width="500" height="276" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAAEUCAMAAADqTDQ6AAADAFBMVEUBAgTE2vje4N+/wcKPkJJeYWUAYN83ODtOkOnY2NcfICPo5+e2uLqcwfMAVN6DhIWur7D2+fxSU1XHyMkre+UREhbv8O9/sO96e32jpKUvMDPO4PdHSEvn8PxnaGvP0M/f3+B1qe4Yb+MJCw4XGBsnKCu10fa/2Pc/QEPd6fo+huhmoO2XmJpWWV1vcHPn6enj5OQOaOKHiIrX19inqKmOuPGnyPS1t7jDw8TN4PkNDhFiY2UFBglcmes1geYdHiElJinPz9BXW2A1Njk9PkFNTlHw8O8jdeS6ursVFhlFRknQ0M/u7/Cwr7H///8tLjF1dnmen6GKte/m5+jX2NiWl5kPEBMiIyZtbnFiZWn19/qOjpB9foAZGh0TbOI/iOgHCAsKZuFxp+57re85Oj1fY2imp6hCQ0XZ5/qGh4mxz/ZVVllaW13b29zq6+vn6OcxMjXj7fu71farq62UvPLM3vYccuS+v8CSk5UpKi2jxfRUleqKi41PUFPNzc1qa21yc3VJjenz9PRcXmJKS03Hx8ivsLHK3vg7hOdjnuyEsvCbm5wxfuZro+0meOXP0NDf4OGfoKJ+rvB/gILU1NR3eXusy/TQz9D49/eZv/IAXuDT5PlZl+vw7+/v8PDr8/zg39/Y19jo6Of3+Pfg3+BGi+eJtvGAr+/w7/DA1/bS4vcAWt+Ar/DQz8+ys7UEYuHE2fZEiuiYl5mDsu9Ah+j4+PcAAABwAAAInHQAAAsAAAApAAAACwCVz4jVOAhgCJUInHQTAAAAAAHsAAAA7+01PvawuXcAdzYAAAAAAAAAAAAAAAAAAAAAAAClIACOVLJ2ZA7v7pAO6QAAdmQAAAAAAAAAAABewAB2ZA8AAGAABQCAAAAAAAAQAIAAAMAIAAAAAAgAAAAAAgAAAAAAAAB4AHbVOACoCJUA7+4AAAAAAAA4AAAIldUAAAAPoAAAdmcAAAAAAAAAAAAAAAAAAAAAABgAAAAwAAAA7+4AAEAAAACAAAAA7+4WYPAAAAEMARPYWs/rAAAAAWJLR0ROGWFx3wAAAAlwSFlzAAAOxAAADsQBlSsOGwAAIABJREFUeNrtnY9jEteX6OlX89JmdWNo5vuC23WjE32xrTIx9ivfAQULaZise4lLE0zq8BKlUk1mipIvgiLBgRoN2qbbab7buqv762V/PqKv7/1/75w7A4H8kthoAtxbS4Yzvy7zuefccy/nHiykqmga/NNUQVVVxbHvQXGff9++M/vOQNlX+h8Kvp6h8n1n6Lsa5fjPf+ZB0aELgt1uV4NC0C7Y4WZ2exD+wZuSXFgrV025ulZur5AHTXnQkKvV8mCl3G7KBXjdQI7XgT1Yzw3kQVMuVMlh077e8VXy4Cp50JDbqVwAuUrlQQHk9rVyu7D2+KAhV/Ej2/FVxddSuaBeeAb/nlkqgMN/iB2p4zmC7vAXiwicvhjsS+VV8uK6cix+h74Az1jAEqz4XyhLKmQrO8pye3ATud14F6yQB2uQC7tPHlyRB7csh5aECkW5V2E3wFuq1FwzNJ0qO7S8oKJn9uwzWG1HOeO/7dAVo6asvI0SpIauEjlSt1QRryhqqQl2K7SYf35lWaOjrLxx7NhjVml7GbpWSf0ZMAcT/yb4LCwsGH/pP2hShnBl/yr5gmAev/AG5MKKvLTRvbCZvLtS3r075EKVvPwUq4sKvsdKqdZ0VVD0787rme/OZzIZHf7POGjZs2cP/YP/6H97qNCQ7ynJHTXIHRXXcZQu7nBsr5zu2lPatZ58T7V8z1bke9aV79lA7niVvLTtcFTft3TNzeV71sr3VD8Wh+MbxzeZ/oWgqe4XytANDbf3KxorDVkUXShvE4uB/G/xjaBrhJVGLUpJoQmFXnLdGPPGpl7WdcuKD6cI7ME0ctF0tWTeyyNzu8IUvbFLt7BG0wWFPZbGLqpCJ9+gT1f6/1GnxfE+eywN3qnvM0jrlvJkWSbDHkuDQ/ebqFfM+8Ln7LE0doEhOZYOdOSwXFBVRWePpdGhA2b04A3oONPOoDc+dIO5CV1TGfQmgV6h6Qx6M0DPMOjNB/08hX6BQlcZ9CbSdNXUdLrdz6DXf9HW2doMus6g1z3y69kSRKWry74BdNUw7wx6g9jvltyYMa+qXMqd0DeD/uwzGifLoNd/OZNrodSVSy2fXtvIvKuqRXvGNL1xSpFSBz3/1LZhn041/TMGvZGo5w49yH6as63vvdtNTTf79CCD3hDlQUvLiZbc9+sP2YJCCTr9KzBNb5DyfW4s98UG43ShpOlqqU9n36c3QlF+bMm1ZNdlKbwvVGk6Lldkmt4IzC992vLD2KdjmfU1vdq8qwx6YzBHv71ojtxWQ3cY0D+zqNS82wVB/449s/pn3kLHakj9/Fro31Q5cnaEzjS93os63GKO1YD6rLCRppcdOabpDVCCLVOlebjiiRPKetD/yYSuGub9PPPe677ojvLmN5l1+/RghSMn7Iyma/oztEpsEd1bKQid2neL+kw1zfvmmi5kHJnXXQMDXcj6Ow64nPBqFZmReVvQvw6WzTsmK9jUkVO7fDIvxZz+17rbxUh8A28zJd8mB6SYyoi8VU03J2cA+h836SvyvBQYam0TQ4XXuVu7JbnBHlso5G1LnWFA3gr0bwD61yuO3ObmXYhxERtY6G/yPT37XuNuaX7DtpJpd6bZWPHtabpa4b1DE/jjxo5clouZARm9UnS94KtXrHLu4tNVI4utLITXKq+9sHE/ICjjFW9et79QKk7U/kFoPOiCWqXpmQ0VTsuPlqD5ZbefaL7WSCQajUQOohtGPo7GUq1ObBWzMUMey1c8rvh0JOVORXKmO/C36d5YymfMHOwN2AgZJ2rOe5EaBJ8vEokMxQ6snLznnveo12oMRJTZSCA2tJdWfwjuAqU3ksU25d3zfj4Qi5qVFPC4qHFcNIoU22NFHLqmZuH1eoz6F4I1ADJtCu8YnTbqpjjxBiNlLyZwcAgtVNwbifiicKD3Wv1Dp9mGLKW5GeGPm5j3srYB/2GiRSNRryT7ot4xkDg5LtbrHvXAMzzZ2htxS7Fo670ydNXZI6ZS7oBHlLL0IjlRjgyFRB8eMWyhnC6L3HX86+QDUV/UY1npCx7IUutAjAshdb1VDEV7pdEfEY/c09rr80UDLiu8mxadIdkXE7kxvIPiFT3R3h7xEm5LEkJ3unCeymYZwoZpXP4ShzI1wMWivtCoGxtFJgYn+iSu3WguouzzSqPgjByI+HpTnKfXt5E7Woea/ltT0/9i83GTZiQkO+SapkMwh5xStWfwkD/m5KSiOgbEiEC0C5oSlR3wZ6VnEENJ/Ue+PdMeGsWneZE/Goezo/TRd/H4xa/DHZIpfCt/ukPVplzlqA/NZ/lRIMqUqwvRWvKZZ+rFth6wSEoopmsXVLKXDvmcPVzeoSrt7lE80wnHfabaQpyCx7Uh9FkOdfS0ZYBWCAMMirJHROjekF9TM1PiIZDds1gzv1VHZDeOTGd5b9GuJN09RaI9e6a185fpp22UPr2k6a9Yn14IxWKxg7EUd8/w5+WUyYW7TE1jRKQeujokV3YT52U3PNv0BCBOyinYoxfpbWwitcsTAF3rlT0ShR6VHBTuCvQ9fo0ejHbZUaTmI8eDviluL31TsOQQ82irYmjvvZXjxhC00uam0EcroUNXIkTkFA+3uRDz4PcStlEn3Oe2caJV9OMNQnvouIO3Gq7oxKn679OVlRm5Z+aQ7Y+bQ7cdxO7Pd5AbMLxuOUUbvu6hkDUy67pEoUflyuskuTz2ozw2iAhv0nwmCHu5ac2E3u5qz7poqEcklIELVUCn8zrC+/fKuq/alZxYQJjehQro/Czd6xA9ZreiCkoLNsJ1oYOmZ/m91OQbmq5MlYaUHWpQOYH2wtbTqsBDUW0y7Ydg/HG9MaALq6Zh9VfMquFhF066TpgqbEC/LUeMB/3xKGJETa+EPiz+UIZ+iPrwSnp2INoqSQb0NHHIXs2ArnkDerWmQxmJRCXJQOK/nMv3xmTJgF6p6aLhBSihEF7A0eXM9wY4ee8G0AukKEY1p4VCl6PWgVjPLHXa93Xl8r6DsgQ7rsvgeUSjH6S4wPmGgV7Rp18w+/Q/1jIXqk2bWlWC7pejBnQbtx70LAWdptCzInTqDi8veSIDMWm6A6EntSGxSGZR44kQoCSroZ/iwA3Mo9lPunk5FbWmuLXQOZs5v9cGhEbcIhyX98gbaDpvU33yHjJtaLocCoU8bT6cHkrLojs1dC+F0Ntljy8ajQ61pqx6Y0G3V43Tv9sYenykNOuup9y2KuiZUJuRtqRrYpashZ7mcmVNj7oA1zTvxGvFxRxCdxWSE9C5XwLoHdBTDKlroEOxX0ZfXwnIX1CA/DqaftmokxhSiOAxjstWmXe85DVT023QoYBvYJp3qK060gMnwkdLavRq19A9ndaqp5caBHp1NOxmM3I+y7S59eNoKlgFXT0o2oyxnKt9Heh+MQVvr08AAIdH9oO/Ry0wXIdC5wbcMcGArpF9HL1LBXRV+Sf6N8VlyDXTmWhdR9P5vGY4EBENRnn0OC3KVUAXVzT9JDcg4wQThQ6OHK1tL1ckBZHeXjuIdsPREzDauaKQBjTvanlyZhNNl93D+PC09hCXJFXQyTCdrdPaJc8360DXBsRohkJ3RPgc+nk92P8WPdS8D8uyfABwX6Lm/dJE1yroDq/PQcd0gNjvbsXm0iWt06dLdAThD4jX8WA6e/iDVNmni6fxUxiaLuH8Ugk61XRoj9CqDsg+AKxlpR4bDim4E3jmZXeusaDbVwVRbPJ9ers86s3ubY9y3CHT6p13B4wtpVU86uwa6jHmNAC6u6rxZCKi2xqV8laZj1JoE6HpdK7HK1NNd/fMGj3/XuIYkNrozNv0yjidDFi8lwuzHvEUXliMZdPRHi+FHmo1oBvjdCnC+bpyR7kIUvOJB+E42Uv79FCo63p7e697+np7OkdtRVaWadtyToD2q5G22XS7MyROaUT1id4fr/tkbw+aBX8PF8m2D4hy3IR+qjGgB+1V4VJ/uZkjV/SJIs+L3nSpp8uIsrmpt8iwJ2ZaADXCV19HyQZ4KSTxsWE6yFKzMu/ihm0WK0DPugyFdVpOkRGLx5hGtVbMyHVfck9M8Cl61/MDHG/x2E5aPoaLckfp1ZIWK3Xkrn0hT4ic4XPpcJzLczFrQU3nuAmXC3bxrgmXyEfojBydmSVT1HtP8bzLxUUuYTUyH8ANArYxw9IUh/ADf1A0W73lh4Yy76Uh2/lNI2dU/0i6UFyZUtfOr4zwvtv3wFHeo2RWT1wpmUOj2ZUADN1f1IlG3wsZ4zQhEyRBv1I6vPLbkn5H0WHuUDNFfzcuyMIWoJsihU7OPCD6vrjDvLEGxwml476jKRLP09eqexq30TO4Q1i5gVC+v+ooFstVKZ3VMJpumvc3mDEy7Sq8yQ/j5OKEldcasmXe3Nfa7a7kG4UuMuivMyOnvtG497T4RjV9TGLQtzgjV+rU36B5D1Z109teFs6zaNqtQi/FyLGQ1CaAvirunS12aB5NL8e9M+hN4chVx70z6E3Up2tsLVszQa857p2VhoG+Ku79fzPoTTZkU9/ojBwruwZ67XHvrDSqpv8Fg948fXqNce+sNMQ43V4d986GbM0AfWtx76w0Up/+bCtx76zUO/Sa495ZaUhHroYZOU2o+NZaVSt3VF1Z3ejN2qIKtX0Rrr3qOFVlSLdi3muJe7dFLgqXIpHosPFs1a58JGI1I6D8Vl9s6BCGHKrOKaWY9/qmiuY9uoZaI9M0n4w6ZsV1MMkYrvjX85cu0DOnfd5oF20xfp8RCZtsvYih53laFX2ABk2T82NRb29LhcehdUVpsLRmHaAxk2mozkC7GZEtMLibQa897r3dMu3jAwFOzCN1YWi0x+vlRn/Ex/y9m4tFQ6MYcS4EQmOS2+vm3TQ4SomIPd6jozI2AcEr44LUS5YsvDo4H14mKYser2wsTrFZaE4LOOAyIc+GcLEw6bCO0mjqYoAPeUMTkRXqmnWCtitNlkA4Pi1KsUgPP4UXissHmT+6GfTa495PuWWPTVBGjtJV5VmLz6+qF0OYH8KecrWrJOPDxWqCTx51fqM6pjlcuqSd4H1FQR/mjuJqsShdPjRs6ULoIWw7DreU/U444+MPjQMrzlgWOey6jkxlXBuelDxSBtuLOO0QHFY+Xzbh2rREoaspvFHSkooLatHrwkC5yzyLjK3Bkasl7v2U7KaPMil5QaMdNqpMORfYarVIH3875ooQeketqG3BKAfvHFyKtiLnxEk4rJcuH8oa0N0fqLhweQx3Z44i2bhoQre0A9N7CF1PybjYCFe4U/MS5b5fgc7RHFeaB6FnbPQ+aR6X2CgtwyxerhZNf3Xce5ozVggKkZ4H5nNX1VnL9dJ2JioWEbp4EZhqJG3JE7J3NE9/GegLzqrCrtXQg0Ncgd46KkE3fnrUSatxyVWGPs0lo5hJ0uq6jsdpWddYBfRrtKV6QnqpCkLabDes1DJOryHuPU2z9kDJ01ULmfTsVN7nMZd3JfNDMk0fIkTaaMoOEuejGsnK7g8GBvLWFOcT1oGue6WANT8wAOcCZ5ucig5Fo/kArojTBmQ/rlLTehF6lIvAcXmr10wEYkBvhaOHokYSAiWZnc775B4GfYszcpvHvaf5YWNjAPN02DwuKeTNx8yFnFk+FJJz6MhFjHW/pCiBpzbbE/K2trZGUqET60E/f1AORGC3NxTAS8oeL5TWFIV+T/pG8aQUEhkF7y8q4XFwncClCuiBVjy+DaH7vROcHIselRj0LWj6q+Pe06M5at61qGgjQqvUJWjoipt52zRNybmmNXDkJMP4FzB312XxpLEXX+xroCuRkJ/uo/tPi5gNDMyDy9R058RFXEYKJ+UthdU/FgvQH6BMpeZ9gB9ToDof8wz6Fs375nHvp2Rjib7Dk3IQvxgztR6gX/gX6lMLoZgCvhZPFwGTWb6FkGuimVtSEExHTquErlmNbFTkt93aakduwG2VMHGZDzQdLmZouKZUeO9csezI6QeNus2OMui1OHI1x71fd3M4ChbyYn4c80phR/BFG64ajwesCjXoA+Ct+XpoEj6bGxd1CykpS61/CLqGP+mlvS8O2cAloN57ejSAHkAmGnBUQEdN/3urJKWUEnS/HMKlw0IuVVgXuuJtwzcHQrRPV2fbGdwaZuSevXpG7pQUkw62D3ultjOg3PfEWFfSKh3k0tiPW4aStlkPHadHQilpOn2CLvEHIy9KH7Sn8zzmfbAPhYaT6Y/znLWQTmbdOAhThyY8zuRwyoIHl8bpXZiu7ZnVLRdoZ4KjOXJSdE+l272uWHcZeq7HgJ7y6Jh8JDVbcEoxmSYBFeUio7uZI1dz3Ht6ov17j4UXvXS0nslzvEsq0NkzkjnBuVx8ai+ddosVnfwELzmNqdARL8+7xLyf7nLxLjiOo6+uCFpqxSlP8K62rEpn5FqMjgFNwd8PWagLoR20YJV+2+WB60i5z1f69HsW6jyoEqejDeAwzUGSTurZRkPse6Ma+vQa4t7T/GWiFG2lnASq41oc7Kqfqp6W+SvbHsUYxR9ViOPa6fLviAhFW9xh9MQZR2Ux75SJ24pmcgG/gVShmQl0v3GjjN/wCnS49fuV9dFvG1d10DwE2jfxeAYuYbgdjPnm0GuOe0foNVwzkmI/+LTboRtfrZa69M3m3muGzr7sqKch2+Zx7wx6w0BfFfe+ifcuOGr6ljqTYV927HpNt7O49ybt01nce1ON043ImWcs7r2pJmdY3HvTeu8s/UizOnIs7r0JHTmWiaKpzHstce+sNAx0e3WM3Hk2cd4M0LeQ752VhnLkVJYxspmgv71876zstnH6W8j3zsquKG833zsru07TNTZka07zzvK9N4sjx/K9N6um1xL3zkrjOHIs33vT9unMvDcVdJbvvfmgr8r3zqA325CN5XtvEui1x72z0jiazuLem1DTWdx7843TWdx7E0J/U3Hv78eLxWLcb9znQWGPucDNUSjgevNMvHjgwIMDRVWwLaC436airPjgQbyomlcoYmISxVZe6F488ACuSBulUCzEaUX99AaZokY0U7AHb2cuuvOfIUQ160B0m7Ji4vYViisL87AyRaOxa2cKxg31ONRSfwB1UeJG4lrzjso1R+ms+kxA+ybj3u/xoijyMWSdDHAueYg+slM9rgnJqhCnS+S4UZHL6DQBDcmNKiRn4eAU0V2qQShKSHdEMpkRVYKdo65popGid9QlhjA5iZemOxpz60THRDVEjUQxveQBIxVV71FCbrvaDNhRSzldzZmI5OqJFUtvp/HGoa4OIJrnXBPuLji5ywJnXecA8AimRNSycEcP3iFpaaWwF1JisSEcue2Me/dZoT3lvTRpVDQjfMz1qpiBZiqjpCcGNFVQs0f9qkDG8zGQC5iOyOnR4ZRZd8nWxAaIOiSvZLTg2lUhk3IC2XyoKJxJeQBLNIo5yC4FALqEWQzVoXtwl5CRvpDkvWBaZJmmOoq3cSXomaOpolAMlFuXM6QLjgHMXDYrfSFkBjD9aDsHV/8CE98WMG9SO5/VdStvI+T/yBImsYaW5TlT75Mz2x73HsJ8nlbQdO1ECFUjyccJCXhx85QTU5Zc9lANHLHAg7Wh1jhDqJ7DUgl6YEob4PzlC+o8QAumckCZ5hi5ZoF9vVHclU0BdO4LynkAMbX76SEUuoSJzohmdZeht1tuo73u6TLft3gIpr1zmGlLMm7Y0S4i9DaELheJ2kPzU8emNJKUQkPQTLWIO1Ssc/O+/XHvVL8GALoQoA8sE+oiiqF0RunyULp6CGR5TAPuDKlknGR7StC9kenKJFEO0YYpynK06/VfG5nGhjKUKhQ+vhilmj5VKBSSB1HTZUmSY2kTOp8NgVn2t3WJJeg5D7YuNeorabrbFk/H7tEe4Ztr319Cs1MNPcM5bRdt38dSCkm6s9B7kJGY012/0N9Q3LsqoR7dA+iKkcBCOWgFretaOeKyAZ1Mp8hCW5aUNH0FesQtBTpWji9iCzCg7/V4YrEUppHL98RiMa87BtDdIIvF3NZx0PSCcACzE1PolvihWJDkoo4JE/oFn5HYeCBVgs7BeRJmMSzGQgFvilsD/Zqc8sLFA2BRkj1FK7SWiPO0kYS6jmfktj3uXZfS0NlSTU8Zmu7pIgvyybXQC/L7NrdjHegH7+2leUPNMoId7AJC9/NDp/vVay6AHo2grXJS896Fgw8fmve2fZhJ/hAZMqDrrrgixnXLxVWa3lvWdIfuP8mPQFVThUzQ4S5BT5c1XbyuKnCjfwPzPpqJc5niqH6touupT0dOVbf5q9WLbX7ap5OVPh2MYoz26ekxoQK6GrrkjJH1oFtJV0Wam2mvij8nAC3oYxde+zJfLPXpJyl0TFKrDVHosP99t7MEnVgj0xFtBfp19AaIX6rq05XQCeKn3Y9NpNChjsk2eBrfY58u0Qx352G0meQcmndgykcuSvWr6Wbcu1Z73PuF2yM//JiOK5sd83nUC664MBDTNXKN/yAjXJQidvTepzPCiPHjHZdLCYlmZfdeOvBKUUeu7L17rURrKXXEWjE0jROGgekF4nc5deFUCBNGDhnQD+rUtKBjb0Xv3YY/AhEn+Qh00uByP5BG0ySDvrfhvXtS+4RiTC591DFPv6B0udIAPuIQrgWwNVznMoLQ7ikKwl5MkNnFD+tCgXNqZET2k70S94BclOtY01fFvb+yT3ecPJGD8mnLxY0TCgkxUbRA4TnsSJNHJyyS8fM7p0ZdLn6gn7rcnPnQHT0h2oCsIjpys5YSdDd0ncEhi5Ex2D8h8cYVRV2b5Scs3lkLDgcCVFXB4zcG/KoXTkq6LJaJo2AjIiHU9ALRpn0C+ca8EnbdXtEirozTT1jgBHcOVDvdY5mQs6NOTGALMhePLyLcR7skuyz8Paj4F5Z9RI1MqTBgr09H7nXi3ou53NiXY/DvyxPXN6QueHNFWgrochPlgM3MGUkcF21+Y1MvXjAPFo3f68nQh6g/KF31DHb0gjmh5uDTxhW7eB2c94JNUW3COjNyt+EkBQ7z4zsH7FVPw2GCghsVM3L+i9UzckVzRs5hK2Q03NbjxXKhR2auXaSpK5UDUP1ue3mmrp41Xasx7l13toy1UOZfjp2wbXjhNrMvFlamwTYq2g+1TG35LeYsTdzCvvHfJuj/ptb2hYt26gTgPpFrmWr5sqWlZaN+Xc2ZrBXfq7ydeIo/VEPiufM+s2J+n8LA/WpHbkuBkfqJsZaW3MfnYYiT+/LLT0c2bBxrNjZU4VmbWktda78iK7XOyNUY9/4AFD1H5zsdYOU/vcwI1F35hy3HvV/8FLpy6jypw7mxXJb9vGVdO3K1mfdV0E8y6PUJ/Z+28i1bcarKvP/IzHtdQt9a3LvhyI1k9H2X0JHby55hPZv3cvqRzUfBaleODtlyxpDNwZ5hXULfYtz7aVR1OjkDGp9l1r1Ox+lbi3sXDoFZb/kS/m8ZmzrDHmGdavoW494LOcocXnInVfYI669UxL1fqDXuXThEmePUO1P0eoW+5bj3IvTqoOhjuXbWo9e591573Lt2HX05oM6++Khf6FuOexcuIfJP/ez51S3014h79+fGxk6weZm6N+9bi3u3nch1Mc+9/odsW4p71374knXodQ39deLelVf6+JkzdqN9OOhUrVos/bIy0eNx/BlkwW8UXLQq+OPGzzZmDJkxu/tdvGg0rQUqpOvTtEyc/tgyRsURje530NC126eNH2FWzuC7IL4xflpZ2aeWNnU/G2+80bj3AcsP9O9pF65hVPITFq6XYiu0WVySVSfJCV6URNGSJmQkIFrc04BJ+2BC5KHgYgShpc0ipjCsmaRFkIoh2OrPuy2i9yIhF13T4+Rzyym4HkZbaWMiyDFk7zKuNiVxDHcODOFlIhMOosZwBZPicbPwuteNe6+pTHFefPqalYtqRLVyH+vxthg887g0dFtv5yNE1YWR0BeCrhIbl/cr17kplWgDMUFRlKkUYJwW23XHPVy0SLoCfkG3enBRCpdU/F6pSKDNdBGFS5MiNw1HZPku3d+KgejXOYVoJC7HCWm1AvRZzg3QfR8QXA7tZdBfM+69tmKV6eIwv+T2acRPY2IdLnjN09XiaSu+FtvieGgkgCa+iy8SFRefGUtdMjwuNlFj0WeEjOHaFqcbWswofpWvyBgy3TVhU/lC0B2FfcooPbhnFpcYq/S2cGXvgEqKPT4JoEeGcC1rIMCgv9F87/nYNBrpvDUa00iaTz84faAgzpKFmHXlmHibjYwTe9sY7cFdSaIZ0FsAemG0iJtdErQOK65pzYF5Hz5Km6Q1gmDHQpflQ2AasPVws8XT8QfuvEraxeRpWzxrQP9nNTBdEB00VYHi/iEbeo8xXzfufZs0fSjqlwvEIcdbwFaP9RyNBQ4GQlPk/baKdasH2rAXft9YvyyIwyXoqOnDHtrPJC3wxxelLQFbEnXWsj1oJ/aIoZCHo+eekj2xQCAQ6lUAeiCQOuiRTyN0knV323hD060ebbiNjTkqoV9QtznRUN7bMeDVWmKa9aBG2vk49tWCSpTY1GrogvsQda0n9lZCTxprQttHgVMsb0KfNZa/TeMySKE1YJN+uMRhDxEX24V+vD7catQvfC6MoKbHpq9xI+Rjqun3imKczIYY9Dea7z0fI/FQNpaGDY0UXbTzdgCyPF3CaptVytBJDLts6AKq+nSHC71/rRUsezB1yIRuG0XfQGib/n/g6HF+lU9qsdB5aDAitR8ZGPe1c9TeI/SI9+jUOKHmPZpKQR9ykkEnbzTf+0CEkCgXUIkVhmxCRI6rQhZXoBbEKV29xtEFqgc8FHpSzOnq9z1DQfDeIxQ67L0wwBVUZQxGdGo7h4c5PbguEq6j53F9HF1kCt67Q4YOvuOEmFTVJNr66+gEkAfovQ9Jbf1wQw6g5znsGLJHGfTXiXuvueCC0bgMDnyvGzOI+Tiel7LgiQOVCZ7gOqJ4AAAOYElEQVQ31ihd443FT+0hcULC7FNaa4g6aiId2ks87x7G3E95tARWHnU5wvGiJ41LzFtg1G5px1wxUYEIVjhYnFLMrFDkmgXaxUE6ZkhabkNjcWG+KafIvPd14963S9OLaNBxmm0ftezBYnLE/FrOn0zGg8bgoZTZLXMxuc9ePov4qQFQ/clChr4TVoRwHRuSixegITwr4GaxgNM6/pEkTtKRTIEuLf1ewYvhpl4AC3LA6F5qW0DVZNBZvvcmgc7yvTf5jJyd5XtvDuh2O8sC3Xzj9K9Zvvfm03SW7725ilJ25GqPe2elAaC/qXzvrOx+733b872zspuhv6F876zsYugqm5FrVvO+/fneWdn9Q7btzvfOSh2Y95Km/yXT9KZx5FT2hUszQa8Ml7KzPr2pxunbHffOym4tbzDunZU60PTtjntnZfdD3/a4d1bqxZFj3ntTQd/2uHdWdrV5X4l7twvMvDeXI8ciZ5oUOvuWrUmgs7j35tV0FvfeTNBZ3HszQheqNJ3FvTcFdOa9N1dhce9NCp3FvTev977Tce8X1F1c1quwtpsrrL0KenXc+844cqqg7eYSXINdE9TdXGFVqGlyZkdn5NbXpV1ULqyqoGbf5RXepIK7JO5d2+3M1zTL3f8Ts5pQw5BtJ+Pedz/zVXVUL9RBhbVXm3d1B827ndTZMwzWQYU3NJ/UvH+903HvWj08w6BWV9Z9k159d8S9jweZpr9l6Dsf914X0O0No+m7I+6dafpOaXoJOtP05oGu7mDcO4O+o47cznjvDPoOQTfi3pn33izm3Yh7/3tkbt+RREMM+o46cgLT9Kb03lmf3gzQdz7ufWPoT+8s0vK03qDPzey/sXjs9893uabvYNz7xtCvLocnJyf7/tuVeoN+dhIrHn45t0uh73zc+8bQ5/vuzyx98snSi3qD/mTy7J2Z+Yfhzqe7FPqOx71vAn35SXn7+R9ouYnbN18sztGN4y/wzx9eHAcRbo3/4WkHeT73FXl67MZXxnk3X9yYo2b2z/B02E37jVuLL57j4Ub5D9j6j22F/vMSVvnh5B38M3fjlgkfqjU3jvWeG3/+YvGFUZnxF4v/fhw3vsI60Q/yHD4RbKH0+QuomVnPP8NP8QYmZzK7FfqdcN8yWPuruHmubzL84S36cOfhqMnBd8jV/8Q9h5cfHyc3Js8thSf7vl3E0/Y/BjP7P9FUfNs3CRd4hKznE8uTfR/+gdxaXp4Mh5eXE+R/hB/++XZCX/6FANH5MNT/xUu09Ifh7fMnYbjv2eOk4+zy1fvLfeGzSP3mu32Tk537YevvlmcI+a+f4YPcWT47Tq7+KX76wz+fez6+DDUPQ/W/upkI3/yV0FfHvQu7bBp2fvL+/pn9VDfI/vC7d/bfDQPkxUTiCWx9+w48kfAnZCbc+QIPhT3HEoMvj5Njg4OJszP3w53Qoy6G4di/o2b2YWLp1tK5ySV8pJ2fzNzve9lxc/+dq4nHM/vvkHcG73dsM3T0ScKHyfOXk3fvHB4MQxP8ZPncT3deLl8lHR8lBjuXrgyGwVkZvzv5cv8vCdz/KAzol8JXsdpPOqDJH8aPlHj5nOzfP9M5OH9nf8fxzs7n2wB95+PeN4EeTvT19SUQKjwxeBhLiPbdyV+orwTvr0zuf5FI3ACtmp/8L3i+RwY/ROjYNG6+Cwc8fxcf4fOzffD4HoaB/BW8yrF5aA43BxOoM3NHHuKd3hl8eGxu7vn2QYcadLzzeHKR3JzZD81pqQ+09s5hqMHS8iPS8Sh87ikar8c3ya0wNrfF8N0OE3of1PB34Y8Q+hXoIQA61rPj2wQa+686B4+9M3fz15r3nY9731TTZ2auPgwPAqRflkFHf+mbJzcfgjUn5MaRu8/JlfDdh+FF49D/Tn6ZfNL5EKAnzoEFJTN9j8jxbwfxAS1OvovQl27sf5jAXoH8+a3FmU76FF8kHqKKv9OZmFzuo13GdkB/1Hf/6pOzg32UF3m6+LsrfXepD7J45yW20Y/ABEBjfJk4Bg377uKd3+1PdN4kZ9dCP3zkUedDbIvjg4mnFDrUc/Lx4q+FvuNx76/q02++i33d1cn96M7/Ql4MPkRac4OdXwH0xJHH5qFLT8N3n35Lob9EjvjnaZhaw1uJh+PkXCKR6As/gr7i+KPHg4nwYAJdvXcSpqY/nvnpZfjx8W2CHh4Mh490PkLmd152wp0TAL2jYz4cDkNbBej76ciub4bcTRwJJxJHBsNfrYH+87/CR5rr/BC9jfFvaXVB02f2nz1yZO7XQVd38YzcPJrCDnK4D/q+K6jR86DpXz2mA6FbiZd/jpp+Dg04avrhu+G5mwk074mHN0HT74TvkuOJQYR+Y/IlavrVxU9eHvkI3Ki+h0u3jg1STS9Dh57z+Msj+7fLvB8+/vvj1Be5lUg8ujO3NPl3xmzTzMvEI2wU82iy74bvgFty5Z1/f/Fibq7SvN8xNP3R2fDTp1izSujPwQ0Iz2yHed/JuPdXafr43eW/JuP3B78yoJP/1Ydork5CSziMfToldTWBPflTtAKAE0dKj5bRizpyhx77CKHPofqfu/mc6vjxVdDvgwK+G94u6HTIRsvMMuL+G4DecWOxg9qUrwAvduQvBqH5/i58lraNWwj9Drot/4pdPED/m75B+Lhz335YBf1beHeWtplfP2Tbwbj3zSZn7t743dWXicSL44cTnQRdW+zYw537ny5Rfxi990/Cg+i9DyZejsMz+b8U+uDMrSuDCTQNMBj6/XwCe3Lo/MeffgRP+/m5I4e/uvVycPC44cEZffqHt148SQz+frs0vQz9zuTDxePzg4OA/uXkk6fHn4TfBbxHEneP7f8wDK7Gzc7wk7mnH/XdHwfovzyde3Lko98/XTqC3nsYW+LvOw1N7xyk0B93HpubH+w7tn1z77vNvB/+OdzXtxw+d4f8zbKhz3Q0fiXcF54cxMf60X9Ck/9oOfECRuhhAAt9ODXvOA0apqOmJ0fg2MRPsDW4HD4SDncu4ugPRufnEsu0l1jupIqGoslvl7ZrGvZPr5Y2YRQBd3358324yePJ8JFJqAF47+DlhSfPIcdbnXjrh9Bw7/4MXT4MV+B1+e44Ofyf2Fbnwp102ik8idV9msCDE1d/rSO343HvG0O/Nb8E5Q5o5K2r1GG9dZX614vzV5boxrGr4Mg/X5pfNA94vjTznBwL3x+fOWycADZ1/rAxjTszvzQ//xOdGrtx9fDMzZ/mUYOOz9Pu8fgncKOZd7ZryLZ4dWUccHPm6tV3ntLqHP/rw1eW0Af7KLw4d/XwvDFPNzf/BKpDP9ZSqcAnMj/SzaWfqG+wtITVfT4DOz+5tZ0zco0ROXMrcX+n595faf7Dv9vRuffGi3u/Mflwt0M/u3xnx6ArK+P0Bop7f/rol90O/aezL3aDprO497cJ/S0UFvfOoG/syLG496aCzuLem8u8V8e9M01vnj7d+GqVxb03F3QW9755sTdUJordHPfONP3Nanp5Ru7tT86wnDM7PWTLsOxSDaLp6ibQd0G+d7UeoFe9eVZnrXQXavqz3U+9gTJGro17D55nuWFraJa7PrHpJrlhd02+d5YF+u1mgV41ObND+d7/GecDd2lZP326tnsrbN9qvnf2u2yNXiomZz4zvXf2cx7NAH1V3Pt3TNMbHfr7a+LemXlvIvNuaHqQQW8K6MaM3Erc+1+yx9IsfTr7Ke0mNO+flTT9u+/YY2l06PYqTWdDtibx3qvXpwd1punNA13duRUurOyspttVBr3hoWeqfz+daXpTQA/aqzRdDTLozaDpiPoZQDdyijHz3gTQzS9aLFpJ1Zn33gTmvdqRY5reFJpuX63pDHqTQNcsWom60s8eS4ND/85Q7wsI3cwOe15jz6Whi64Y0Cs0XT2vsOfSyEXNGG6cZkC/YKh6RmVPpnGLlikpugG91KtnBPZsGlfPFerGgYab5t008N2ZjCII8K9bUboFhZV6L93wn0CLDmRLil6l6WDhlfMZBy239/hv3/azUs/ltv/2ntuU5vuZz42vWijzEnSzV1eNZqGsp+W6ovTj3376h/7fvzX5P64j/3wTudKPr3o/7lor719H3l+TvFxWy0sn9OO5ryHvr5D3v0qubCTXS7WrRa6sJ68sQrfB1NTzSuhaecWyQX0tcFre03XY1nV83w8vxtar5P2mvL8k7y/J31slV6hcoXKUrS9XtiRXKuT9K/L36HPU9f5KufFh31tX/l6FXFkr19fK9fXlKw9IXyvHF9xckesr8qrjK+R4/f73SvWvxt69QInaK5hrFlJp3lVT1QVhgXWIDVEW1mFegl7+rg0jo4UN9J2Vuir/0i0owlrbXmXetVW6DtpOe/dm0vkFw+Xd9fLfbFb/BTwFyHWXenN7iXkZOg7btWoTX8F9pQFA3wDX6wZzAf/T5rCwAB1Gt/Ib4TfoLVD5bxYq5QtwvCFfQLlQkgvl63SX5QtULlTIFyrlKDHk3YZcQMOlUAncHOXdW5MvUHn3KrmwrnwB5UpJrlTIF6i8u2Y5XhyqVJYL5n276YdfJVdKr3QA/Rt0r9fIETOCQSQLVFGVVeRU1b6KOQFNJ2Vlf6ZWgrcLrNR9qSBaZl6p6ZXKbofhG4Ne98SFFS2vzJ9hMeZltWp3Tq2gD+Vro2uwG5fBLTtuBc0u4+tVcrvRkVTIg1Vy4zpgS9QgrZZdCNYiD24stxsfz+zAquR2dXO5YNwRraApt5eOL8vtVfI/sdcsh3p+vUoumLMhX3/9J3bz58zLVaDVMeX045hVLsmDK3L7ilyg8mBZDhtfC6s5ahXQiaWKeWXHXkndmLgx3tvtFc3nV8i/XpHbN5XbzSmEWuXqGrlaIVc3kVd9bvuGckMQrFkurCcvf+Ctyu0bydVNygVN/azMnPx/vzkCCqCYtL0AAAAASUVORK5CYII="/>
+                </svg>
+
+                <h3>Получение информации об ошибке</h3>
+
+                <p>
+                    Но если пользователь откажется предоставить доступ к геоданным в браузере, то будет срабатывать функция <code>error</code>, которая передается в качестве второго параметра. Эта функция в качестве параметра принимает информацию об ошибке в виде объекта 
+                    GeolocationPositionError. Через свойство <code>message</code> можно получить сообщение об ошибке. Кроме того через свойство <code>code</code> можно получить код ошибки, который может принимать 
+                    следующие значения:
+                </p>
+
+                <ul>
+                    <li><code>1</code> (<code>PERMISSION_DENIED</code>): отсутствуют разрешения на получение геоданных</li>
+                    <li><code>2</code> (<code>POSITION_UNAVAILABLE</code>): не удалось установить позицию</li>
+                    <li><code>3</code> (<code>TIMEOUT</code>): допустимый таймаут истек до получения позиции пользователя</li>
+                </ul>
+
+                <p>Применим обработчик ошибки:</p>
+                <div class="code-block"><code>function successHandler(position) {
+    console.log("Широта: ", position.coords.latitude);
+    console.log("Долгота: ", position.coords.longitude);
+};
+function errorHandler(error) {  
+    console.log(error.message);    <code class="comment">// выводим сообщение об ошибке</code>
+    console.log(error.code);       <code class="comment">// выводим код ошибки</code>
+}
+navigator.geolocation.getCurrentPosition(successHandler, errorHandler);</code></div>
+
+                <p>И в случае, если разрешение на получение данных отсутствует, мы получим следующий консольный вывод:</p>
+
+                <pre class="browser">User denied Geolocation
+1</pre>
+
+                <h3>Отслеживание изменения позиции</h3>
+
+                <p>
+                    Метод <span class="b">watchPosition()</span> объекта <code>Geolocation</code> позволяет зарегистрировать функцию-обработчик, которая будет вызываться автоматически каждый раз при изменении положения устройства. 
+                    Этот метод принимает те же параметры, что и <code>getCurrentPosition()</code>:
+                </p>
+
+                <div class="code-block"><code>watchPosition(success)
+watchPosition(success, error)
+watchPosition(success, error, options)</code></div>
+
+                <p>В качестве результата метод возвращает идентификатор, который может быть передан методу <span class="b">clearWatch()</span> объекта Geolocation для остановки отслеживания. Например:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+&lt;button id="btn">Stop watching&lt;/button>
+&lt;script>
+    function successHandler(position) {
+        console.log("Широта: ", position.coords.latitude);
+        console.log("Долгота: ", position.coords.longitude);
+    };
+    function errorHandler(error) {  
+        console.log(error.message);
+    }
+    
+    const geolocation = navigator.geolocation;
+    const watchID = geolocation.watchPosition(successHandler, errorHandler);
+    // по нажатию на кнопку прекращаем отслеживание позиции
+    document.getElementById("btn").addEventListener("click", ()=>geolocation.clearWatch(watchID));
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
                 <h1>Глава 28. Web Speech API</h1>
                 
                 <h2>Введение в Web Speech API</h2>
