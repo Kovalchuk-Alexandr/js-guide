@@ -885,10 +885,22 @@
                         <li class="nav-item has-subitems" data-target="ch28"><span class="ch-emoj"></span> Глава 28. Дополнительные Web API
                             <ul class="nav-sublist">
                                 <li class="nav-subitem" data-target="ch28-geolocation">📜 Geolocation API</li>
-                                <li class="nav-subitem" data-target="ch28-types-conclusion">📜 Типы Web Workers</li>
+                                <li class="nav-subitem" data-target="ch28-battary">📜 Battery Status API</li>
+                                <li class="nav-subitem" data-target="ch28-speech">📜 Глава 28. Web Speech API. Синтез речи</li>
+                                <li class="nav-subitem" data-target="ch28-recognition">📜 Распознавание речи</li>
+                                <li class="nav-subitem" data-target="ch28-animation">📜 Web Animation API</li>
+                                <li class="nav-subitem" data-target="ch28-resume">📜 Резюме</li>
                             </ul>
                         </li>
-                        <li class="nav-item" data-target="ch29">Глава 29. Паттерны</li>
+                        <li class="nav-item has-subitems" data-target="ch29"><span class="ch-emoj"></span> Глава 29. Паттерны
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch29-namespace-pattern">📜 1. Паттерн "Пространство имен" (Namespace Pattern)</li>
+                                <li class="nav-subitem" data-target="ch29-module-pattern">📜 2. Паттерн "Модуль" (Module Pattern)</li>
+                                <li class="nav-subitem" data-target="ch29-js-in-css">📜 3. JavaScript в CSS</li>
+                                <li class="nav-subitem" data-target="ch29-mobile-detect">📜 4. Определение мобильного устройства в JS</li>
+                                <li class="nav-subitem" data-target="ch29-compare-resume">📜 Сравнение паттернов. Резюме</li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
 
@@ -896,7 +908,14 @@
                 <div class="nav-section">
                     <div class="nav-title">🆕 Дополнительно</div>
                     <ul class="nav-list">
-                        <li class="nav-item new" data-target="ch30">Глава 30. jQuery</li>
+                        <li class="nav-item has-subitems" data-target="ch30"><span class="ch-emoj"></span> Глава 30. jQuery
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch30-intro">📜 Введение в jQuery</li>
+                                <li class="nav-subitem" data-target="ch30-connection">📜 Подключение библиотеки</li>
+                             
+                                <li class="nav-subitem" data-target="ch29-compare-resume">📜 Сравнение паттернов. Резюме</li>
+                            </ul>
+                        </li>
                         <li class="nav-item new" data-target="ch31">Глава 31. Best Practices</li>
                         <li class="nav-item new" data-target="ch32">Глава 32. Отладка</li>
                         <li class="nav-item new" data-target="ch33">Глава 33. Полезные ресурсы</li>
@@ -28973,7 +28992,7 @@ navigator.geolocation.getCurrentPosition(successHandler, errorHandler);</code></
 watchPosition(success, error)
 watchPosition(success, error, options)</code></div>
 
-                <p>В качестве результата метод возвращает идентификатор, который может быть передан методу <span class="b">clearWatch()</span> объекта Geolocation для остановки отслеживания. Например:</p>
+                <p>В качестве результата метод возвращает идентификатор, который может быть передан методу <span class="b">clearWatch()</span> объекта <code>Geolocation</code> для остановки отслеживания. Например:</p>
 
                 <div class="code-block"><code>&lt;!DOCTYPE html>
 &lt;html>
@@ -28994,15 +29013,92 @@ watchPosition(success, error, options)</code></div>
     
     const geolocation = navigator.geolocation;
     const watchID = geolocation.watchPosition(successHandler, errorHandler);
-    // по нажатию на кнопку прекращаем отслеживание позиции
+    <code class="comment">// по нажатию на кнопку прекращаем отслеживание позиции</code>
     document.getElementById("btn").addEventListener("click", ()=>geolocation.clearWatch(watchID));
 &lt;/script>
 &lt;/body>
 &lt;/html></code></div>
 
-                <h1>Глава 28. Web Speech API</h1>
+                <h2 id="ch28-battary">📜 Battery Status API</h2>
+
+                <p>
+                    Через <span class="b">Battery Status API</span> можно получить доступ к информации о батарее устройства. Эта информация может, к примеру, использоваться 
+                    для адаптации веб-страницы в зависимости от состояния батареи. 
+                    Для получения информации о батарее данный API определяет интерфейс <span class="b">BatteryManager</span>, который можно использовать. Чтобы получить 
+                    объект типа BatteryManager, у свойства <code>window.navigator</code> вызывается метод <span class="b">getBattery()</span>:
+                </p>
+
+                <div class="code-block"><code>navigator.getBattery()
+        .then((batteryManager)=>console.log(batteryManager)); <code class="comment">// BatteryManager { ......}</code></code></div>
+
+                <p><code>navigator.getBattery()</code> возвращает промис. Функция, которая передается в <code>then()</code>, в качестве параметра получает объект <span class="b">BatteryManager</span>.</p>
+
+                <p>Интерфейс <code>BatteryManager</code> предоставляет ряд свойств с информацией о батарее:</p>
+
+                <ul>
+                    <li><span class="b">charging</span>: логическое значение, которое указывает, заряжается ли аккумулятор в данный момент.</li>
+                    <li><span class="b">chargingTime</span>: число, которое обозначает оставшееся время в секундах до полной зарядки аккумулятора, или <code>0</code>, если 
+                    аккумулятор уже полностью заряжен. Если батарея в текущий момент не заряжается, то имеет значение <code>Infinity</code></li>
+                    <li><span class="b">dischargingTime</span>: число, которое обозначает оставшееся время в секундах до полной разрядки аккумулятора и приостановки работы 
+                    системы. Если батарея в текущий момент заряжается, то имеет значение <code>Infinity</code></li>
+                    <li><span class="b">level</span>: число, которое обозначает уровень заряда аккумулятора системы, масштабированное до значения от <code>0,0</code> до <code>1,0</code></li>
+                </ul>
+
+                <p>Например, получим информацию о состоянии батареи:</p>
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+&lt;script>
+    async function dislpayBatteryStatus(){
+        const batteryManager = await navigator.getBattery();
+        console.log("is charging: ", batteryManager.charging);
+        console.log("charging time (sec): ", batteryManager.chargingTime);
+        console.log("discharging time (sec): ", batteryManager.dischargingTime);
+        console.log("charge level: ", batteryManager.level);
+    }
+    dislpayBatteryStatus();
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <h3>События батареи</h3>
+
+                <p><code>BatteryManager</code> предоставляет ряд событий, с помощью которых можно отследить изменение состояния батареи:</p>
+
+                <ul>
+                    <li><span class="b">chargingchange</span>: срабатывает, когда изменяется статус зарядки батареи (свойство charging)</li>
+                    <li><span class="b">chargingtimechange</span>: срабатывает, когда изменяется время до полной зарядки батареи (свойство chargingTime)</li>
+                    <li><span class="b">dischargingtimechange</span>: срабатывает, когда изменяется время до полной разрядки батареи (свойство dischargingTime)</li>
+                    <li><span class="b">levelchange</span>: срабатывает, когда изменяется уровень заряда батареи (свойство level)</li>
+                </ul>
+
+                <p>Например, обработаем события для отслеживания статуса батареи:</p>
+
+                <div class="code-block"><code>function dislpayBatteryStatus(battery){
+    console.log("is charging: ", battery.charging);
+    console.log("charging time (sec): ", battery.chargingTime);
+    console.log("discharging time (sec): ", battery.dischargingTime);
+    console.log("charge level: ", battery.level);
+}
+navigator.getBattery().then((battery)=>{
+    dislpayBatteryStatus(battery);
+    battery.addEventListener("chargingchange", 
+                        (e)=>console.log("is charging: ", e.target.charging));
+    battery.addEventListener("chargingtimechange", 
+                        (e)=>console.log("charging time (sec): ", e.target.chargingTime)); 
+    battery.addEventListener("dischargingtimechange", 
+                        (e)=>console.log("discharging time (sec): ", e.target.dischargingTime));   
+    battery.addEventListener("levelchange", 
+                        (e)=>console.log("charge level: ", e.target.level)); 
+});</code></div>
+
+                <h2 id="ch28-speech">📜 Глава 28. Web Speech API. Синтез речи.</h2>
                 
-                <h2>Введение в Web Speech API</h2>
+                <h3>Введение в Web Speech API</h3>
                 <p><strong>Web Speech API</strong> позволяет веб-разработчикам программно генерировать и распознавать речь на веб-странице. Для этого Web Speech API определяет два интерфейса:</p>
                 
                 <ul>
@@ -29016,7 +29112,7 @@ watchPosition(success, error, options)</code></div>
                 </div>
 
                 <h2>Часть 1: Синтез речи (Speech Synthesis)</h2>
-                <p>Синтез речи (Text-to-Speech, TTS) — это процесс преобразования текста в речь, которая воспроизводится через динамик устройства.</p>
+                <p>Синтез речи <code>(Text-to-Speech, TTS)</code> — это процесс преобразования текста в речь, которая воспроизводится через динамик устройства.</p>
 
                 <h3>Проверка поддержки</h3>
                 <p>На уровне браузера синтез речи доступен через свойство <code>speechSynthesis</code> объекта <code>window</code>, которое представляет <code>SpeechSynthesis</code> и через которое можно проверить поддержку браузером синтеза речи:</p>
@@ -29027,7 +29123,7 @@ watchPosition(success, error, options)</code></div>
     console.log("Синтез речи НЕ поддерживается");
 }
 
-// Альтернативный способ проверки
+<code class="comment">// Альтернативный способ проверки</code>
 if ("speechSynthesis" in window) {
     console.log("Синтез речи поддерживается");
 } else {
@@ -29152,10 +29248,10 @@ function speak() {
     if (window.speechSynthesis) {
         const utterance = new SpeechSynthesisUtterance();
         utterance.text = "Привет";
-        utterance.lang = "ru";      // аббревиатура языка
-        utterance.volume = 0.5;     // громкость (0-1)
-        utterance.rate = 0.5;       // скорость (0.1-10)
-        utterance.pitch = 0.5;      // высота (0-2)
+        utterance.lang = "ru";      <code class="comment">// аббревиатура языка</code>
+        utterance.volume = 0.5;     <code class="comment">// громкость (0-1)</code>
+        utterance.rate = 0.5;       <code class="comment">// скорость (0.1-10)</code>
+        utterance.pitch = 0.5;      <code class="comment">// высота (0-2)</code>
         
         window.speechSynthesis.speak(utterance);
     }
@@ -29164,13 +29260,13 @@ function speak() {
                 <h3>Выбор голоса</h3>
                 <p>Если браузер поддерживает несколько голосов, то их можно выбрать с помощью метода <code>getVoices()</code> объекта <code>SpeechSynthesis</code>. Каждый голос имеет разные свойства, включая имя и связанное с ним сокращение страны или языка.</p>
                 
-                <div class="code-block"><code>// Получаем список доступных голосов
+                <div class="code-block"><code><code class="comment">//</code> Получаем список доступных голосов
             const voices = window.speechSynthesis.getVoices();
 
             voices.forEach(function(voice) {
-                console.log(voice.name);     // имя голоса
-                console.log(voice.lang);     // язык
-                console.log(voice.default);  // является ли голос по умолчанию
+                console.log(voice.name);     <code class="comment">// имя голоса</code>
+                console.log(voice.lang);     <code class="comment">// язык</code>
+                console.log(voice.default);  <code class="comment">// является ли голос по умолчанию</code>
             });</code></div>
 
                 <p>Выбрав нужный голос, его можно установить с помощью свойства <code>voice</code> объекта <code>SpeechSynthesisUtterance</code>:</p>
@@ -29183,7 +29279,7 @@ function speak() {
         utterance.text = "Привет";
         
         const voices = window.speechSynthesis.getVoices();
-        const selectedVoice = voices[0]; // выбираем первый голос
+        const selectedVoice = voices[0]; <code class="comment">// выбираем первый голос</code>
         utterance.voice = selectedVoice;
         
         window.speechSynthesis.speak(utterance);
@@ -29259,8 +29355,9 @@ function speak() {
     }
 }</code></div>
 
-                <h2>Часть 2: Распознавание речи (Speech Recognition)</h2>
-                <p>Распознавание речи (Speech-to-Text) — это процесс преобразования речи пользователя в текст.</p>
+                <h2 id="ch28-recognition">📜 Часть 2: Распознавание речи (Speech Recognition)</h2>
+
+                <p>Распознавание речи <code>(Speech-to-Text)</code> — это процесс преобразования речи пользователя в текст.</p>
 
                 <h3>Проверка поддержки</h3>
                 <p>Распознавание речи управляется объектом <code>SpeechRecognition</code>. Для его получения применяется свойство <code>webkitSpeechRecognition</code> глобального объекта <code>window</code>:</p>
@@ -29271,7 +29368,7 @@ function speak() {
     console.log("Распознавание речи НЕ поддерживается");
 }
 
-// Альтернативный способ проверки
+<code class="comment">//</code> Альтернативный способ проверки
 if ("webkitSpeechRecognition" in window) {
     console.log("Распознавание речи поддерживается");
 } else {
@@ -29417,8 +29514,8 @@ if ("webkitSpeechRecognition" in window) {
                 <div class="code-block"><code>const recognition = new webkitSpeechRecognition();
 
 recognition.onresult = function(event) {
-    const results = event.results; // получаем результат распознавания
-    console.log(results); // список SpeechRecognitionResultList
+    const results = event.results; <code class="comment">// получаем результат распознавания</code>
+    console.log(results);          <code class="comment">// список SpeechRecognitionResultList</code>
 };</code></div>
 
                 <p>Параметр функции-обработчика представляет тип <code>SpeechRecognitionEvent</code>, у которого через свойство <code>results</code> можно получить результаты распознавания в виде списка <code>SpeechRecognitionResultList</code>.</p>
@@ -29428,12 +29525,12 @@ recognition.onresult = function(event) {
                 <div class="code-block"><code>const recognition = new webkitSpeechRecognition();
 
 recognition.onresult = function(event) {
-    const results = event.results;            // получаем список результатов
-    const firstResult = results[0];           // получаем первый результат
-    const firstAlternative = firstResult[0];  // получаем первый вариант
+    const results = event.results;            <code class="comment">// получаем список результатов</code>
+    const firstResult = results[0];           <code class="comment">// получаем первый результат</code>
+    const firstAlternative = firstResult[0];  <code class="comment">// получаем первый вариант</code>
     
-    const transcript = firstAlternative.transcript;  // распознанный текст
-    const confidence = firstAlternative.confidence;  // уровень уверенности (0-1)
+    const transcript = firstAlternative.transcript;  <code class="comment">// распознанный текст</code>
+    const confidence = firstAlternative.confidence;  <code class="comment">// уровень уверенности (0-1)</code>
     
     console.log(transcript);
     console.log(confidence);
@@ -29469,18 +29566,18 @@ recognition.onresult = function(event) {
                 `&lt;p&gt;${transcript} (уверенность: ${(confidence * 100).toFixed(2)}%)&lt;/p&gt;`;
         };
         
-        // по нажатию на кнопку Start запускаем распознавание
+        <code class="comment">// по нажатию на кнопку Start запускаем распознавание</code>
         document.getElementById("startBtn").addEventListener("click", () =&gt; {
             if (window.webkitSpeechRecognition) {
                 recognition.continuous = true;
-                recognition.lang = "ru";  // распознавание на русском
+                recognition.lang = "ru";  <code class="comment">// распознавание на русском</code>
                 recognition.start();
             } else {
                 console.log("Распознавание речи НЕ поддерживается");
             }
         });
         
-        // по нажатию на кнопку Stop останавливаем распознавание
+        <code class="comment">// по нажатию на кнопку Stop останавливаем распознавание</code>
         document.getElementById("stopBtn").addEventListener("click", () =&gt; {
             recognition.stop();
             index = 0;
@@ -29529,7 +29626,7 @@ recognition.onresult = function(event) {
             const transcript = event.results[0][0].transcript.toLowerCase();
             document.getElementById("result").textContent = `Вы сказали: ${transcript}`;
             
-            // Простой обработчик команд
+            <code class="comment">// Простой обработчик команд</code>
             let response = "";
             
             if (transcript.includes("привет")) {
@@ -29542,7 +29639,7 @@ recognition.onresult = function(event) {
                 response = "Я вас не понял";
             }
             
-            // Синтезируем ответ
+            <code class="comment">// Синтезируем ответ</code>
             const utterance = new SpeechSynthesisUtterance(response);
             utterance.lang = "ru";
             synth.speak(utterance);
@@ -29582,7 +29679,261 @@ recognition.onresult = function(event) {
                     </ul>
                 </div>
 
-                <h2>Резюме</h2>
+                <h2 id="ch28-animation">📜 Web Animation API</h2>
+
+                <p><span class="b">Web Animation API</span> позволяет определять и управлять анимациями на веб-странице. Для создания анимации у элементов веб-страницы вызывается метод <span class="b">animate()</span></p>
+
+                <div class="code-block"><code>animate(keyframes, options)</code></div>
+
+                <p>Первый параметр - <code>keyframes</code> представляет определения ключевых кадров. Второй параметр представляет конфигурационные настройки анимации в виде объекта со следующими свойствами:</p>
+                <ul>
+                    <li><code>delay</code>: задержка (в миллисекундах), после которой запускается анимация</li>
+                    <li><code>endDelay</code>: задержка (в миллисекундах), после которой завершается анимация</li>
+                    <li><code>fill</code>: поведение заполнения анимации (возможные значения: <code>none, forwards, backwards, both, auto</code>)</li>
+                    <li><code>iterationStart</code>: определяет итерацию, в которой активируется определенный эффект анимации</li>
+                    <li><code>iterations</code>: количество повторений (для бесконечного повторения анимации передается значение <code>infinity</code>)</li>
+                    <li><code>duration</code>: длительность анимации в миллисекундах</li>
+                    <li><code>direction</code>: направление анимации (возможные значения: <code>alternate, normal, reverse, alternate-reverse</code>)</li>
+                    <li><code>easing</code>: поведение анимации (возможные значения: <code>ease, ease-in, ease-out, ease-in-out, cubic-bezier</code>)</li>
+                </ul>
+
+                <p>Результатом метода <span class="b">animate()</span> является анимация в виде объекта <span class="b">Animation</span></p>
+
+                <p>Настройки, которые можно выполнить с помощью этих двух параметров, аналогичны настройкам анимации в коде CSS.</p>
+
+                <h3>Анимация на CSS</h3>
+
+                <p>Например, возьмем примитивную анимацию CSS:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+    &lt;style>
+    @keyframes frames {    
+        0% {        
+            transform: scale(2);        
+            opacity: 0.2;    
+        }    
+        30% {        
+            transform: scale(3);        
+            opacity: 0.4;    
+        }    
+        60% {        
+            transform: scale(4);        
+            opacity: 0.6;    
+        }
+        100% {        
+            transform: scale(5);        
+            opacity: 0.8;    
+        }
+    }
+    #circle {    
+        width:50px;
+        height: 50px;
+        opacity: 0.2;
+        background-color: red;
+        margin: 100px;
+        border-radius: 25px;
+        animation: frames 500ms ease-in-out 10ms infinite alternate both;
+    }
+    &lt;/style>
+&lt;/head>
+&lt;body>
+&lt;div id="circle">&lt;/div>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>
+                    здесь пока нет никакого кода <code>JavaScript</code>, вся анимация задана целиком в <code>CSS</code>. Анимация состоит из отдельных фреймов или состояний, а вся суть анимации заключается в переходе от одного из таких состояний к другому. 
+                    Для установки фреймов применяется слово <span class="b">@keyframes</span>. В данном случае набор фреймов называется <code>frames</code> и содержит 4 фрейма, каждый из которых описывает 
+                    значения свойств <code>translation</code> и <code>opacity</code>. Например, возьмем следующий фрейм:
+                </p>
+
+                <div class="code-block"><code>30% {        
+    transform: scale(3);        
+    opacity: 0.4;    
+}   </code></div>
+
+                <p>
+                    Процентные доли  - <code>30%</code> указывают, что данный фрейм будет выполняться, после прохождения анимацией 30% времени. В данном фрейме к анимируемому элементу применяется 
+                    настройка <code>scale(3)</code> - элемент увеличивается в 3 раза. Кроме того с помощью свойства <code>opacity: 0.4</code> для элемента устанавливается прозрачность в 0.4
+                </p>
+
+                <p>Для применения анимации у элемента применяется свойство <code>animation</code></p>
+
+                <div class="code-block"><code>#circle {    
+    .............
+    animation: frames 500ms ease-in-out 10ms infinite alternate both;
+}</code></div>
+
+                <p>Через стилевое свойство <code>animation</code> устанавливаем фреймы анимации - <code>frames</code> и дополнительные параметры:</p>
+
+                <ul>
+                    <li><code>500ms</code>: время анимации - 500 миллисекунд (параметр duration)</li>
+                    <li><code>ease-in-out</code>: поведение анимации (параметр easing)</li>
+                    <li><code>10ms</code>: задержка при старте анимации - 10 миллисекунд (параметр delay)</li>
+                    <li><code>Infinity</code>: количество повторений - бесконечно (параметр iterations)</li>
+                    <li><code>alternate</code>: направление анимации (параметр direction)</li>
+                    <li><code>both</code>: "заполнение" анимации - 500 миллисекунд (параметр fill)</li>
+                </ul>
+
+                <p>Таким образом, мы получим пульсирующий круг, который меняет размеры и прозрачность:</p>
+
+                <h3>Использование Web Animation API</h3>
+
+                <p>Теперь используем Web Animation API и определим ту же самую анимацию в коде JavaScript:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+    &lt;style>
+    #circle {    
+        width:50px;
+        height: 50px;
+        opacity: 0.2;
+        background-color: red;
+        margin: 100px;
+        border-radius: 25px;
+    }
+&lt;/style>
+&lt;/head>
+&lt;body>
+&lt;div id="circle">&lt;/div>
+&lt;script>
+    const circle = document.getElementById("circle");
+    <code class="comment">// определяем кадры анимации</code>
+    const frames = [{
+        transform: "scale(2)",      
+        opacity: 0.2,      
+        offset: 0    
+    },{      
+        transform: "scale(3)",      
+        opacity: 0.4,
+        offset: 0.3    
+    },{      
+        transform: "scale(4)",      
+        opacity: 0.6,      
+        offset: 0.6    
+    },{      
+        transform: "scale(5)",      
+        opacity: 1.0,      
+        offset: 1    
+    }];
+    <code class="comment">// параметры анимации</code>
+    const config = {    
+        duration: 500,          <code class="comment">// время анимации в миллисекундах</code>
+        easing: "ease-in-out",  <code class="comment">// поведение анимации</code>
+        delay: 10,              <code class="comment">// задержка в миллисекундах</code>
+        iterations: Infinity,   <code class="comment">// кол-во повторений</code>
+        direction: "alternate", <code class="comment">// направление анимации</code>
+        fill: "both"            <code class="comment">// заполнение поведения анимации</code>
+    };
+    <code class="comment">//</code> выполняем анимацию
+    circle.animate(frames, config);
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>Здесь кадры/фреймы анимации заданы массивом <code>frames</code>, каждый элемент которого имеет три свойства. Например:</p>
+
+                <div class="code-block"><code>{      
+    transform: "scale(3)",      
+    opacity: 0.4,
+    offset: 0.3    
+}</code></div>
+
+                <p>
+                    Первые два свойства <code>(transform и opacity)</code> - это те же стилевые свойства элемента, которые устанавливались в <code>CSS</code>. Третье свойство  - <code>offset</code> 
+                    задает момент времени, когда данный кадр должен отображаться в анимации. Так, <code>offset: 0.3 </code> соответствует 30% в CSS. 
+                    Если это свойство опущено, отдельные ключевые кадры распределяются равномерно в течение определенной продолжительности.
+                </p>
+                <p>Второй параметр функции <code>animate()</code> аналогичен дополнительным параметрам анимации, которые устанавливаются в CSS.</p>
+
+                <h3>Управление анимацией</h3>
+
+                <p>Метод <code>animate()</code> возвращает объект <span class="b">Animation</span>, который позволяет управлять анимацией с помощью ряда методов:</p>
+
+                <ul>
+                    <li><span class="b">pause()</span>: приостанавливает анимацию</li>
+                    <li><span class="b">play()</span>: возобновляет анимацию</li>
+                    <li><span class="b">cancel()</span>: отменяет анимацию</li>
+                    <li><span class="b">finish()</span>: завершает анимацию</li>
+                </ul>
+
+                <p>Кроме того, с помощью свойства <span class="b">playbackRate</span> можно управлять скоростью анимации. Например:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+    &lt;style>
+    #rect {    
+        width:50px;
+        height: 50px;
+        background-color: green;
+        margin-top: 20px;
+    }
+&lt;/style>
+&lt;/head>
+&lt;body>
+&lt;div>
+&lt;button id="pause">Pause&lt;/button> 
+&lt;button id="play">Play&lt;/button>
+&lt;button id="cancel">Cancel&lt;/button>
+&lt;button id="faster">Faster&lt;/button>
+&lt;button id="slower">Slower&lt;/button>
+&lt;/div>
+&lt;div id="rect">&lt;/div>
+&lt;script>
+    <code class="comment">// анимируемый элемент</code>
+    const rect = document.getElementById("rect");
+    <code class="comment">// фреймы анимации</code>
+    const frames = [{
+        marginLeft: "50px",      
+        offset: 0    
+    },{      
+        marginLeft: "100px",
+        offset: 0.3    
+    },{      
+        marginLeft: "150px",   
+        offset: 0.6    
+    },{      
+        marginLeft: "200px",    
+        offset: 1    
+    }];
+    <code class="comment">// параметры анимации</code>
+    const config = {    
+        duration: 600,          
+        easing: "ease-in-out",
+        iterations: Infinity,
+        direction: "alternate"
+    };
+    const animation = rect.animate(frames, config);
+    
+    document.getElementById("pause").addEventListener("click", () => animation.pause());
+    document.getElementById("play").addEventListener("click", () => animation.play());
+    document.getElementById("cancel").addEventListener("click", () => animation.cancel());
+    <code class="comment">// увеличиваем скорость в 2 раза</code>
+    document.getElementById("faster").addEventListener("click", () => animation.playbackRate *= 2);
+    <code class="comment">// уменьшаем скорость в 2 раза</code>
+    document.getElementById("slower").addEventListener("click", () => animation.playbackRate /= 2);
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>В данном случае с помощью набора кадров изменяем свойство <code>"margin-left"</code> у элемента div, который стилизован под зеленный квадрат. А с помощью кнопок управляем его анимацией:</p>
+
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="496" height="194" xml:space="preserve" version="1.1" viewBox="0 0 496 194">
+                    <image width="496" height="194" xlink:href="data:image/png;base64,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"/>
+                </svg>
+
+                <h2 id="ch28-resume">📜 Резюме</h2>
+
                 <p>В этой главе мы рассмотрели:</p>
                 <ul>
                     <li>✅ Введение в Web Speech API и его два интерфейса</li>
@@ -29607,7 +29958,7 @@ recognition.onresult = function(event) {
                 <h2>Введение</h2>
                 <p>В этой главе рассмотрим несколько дополнительных паттернов и техник JavaScript, которые помогают организовывать код, избегать конфликтов имен и создавать более структурированные приложения.</p>
 
-                <h2>1. Паттерн "Пространство имен" (Namespace Pattern)</h2>
+                <h2 id="ch29-namespace-pattern">📜 1. Паттерн "Пространство имен" (Namespace Pattern)</h2>
                 
                 <h3>Проблема конфликта имен</h3>
                 <p>Если на веб-страницу подключается множество скриптов, то может возникнуть проблема <strong>конфликта имен</strong>, если разные скрипты определяют переменные/константы и функции с одним и тем же именем.</p>
@@ -29622,27 +29973,32 @@ recognition.onresult = function(event) {
                 <h3>Реализация паттерна</h3>
                 <p>Паттерн "пространство имен" использует объекты в качестве контейнеров для группировки связанного функционала:</p>
                 
-                <div class="code-block"><code>// Определяем объект-пространство имен
+                <div class="code-block"><code><code class="comment">// Определяем объект-пространство имен</code>
 var MathLib = MathLib || {};
 
-// Определяем переменную внутри пространства имен
+<code class="comment">// Определяем переменную внутри пространства имен</code>
 MathLib.MAX = 1234;
 
-// Определяем функцию внутри пространства имен
+<code class="comment">// Определяем функцию внутри пространства имен</code>
 MathLib.sum = function(a, b) {
     return a + b;
 };
 
-console.log(MathLib.sum(4, 5)); // 9
-console.log(MathLib.MAX);        // 1234
+console.log(MathLib.sum(4, 5));  <code class="comment">// 9</code>
+console.log(MathLib.MAX);        <code class="comment">// 1234</code>
 
 MathLib.MAX = 5678;
-console.log(MathLib.MAX);        // 5678</code></div>
+console.log(MathLib.MAX);        <code class="comment">// 5678</code></code></div>
+
+                <p>Здесь определяется пространство имен в виде объекта <span class="b">MathLib</span> (условно говоря пространство имен MathLib). Обратите внимание на форму определения:</p>
 
                 <div class="info-box note">
                     <div class="info-box-title">💡 Объяснение кода</div>
-                    <p>Выражение <code>var MathLib = MathLib || {}</code> предотвращает перезапись объекта MathLib, если он уже существует. Если MathLib не определен, создается новый пустой объект.</p>
+                    <p>Выражение <code>var MathLib = MathLib || {}</code> предотвращает перезапись объекта MathLib, если он уже существует. Если MathLib не определен, создается новый пустой объект. Но при таком определении мы не можем использовать ключевые слова <code>let</code> 
+или <code>const</code> для определения объекта. Поэтому в данном случае объект определяется с помощью <code>var</code>.</p>
                 </div>
+
+                <p>Затем в <code>MathLib</code> для демонстрации определяются переменная <code>MAX</code> и функция <code>sum</code>, которые мы можем использовать, применяя имя объекта <span class="b">MathLib</span>.</p>
 
                 <h3>Определение содержимого сразу</h3>
                 <div class="code-block"><code>var MathLib = MathLib || {
@@ -29669,10 +30025,26 @@ var OtherMathLib = OtherMathLib || {
     }
 };
 
-console.log(MathLib.sum(4, 5));          // 9
-console.log(OtherMathLib.sum([4, 5, 6])); // 15</code></div>
+console.log(MathLib.sum(4, 5));           <code class="comment">// 9</code>
+console.log(OtherMathLib.sum([4, 5, 6])); <code class="comment">// 15</code></code></div>
 
                 <p>В данном случае два объекта-пространства имен определяют функцию с одним и тем же именем <code>sum</code>, но разным функционалом. И пока такие объекты-контейнеры имеют глобально уникальное имя, такой подход не приводит к каким-либо конфликтам имен.</p>
+
+                <h3>Вложенные пространства имен</h3>
+                <p>Подобным образом можно определять вложенные пространства имен:</p>
+
+                <div class="code-block"><code>var Messages = Messages || {
+    ru: {
+        hello: "Привет",
+        bye: "Пока"
+    },
+    en: {
+        hello: "Hello",
+        bye: "Good bye"
+    },
+};
+console.log(Messages.ru.hello); <code class="comment">// Привет</code>
+console.log(Messages.en.hello); <code class="comment">// Hello</code></code></div>
 
                 <div class="info-box success">
                     <div class="info-box-title">✅ Преимущества</div>
@@ -29684,7 +30056,8 @@ console.log(OtherMathLib.sum([4, 5, 6])); // 15</code></div>
                     </ul>
                 </div>
 
-                <h2>2. Паттерн "Модуль" (Module Pattern)</h2>
+                
+                <h2 id="ch29-module-pattern">📜 2. Паттерн "Модуль" (Module Pattern)</h2>
                 
                 <h3>Основная идея</h3>
                 <p>Паттерн "Модуль" базируется на <strong>замыканиях</strong> и состоит из двух компонентов:</p>
@@ -29704,18 +30077,62 @@ console.log(OtherMathLib.sum([4, 5, 6])); // 15</code></div>
     };
 })();
 
-printer.print(); // "hello"</code></div>
+printer.print(); <code class="comment">// "hello"</code></code></div>
 
                 <p>Здесь определена константа <code>printer</code>, которая представляет результат анонимной функции (IIFE). Внутри подобной функции определен объект <code>messages</code> с некоторыми данными. Этот объект является приватным — к нему нельзя обратиться извне. Доступ к данным предоставляется только через публичный метод <code>print</code>.</p>
 
+                <p>
+                    Сама анонимная функция возвращает объект, который определяет функцию <span class="b">print</span>. Возвращаемый объект определяет общедоступый API, 
+                    через который мы можем обращаться к данным, определенным внутри модуля.
+                </p>
+
+                <div class="code-block"><code>return {
+    print: function(){
+        console.log(messages.greeting);
+    }
+}</code></div>
+
+                <p>Такая конструкция позволяет закрыть некоторый набор данных в рамках функции-модуля и опосредовать доступ к ним через определенный API - возвращаемые внутренние функции.</p>
+
+                <h4>Возвращаемые функции могут быть определены где-то в другом месте, а не внутри анонимной функции:</h4>
+
+                <div class="code-block"><code>const printer = (function(){
+    const messages = {greeting: "Hello METANIT.COM"};
+    const printMessage = function(){
+        console.log(messages.greeting);
+    };
+    return {
+        print: printMessage <code class="comment">// функция printMessage определена вне объекта</code>
+    }
+})();
+printer.print();            <code class="comment">// Hello METANIT.COM</code></code></div>
+
+                <p>Если существует вероятность, что модуль уже определен где-то ранее в коде или во внешних подключаемых файлах, то мы можем использовать следующую конструкцию:</p>
+
+                <div class="code-block"><code>var printer =  printer || (function(){
+    const messages = {greeting: "Hello World"};
+    return {
+        print: function(){
+            console.log(messages.greeting);
+        }
+    }
+})();
+printer.print();    <code class="comment">// Hello World</code></code></div>
+
+                <p>
+                    Определение <code>var printer =  printer || (function(){ ... </code> присваивает переменной значение некоторого объекта printer, если он существует, 
+                    либо присваивает результат вызова анонимной IIFE-функции. Но при таком определении мы не можем использовать ключевые слова <code>let</code> 
+                    или <code>const</code> для определения объекта. Поэтому в данном случае объект определяется с помощью <code>var</code>.
+                </p>
+
                 <h3>Практический пример: калькулятор</h3>
                 <div class="code-block"><code>const calculator = (function() {
-    // Приватные данные
+    <code class="comment">// Приватные данные</code>
     const data = {
         result: 0
     };
     
-    // Публичные методы
+    <code class="comment">// Публичные методы</code>
     return {
         sum: function(a, b) {
             data.result = a + b;
@@ -29738,26 +30155,101 @@ printer.print(); // "hello"</code></div>
     };
 })();
 
-// Использование
-calculator.sum(10, 5).print();      // 15
-calculator.subtract(20, 8).print(); // 12
-console.log(calculator.getResult()); // 12
+<code class="comment">// Использование</code>
+calculator.sum(10, 5).print();       <code class="comment">// 15</code>
+calculator.subtract(20, 8).print();  <code class="comment">// 12</code>
+console.log(calculator.getResult()); <code class="comment">// 12</code>
 
-// Попытка прямого доступа к приватным данным
-console.log(calculator.data); // undefined</code></div>
+<code class="comment">// Попытка прямого доступа к приватным данным</code>
+console.log(calculator.data); <code class="comment">// undefined</code></code></div>
 
                 <p>Данный модуль представляет примитивный калькулятор, который выполняет три операции: сложение, вычитание и вывод результата. Все данные инкапсулированы в объекте <code>data</code>, который хранит результат операции. Извне к этому объекту нет доступа — он приватный.</p>
+                <p>Все данные инкапсулированы в объекте <span class="b">data</span>, который хранит результат операции. Все операции представлены тремя возвращаемыми 
+функциями: <code>sum, subtract и print</code>. Через эти функции мы можем управлять результатом калькулятора извне.</p>
 
                 <div class="info-box note">
                     <div class="info-box-title">💡 Инкапсуляция</div>
                     <p>Паттерн "Модуль" позволяет эмулировать приватные переменные и методы в JavaScript, которые недоступны извне, но доступны публичным методам через замыкание.</p>
                 </div>
 
+                <h3>Передача внешних модулей</h3>
+
+                <p>Через параметры IIFE-функций в модули можно передать какие-нибудь данные, например, другие модули:</p>
+
+                <div class="code-block"><code>var moduleA = moduleA || (function () { 
+    const message = "Hello World";
+    return { 
+        printMessage: function() {    
+            console.log(message);  
+        }  
+     } 
+})();
+ 
+var moduleB = moduleB || (function (moduleA) { 
+    return { 
+        print: function() {    
+            moduleA.printMessage();  
+        }  
+     } 
+})(moduleA);
+ 
+moduleB.print();</code></div>
+
+                <p>В данном случае модуль <code>moduleB</code> ожидает получение модуля <code>moduleA</code>. Внутри модуля <code>moduleB</code> идет обращение к функции <code>moduleA.printMessage</code>. Аналогично можно передавать и набор модулей.</p>
+
                 <h3>Расширение модуля</h3>
-                <p>Модули можно расширять, добавляя новые методы:</p>
+
+                <p>При работе с модулями может возникнуть задача расширить его функционал - добавить в него функции или переменные. В этом случае мы можем использовать ряд техник.</p>
+
+                <div class="code-block"><code><code class="comment">// первая техника</code>
+var localeModule =  localeModule || (function(locale){
+    const enMessage = "Hello World";
+    locale.printEn = function(){console.log(enMessage);};
+    return locale;
+})(localeModule || {});
+<code class="comment">// вторая техника</code>
+var localeModule =  (function(locale){
+    const ruMessage = "Привет мир";
+    locale.printRu = function(){console.log(ruMessage);};
+    return locale;
+})(localeModule);
+ 
+localeModule.printEn(); <code class="comment">// Hello World</code>
+localeModule.printRu(); <code class="comment">// Привет мир</code></code></div>
+
+                <p>Для расширения модуля можно применять две техники.</p>
+                
+                <h4>Первая техника заключается в том, что если модуль еще не создан, то в качестве параметра передается пустой объект:</h4>
+
+                <div class="code-block"><code>var localeModule =  localeModule || (function(locale){
+    const enMessage = "Hello World";
+    locale.printEn = function(){console.log(enMessage);};
+    return locale;
+})(localeModule || {});</code></div>
+
+                <p>Так, в данном случае, если модуля <code>localModule</code> еще не существует, то будет создан объект, в который будет добавлена функция <code>printEn</code> для вывода некоторого сообщения.</p>
+                <p>Преимущество этой техники состоит в том, что скрипты, которые входят в модуль, могут загружаться асинхронно. Не имеет значения, какой скрипт 
+будет загружен первым, поскольку в случае сомнений модуль будет создан заново.</p>
+
+                <h4>Вторая техника предполагает, что модуль уже существует:</h4>
+
+                <div class="code-block"><code>var localeModule =  (function(locale){
+    const ruMessage = "Привет мир";
+    locale.printRu = function(){console.log(ruMessage);};
+    return locale;
+})(localeModule);</code></div>
+
+                <p>Здесь мы уверены, что уже есть объект <span class="b">localModule</span>, и также добавляем к нему новую функцию - <code>printRu</code>. В обоих случаях модуль возвращает в качестве результата расширенный новой функциональность объект из параметра.</p>
+                <p>
+                    Но независимо от того, какой тип расширения модуля применяется, у них есть один общий недостаток: функции, определенные в одном файле исходного кода 
+                    для модуля, не имеют доступа к частным переменным и константам, определенным в другом файле исходного кода для того же модуля. Например, метод <code>printRu</code> 
+                    не имеет доступа к константе <code>enMessage</code>.
+                </p>
+
+                <h4>Модули можно расширять, добавляя новые методы:</h4>
                 
                 <div class="code-block"><code>const calculator = (function(calc) {
-    // Добавляем новый метод
+    <code class="comment">// Добавляем новый метод</code>
     calc.multiply = function(a, b) {
         this.result = a * b;
         return this;
@@ -29777,7 +30269,7 @@ console.log(calculator.data); // undefined</code></div>
                     </ul>
                 </div>
 
-                <h2>3. JavaScript в CSS</h2>
+                <h2 id="ch29-js-in-css">📜 3. JavaScript в CSS</h2>
                 
                 <h3>Использование CSS переменных для хранения JS-кода</h3>
                 <p>CSS-переменные (Custom Properties) могут использоваться для хранения JavaScript-кода, который затем выполняется с помощью функции <code>eval()</code> или <code>Function()</code>.</p>
@@ -29795,21 +30287,61 @@ console.log(calculator.data); // undefined</code></div>
 &lt;/head&gt;
 &lt;body&gt;
     &lt;script&gt;
-        // Получаем стили документа
+        <code class="comment">// Получаем стили документа</code>
         const style = getComputedStyle(document.documentElement);
         
-        // Получаем значение CSS-переменной
+        <code class="comment">// Получаем значение CSS-переменной</code>
         const script = style.getPropertyValue("--script");
         
-        // Выполняем код
-        eval(script); // "Hello from CSS!"
+        <code class="comment">// Выполняем код</code>
+        eval(script); <code class="comment">// "Hello from CSS!"</code>
         
-        // Альтернативный способ
+        <code class="comment">// Альтернативный способ</code>
         const fn = new Function(script);
         fn();
     &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></div>
+
+                <p>Здесь свойство или переменная CSS <code>--script</code> хранит js-код, который выводит на консоль браузера сообщение.</p>
+                <p>Чтобы выполнить этот код, сначала получаем стили документа:</p>
+                <div class="code-block"><code>const style = getComputedStyle(document.documentElement);</code></div>
+
+                <p>Затем получаем среди этих стилей определение свойства <code>--script</code>:</p>
+                <div class="code-block"><code>const script = style.getPropertyValue("--script");</code></div>
+
+                <p>Далее выполняем код:</p>
+                <div class="code-block"><code>new Function(script)();</code></div>
+
+                <p>В качестве альтернативы для выполнения кода можно вызвать функцию <span class="b">eval()</span>:</p>
+                <div class="code-block"><code>eval(script);</code></div>
+
+                <p>В качестве хранимого кода могут применяться более сложные выражения JavaScript. Например, используем конструкцию <span class="b">if</span>:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+    &lt;style>
+    :root {
+        --script: if (x > 5) document.body.style.background = "blue";
+    }
+&lt;/style>
+&lt;/head>
+&lt;body>
+&lt;script>
+    let x = 10;
+    
+    const style = getComputedStyle(document.documentElement);
+    const script = style.getPropertyValue("--script");
+    eval(script);
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>Здесь если значение переменной <code>x больше 5</code>, то окрашиваем пространство элемента <code>body</code> в синий цвет.</p>
+
 
                 <h3>Практический пример: логирование ширины экрана</h3>
                 <div class="code-block"><code>&lt;!DOCTYPE html&gt;
@@ -29853,16 +30385,19 @@ console.log(calculator.data); // undefined</code></div>
 &lt;/body&gt;
 &lt;/html&gt;</code></div>
 
-                <p>Здесь в <code>localStorage</code> записывается элемент с ключом "minwidth", значение которого зависит от значений media-query.</p>
+                <p>Здесь в <code>localStorage</code> записываем элемент с ключом <code>"minwidth"</code>, значение которого зависит от значений <code>media-query</code>. А в коде javascript 
+определяем обработчик событий <code>window.onresize</code> и <code>window.onload</code>, чтобы при загрузке страницы, а также при изменении ширины окна браузера значение в <code>localStorage</code> перезаписывалось.</p>
 
                 <div class="info-box warning">
                     <div class="info-box-title">⚠️ Безопасность</div>
                     <p>Использование <code>eval()</code> может представлять угрозу безопасности, так как выполняет произвольный код. Используйте эту технику только с контролируемым кодом.</p>
                 </div>
 
-                <h2>4. Определение мобильного устройства в JavaScript</h2>
+                <h2 id="ch29-mobile-detect">📜 4. Определение мобильного устройства в JavaScript</h2>
                 
                 <h3>Метод 1: Проверка User Agent</h3>
+                <p>Анализ строки User Agent браузера, который можно получить с помощью свойства <code>navigator.userAgent</code>, может дать приблизительную информацию об устройстве. Например, возьмем следующий код:</p>
+
                 <div class="code-block"><code>function isMobileDevice() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
         .test(navigator.userAgent);
@@ -29874,8 +30409,54 @@ if (isMobileDevice()) {
     console.log("Десктоп");
 }</code></div>
 
-                <h3>Метод 2: Проверка сенсорных событий</h3>
-                <div class="code-block"><code>// Проверка поддержки touch-событий
+                <p>В данном случае тестируем строку <code>navigator.userAgent</code> на наличие в ней распространенных маркеров мобильных устройств. Тем не менее этот способ имеет недостатки. В частности, строку с <code>User Agent</code> можно подделать. Также некоторые планшеты могут определяться как мобильные или наоборот.</p>
+
+                <h3>Метод 2: Проверка ширины экрана и сенсорных (touch) событий</h3>
+
+                <p>Другой способ представляет проверку поддержки сенсора на текущем устройстве. В частности, мы можем проверять, поддерживает ли браузер сенсорные события (касания), что характерно для мобильных устройств и тачскринов. Для этого можно использовать проверку:</p>
+                <div class="code-block"><code>"ontouchstart" in window</code></div>
+
+                <p>
+                    Она проверяет, существует ли в объекте <span class="b">window</span> свойство <code>ontouchstart</code>. Если да, значит, браузер поддерживает touch-события (например, на смартфонах и планшетах). Но важно помнить, что 
+                    некоторые десктопные браузеры (например, Chrome с эмуляцией) тоже могут возвращать <code>true</code>.
+                </p>
+                <p>
+                    Более современный способ предполагает проверку свойства <code>maxTouchPoints</code> интерфейса Navigator (свойство <code>navigator.maxTouchPoints</code>), которое возвращает максимальное количество одновременных точек касания, поддерживаемых текущим устройством. 
+                    Если это свойство возвращает значение больше 0, значит, устройство сенсорное.
+                </p>
+                <p>
+                    В конечном счете, мы можем совместить оба выше описанных способа проверки. На десктопах (без тачскрина) оба способа обычно дают <code>false</code>. На мобильных устройствах — <code>true</code>.
+                    Но есть нюансы: некоторые ноутбуки с тачскрином (например, Windows Surface) вернут <code>true</code>. Браузеры в режиме эмуляции мобильных устройств тоже могут вернуть <code>true</code>.
+                </p>
+
+                <div class="code-block"><code>function isMobile() {
+    return isTouchScreen = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+}
+ 
+if (isMobile()) {
+    console.log("Мобильное устройство (сенсорный экран + малый размер)");
+} else {
+    console.log("Десктоп или планшет");
+}</code></div>
+                
+                <p>Можно комбинировать проверку ширины экрана и поддержку сенсорных событий. Например:</p>
+                <div class="code-block"><code>function isMobile() {
+    const isTouchScreen = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    
+    // Обычно мобильные устройства имеют ширину меньше 768px, но это не точно
+    const isSmallScreen = window.innerWidth &lt; 768;
+    return isTouchScreen && isSmallScreen;
+}
+ 
+if (isMobile()) {
+    console.log("Мобильное устройство (сенсорный экран + малый размер)");
+} else {
+    console.log("Десктоп или планшет");
+}</code></div>
+
+                <p>Из плюсов - это более точный метод, чем просто проверка <code>User Agent</code>. Однако на десктопах с сенсорными экранами может давать ложные срабатывания.</p>
+
+                <div class="code-block"><code><code class="comment">// Проверка поддержки touch-событий</code>
 function isTouchDevice() {
     return ('ontouchstart' in window) || 
            (navigator.maxTouchPoints &gt; 0) ||
@@ -29896,15 +30477,46 @@ console.log("Максимальное количество точек касан
                 <p>Свойство <code>maxTouchPoints</code> возвращает максимальное количество одновременных точек касания, поддерживаемых текущим устройством.</p>
 
                 <h3>Метод 4: window.matchMedia</h3>
-                <div class="code-block"><code>function isMobileScreen() {
-    return window.matchMedia("(max-width: 768px)").matches;
-}
 
-if (isMobileScreen()) {
-    console.log("Экран мобильного размера");
+                <p>
+                    Можно использовать медиа-запросы для проверки мобильного разрешения с помощью метода <code>window.matchMedia()</code>.  
+                    Этот метод возвращает объект <code>MediaQueryList</code>, который затем можно использовать для определения соответствия веб-страницы строке медиа-запроса, а также для мониторинга 
+                    соответствия страницы (или прекращения соответствия) этому медиа-запросу. Например:
+                </p>
+
+                <div class="code-block"><code>function isMobileView() {
+    return window.matchMedia("(max-width: 767px)").matches;
+}
+ 
+if (isMobileView()) {
+    console.log("Мобильное разрешение экрана");
+} else {
+    console.log("Широкий экран (десктоп/планшет)");
 }</code></div>
 
-                <h3>Метод 5: Анализ плотности пикселей (devicePixelRatio)</h3>
+                <p>Из недостатков: этот способ не различает мобильные устройства и просто узкие окна браузера.</p>
+
+                <h3>Метод 5: Анализ плотности пикселей (window.devicePixelRatio)</h3>
+
+                <p>Плотность пикселей, которая представлена свойством <b>window.devicePixelRatio</b>, показывает соотношение между физическими и логическими пикселями на экране или <span class="b">DPR</span>. </p>
+                <pre classs="browser">DPR = Физические пиксели/Логические (CSS) пиксели</pre>
+                <p></p>
+
+                <p>Несколько примеров:</p>
+                <ul>
+                    <li>1.0 — обычный экран (старые ноутбуки, десктопы).</li>
+                    <li>1.5-2.0 — HD-экраны (многие смартфоны, планшеты).</li>
+                    <li>2.0-3.0+ — Retina (iPhone), Super AMOLED (Samsung).</li>
+                </ul>
+
+                <p>Это значение полезно для:</p>
+                <ul>
+                    <li>Различения Retina-экранов (Apple) и высокоплотных дисплеев (Android).</li>
+                    <li>Определения, является ли устройство смартфоном или планшетом (у смоартфонов обычно значение <code>devicePixelRatio &gt;= 2</code>, а у десктопов — 1 или 1.25).</li>
+                    <li>Оптимизации отображения графики (например, загрузка изображений в высоком разрешении для Retina-экранов).</li>
+                </ul>
+
+                <p>Например, используем <code>devicePixelRatio</code> для определения устройства:</p>
                 <div class="code-block"><code>function isHighDensityDisplay() {
     return window.devicePixelRatio &gt;= 2;
 }
@@ -29913,15 +30525,22 @@ if (isHighDensityDisplay()) {
     console.log("Устройство с высоким DPI (скорее всего, мобильное)");
 } else {
     console.log("Обычный экран (возможно, десктоп)");
-}
+}</code></div>
 
-// Определение типа устройства по DPR
+                <h4>Отличие iPhone от Android</h4>
+
+                <p>У iPhone (особенно Retina) значение <code>DPR</code> обычно 2 или 3, а у Android-устройств может быть 2.5, 3.5 и выше:</p>
+
+<div class="code-block"><code>
+<code class="comment">// Определение типа устройства по DPR</code>
 const dpr = window.devicePixelRatio;
 
 if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
     console.log(`Apple устройство с DPR = ${dpr}`);
 } else if (/Android/i.test(navigator.userAgent)) {
     console.log(`Android устройство с DPR = ${dpr}`);
+} else {
+    console.log("Другое устройство (десктоп?)");
 }</code></div>
 
                 <div class="info-box note">
@@ -29934,6 +30553,60 @@ if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
                         <li>Десктоп: DPR = 1 или 1.25</li>
                     </ul>
                 </div>
+
+                <p>Благодаря этому мы можем оптимизировать различные аспекты, например, изображения под дисплеи Retina:</p>
+                <div class="code-block"><code>const dpr = window.devicePixelRatio;
+const img = document.querySelector("img");
+ 
+if (dpr >= 2) {
+    img.src = "image@2x.png"; <code class="comment">// Загрузка HD-версии</code>
+} else {
+    img.src = "image.png";    <code class="comment">// Обычная версия</code>
+}</code></div>
+
+                <h3>Комбинированный подход</h3>
+
+                <p>Для оптимальной точности лучше всего использовать несколько проверок:</p>
+                <div class="code-block"><code>function isMobile() {
+    const userAgent = navigator.userAgent;
+    const isMobileUA = 
+            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+    const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    const isSmallScreen = window.innerWidth < 768;
+ 
+    <code class="comment">// здесь возможны варианты типа (isMobileUA && isTouchDevice && isSmallScreen)</code>
+    return isMobileUA || (isTouchDevice && isSmallScreen);
+}
+ 
+if (isMobile()) {
+    console.log("Мобильное устройство");
+} else {
+    console.log("Десктоп или планшет");
+}</code></div>
+
+                <p>Также можно объединить с DRP:</p>
+                <div class="code-block"><code>function isMobileDevice() {
+    const isMobileUA = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const isHighDPI = window.devicePixelRatio >= 2;
+    const isSmallScreen = window.innerWidth < 768;
+ 
+    return isMobileUA || (isHighDPI && isSmallScreen);
+}
+ 
+if (isMobileDevice()) {
+    console.log("Скорее всего, это мобильное устройство");
+} else {
+    console.log("Десктоп или устройство без высокого DPI");
+}</code></div>
+
+                <p>Или просто комбинировать отдельные аспекты, например, плотность пикселей и строку User Agent:</p>
+                <div class="code-block"><code>function isRetinaMobile() {
+    const dpr = window.devicePixelRatio;
+    const isApple = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const isAndroid = /Android/i.test(navigator.userAgent);
+     
+    return (dpr >= 2) && (isApple || isAndroid);
+}</code></div>
 
                 <h3>Комплексная проверка</h3>
                 <div class="code-block"><code>function detectDevice() {
@@ -29958,7 +30631,7 @@ if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
 const device = detectDevice();
 console.log(device);
 
-// Пример использования
+<code class="comment">// Пример использования</code>
 if (device.isMobile) {
     document.body.classList.add('mobile');
 } else {
@@ -29975,7 +30648,7 @@ if (device.isMobile) {
                     </ul>
                 </div>
 
-                <h2>Сравнение паттернов</h2>
+                <h2 id="ch29-compare-resume">📜 Сравнение паттернов</h2>
                 
                 <table>
                     <thead>
@@ -30042,7 +30715,7 @@ if (device.isMobile) {
             <section class="chapter" id="ch30">
                 <h1>Глава 30. jQuery</h1>
                 
-                <h2>Введение в jQuery</h2>
+                <h2 id="ch30-intro">📜 Введение в jQuery</h2>
                 <p><strong>jQuery</strong> — это быстрая, легкая и многофункциональная JavaScript-библиотека, которая упрощает работу с HTML-документами, обработку событий, анимацию и AJAX-взаимодействие для быстрой веб-разработки.</p>
 
                 <div class="info-box note">
@@ -30063,8 +30736,8 @@ if (device.isMobile) {
                     <p>В современной веб-разработке jQuery используется реже из-за появления нативных API (querySelector, fetch) и фреймворков (React, Vue, Angular). Однако jQuery все еще активно используется в legacy-проектах и для быстрого прототипирования.</p>
                 </div>
 
-                <h2>Подключение библиотеки</h2>
-                <p>Работа с jQuery всегда начинается с подключения библиотеки. Есть два основных способа:</p>
+                <h2 id="ch30-connection">📜 Подключение библиотеки</h2>
+                <p>Работа с <code>jQuery</code> всегда начинается с подключения библиотеки. Есть два основных способа:</p>
 
                 <h3>1. Локальное подключение</h3>
                 <div class="code-block"><code>&lt;body&gt;
