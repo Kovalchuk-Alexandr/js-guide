@@ -912,6 +912,26 @@
                             <ul class="nav-sublist">
                                 <li class="nav-subitem" data-target="ch30-intro">📜 Введение в jQuery</li>
                                 <li class="nav-subitem" data-target="ch30-connection">📜 Подключение библиотеки</li>
+                                <li class="nav-subitem" data-target="ch30-launch">📜 Запуск кода</li>
+                                <li class="nav-subitem" data-target="ch30-select-elements">📜 Выбор элементов на странице</li>
+                                <li class="nav-subitem" data-target="ch30-select-func">📜 Функции выборки элементов</li>
+                                <li class="nav-subitem" data-target="ch30-css-styles">📜 Работа с CSS-стилями</li>
+                                <li class="nav-subitem" data-target="ch30-css-class">📜 Работа с CSS-классами</li>
+                                <li class="nav-subitem" data-target="ch30-attr">📜 Работа с атрибутами</li>
+                                <li class="nav-subitem" data-target="ch30-props">📜 Работа со свойствами</li>
+                                <li class="nav-subitem" data-target="ch30-events">📜 События</li>
+                                <li class="nav-subitem" data-target="ch30-events-handle">📜 Работа с событиями</li>
+                                <li class="nav-subitem" data-target="ch30-animation">📜 Анимация</li>
+                                <li class="nav-subitem" data-target="ch30-create-operate">📜 Создание и манипуляция с элементами</li>
+                                <li class="nav-subitem" data-target="ch30-content-operation">📜 Работа с содержимым</li>
+                                <li class="nav-subitem" data-target="ch30-dimensions">📜 Размеры элементов</li>
+                                <li class="nav-subitem" data-target="ch30-ajax">📜 AJAX запросы</li>
+                                <li class="nav-subitem" data-target="ch30-method-chaining">📜 Цепочки методов</li>
+                                <li class="nav-subitem" data-target="ch30-utilities">📜 Утилиты jQuery</li>
+                                <li class="nav-subitem" data-target="ch30-todo-examp">📜 Пример: Todo-список</li>
+                                <li class="nav-subitem" data-target="ch30-compare-jq-js">📜 Сравнение jQuery и JavaScript</li>
+                                <li class="nav-subitem" data-target="ch30-plugints">📜 Плагины jQuery</li>
+                                <li class="nav-subitem" data-target="ch30-conclusion">📜 Когда использовать jQuery?</li>
                              
                                 <li class="nav-subitem" data-target="ch29-compare-resume">📜 Сравнение паттернов. Резюме</li>
                             </ul>
@@ -30741,7 +30761,7 @@ if (device.isMobile) {
 
                 <h3>1. Локальное подключение</h3>
                 <div class="code-block"><code>&lt;body&gt;
-    &lt;!-- Ваш контент --&gt;
+    <code class="comment">&lt;!-- Ваш контент --&gt;</code>
     
     &lt;script src="js/jquery.js"&gt;&lt;/script&gt;
     &lt;script src="js/script.js"&gt;&lt;/script&gt;
@@ -30749,12 +30769,12 @@ if (device.isMobile) {
 
                 <h3>2. Подключение через CDN (рекомендуется)</h3>
                 <div class="code-block"><code>&lt;body&gt;
-    &lt;!-- Ваш контент --&gt;
+    <code class="comment">&lt;!-- Ваш контент --&gt;</code>
     
-    &lt;!-- jQuery 3.7.1 (последняя версия) --&gt;
+    <code class="comment">&lt;!-- jQuery 3.7.1 (последняя версия) --&gt;</code>
     &lt;script src="https://code.jquery.com/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
     
-    &lt;!-- Альтернативно: Google CDN --&gt;
+    <code class="comment">&lt;!-- Альтернативно: Google CDN --&gt;</code>
     &lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"&gt;&lt;/script&gt;
     
     &lt;script src="js/script.js"&gt;&lt;/script&gt;
@@ -30769,12 +30789,12 @@ if (device.isMobile) {
                     </ul>
                 </div>
 
-                <h2>Запуск кода</h2>
+                <h2 id="ch30-launch">📜 Запуск кода</h2>
                 <p>Для выбора элемента на странице в jQuery используется функция <code>$()</code> или <code>jQuery()</code>:</p>
 
                 <div class="code-block"><code>&lt;script&gt;
     jQuery("h2").css("color", "red");
-    // или
+    <code class="comment">// или</code>
     $("h2").css("color", "red");
 &lt;/script&gt;
 
@@ -30822,7 +30842,7 @@ if (device.isMobile) {
     })(jQuery);
 &lt;/script&gt;</code></div>
 
-                <h2>Выбор элементов на странице</h2>
+                <h2 id="ch30-select-elements">📜 Выбор элементов на странице</h2>
                 <p>Все простые выборки на странице можно сделать с помощью CSS-селекторов:</p>
 
                 <table>
@@ -30896,7 +30916,7 @@ if (device.isMobile) {
                     </tbody>
                 </table>
 
-                <h2>Функции выборки элементов</h2>
+                <h2 id="ch30-select-func">📜 Функции выборки элементов</h2>
                 <p>jQuery предоставляет дополнительные методы для навигации по DOM:</p>
 
                 <table>
@@ -30955,14 +30975,14 @@ if (device.isMobile) {
                 </table>
 
                 <h3>Примеры</h3>
-                <div class="code-block"><code>$("section").find("article").find("h3"); // поиск h3 внутри article внутри section
-$("#post").next();                        // следующий элемент после #post
-$("article").children();                  // дочерние элементы article
-$("p").parent();                          // прямые родители всех &lt;p&gt;
-$("p").parents("section");                // все предки &lt;section&gt; для &lt;p&gt;
-$("p").closest("section");                // первый предок &lt;section&gt; для &lt;p&gt;</code></div>
+                <div class="code-block"><code>$("section").find("article").find("h3"); <code class="comment">// поиск h3 внутри article внутри section</code>
+$("#post").next();                        <code class="comment">// следующий элемент после #post</code>
+$("article").children();                  <code class="comment">// дочерние элементы article</code>
+$("p").parent();                          <code class="comment">// прямые родители всех &lt;p&gt;</code>
+$("p").parents("section");                <code class="comment">// все предки &lt;section&gt; для &lt;p&gt;</code>
+$("p").closest("section");                <code class="comment">// первый предок &lt;section&gt; для &lt;p&gt;</code></code></div>
 
-                <h2>Работа с CSS-стилями</h2>
+                <h2 id="ch30-css-styles">📜 Работа с CSS-стилями</h2>
                 <p>Для работы со стилями предназначен метод <code>.css()</code>:</p>
 
                 <table>
@@ -30993,30 +31013,30 @@ $("p").closest("section");                // первый предок &lt;secti
                 </table>
 
                 <h3>Примеры</h3>
-                <div class="code-block"><code>// Установка одного свойства
+                <div class="code-block"><code><code class="comment">// Установка одного свойства</code>
 $("#my").css("color", "red");
 $("#my").css("background-color", "yellow");
 
-// Установка нескольких свойств (строковые ключи)
+<code class="comment">// Установка нескольких свойств (строковые ключи)</code>
 $("#my").css({
     "color": "red",
     "font-size": "18px",
     "background-color": "white"
 });
 
-// Установка нескольких свойств (camelCase)
+<code class="comment">// Установка нескольких свойств (camelCase)</code>
 $("#my").css({
     color: "black",
     fontSize: "12px",
     backgroundColor: "transparent"
 });
 
-// Использование callback-функции
+<code class="comment">// Использование callback-функции</code>
 $("#my").css("font-size", function(i, value) {
-    return parseFloat(value) * 1.5; // увеличиваем размер шрифта в 1.5 раза
+    return parseFloat(value) * 1.5; <code class="comment">// увеличиваем размер шрифта в 1.5 раза</code>
 });</code></div>
 
-                <h2>Работа с CSS-классами</h2>
+                <h2 id="ch30-css-class">📜 Работа с CSS-классами</h2>
                 <table>
                     <thead>
                         <tr>
@@ -31045,14 +31065,14 @@ $("#my").css("font-size", function(i, value) {
                 </table>
 
                 <h3>Примеры</h3>
-                <div class="code-block"><code>$("p").addClass("highlight");           // добавить класс
-$("p").removeClass("highlight");        // удалить класс
-$("p").toggleClass("highlight");        // переключить класс
-if ($("p").hasClass("highlight")) {     // проверка класса
+                <div class="code-block"><code>$("p").addClass("highlight");          <code class="comment">// добавить класс</code>
+$("p").removeClass("highlight");        <code class="comment">// удалить класс</code>
+$("p").toggleClass("highlight");        <code class="comment">// переключить класс</code>
+if ($("p").hasClass("highlight")) {     <code class="comment">// проверка класса</code>
     console.log("Параграф выделен");
 }</code></div>
 
-                <h2>Работа с атрибутами</h2>
+                <h2 id="ch30-attr">📜 Работа с атрибутами</h2>
                 <table>
                     <thead>
                         <tr>
@@ -31081,22 +31101,22 @@ if ($("p").hasClass("highlight")) {     // проверка класса
                 </table>
 
                 <h3>Примеры</h3>
-                <div class="code-block"><code>// Получение адреса ссылки
+                <div class="code-block"><code><code class="comment">// Получение адреса ссылки</code>
 $("a").attr("href");
 
-// Изменение адреса и заголовка ссылки
-$("a").attr({
+<code class="comment">// Изменение адреса и заголовка ссылки
+$("a").attr({</code>
     "href": "https://example.com",
     "title": "Example Website"
 });
 
-// Получение альтернативного текста картинки
+<code class="comment">// Получение альтернативного текста картинки</code>
 $("img").attr("alt");
 
-// Изменение адреса картинки
+<code class="comment">// Изменение адреса картинки</code>
 $("img").attr("src", "/images/default.png");</code></div>
 
-                <h2>Работа со свойствами</h2>
+                <h2 id="ch30-props">📜 Работа со свойствами</h2>
                 <p>Для работы со свойствами используем методы из семейства <code>.prop()</code>:</p>
 
                 <table>
@@ -31130,19 +31150,19 @@ $("img").attr("src", "/images/default.png");</code></div>
                 </div>
 
                 <h3>Примеры</h3>
-                <div class="code-block"><code>// Получение состояния checkbox
-$("#checkbox").prop("checked");          // true или false
+                <div class="code-block"><code><code class="comment">// Получение состояния checkbox</code>
+$("#checkbox").prop("checked");          <code class="comment">// true или false</code>
 
-// Снятие галочки
+<code class="comment">// Снятие галочки</code>
 $("#checkbox").prop("checked", false);
 
-// Установка галочки
+<code class="comment">// Установка галочки</code>
 $("#checkbox").prop("checked", true);
 
-// Для select
+<code class="comment">// Для select</code>
 $("option").prop("selected", true);</code></div>
 
-                <h2>События</h2>
+                <h2 id="ch30-events">📜 События</h2>
                 <p>jQuery работает практически со всеми событиями в JavaScript. Список самых востребованных:</p>
 
                 <h3>События мыши</h3>
@@ -31245,7 +31265,7 @@ $("option").prop("selected", true);</code></div>
                     </tbody>
                 </table>
 
-                <h2>Работа с событиями</h2>
+                <h2 id="ch30-events-handle">📜 Работа с событиями</h2>
                 <p>Для работы с событиями существует три основных метода:</p>
 
                 <table>
@@ -31272,55 +31292,55 @@ $("option").prop("selected", true);</code></div>
                 </table>
 
                 <h3>Примеры</h3>
-                <div class="code-block"><code>// Вешаем обработчик
+                <div class="code-block"><code><code class="comment">// Вешаем обработчик</code>
 $("p").on("click", function() {
     alert("Click!");
 });
 
-// Инициируем событие программно
+<code class="comment">// Инициируем событие программно</code>
 $("p").trigger("click");
 
-// Отключаем обработчик
+<code class="comment">// Отключаем обработчик</code>
 $("p").off("click");</code></div>
 
                 <h3>Использование this</h3>
                 <p>Внутри обработчика вы можете получить доступ к DOM-элементу используя ключевое слово <code>this</code>. Если нужно использовать jQuery-инструменты, используйте конструкцию <code>$(this)</code>:</p>
 
                 <div class="code-block"><code>$("p").on("click", function() {
-    $(this).css("color", "red");  // изменяем цвет кликнутого параграфа
+    $(this).css("color", "red");  <code class="comment">// изменяем цвет кликнутого параграфа</code>
 });</code></div>
 
                 <h3>Делегирование событий</h3>
-                <div class="code-block"><code>// Обработчик для элементов, добавленных динамически
+                <div class="code-block"><code><code class="comment">// Обработчик для элементов, добавленных динамически</code>
 $("ul").on("click", "li", function() {
     $(this).toggleClass("selected");
 });</code></div>
 
-                <h2>Анимация</h2>
+                <h2 id="ch30-animation">📜 Анимация</h2>
                 <p>jQuery позволяет очень легко анимировать элементы на странице. При такой анимации происходит изменение атрибутов width, height, opacity и т.д.</p>
 
                 <h3>Показать/Скрыть</h3>
-                <div class="code-block"><code>$('img').hide();              // скрыть все картинки
-$('img').show();              // показать все картинки
-$('img').toggle();            // переключить (hide ↔ show)
+                <div class="code-block"><code>$('img').hide();                 <code class="comment">// скрыть все картинки</code>
+$('img').show();                <code class="comment">// показать все картинки</code>
+$('img').toggle();              <code class="comment">// переключить (hide ↔ show)</code>
 
-$('img').hide('slow');        // slow == 600ms, fast == 200ms
-$('img').show(400);           // показать за 400ms
+$('img').hide('slow');          <code class="comment">// slow == 600ms, fast == 200ms</code>
+$('img').show(400);             <code class="comment">// показать за 400ms</code>
 
 $('img').hide('slow', function() {
-    alert("Images was hidden"); // callback после завершения
+    alert("Images was hidden"); <code class="comment">// callback после завершения</code>
 });</code></div>
 
                 <h3>Slide (вертикальная анимация)</h3>
-                <div class="code-block"><code>$('img').slideUp();           // скрыть с анимацией вверх
-$('img').slideDown();         // показать с анимацией вниз
-$('img').slideToggle();       // переключить</code></div>
+                <div class="code-block"><code>$('img').slideUp();          <code class="comment">// скрыть с анимацией вверх</code>
+$('img').slideDown();         <code class="comment">// показать с анимацией вниз</code>
+$('img').slideToggle();       <code class="comment">// переключить</code></code></div>
 
                 <h3>Fade (изменение прозрачности)</h3>
-                <div class="code-block"><code>$('img').fadeIn();            // проявление (opacity: 0 → 1)
-$('img').fadeOut();           // затухание (opacity: 1 → 0)
-$('img').fadeToggle();        // переключение
-$('img').fadeTo("slow", 0.5); // изменение до указанного значения</code></div>
+                <div class="code-block"><code>$('img').fadeIn();           <code class="comment">// проявление (opacity: 0 → 1)</code>
+$('img').fadeOut();           <code class="comment">// затухание (opacity: 1 → 0)</code>
+$('img').fadeToggle();        <code class="comment">// переключение</code>
+$('img').fadeTo("slow", 0.5); <code class="comment">//изменение до указанного значения</code></code></div>
 
                 <h3>Произвольная анимация</h3>
                 <p>Метод <code>animate()</code> позволяет анимировать любые CSS-свойства:</p>
@@ -31329,9 +31349,9 @@ $('img').fadeTo("slow", 0.5); // изменение до указанного з
     'opacity': 0.5,
     'height': '100px',
     'width': '100px'
-}, 4000);  // за 4 секунды
+}, 4000);  <code class="comment">// за 4 секунды</code>
 
-// С callback
+<code class="comment">// С callback</code>
 $('div').animate({
     left: '250px',
     opacity: '0.5',
@@ -31344,65 +31364,65 @@ $('div').animate({
     }
 });</code></div>
 
-                <h2>Создание элементов</h2>
+                <h2 id="ch30-create-operate">📜 Создание элементов</h2>
                 <p>Рассмотрим создание элемента с атрибутами id и class:</p>
 
-                <div class="code-block"><code>// Самый быстрый способ
+                <div class="code-block"><code><code class="comment">// Самый быстрый способ</code>
 var myDiv = $('&lt;div&gt;').attr({'id':'my', 'class':'some'});
 
-// Немного медленнее
+<code class="comment">// Немного медленнее</code>
 var myDiv = $('&lt;div&gt;', {'id':'my', 'class':'some'});
 
-// Самый медленный
+<code class="comment">// Самый медленный</code>
 var myDiv = $('&lt;div id="my" class="some"&gt;&lt;/div&gt;');</code></div>
 
                 <h2>Манипуляция с элементами</h2>
 
                 <h3>Вставка после/перед (after/before)</h3>
-                <div class="code-block"><code>// after(content) — вставляет контент ПОСЛЕ каждого элемента
-$("p").after("&lt;hr/&gt;");  // после каждого &lt;p&gt; будет добавлена линия
+                <div class="code-block"><code><code class="comment">// after(content) — вставляет контент ПОСЛЕ каждого элемента</code>
+$("p").after("&lt;hr/&gt;");  <code class="comment">// после каждого &lt;p&gt; будет добавлена линия</code>
 
-// insertAfter(element) — вставляет элемент ПОСЛЕ указанного
+<code class="comment">// insertAfter(element) — вставляет элемент ПОСЛЕ указанного</code>
 $("&lt;hr/&gt;").insertAfter("p");
 
-// before(content) — вставляет контент ПЕРЕД каждым элементом
+<code class="comment">// before(content) — вставляет контент ПЕРЕД каждым элементом</code>
 $("p").before("&lt;hr/&gt;");
 
-// insertBefore(element) — вставляет элемент ПЕРЕД указанным
+<code class="comment">// insertBefore(element) — вставляет элемент ПЕРЕД указанным</code>
 $("&lt;hr/&gt;").insertBefore("p");</code></div>
 
                 <h3>Вставка внутрь (append/prepend)</h3>
-                <div class="code-block"><code>// append(content) — вставляет контент В КОНЕЦ элемента
+                <div class="code-block"><code><code class="comment">// append(content) — вставляет контент В КОНЕЦ элемента</code>
 $("p").append("&lt;hr/&gt;");
 
-// appendTo(element) — вставляет выбранный контент в конец
+<code class="comment">// appendTo(element) — вставляет выбранный контент в конец</code>
 $("&lt;hr/&gt;").appendTo("p");
 
-// prepend(content) — вставляет контент В НАЧАЛО элемента
+<code class="comment">// prepend(content) — вставляет контент В НАЧАЛО элемента</code>
 $("p").prepend("&lt;hr/&gt;");
 
-// prependTo(element) — вставляет выбранный контент в начало
+<code class="comment">// prependTo(element) — вставляет выбранный контент в начало</code>
 $("&lt;hr/&gt;").prependTo("p");</code></div>
 
                 <h3>Замена элементов</h3>
-                <div class="code-block"><code>// replaceWith(content) — заменяет найденные элементы новым
+                <div class="code-block"><code><code class="comment">// replaceWith(content) — заменяет найденные элементы новым</code>
 $("p").replaceWith("&lt;hr/&gt;");
 
-// replaceAll(target) — вставляет контент взамен найденному
+<code class="comment">// replaceAll(target) — вставляет контент взамен найденному</code>
 $("&lt;hr/&gt;").replaceAll("h3");</code></div>
 
                 <h3>Клонирование и удаление</h3>
-                <div class="code-block"><code>// clone(withDataAndEvents) — клонирует элементы
-var copy = $("p").clone();      // без событий
-var copy = $("p").clone(true);  // с событиями
+                <div class="code-block"><code><code class="comment">// clone(withDataAndEvents) — клонирует элементы</code>
+var copy = $("p").clone();      <code class="comment">// без событий</code>
+var copy = $("p").clone(true);  <code class="comment">// с событиями</code>
 
-// empty() — удаляет текст и дочерние элементы
+<code class="comment">// empty() — удаляет текст и дочерние элементы</code>
 $("div").empty();
 
-// remove() — удаляет элемент из DOM
+<code class="comment">// remove() — удаляет элемент из DOM</code>
 $("div").remove();</code></div>
 
-                <h2>Работа с содержимым</h2>
+                <h2 id="ch30-content-operation">📜 Работа с содержимым</h2>
                 
                 <table>
                     <thead>
@@ -31440,20 +31460,20 @@ $("div").remove();</code></div>
                 </table>
 
                 <h3>Примеры</h3>
-                <div class="code-block"><code>// Получение/установка HTML
-$("div").html();                    // получить HTML
-$("div").html("&lt;p&gt;Новый контент&lt;/p&gt;");  // установить HTML
+                <div class="code-block"><code><code class="comment">// Получение/установка HTML</code>
+$("div").html();                         <code class="comment">// получить HTML</code>
+$("div").html("&lt;p&gt;Новый контент&lt;/p&gt;");   <code class="comment">// установить HTML</code>
 
-// Получение/установка текста
-$("div").text();                    // получить текст
+<code class="comment">// Получение/установка текста</code>
+$("div").text();                         <code class="comment">// получить текст</code>
 $("section").text("Some &lt;strong&gt;text&lt;/strong&gt;");
-// Результат: Some &amp;lt;strong&amp;gt;text&amp;lt;/strong&amp;gt;
+<code class="comment">// Результат: Some &amp;lt;strong&amp;gt;text&amp;lt;/strong&amp;gt;</code>
 
-// Работа с полями форм
-$("#name").val();                   // получить значение
-$("#name").val("John Doe");         // установить значение</code></div>
+<code class="comment">// Работа с полями форм</code>
+$("#name").val();                        <code class="comment">// получить значение</code>
+$("#name").val("John Doe");              <code class="comment">// установить значение</code></code></div>
 
-                <h2>Размеры элементов</h2>
+                <h2 id="ch30-dimensions">📜 Размеры элементов</h2>
                 
                 <table>
                     <thead>
@@ -31507,18 +31527,18 @@ $("#name").val("John Doe");         // установить значение</co
                 </table>
 
                 <h3>Примеры</h3>
-                <div class="code-block"><code>// Получение размеров
-var h = $("div").height();           // высота контента
-var w = $("div").width();            // ширина контента
-var ih = $("div").innerHeight();     // с padding
-var oh = $("div").outerHeight();     // с padding и border
-var ohm = $("div").outerHeight(true); // с padding, border и margin
+                <div class="code-block"><code><code class="comment">// Получение размеров</code>
+var h = $("div").height();            <code class="comment">// высота контента</code>
+var w = $("div").width();             <code class="comment">// ширина контента</code>
+var ih = $("div").innerHeight();      <code class="comment">// с padding</code>
+var oh = $("div").outerHeight();      <code class="comment">// с padding и border</code>
+var ohm = $("div").outerHeight(true); <code class="comment">// с padding, border и margin</code>
 
-// Установка размеров
-$("div").height(200);                // установить 200px
-$("div").width("50%");               // установить 50%</code></div>
+<code class="comment">// Установка размеров</code>
+$("div").height(200);                 <code class="comment">// установить 200px</code>
+$("div").width("50%");                <code class="comment">// установить 50%</code></code></div>
 
-                <h2>AJAX запросы</h2>
+                <h2 id="ch30-ajax">📜 AJAX запросы</h2>
                 <p>jQuery значительно упрощает работу с AJAX-запросами:</p>
 
                 <h3>Метод $.ajax()</h3>
@@ -31535,22 +31555,22 @@ $("div").width("50%");               // установить 50%</code></div>
 });</code></div>
 
                 <h3>Сокращенные методы</h3>
-                <div class="code-block"><code>// GET-запрос
+                <div class="code-block"><code><code class="comment">// GET-запрос</code>
 $.get("/api/users", function(data) {
     console.log(data);
 });
 
-// POST-запрос
+<code class="comment">// POST-запрос</code>
 $.post("/api/users", {name: "John", age: 30}, function(data) {
     console.log("Создан:", data);
 });
 
-// Загрузка JSON
+<code class="comment">// Загрузка JSON</code>
 $.getJSON("/api/users.json", function(data) {
     console.log("JSON:", data);
 });
 
-// Загрузка HTML
+<code class="comment">// Загрузка HTML</code>
 $("#content").load("/page.html");</code></div>
 
                 <h3>Современный синтаксис с промисами</h3>
@@ -31568,7 +31588,7 @@ $("#content").load("/page.html");</code></div>
     console.log("Завершено");
 });</code></div>
 
-                <h2>Цепочки методов (Method Chaining)</h2>
+                <h2 id="ch30-method-chaining">📜 Цепочки методов (Method Chaining)</h2>
                 <p>Одна из мощных возможностей jQuery — цепочки методов. Большинство методов возвращают объект jQuery, что позволяет вызывать методы последовательно:</p>
 
                 <div class="code-block"><code>$("p")
@@ -31577,22 +31597,22 @@ $("#content").load("/page.html");</code></div>
     .fadeIn(500)
     .html("Новый текст");
 
-// То же самое, но без цепочки:
+<code class="comment">// То же самое, но без цепочки:</code>
 $("p").addClass("highlight");
 $("p").css("font-size", "16px");
 $("p").fadeIn(500);
 $("p").html("Новый текст");</code></div>
 
-                <h2>Утилиты jQuery</h2>
+                <h2 id="ch30-utilities">📜 Утилиты jQuery</h2>
                 
                 <h3>$.each() — перебор массивов и объектов</h3>
-                <div class="code-block"><code>// Перебор массива
+                <div class="code-block"><code><code class="comment">// Перебор массива</code>
 var arr = [1, 2, 3, 4, 5];
 $.each(arr, function(index, value) {
     console.log(index + ": " + value);
 });
 
-// Перебор объекта
+<code class="comment">// Перебор объекта</code>
 var obj = {name: "John", age: 30};
 $.each(obj, function(key, value) {
     console.log(key + ": " + value);
@@ -31603,27 +31623,27 @@ $.each(obj, function(key, value) {
 var doubled = $.map(arr, function(value, index) {
     return value * 2;
 });
-console.log(doubled); // [2, 4, 6, 8, 10]</code></div>
+console.log(doubled); <code class="comment">// [2, 4, 6, 8, 10]</code></code></div>
 
                 <h3>$.grep() — фильтрация массивов</h3>
                 <div class="code-block"><code>var arr = [1, 2, 3, 4, 5];
 var filtered = $.grep(arr, function(value) {
     return value &gt; 2;
 });
-console.log(filtered); // [3, 4, 5]</code></div>
+console.log(filtered); <code class="comment">// [3, 4, 5]</code></code></div>
 
                 <h3>$.extend() — объединение объектов</h3>
                 <div class="code-block"><code>var obj1 = {a: 1, b: 2};
 var obj2 = {b: 3, c: 4};
 var result = $.extend({}, obj1, obj2);
-console.log(result); // {a: 1, b: 3, c: 4}</code></div>
+console.log(result); <code class="comment">// {a: 1, b: 3, c: 4}</code></code></div>
 
                 <h3>$.trim() — удаление пробелов</h3>
                 <div class="code-block"><code>var str = "  hello world  ";
 var trimmed = $.trim(str);
-console.log(trimmed); // "hello world"</code></div>
+console.log(trimmed); <code class="comment">// "hello world"</code></code></div>
 
-                <h2>Практический пример: Todo-список</h2>
+                <h2 id="ch30-todo-examp">📜 Практический пример: Todo-список</h2>
                 <div class="code-block"><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;head&gt;
@@ -31644,7 +31664,7 @@ console.log(trimmed); // "hello world"</code></div>
     &lt;script src="https://code.jquery.com/jquery-3.7.1.min.js"&gt;&lt;/script&gt;
     &lt;script&gt;
         $(function() {
-            // Добавление новой задачи
+            <code class="comment">// Добавление новой задачи</code>
             $("#addBtn").on("click", function() {
                 var task = $("#newTask").val().trim();
                 
@@ -31658,21 +31678,21 @@ console.log(trimmed); // "hello world"</code></div>
                 }
             });
             
-            // Добавление по Enter
+            <code class="comment">// Добавление по Enter</code>
             $("#newTask").on("keypress", function(e) {
                 if (e.which === 13) {
                     $("#addBtn").click();
                 }
             });
             
-            // Переключение выполнения задачи
+            <code class="comment">// Переключение выполнения задачи</code>
             $("#taskList").on("click", "li", function(e) {
                 if (!$(e.target).hasClass("delete")) {
                     $(this).toggleClass("completed");
                 }
             });
             
-            // Удаление задачи
+            <code class="comment">// Удаление задачи</code>
             $("#taskList").on("click", ".delete", function(e) {
                 e.stopPropagation();
                 $(this).parent().fadeOut(300, function() {
@@ -31684,7 +31704,7 @@ console.log(trimmed); // "hello world"</code></div>
 &lt;/body&gt;
 &lt;/html&gt;</code></div>
 
-                <h2>Сравнение jQuery и нативного JavaScript</h2>
+                <h2 id="ch30-compare-jq-js">📜 Сравнение jQuery и нативного JavaScript</h2>
                 
                 <table>
                     <thead>
@@ -31728,7 +31748,7 @@ console.log(trimmed); // "hello world"</code></div>
                     </tbody>
                 </table>
 
-                <h2>Плагины jQuery</h2>
+                <h2 id="ch30-plugints">📜 Плагины jQuery</h2>
                 <p>jQuery имеет огромную экосистему плагинов. Вот некоторые популярные:</p>
 
                 <ul>
@@ -31759,10 +31779,10 @@ console.log(trimmed); // "hello world"</code></div>
     };
 })(jQuery);
 
-// Использование
+<code class="comment">// Использование</code>
 $("p").highlight({color: "lightblue", duration: 1000});</code></div>
 
-                <h2>Когда использовать jQuery?</h2>
+                <h2 id="ch30-conclusion">📜 Когда использовать jQuery?</h2>
                 
                 <div class="info-box success">
                     <div class="info-box-title">✅ Плюсы jQuery</div>
