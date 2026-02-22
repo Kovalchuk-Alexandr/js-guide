@@ -512,8 +512,28 @@
                 <div class="nav-section">
                     <div class="nav-title">📖 Основы (Metanit)</div>
                     <ul class="nav-list">
-                        <li class="nav-item" data-target="ch1">Глава 1. Введение</li>
-                        <li class="nav-item" data-target="ch2">Глава 2. Основы JS</li>
+                        <li class="nav-item has-subitems" data-target="ch1-intro"><span class="ch-emoj"></span> Глава 1. Введение
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch1-history">📜 История создания JavaScript</li>
+                                <li class="nav-subitem" data-target="ch1-about">📜 Что такое JavaScript?</li>
+                                <li class="nav-subitem" data-target="ch1-first-prog">📜 Первая программа</li>
+                                <li class="nav-subitem" data-target="ch1-code-perfome">📜 Выполнение кода javascript</li>
+                                <li class="nav-subitem" data-target="ch1-syntax">📜 Основы синтаксиса javascript</li>
+                                <li class="nav-subitem" data-target="ch1-connection">📜 Способы подключения JavaScript</li>
+                                <li class="nav-subitem" data-target="ch1-console">📜 Консоль браузера</li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-subitems" data-target="ch2"><span class="ch-emoj"></span> Глава 2. Основы JS
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch2-variables">📜 Переменные и константы</li>
+                                <li class="nav-subitem" data-target="ch2-data-types">📜 Типы данных в JavaScript</li>
+                                <li class="nav-subitem" data-target="ch2-arithmetic">📜 Арифметические операции</li>
+                                <li class="nav-subitem" data-target="ch2-bitwise">📜 Поразрядные операции</li>
+                                <li class="nav-subitem" data-target="ch2-condition-expr">📜 Условные выражения</li>
+                                <li class="nav-subitem" data-target="ch2-condition-constructions">📜 Условные конструкции</li>
+                                <li class="nav-subitem" data-target="ch2-ternary">📜 Условные операторы ?: и ??</li>
+                            </ul>
+                        </li>
                         <li class="nav-item" data-target="ch3">Глава 3. Функции</li>
                         <li class="nav-item" data-target="ch4">Глава 4-5. ООП</li>
                     </ul>
@@ -1048,7 +1068,7 @@
             <section class="chapter" id="ch1">
                 <h1>Глава 1. Введение в JavaScript</h1>
                 
-                <h2>История создания JavaScript</h2>
+                <h2 id="ch1-history">📜 История создания JavaScript</h2>
                 <p>JavaScript был создан в 1995 году программистом <strong>Бренданом Айком</strong> (Brendan Eich) всего за <strong>10 дней</strong>, когда он работал в компании Netscape Communications. Изначально язык назывался <strong>Mocha</strong>, затем был переименован в <strong>LiveScript</strong>, и наконец получил название <strong>JavaScript</strong> в рамках маркетинговой стратегии, чтобы воспользоваться популярностью Java (хотя это совершенно разные языки).</p>
                 
                 <div class="info-box note">
@@ -1065,7 +1085,7 @@
                     <li><strong>2016-2024</strong> — Ежегодные обновления (async/await, optional chaining, и др.)</li>
                 </ul>
                 
-                <h2>Что такое JavaScript?</h2>
+                <h2 id="ch1-about">📜 Что такое JavaScript?</h2>
                 <p>JavaScript (JS) — интерпретируемый язык программирования, выполняющийся в браузере. Позволяет создавать интерактивные веб-страницы.</p>
                 
                 <div class="info-box note">
@@ -1079,95 +1099,198 @@
                     </ul>
                 </div>
 
-                <h2>Типы данных в JavaScript</h2>
-                <p>В JavaScript существует <strong>8 типов данных</strong>: 7 примитивных и 1 сложный (Object).</p>
-                
-                <h3>Примитивные типы (7 типов)</h3>
-                <div class="code-block"><code>// 1. Number (числа)
-let integer = 42;
-let float = 3.14;
-let negative = -10;
+                <h2 id="ch1-first-prog">📜 Первая программа</h2>
 
-// 2. String (строки)
-let str1 = "Hello";
-let str2 = 'World';
-let str3 = `Hello ${name}`; // template literal (ES6)
+                <p>
+                    Для начала определим для нашего приложения какой-нибудь каталог. Например, создадим на диске <code>C:</code> папку <span class="b">app</span>. 
+                    В этой папке создадим файл под названием <span class="b">index.html</span>. То есть данный файл будет представлять веб-страницу с кодом HTML.
+                </p>
 
-// 3. Boolean (логический)
-let isTrue = true;
-let isFalse = false;
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+    &lt;script>
+        document.write("&lt;h2>Первая программа на JavaScript&lt;/h2>");
+    &lt;/script>
+&lt;/body>
+&lt;/html></code></div>
 
-// 4. Undefined (неопределённое значение)
-let notDefined;
-console.log(notDefined); // undefined
+                <p>
+                    Здесь мы определяем стандартные элементы html. В элементе <span class="b">head</span> определяется кодировка utf-8 и заголовок (элемент <code>title</code>). 
+                    В элементе <span class="b">body</span> определяется тело веб-страницы, которое в данном случае состоит только из одного элемента 
+                    <span class="b">&lt;script&gt;</span>
+                </p>
+                <p>
+                    Подключение кода <code>javascript</code> на html-страницу осуществляется с помощью тега <span class="b">&lt;script&gt;</span>. Данный тег следует размещать либо в 
+                    заголовке (между тегами <code>&lt;head&gt;</code> и <code>&lt;/head&gt;</code>), либо в теле веб-странице (между тегами <code>&lt;body&gt;</code> 
+                    и <code>&lt;/body&gt;</code>). Нередко подключение скриптов происходит перед закрывающим тегом <code>&lt;/body&gt;</code> для оптимизации загрузки веб-страницы.
+                </p>
+                <p>
+                    Раньше надо было в теге <code>&lt;script&gt;</code> указывать тип скрипта, так как данный тег может использоваться не только 
+                    для подключения инструкций javascript, но и для других целей. Так, даже сейчас вы можете встретить на некоторых веб-страницах такое определение элемента script:
+                </p>
 
-// 5. Null (намеренное отсутствие значения)
-let empty = null;
+                <div class="code-block"><code>&lt;script type="text/javascript"></code></div>
 
-// 6. Symbol (уникальный идентификатор) - ES6
-let id = Symbol('id');
+                <p>Но в настоящее время предпочтительнее опускать атрибут <code>type</code>, так как браузеры по умолчанию считают, что элемент <code>script</code> содержит инструкции <code>javascript</code>.</p>
+                <p>Используемый нами код javascript содержит одно выражение:</p>
+                <div class="code-block"><code>document.write("&lt;h2>Первая программа на JavaScript&lt;/h2>");</code></div>
 
-// 7. BigInt (большие целые числа) - ES2020
-let bigNumber = 1234567890123456789012345678901234567890n;</code></div>
+                <p>
+                    Код javascript может содержать множество инструкций и каждая инструкция завершается точкой с запятой. Наша инструкция вызывает метод 
+                    <span class="b">document.write()</span>, который выводит на веб-страницу некоторое содержимое, в данном случае это заголовок <code>&lt;h2&gt;Первая программа на JavaScript&lt;/h2&gt;</code>.
+                </p>
 
-                <h3>8-й тип: Object (Объекты)</h3>
-                <p>Тип <strong>Object</strong> — это сложный тип данных, который включает в себя три основных подтипа:</p>
-                
-                <div class="code-block"><code>// 1. Object (объект) - коллекция пар ключ-значение
-let user = {
-    name: 'Alice',
-    age: 25,
-    isAdmin: false
-};
-
-// 2. Array (массив) - упорядоченная коллекция элементов
-let numbers = [1, 2, 3, 4, 5];
-let mixed = [1, 'text', true, null];
-
-// 3. Date (дата и время) - работа с датами
-let now = new Date();
-let specificDate = new Date('2024-01-01');</code></div>
-
-                <div class="info-box note">
-                    <div class="info-box-title">💡 Важно понимать</div>
-                    <ul>
-                        <li><strong>Array</strong> и <strong>Date</strong> технически являются объектами, но имеют специальное поведение</li>
-                        <li><code>typeof []</code> вернёт "object"</li>
-                        <li><code>typeof new Date()</code> вернёт "object"</li>
-                        <li>Для проверки массива используйте: <code>Array.isArray([])</code> → true</li>
-                        <li>Для проверки даты: <code>now instanceof Date</code> → true</li>
-                    </ul>
-                </div>
-
-                <h3>Проверка типа</h3>
-                <div class="code-block"><code>console.log(typeof 42);        // "number"
-console.log(typeof "Hello");   // "string"
-console.log(typeof true);      // "boolean"
-console.log(typeof undefined); // "undefined"
-console.log(typeof null);      // "object" (баг JS!)
-console.log(typeof []);        // "object"
-console.log(typeof {});        // "object"
-console.log(typeof new Date());// "object"
-
-// Правильная проверка массива
-console.log(Array.isArray([])); // true
-
-// Правильная проверка даты
-let now = new Date();
-console.log(now instanceof Date); // true</code></div>
-
-                <h2>Первая программа</h2>
-                <div class="code-block"><code>// Вывод в консоль
+                <div class="code-block"><code><code class="comment">// Вывод в консоль</code>
 console.log('Hello, World!');
 
-// Окно с сообщением
+<code class="comment">// Окно с сообщением</code>
 alert('Привет, JavaScript!');
 
-// Запрос у пользователя
+<code class="comment">// Запрос у пользователя</code>
 let name = prompt('Как тебя зовут?');
 console.log('Привет, ' + name);</code></div>
 
-                <h2>Способы подключения JavaScript</h2>
+                <h2 id="ch1-code-perfome">📜 Выполнение кода javascript</h2>
+
+                <p>
+                    Когда браузер получает веб-страницу с кодом <code>html</code> и <code>javascript</code>, то он ее интерпретирует. Результат интерпретации в виде различных элементов - кнопок, 
+                    полей ввода, текстовых блоков и т.д., мы видим перед собой в браузере. Интерпретация веб-страницы происходит последовательно сверху вниз.
+                </p>
+                <p>
+                    Когда браузер встречает на веб-странице элемент <code>&lt;script&gt;</code> с кодом javascript, то вступает в действие встроенный интерпретатор javascript. 
+                    И пока он не закончит свою работу, дальше интерпретация веб-страницы не идет.
+                </p>
+                <p>Рассмотрим небольшой пример и для этого определим файл <span class="b">index.html</span> со следующим кодом:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+    &lt;script>
+        document.write("Начальный текст");
+    &lt;/script>
+&lt;/head>
+&lt;body>
+    &lt;h2>Первый заголовок&lt;/h2>
+    &lt;script>
+        document.write("Первый текст");
+    &lt;/script>
+    &lt;h2>Второй заголовок&lt;/h2>
+    &lt;script>
+        document.write("Второй текст");
+    &lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>Здесь три вставки кода javascript - один в секции <code>&lt;head&gt;</code> и по одному после каждого заголовка.</p>
+                <p>Браузер последовательно выполняет код веб-страницы:</p>
+                <pre class="sh">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="219" height="199" xml:space="preserve" version="1.1" viewBox="0 0 219 199">
+                        <image width="219" height="199" xlink:href="data:image/png;base64,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"/>
+                    </svg>
+                </pre>
+
+                <p>
+                    После этого браузер закончит интерпретацию веб-страницы, и веб-страница окажется полностью загружена. Данный момент 
+                    очень важен, поскольку может влиять на производительность. Поэтому нередко вставки кода javascript идут перед закрывающим тегом <span class="b">&lt;/body&gt;</span>, 
+                    когда основная часть веб-страницы уже загружена в браузере.
+                </p>
+
+                <h2 id="ch1-syntax">📜 Основы синтаксиса javascript</h2>
+
+                <p>
+                    Код <code>javascript</code> состоит из инструкций. Каждая инструкция представляет некоторое действие. И для отделения инструкций друг от друга в javascript 
+                    после инструкции ставится точка с запятой:
+                </p>
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+    &lt;script>
+        document.write("2 + 5 =  "); const sum = 2 + 5; document.write(sum); 
+    &lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>Однако современные браузеры вполне могут различать отдельные инструкции, если они просто располагаются на отдельных строках без точки запятой:</p>
+                <div class="code-block"><code>&lt;body>
+    &lt;script>
+        document.write("2 + 5 =  ")
+        const sum = 2 + 5
+        document.write(sum)
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>Но чтобы улучшить читабельность кода и снизить число возможных ошибок, рекомендуется определять каждую инструкцию javascript на отдельной строчке и завершать ее точкой с запятой, как в первом варианте.</p>
+
+                <h3>Блоки кода</h3>
+
+                <p>Отдельные инструкции можно можно объединять в блоки кода, которые представляют некоторый код, заключенные между фигурными скобками <code>{ блок кода }</code>. Например, определим следующую страницу:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+    &lt;script>
+        document.write("Привет! ");
+        {
+            document.write("Как дела? ");
+            document.write("Че не отвечаешь, ты че спишь? ");
+        }
+        document.write("Ну пока...");
+    &lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>Здесь программа на JavaScript состоит из 4-х инструкций. Причем две из инструкций помещены в блок кода:</p>
+                <div class="code-block"><code>{
+    document.write("Как дела? ");
+    document.write("Че не отвечаешь, ты че спишь? ");
+}</code></div>
+
+                <h3>Комментарии</h3>
+
+                <p>В коде javascript могут использоваться комментарии. Комментарии не обрабатываются интерпретатором javascript и никак не учитываются в работе программы. Они предназначены для ориентации по коду, чтобы указать, что делает тот или иной код.</p>
+
+                <p>Комментарии могут быть однострочными, для которых используется двойной слеш:</p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;script>
+        <code class="comment">// выводим сообщение</code>
+        document.write("2 + 5 =  ")
+        <code class="comment">// объявляем константу и присваиваем ей сумму чисел 2 и 5</code>
+        const sum = 2 + 5
+        <code class="comment">// выводим значение константы sum</code>
+        document.write(sum)
+    &lt;/script>
+&lt;/body></code></div>
+
+                <p>Кроме однострочных комментариев могут использоваться и многострочные. Такие комментарии заключаются между символами <code>/*текст комментария*/</code>. Например:</p>
+
+                <div class="code-block"><code>&lt;body>
+    &lt;script><code class="comment">
+        /*  Пример арифметической операции
+        и определения константы
+        в коде JavaScript */</code>
+        document.write("2 + 5 =  ")
+        const sum = 2 + 5
+        document.write(sum)
+    &lt;/script>
+&lt;/body></code></div>
+
+                <h2 id="ch1-connection">📜 Способы подключения JavaScript</h2>
                 
                 <h3>1. Внутри HTML (inline)</h3>
                 <div class="code-block"><code>&lt;script&gt;
@@ -1184,7 +1307,36 @@ console.log('Привет, ' + name);</code></div>
 &lt;!-- С async (параллельная загрузка) --&gt;
 &lt;script src="script.js" async&gt;&lt;/script&gt;</code></div>
 
-                <h2>Консоль браузера</h2>
+                <h3>Асинхронная загрузка и отложенное выполнение</h3>
+
+                <p>
+                    Нередко веб-страницы имеют сложную структуру, какие-то блоки на html-странице, где подключаются файлы javascript, формируются динамически, что может усложнять управление файлами javascript. 
+                    И для управления загрузкой файла с кодом JavaScript браузер предоставляет два атрибута: <span class="b">async</span> и <span class="b">defer</span>.
+                </p>
+                <p>
+                    Атрибут <span class="b">async</span> гарантирует, что обработка HTML-кода не будет приостановлена, когда браузер встретит элемент <code>&lt;script&gt;</code>. 
+                    Файл JavaScript загружается асинхронно (отсюда и название атрибута - <code>async</code>). В этом случае HTML-код продолжает обрабатываться до тех пор, пока не будет загружен 
+                    соответствующий файл JavaScript. Когда будет загружен файл JavaScript, обработка HTML останавливается, и начинает выполняться загруженный файл JS. После выполнения кода JavaScript 
+                    продолжается обработка HTML.
+                </p>
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500" height="82" xml:space="preserve" version="1.1" viewBox="0 0 500 82">
+                  <image width="500" height="82" xlink:href="data:image/png;base64,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"/>
+                </svg>
+                <p>Пример применения атрибута <span class="b">async</span>:</p>
+                <div class="code-block"><code>&lt;script async src="js/main.js">&lt;/script></code></div>
+
+                <p>
+                    Атрибут <span class="b">defer</span> также гарантирует, что обработка HTML-кода не будет приостановлена. С другой стороны, исходный код JavaScript выполняется только 
+                    после полной обработки HTML-кода. Таким образом, выполнение кода JavaScript откладывается (отсюда и название - <code>defer</code> (в переводе на английский).
+                </p>
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500" height="88" xml:space="preserve" version="1.1" viewBox="0 0 500 88">
+                  <image width="500" height="88" xlink:href="data:image/png;base64,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"/>
+                </svg>
+
+                <p>Пример применения атрибута <span class="b">defer</span>:</p>
+                <div class="code-block"><code>&lt;script defer src="js/main.js">&lt;/script></code></div>
+
+                <h2 id="ch1-console">📜 Консоль браузера</h2>
                 <p>Консоль — главный инструмент разработчика для отладки.</p>
                 
                 <div class="info-box success">
@@ -1196,40 +1348,54 @@ console.log('Привет, ' + name);</code></div>
                     </ul>
                 </div>
 
+                <p>Мы можем напрямую вводить в консоль браузера выражения JavaScript, и они будут выполняться. Например, введем в консоли следующий текст:</p>
+                <div class="code-block"><code>alert("Привет мир");</code></div>
+
                 <h3>Методы console</h3>
-                <div class="code-block"><code>// Обычное сообщение
+                <div class="code-block"><code><code class="comment">// Обычное сообщение</code>
 console.log('Сообщение');
 
-// Ошибка (красным)
+<code class="comment">// Ошибка (красным)</code>
 console.error('Ошибка!');
 
-// Предупреждение (желтым)
+<code class="comment">// Предупреждение (желтым)</code>
 console.warn('Внимание!');
 
-// Таблица
+<code class="comment">// Таблица</code>
 console.table([
     {name: 'Alice', age: 25},
     {name: 'Bob', age: 30}
 ]);
 
-// Замер времени
+<code class="comment">// Замер времени</code>
 console.time('myTimer');
-// ... код ...
-console.timeEnd('myTimer'); // "myTimer: 123ms"</code></div>
+<code class="comment">// ... код ...</code>
+console.timeEnd('myTimer'); <code class="comment">// "myTimer: 123ms"</code></code></div>
+
+            <p>Также последовательно вводим инструкции и после ввода каждой инструкции нажимаем на <code>Enter</code>.</p>
+            <p>Если нам надо, чтобы код в консоли переносился на новую строку без выполнения, то в конце выражения javascript нажимаем на комбинацию клавиш <span class="b">Shift + Enter</span>. После ввода последней 
+инструкции для выполнения введенного кода javascript нажимаем на <code>Enter</code>.</p>
             </section>
 
             <!-- ГЛАВА 2: Основы -->
             <section class="chapter" id="ch2">
                 <h1>Глава 2. Основы JavaScript</h1>
                 
-                <h2>Переменные и константы</h2>
-                <div class="code-block"><code>// let - изменяемая переменная (ES6+)
-let age = 25;
-age = 26; // OK
+                <h2 id="ch2-variables">📜 Переменные и константы</h2>
 
-// const - константа (нельзя изменить)
+                <p>
+                    Для хранения данных в программе используются <span class="b">переменные</span> и <span class="b">константы</span>. <code>Переменные</code> предназначены для хранения 
+                    каких-нибудь временных данных или таких данных, которые в процессе работы могут менять свое значение. <code>Константы</code>, наоборот, предназначены для хранения неизменных данных, значение которых должно 
+                    оставаться постоянным в течение всей программы.
+                </p>
+
+                <div class="code-block"><code><code class="comment">// let - изменяемая переменная (ES6+)</code>
+let age = 25;
+age = 26; <code class="comment">// OK</code>
+
+<code class="comment">// const - константа (нельзя изменить)</code>
 const PI = 3.14159;
-// PI = 3; // Ошибка!
+<code class="comment">// PI = 3; // Ошибка!</code>
 
 // var - старый способ (не рекомендуется)
 var name = 'Alice';</code></div>
@@ -1244,25 +1410,1027 @@ var name = 'Alice';</code></div>
                     </ul>
                 </div>
 
-                <h2>Арифметические операции</h2>
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Список зарезервированных слов в JavaScript:</div>
+                    <p>await, break, case, catch, class, const, continue, debugger, default, delete, do, else, enum, export, extends, false, finally, for, function, if, 
+import, in, instanceof, new, null, return, super, switch, this, throw, true, try, typeof, var, void, while, with, yield</p>
+                </div>
+
+                <p>Через запятую можно определить сразу несколько переменных:</p>
+                <div class="code-block"><code>var username, age, height;
+let a, b, c;</code></div>
+
+                <h3>Присвоение переменной значения</h3>
+
+                <p>После определения переменной ей можно присвоить какое-либо значение. Для этого применяется <span class="b">оператор присваивания</span> (<span class="b">=</span>):</p>
+
+                <div class="code-block"><code>var username;
+username = "Tom";</code></div>
+
+                <p>Можно сразу присвоить переменной значение при ее определении:</p>
+                <div class="code-block"><code>var username = "Tom";
+let userage = 37;</code></div>
+
+                <p>
+                    Процесс присвоения переменной начального значения называется <span class="b">инициализацией</span>.Можно обратить внимание, что одна переменная определена с помощью <code>let</code>, а другая - с помощью <code>var</code>. Конкретно в данном случае это не имеет значения, и мы могли 
+                    бы определить обе переменных либо с помощью <code>let</code>, либо с помощью <code>var</code>. Но в целом между <code>let</code> и <code>var</code>, есть различия, которые будут 
+                    рассмотрены следующих статьях.
+                </p>
+                <p>Можно сразу инициализировать несколько переменных:</p>
+                <div class="code-block"><code>let name1 = "Tom", name2 = "Bob", name3 = "Sam";
+console.log(name1);  <code class="comment">// Tom</code>
+console.log(name2);  <code class="comment">// Bob</code>
+console.log(name3);  <code class="comment">// Sam</code></code></div>
+
+                <p>JavaScript позволяет <code>НЕ использовать</code> ключевые слова <span class="b">let</span> или <span class="b">var</span>. Но, лучше так не делать.</p>
+                <div class="code-block"><code>&lt;script>
+        username = "Tom";       <code class="comment">// ошибки нет, норм</code>
+        console.log(username);  <code class="comment">// Tom</code>
+    &lt;/script> </code></div>
+
+                <h3>Изменение переменных</h3>
+
+                <p>Отличительной чертой переменных является то, что мы можем изменить их значение:</p>
+
+                <div class="code-block"><code>&lt;script>
+        let username = "Tom";
+        console.log("username до изменения:", username);
+        username = "Bob";
+        console.log("username после изменения:", username);
+    &lt;/script></code></div>
+
+                <h3>Константы</h3>
+
+                <p>С помощью ключевого слова <span class="b">const</span> можно определить <span class="b">константу</span>, которая, как и переменная, хранит значение, однако это значение не может быть изменено.</p>
+                <div class="code-block"><code>const username = "Tom";</code></div>
+
+                <p>Также стоит отметить, что поскольку мы не можем изменить значение константы, то она должна быть инициализирована, то есть при ее определении мы должны предоставить ей начальное значение. Если мы этого не сделаем, то опять же мы столкнемся с ошибкой:</p>
+                <div class="code-block"><code>const username; <code class="comment">// ошибка, username не инициализирована</code></code></div>
+
+                <h2 id="ch2-data-types">📜 Типы данных в JavaScript</h2>
+                <p>В JavaScript существует <strong>8 типов данных</strong>: 7 примитивных и 1 сложный (Object).</p>
+                
+                <ul>
+                    <li><span class="b">String</span>: представляет строку</li>
+                    <li><span class="b">Number</span>: представляет числовое значение</li>
+                    <li><span class="b">BigInt</span>: предназначен для представления очень больших целых чисел</li>
+                    <li><span class="b">Boolean</span>: представляет логическое значение <span class="b">true</span> или <span class="b">false</span></li>
+                    <li><span class="b">Undefined</span>: представляет одно специальное значение - <span class="b">undefined</span> и указывает, что значение не установлено</li>
+                    <li><span class="b">Null</span>: представляет одно специальное значение - <span class="b">null</span> и указывает на отсутствие значения</li>
+                    <li><span class="b">Symbol</span>: представляет уникальное значение, которое часто применяется для обращения к свойствам сложных объектов</li>
+                    <li><span class="b">Object</span>: представляет комплексный объект</li>
+                </ul>
+
+                <h3>Примитивные типы (7 типов)</h3>
+                <div class="code-block"><code><code class="comment">// 1. Number (числа)</code>
+let integer = 42;
+let float = 3.14;
+let negative = -10;
+
+<code class="comment">// 2. String (строки)</code>
+let str1 = "Hello";
+let str2 = 'World';
+let str3 = `Hello ${name}`; <code class="comment">// template literal (ES6)</code>
+
+<code class="comment">// 3. Boolean (логический)</code>
+let isTrue = true;
+let isFalse = false;
+
+<code class="comment">// 4. Undefined (неопределённое значение)</code>
+let notDefined;
+console.log(notDefined); <code class="comment">//</code> undefined
+
+<code class="comment">// 5. Null (намеренное отсутствие значения)</code>
+let empty = null;
+
+<code class="comment">// 6. Symbol (уникальный идентификатор) - ES6</code>
+let id = Symbol('id');
+
+<code class="comment">// 7. BigInt (большие целые числа) - ES2020</code>
+let bigNumber = 1234567890123456789012345678901234567890n;</code></div>
+
+                <h3>8-й тип: Object (Объекты)</h3>
+                <p>Тип <strong>Object</strong> — это сложный тип данных, который включает в себя три основных подтипа:</p>
+                
+                <div class="code-block"><code><code class="comment">// 1. Object (объект) - коллекция пар ключ-значение</code>
+let user = {
+    name: 'Alice',
+    age: 25,
+    isAdmin: false
+};
+
+<code class="comment">// 2. Array (массив) - упорядоченная коллекция элементов</code>
+let numbers = [1, 2, 3, 4, 5];
+let mixed = [1, 'text', true, null];
+
+<code class="comment">// 3. Date (дата и время) - работа с датами</code>
+let now = new Date();
+let specificDate = new Date('2024-01-01');</code></div>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Важно понимать</div>
+                    <ul>
+                        <li><strong>Array</strong> и <strong>Date</strong> технически являются объектами, но имеют специальное поведение</li>
+                        <li><code>typeof []</code> вернёт "object"</li>
+                        <li><code>typeof new Date()</code> вернёт "object"</li>
+                        <li>Для проверки массива используйте: <code>Array.isArray([])</code> → true</li>
+                        <li>Для проверки даты: <code>now instanceof Date</code> → true</li>
+                    </ul>
+                </div>
+
+                <h3>Проверка типа</h3>
+                <div class="code-block"><code>console.log(typeof 42);       <code class="comment">// "number"</code>
+console.log(typeof "Hello");   <code class="comment">// "string"</code>
+console.log(typeof true);      <code class="comment">// "boolean"</code>
+console.log(typeof undefined); <code class="comment">// "undefined"</code>
+console.log(typeof null);      <code class="comment">// "object" (баг JS!)</code>
+console.log(typeof []);        <code class="comment">// "object"</code>
+console.log(typeof {});        <code class="comment">// "object"</code>
+console.log(typeof new Date());<code class="comment">// "object"</code>
+
+<code class="comment">// Правильная проверка массива</code>
+console.log(Array.isArray([])); <code class="comment">// true</code>
+
+<code class="comment">// Правильная проверка даты</code>
+let now = new Date();
+console.log(now instanceof Date); <code class="comment">// true</code></code></div>
+
+                <h3>Number</h3>
+
+                <p>Тип <span class="b">Number</span> представляет числа в JavaScript, которые могут быть целыми или дробными:</p>
+                <ul>
+                    <li>
+                        Целые числа, например, 35. Мы можем использовать как положительные, так и отрицательные числа. Диапазон используемых чисел: 
+                        от -2<sup>53</sup> до 2<sup>53</sup></li>
+                    <li>
+                        Дробные числа (числа с плавающей точкой). В качестве разделителя дробной и целой части применяется точка, например, <code>3.5575</code>. Можно использовать как положительные, так и отрицательные числа. Для 
+                        чисел с плавающей точкой используется тот же диапазон: от -2<sup>53</sup> до 2<sup>53</sup>
+                    </li>
+                </ul>
+
+                <p>JavaScript поддерживает возможность определять числа в <code>двоичной, восьмеричной и шестнадцатеричной системах</code>.</p>
+                <div class="code-block"><code><code class="comment">// Для определения числа в двоичной системе, перед числом указывается префикс <span class="b">0b</span>:</code>
+const num1 = 0b1011;    <code class="comment">// число 11 в двоичной системе</code>
+console.log(num1);      <code class="comment">// 11</code>
+
+<code class="comment">// Для определения числа в восьмеричной системе, перед числом указывается префикс <span class="b">0o</span>:</code>
+const num1 = 0o11;      <code class="comment">// число 9 в восьмеричной системе</code>
+console.log(num1);      <code class="comment">// 9</code>
+
+<code class="comment">// Для определения числа в шестнадцатеричной  системе, перед числом указывается префикс <span class="b">0x</span>:</code>
+const num1 = 0xff;      <code class="comment">// число 255 в шестнадцатеричной системе</code>
+console.log(num1);      <code class="comment">// 255</code>
+const num2 = 0x1A;      <code class="comment">// число 26 в шестнадцатеричной системе</code>
+console.log(num2);      <code class="comment">// 26</code>
+</code></div>
+
+                <p>Начиная со стандарта ECMA2021 в JavaScript для увеличения читабельности в качестве разделителя между разрядами можно использовать символ подчеркивания _:</p>
+
+                <div class="code-block"><code>const num1 = 1234567;
+const num2 = 123_4567;        <code class="comment">// число равное num1</code>
+ 
+const num3 = 1234567890;
+const num4 = 12_3456_7890;    <code class="comment">// число равное num3</code></code></div>
+
+                <h3>Тип BigInt</h3>
+
+                <p>Тип <span class="b">BigInt</span> добавлен в последних стандартах JavaScript для представления очень больших целых чисел, которые выходят за пределы диапазона типа 
+                    <code>number</code>. Это не значит, что мы не можем совсем работать с большими числами с помощью типа number, но работа с ними в случае с типом number будет сопряжена с проблемами. 
+                    Рассмотрим небольшой пример:
+                </p>
+                <div class="code-block"><code>let num = 9007199254740991
+console.log(num);       <code class="comment">// 9007199254740991</code>
+console.log(num + 1);   <code class="comment">// 9007199254740992</code>
+console.log(num + 2);   <code class="comment">// 9007199254740992</code></code></div>
+
+                <p>Здесь переменной <code>num</code> присваивается максимальное значение. И далее прибавляем к ней некоторые значения и выводим на консоль результат. И результаты могут нас смутить, особенно в случае прибавления числа 2.</p>
+                <p>Стоит отметить, что тип <code>Number</code> ограничен, хотя и позволяет оперировать довольно большим диапазоном чисел. В частности, мы можем использовать специальные константы 
+<code>Number.MIN_VALUE</code> и <code>Number.MAX_VALUE</code> для проверки минимального и максимального возможных значений для типа Number:</p>
+
+                <div class="code-block"><code>console.log(Number.MIN_VALUE);   <code class="comment">// 5e-324</code>
+console.log(Number.MAX_VALUE);    <code class="comment">// 1.7976931348623157e+308</code></code></div>
+
+                <p>Например, рассмотрим следующий пример:</p>
+                <div class="code-block"><code>const num = 9223372036854775801;
+console.log(num);   <code class="comment">// 9223372036854776000</code></code></div>
+
+                <p>В силу ограничений типа <code>Number</code> на консоли мы увидим несколько другое число, нежели мы присвоили константе num. Это может негативно влиять на точность 
+в вычислениях. И для подобных подобных чисел как раз предназначен тип <span class="b">BigInt</span>. Для определения числа как значения типа <code>BigInt</code> в конце числа добавляется суффикс <span class="b">n</span>:</p>
+
+                <div class="code-block"><code>let dimension = 19007n;
+const value = 2545n;</code></div>
+                
+                <p>Например, изменим из предыдущего примера тип <code>number</code> на <code>bigint</code>:</p>
+                <div class="code-block"><code>const num = 9223372036854775801n;
+console.log(num);   <code class="comment">// 9223372036854775801n</code></code></div>
+
+                <h3>Тип Boolean</h3>
+
+                <p>Тип Boolean представляет булевые или логические значения <span class="b">true</span> (верно) и <span class="b">false</span> (ложно):</p>
+                <div class="code-block"><code>const isAlive = true;
+const isDead = false;</code></div>
+
+                <h3>Строки String</h3>
+
+                <p>Тип <code>String</code> представляет строки. Для определения строк применяются кавычки, причем, можно использовать как двойные, так одинарные, так и косые кавычки. 
+Единственно ограничение: тип закрывающей кавычки должен быть тот же, что и тип открывающей, то есть либо обе двойные, либо обе одинарные.</p>
+
+                <div class="code-block"><code>const user = "Tom";
+const company = 'Microsoft';
+const language = `JavaScript`;
+ 
+console.log(user);
+console.log(company);
+console.log(language);</code></div>
+
+                <p>Если внутри строки встречаются кавычки, то мы их должны экранировать слешем. Например, пусть у нас есть текст <code>"Бюро "Рога и копыта""</code>. Теперь экранируем кавычки:</p>
+                <div class="code-block"><code>const company = "Бюро \"Рога и копыта\"";</code></div>
+
+                <p>Также мы можем внутри стоки использовать другой тип кавычек:</p>
+                <div class="code-block"><code>const company1 = "Бюро 'Рога и копыта'";
+const company2 = 'Бюро "Рога и копыта"';</code></div>
+
+                <p>Также строка может содержать специальные символы - управляющие последовательности, которые интерпретируются определенным образом. Самые распространенные 
+последовательности - это <code>"\n"</code> (перевод на другую строку) и <code>"\t"</code> (табуляция). Например:</p>
+                <div class="code-block"><code>const text = "Hello METANIT.COM\nHello\tWorld";
+console.log(text); </code></div>
+
+                <pre class="browser">Hello METANIT.COM
+Hello	World</pre>
+
+                <h3>Интерполяция</h3>
+
+                <p>Использование косых кавычек позволяет нам применять такой прием как <span class="b">интерполяция</span> - встраивать данные в строку. Например:</p>
+                <div class="code-block"><code>const user = "Tom";
+const text = `Name: ${user}`;
+console.log(text);  <code class="comment">// Name: Tom</code></code></div>
+
+                <p>Для встраивания значений выражений (например, значений других переменных и констант) в строку перед выражением ставится знак доллара <span class="b">$</span>, после которого в фигурных скобках 
+указывается выражение. Так, в примере выше <code>${user}</code> означает, что в этом месте строки надо встроить значение переменной <code>user</code>.</p>
+
+                <p>Подобным образом можно встраивать и больше количество данных:</p>
+                <div class="code-block"><code>const user = "Tom";
+const age = 37;
+const isMarried = false;
+const text = `Name: ${user}   Age: ${age}   IsMarried: ${isMarried}`;
+console.log(text);  <code class="comment">// Name: Tom   Age: 37   IsMarried: false</code></code></div>
+
+                <p>Кроме интерполяции косые кавычки позволяют определять многострочный текст:</p>
+                <div class="code-block"><code>const text = 
+`Мы все учились понемногу
+Чему-нибудь и как-нибудь,
+Так воспитаньем, слава богу,
+У нас немудрено блеснуть.`;
+ 
+console.log(text);</code></div>
+
+                <p>Консольный вывод браузера:</p>
+                <pre class="browser">Мы все учились понемногу
+Чему-нибудь и как-нибудь,
+Так воспитаньем, слава богу,
+У нас немудрено блеснуть.</pre>
+                
+                <h3>null и undefined</h3>
+
+                <p><span class="b">undefined</span> указывает, что значение не определено или не установлено. Например, когда мы только определяем переменную без присвоения ей начального значения, она представляет тип undefined:</p>
+                <div class="code-block"><code>let email;
+console.log(email); <code class="comment">// выведет undefined</code></code></div>
+
+                <p>Присвоение значение <code>null</code> означает, что у переменной отсутствует значение:</p>
+                <div class="code-block"><code>let email;
+console.log(email);     <code class="comment">// undefined</code>
+email = null;
+console.log(email);     <code class="comment">// null</code></code></div>
+
+                <p>Стоит отметить, что хотя в принципе можно переменной присвоить значение <code>undefined</code>, как в следующем случае:</p>
+                <div class="code-block"><code>let email = "tome@mimimail.com";
+email = undefined;      <code class="comment">// установим тип undefined</code>
+console.log(email);     <code class="comment">// undefined</code></code></div>
+
+                <p>
+                    Но основной смысл <code>undefined</code> состоит в том, что переменная неинициализирована, что обычно происходит до первого присвоения ей какого-либо значения. Поэтому обычно не предполагается, что 
+                    переменной явным образом будет присваиваться значение <code>undefined</code>. В тоже время этот тип может быть полезен - мы можем использовать его на проверку 
+                    инициализации переменной. Но если же нам надо указать, что у переменной нет никакого значения, то ей присваивается <code>null</code>, а не <code>undefine</code>.
+                </p>
+                
+                <h3>object</h3>
+
+                <p>Тип <code>object</code> представляет сложный объект. Простейшее определение объекта представляют фигурные скобки:</p>
+
+                <div class="code-block"><code>const user = {};</code></div>
+
+                <p>Объект может иметь различные свойства и методы:</p>
+                <div class="code-block"><code>const user = {name: "Tom", age:24};
+console.log(user.name);</code></div>
+
+                <p>В данном случае объект называется user, и он имеет два свойства: name и age, которые в качестве значения принимают данные других типов.</p>
+
+                <h3>Слабая/динамическая типизация</h3>
+
+                <p>JavaScript является языком со слабой и динамической типизацией. Это значит, что переменные могут динамически менять тип. Например:</p>
+                <div class="code-block"><code>let id;  <code class="comment">// тип undefined</code>
+console.log(id);
+id = 45;  <code class="comment">// тип number</code>
+console.log(id);
+id = "45"; <code class="comment">// тип string</code>
+console.log(id);</code></div>
+
+                <p>Несмотря на то, что во втором и третьем случае консоль выведет нам число 45, но во втором случае переменная <code>id</code> будет представлять число, а в третьем случае - строку.</p>
+
+                <h3>Оператор typeof</h3>
+                
+                <p>С помощью оператора <span class="b">typeof</span> можно получить тип переменной, что может быть полезно, когда в зависимости от типа переменной необходимо выполнить те или иные действия:</p>
+
+                <div class="code-block"><code>let id;
+console.log(typeof id);     <code class="comment">// undefined</code>
+ 
+id = 45;
+console.log(typeof id);     <code class="comment">// number</code>
+ 
+id = 45n;
+console.log(typeof id);     <code class="comment">// bigint</code>
+ 
+id = "45";
+console.log(typeof id);     <code class="comment">// string</code></code></div>
+
+                <p>
+                    Стоит отметить, что для значения <span class="b">null</span> оператор <code>typeof</code> возвращает значение "object", несмотря на то, что согласно спецификации 
+                    JavaScript значение <span class="b">null</span> представляет отдельный тип.
+                </p>
+
+                <h2 id="ch2-arithmetic">📜 Арифметические операции</h2>
                 <div class="code-block"><code>let a = 10;
 let b = 3;
 
-console.log(a + b);  // 13 (сложение)
-console.log(a - b);  // 7  (вычитание)
-console.log(a * b);  // 30 (умножение)
-console.log(a / b);  // 3.333... (деление)
-console.log(a % b);  // 1  (остаток от деления)
-console.log(a ** b); // 1000 (возведение в степень)
+console.log(a + b);  <code class="comment">// 13 (сложение)</code>
+console.log(a - b);  <code class="comment">// 7  (вычитание)</code>
+console.log(a * b);  <code class="comment">// 30 (умножение)</code>
+console.log(a / b);  <code class="comment">// 3.333... (деление)</code>
+console.log(a % b);  <code class="comment">// 1  (остаток от деления)</code>
+console.log(a ** b); <code class="comment">// 1000 (возведение в степень)</code>
 
-// Инкремент/декремент
+<code class="comment">// Инкремент/декремент</code>
 let x = 5;
-x++;  // x = 6 (постфиксный инкремент)
-++x;  // x = 7 (префиксный инкремент)
-x--;  // x = 6 (декремент)</code></div>
+x++;  <code class="comment">// x = 6 (постфиксный инкремент)</code>
+++x;  <code class="comment">// x = 7 (префиксный инкремент)</code>
+x--;  <code class="comment">// x = 6 (декремент)</code></code></div>
 
-                <h2>Условные конструкции</h2>
+                <p>
+                    Оператор инкремента <code>++</code> увеличивает значение переменной на единицу. Существует префиксный инкремент, который сначала увеличивает переменную 
+                    на единицу, а затем возвращает ее значение. И есть постфиксный инкремент, который сначала возвращает значение переменной, которое было до увеличения его на единицу:
+                </p>
+
+                <div class="code-block"><code><code class="comment">// префиксный инкремент</code>
+let x = 5;
+let z = ++x;
+console.log(x); <code class="comment">// 6</code>
+console.log(z); <code class="comment">// 6</code>
+     
+<code class="comment">// постфиксный инкремент</code>
+let a = 5;
+let b = a++;
+console.log(a); <code class="comment">// 6</code>
+console.log(b); <code class="comment">// 5</code></code></div>
+
+                <p>
+                    Как и принято в математике, все операции выполняются слева направо и различаются по приоритетам: сначала операции инкремента и декремента, затем 
+                    выполняются умножение и деление, а потом сложение и вычитание. Чтобы изменить стандартный ход выполнения операций, часть выражений можно поместить в скобки:
+                </p>
+
+                <h3>Арифметические операции с присваиванием</h3>
+
+                <ul>
+                    <li><span class="b">+=</span>
+                         <p>Сложение с последующим присвоением результата. Например:</p> 
+                        <div class="code-block"><code>let a = 23;
+    a += 5; <code class="comment">// аналогично a = a + 5</code>
+    console.log(a); <code class="comment">// 28</code></code></div>
+                    </li>
+                    <li><span class="b">-=</span>
+                        <p>Вычитание с последующим присвоением результата. Например:</p>
+                        <div class="code-block"><code>let a = 28;
+a -= 10; <code class="comment">// аналогично a = a - 10</code>
+console.log(a); <code class="comment">// 18</code></code></div>
+                    </li>
+                    <li><span class="b">*=</span>
+                        <p>Умножение с последующим присвоением результата:</p>
+                        <div class="code-block"><code>let x = 20;
+x *= 2; <code class="comment">// аналогично x = x * 2</code>
+console.log(x); <code class="comment">// 40</code></code></div>
+                    </li>
+                    <li><span class="b">**=</span>
+                        <p>Возведение в степень с последующим присвоением результата:</p>
+                        <div class="code-block"><code>let x = 5;
+x **= 2;
+console.log(x);  <code class="comment">// 25</code></code></div>
+                    </li>
+                    <li><span class="b">/=</span>
+                        <p>Деление с последующим присвоением результата:</p>
+                        <div class="code-block"><code>let x = 40;
+x /= 4; <code class="comment">// аналогично x = x / 4</code>
+console.log(x); <code class="comment">// 10</code></code></div>
+                    </li>
+                    <li><span class="b">%=</span>
+                        <p>Получение остатка от деления с последующим присвоением результата:</p>
+                        <div class="code-block"><code>let x = 10;
+x %= 3; <code class="comment">// аналогично x = x % 3</code>
+console.log(x); <code class="comment">// 1, так как 10 - 3*3 = 1</code></code></div>
+                    </li>
+                </ul>
+
+                <h2 id="ch2-bitwise">📜 Поразрядные операции</h2>
+
+                <p>Поразрядные операции выполняются над отдельными разрядами или битами чисел. Данные операции производятся только над целыми числами. Но сначала вкратце рассмотрим, что представляют собой разряды чисел.</p>
+
+                <h3>Двоичное представление чисел</h3>
+
+                <p>
+                    На уровне компьютера все данные представлены в виде набора бит. Каждый бит может иметь два значения: <code>1 (есть сигнал)</code> и <code>0 (нет сигнала)</code>. И все данные фактически представляют набор нулей и единиц. 
+                    <code>8 бит</code> представляют <code>1 байт</code>. Подобную систему называют <span class="b">двоичной</span>.
+                </p>
+                <p>Например, число 13 в двоичной системе будет равно <code>1101<sub>2</sub></code>. Как мы это получили:</p>
+                <div class="code-block"><code><code class="comment">// перевод десятичного числа 13 в двоичную систему</code>
+13 / 2 = 6     <code class="comment">// остаток 1 (13 - 6 *2 = 1)</code>
+6 / 2 = 3      <code class="comment">// остаток 0 (6 - 3 *2 = 0)</code>
+3 / 2 = 1      <code class="comment">// остаток 1 (3 - 1 *2 = 1)</code>
+1 / 2 = 0      <code class="comment">// остаток 1 (1 - 0 *2 = 1)</code></code></div>
                 
+                <p>Общий алгоритм состоит в последовательном делении числа и результатов деления на 2 и получение остатков, пока не дойдем до 0. Затем выстраиваем остатки в линию в обратном порядке и таким образом формируем двоичное представление числа. Конкретно в данном случае по шагам:</p>
+                <ol>
+                    <li>Делим число 13 на 2. Результат деления - 6, остаток от деления - <span class="b">1</span> (так как 13 - 6 *2 = 1)</li>
+                    <li>Далее делим результат предыдущей операции деления - число 6 на 2. Результат деления - 3, остаток от деления - <span class="b">0</span></li>
+                    <li>Делим результат предыдущей операции деления - число 3 на 2. Результат деления - 1, остаток от деления - <span class="b">1</span></li>
+                    <li>Делим результат предыдущей операции деления - число 1 на 2. Результат деления - 0, остаток от деления - <span class="b">1</span></li>
+                    <li>Последний результат деления равен 0, поэтому завершаем процесс и выстраиваем остатки от операций делений, начиная с последнего - <code>1101</code></li>
+                </ol>
+
+                <p>При обратном переводе из двоичной системы в десятичную умножаем значение каждого бита <code>(1 или 0)</code> на число <code>2</code> в степени, равной номеру бита (нумерация битов идет от нуля):</p>
+                
+                <pre class="browser"><code class="comment">// перевод двоичного числа 1101 в десятичную систему</code>
+1(3-й бит)1(2-й бит)0(1-й бит)1(0-й бит)
+1 * 2<sup>3</sup> + 1 * 2<sup>2</sup> + 0 * 2<sup>1</sup> + 1 * 2<sup>0</sup>
+=
+1 * 8 + 1 * 4 + 0 * 2 + 1 * 1
+=
+8 + 4 + 0 + 1 
+=
+13
+</pre>
+
+                <p>В JavaScript для определения чисел в двоичном формате перед числом применяется префикс <span class="b">0b</span>:</p>
+                <div class="code-block"><code>const num = 0b1101;  <code class="comment">// 13 в десятичной системе</code>
+ console.log(num);    <code class="comment">// 13</code></code></div>
+
+                <h3>Представление отрицательных чисел</h3>
+
+                <p>
+                    Для записи чисел со знаком в JavaScript применяется дополнительный код <code>(two's complement)</code>, при котором старший разряд является знаковым. 
+                    Если его значение равно <code>0</code>, то число положительное, и его двоичное представление не отличается от представления беззнакового числа. 
+                    Например, <code>0000 0001</code> в десятичной системе <code>1</code>.
+                </p>
+                <p>Если старший разряд равен <code>1</code>, то мы имеем дело с отрицательным числом. Например, <code>1111 1111</code> в десятичной системе представляет <code>-1</code>. Соответственно, <code>1111 0011</code> представляет <code>-13</code>.</p>
+                <p>Чтобы получить из положительного числа отрицательное, его нужно инвертировать и прибавить единицу:</p>
+
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500" height="175" xml:space="preserve" version="1.1" viewBox="0 0 500 175">
+                   <image width="500" height="175" xlink:href="data:image/png;base64,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"/>
+                </svg>
+
+                <p>Например, получим число <code>-3</code>. Для этого сначала возьмем двоичное представление числа <code>3</code>:</p>
+                <pre class="browser">3<sub>10</sub> = 0000 0011<sub>2</sub></pre>
+
+                <p>Инвертируем биты</p>
+                <pre class="browser">~0000 0011 = 1111 1100</pre>
+
+                <p>И прибавим 1</p>
+                <pre class="browser">1111 1100 + 1 = 1111 1101</pre>
+
+                <p>Таким образом, число <code>1111 1101</code> является двоичным представлением числа <code>-3</code>.</p>
+
+                <h4>Сложение числа со знаком и без знака.</h4>
+                <p>Например, сложим <code>12</code> и <code>-8</code>:</p>
+
+                <pre class="browser">12<sub>10</sub> = 00001100<sub>2</sub>
++
+-8<sub>10</sub> = 11111000<sub>2</sub> (8 - 00001000, после инверсии - 11110111, после +1 = 11111000)
+=
+4<sub>10</sub> = 00000100<sub>2</sub>
+</pre>
+
+                <p>Мы видим, что в двоичной системе получилось число <code>00000100</code><sub>2</sub> или <code>4</code><sub>10</sub> в десятичной системе.</p>
+                <p>Мы можем это увидеть на практике:</p>
+                
+                <div class="code-block"><code>let num = 0b1100;  <code class="comment">// 12 в десятичной системе</code>
+num = ~num;         <code class="comment">// инверсия разрядов</code>
+num = num + 1;
+console.log(num);   <code class="comment">// -12</code></code></div>
+
+                <h3>Операции сдвига</h3>
+
+                <p>Каждое целое число в памяти представлено в виде определенного количества разрядов. И операции сдвига позволяют сдвинуть битовое представление числа на несколько разрядов вправо или влево. Операции сдвига применяются только к целочисленным операндам. 
+Есть две операции:</p>
+
+                <ul>
+                    <li>
+                        <p><span class="b">&lt;&lt;</span> (сдвиг влево)</p>
+                        Сдвигает битовое представление числа, представленного первым операндом, влево на определенное количество разрядов, которое задается вторым операндом.
+                        <div class="code-block"><code>const res = 2 &lt;&lt; 2;   <code class="comment">// 10  на два разрядов влево = 1000 - 8</code>
+console.log(res);      <code class="comment">// 8</code></code></div>
+                        Число <code>2</code> в двоичном представлении <code>0010<sub>2</sub></code>. Если сдвинуть число 0010 на два разряда влево, то получится 1000, что в десятичной системе равно число 8.
+                    </li>
+                    <li>
+                        <p><span class="b">&gt;&gt;</span> (арифметический сдвиг вправо)</p>
+                        Сдвигает битовое представление числа вправо на определенное количество разрядов.
+                        <div class="code-block"><code>const res = 16 &gt;&gt; 3;  <code class="comment">// 10000 на три разряда вправо = 10 или 2 в десятичной системе</code>
+console.log(res);      <code class="comment">// 2</code></code></div>
+                        <p>Число <code>16</code> в двоичном представлении <code>10000<sub>2</sub></code>. Если сдвинуть число <code>10000</code> на три разряда вправо (три последних разряда отбрасываются), 
+                        то получится <code>00010</code>, что в десятичной системе представляет число <code>2</code>.</p>
+                        <p>Стоит отметить, что это так называемый арифметический сдвиг, при котором сдвинутые влевой части разряды заполняются знаковым битом - <code>0</code> для положительных и <code>1</code> для отрицательных чисел. 
+                        Таким образом, при сдвиге отрицательных чисел не будет опасения, что после сдвига они станут положительными. Например:</p>
+                        <div class="code-block"><code>const res = -16 >> 3;  <code class="comment">// 11111110000 на три разряда вправо = 1111111111111110</code>
+ console.log(res);      <code class="comment">// -2</code></code></div>
+                        <p>Так, при сдвиге вправо <code>-16</code> на <code>3</code> разряда мы получим <code>-2</code>, что вполне естественно.</p>
+                    </li>
+                    <li>
+                        <p><span class="b">&gt;&gt;&gt;</span> (логический сдвиг вправо)</p>
+                        <p>Сдвигает битовое представление числа вправо на определенное количество разрядов, но в отличие от операции <span class="b">&gt;&gt;</span> заполняет сдвинутые в левой части разряды нулями, 
+                        то есть мы получаем беззнаковый сдвиг. Таким образом, даже если мы сдвигаем отрицательное число, на выходе мы в любом случае получим положительное:</p>
+                        <div class="code-block"><code>const res = -16 >>> 3; 
+ console.log(res);      <code class="comment">// 536870910</code></code></div>
+                    </li>
+                </ul>
+
+                <p>
+                    Можно заметить, что сдвиг на один разряд влево фактически аналогично умножению на <code>2</code>, тогда как сдвиг вправо на один раз эквивалентно делению на два. Мы можем обобщить: сдвиг влево на <code>n</code> аналогичен умножению числа на 
+                    <code>2<sup>n</sup></code>, а сдвиг вправо на <code>n</code> разрядов аналогичен делению на <code>2<sup>n</sup></code>, что можно использовать вместо умножения/деления на степени двойки:
+                </p>
+                <div class="code-block"><code>const res1 = 8 &lt;&lt; 2;  <code class="comment">// эквивалентно 8 * 4</code>
+console.log(res1);     <code class="comment">// 32</code>
+ 
+const res2 = 64 >> 4;  <code class="comment">// эквивалентно 64 / 16</code>
+console.log(res2);     <code class="comment">// 4</code></code></div>
+
+                <h3>Поразрядные операции</h3>
+
+                <p>Поразрядные операции также проводятся только над соответствующими разрядами чисел:</p>
+
+                <ul>
+                    <li><span class="b">&amp;</span> : поразрядная конъюнкция (операция <code>И</code> или поразрядное умножение). Возвращает <code>1</code>, если оба из соответствующих разрядов обоих чисел равны <code>1</code></li>
+                    <li><span class="b">|</span> : поразрядная дизъюнкция (операция <code>ИЛИ</code> или поразрядное сложение). Возвращает <code>1</code>, если хотя бы один из соответствующих разрядов обоих чисел равен <code>1</code></li>
+                    <li><span class="b">^</span> : поразрядное <code>исключающее ИЛИ</code>. Возвращает <code>1</code>, если только один из соответствующих разрядов обоих чисел равен <code>1</code></li>
+                    <li><span class="b">~</span> : поразрядное <code>отрицание или инверсия</code>. Инвертирует все разряды операнда. Если разряд равен <code>1</code>, то он становится равен <code>0</code>, а если он равен <code>0</code>, то он получает значение <code>1</code>.</li>
+                </ul>
+
+                <p>Применение операций:</p>
+                <div class="code-block"><code>const a = 5 | 2;           <code class="comment">// 101 | 010 = 111  - 7</code>
+const b = 6 & 2;            <code class="comment">// 110 & 010 = 10  - 2</code>
+const c = 5 ^ 2;            <code class="comment">// 101 ^ 010 = 111 - 7</code>
+const d = ~9;               <code class="comment">// -10</code></code></div>
+
+                <p>Например, выражение <code>5 | 2</code> равно 7. Число 5 в двоичной записи равно 101, а число 2 - 10 или 010. Сложим соответствующие разряды обоих чисел. При сложении если хотя бы один разряд равен 1, то сумма обоих разрядов равна 1. Поэтому получаем:</p>
+                <table>
+                    <tbody>
+                        <tr><td>1</td><td>0</td><td>1</td></tr>
+                        <tr><td>0</td><td>1</td><td>0</td></tr>
+                        <tr><td>1</td><td>1</td><td>1</td></tr>
+                    </tbody>
+                </table>
+
+                <p>В итоге получаем число <code>111</code>, что в десятичной записи представляет число <code>7</code>.</p>
+                <p>
+                    Возьмем другое выражение <code>6 &amp; 2</code>. Число 6 в двоичной записи равно 110, а число 2 - 10 или 010. Умножим соответствующие разряды 
+                    обоих чисел. Произведение обоих разрядов равно 1, если оба этих разряда равны 1. Иначе произведение равно 0. Поэтому получаем:
+                </p>
+
+                <table>
+                    <tbody>
+                        <tr><td>1</td><td>1</td><td>0</td></tr>
+                        <tr><td>0</td><td>1</td><td>0</td></tr>
+                        <tr><td>0</td><td>1</td><td>0</td></tr>
+                    </tbody>
+                </table>
+
+                <p>Получаем число <code>010</code>, что в десятичной системе равно <code>2</code>.</p>
+
+                <h2 id="ch2-condition-expr">📜 Условные выражения</h2>
+
+                <p>
+                    Условные выражения работают с условиями - выражениями, которые возвращают значение типа <code>Boolean</code> - <span class="b">true</span> (условие не верно) или <span class="b">false</span> 
+                    (условие не верно). Есть два типа условных операций: операции сравнения и логические операции.
+                </p>
+
+                <h3>Операции сравнения</h3>
+                <p>Операторы сравнения сравнивают два значения и возвращают значение <code>true</code> или <code>false</code>:</p>
+
+                <ul>
+                    <li><span class="b">==</span></p>Оператор равенства сравнивает два значения, и если они равны, возвращает <strong><i>true</i></strong>, иначе возвращает <strong><i>false</i></strong>: <code>x == 5</code><p></li>
+                    <li><span class="b">===</span></p>Оператор тождественности также сравнивает два значения и их тип, и если они равны, возвращает <strong><i>true</i></strong>, иначе возвращает <strong><i>false</i></strong>: <code>x === 5</code><p></li>
+                    <li><span class="b">!=</span></p>Сравнивает два значения, и если они <span class="b">не</span> равны, возвращает <strong><i>true</i></strong>, иначе возвращает <strong><i>false</i></strong>: <code>x != 5</code><p></li>
+                    <li><span class="b">!==</span></p>Сравнивает два значения и их типы, и если они <span class="b">не</span> равны, возвращает <strong><i>true</i></strong>, иначе возвращает <strong><i>false</i></strong>: <code>x !== 5</code><p></li>
+                    <li><span class="b">&gt;</span></p>Сравнивает два значения, и если первое больше второго, то возвращает <strong><i>true</i></strong>, иначе возвращает <strong><i>false</i></strong>: <code>x &gt; 5</code><p></li>
+                    <li><span class="b">&lt;</span></p>Сравнивает два значения, и если первое меньше второго, то возвращает <strong><i>true</i></strong>, иначе возвращает <strong><i>false</i></strong>: <code>x &lt; 5</code><p></li>
+                    <li><span class="b">&gt;=</span></p>Сравнивает два значения, и если первое больше или равно второму, то возвращает <strong><i>true</i></strong>, иначе возвращает <strong><i>false</i></strong>: <code>x &gt;= 5</code><p></li>
+                    <li><span class="b">&lt;=</span></p>Сравнивает два значения, и если первое меньше или равно второму, то возвращает <strong><i>true</i></strong>, иначе возвращает <strong><i>false</i></strong>: <code>x &lt;= 5</code><p></li>
+                </ul>
+
+                <p>Все операторы довольно просты, наверное, за исключением оператора равенства и оператора тождественности. Они оба сравнивают два значения, но оператор тождественности также принимает во внимание и тип значения. Например:</p>
+                <div class="code-block"><code>const income = 100;
+const strIncome = "100";
+const result = income == strIncome;
+console.log(result); <code class="comment">// true</code></code></div>
+
+                <p>Константа <code>result</code> здесь будет равна <code>true</code>, так как фактически и <code>income</code>, и <code>strIncome</code> представляют число <code>100</code>.</p>
+                <p>Но оператор тождественности возвратит в этом случае <code>false</code>, так как данные имеют разные тип:</p>
+
+                <div class="code-block"><code>const income = 100;
+const strIncome = "100";
+const result = income === strIncome;
+console.log(result); <code class="comment">// false</code></code></div>
+
+                <p>Аналогично работают операторы неравенства <span class="b">!=</span> и <span class="b">!==</span>.</p>
+
+                <div class="code-block"><code><code class="comment">// == (нестрогое равенство - приводит типы)</code>
+console.log(5 == '5');   <code class="comment">// true</code>
+console.log(0 == false); <code class="comment">// true</code>
+
+<code class="comment">// === (строгое равенство - сравнивает и тип)</code>
+console.log(5 === '5');   <code class="comment">// false</code>
+console.log(0 === false); <code class="comment">// false</code>
+
+<code class="comment">// != и !== (неравенство)</code>
+console.log(5 != '5');   <code class="comment">// false</code>
+console.log(5 !== '5');  <code class="comment">// true</code>
+
+<code class="comment">// Больше, меньше</code>
+console.log(5 > 3);   <code class="comment">// true</code>
+console.log(5 < 3);   <code class="comment">// false</code>
+console.log(5 >= 5);  <code class="comment">// true</code>
+console.log(5 <= 4);  <code class="comment">// false</code></code></div>
+
+                <div class="info-box note">
+                    <div class="info-box-title">💡 Всегда используйте ===</div>
+                    <p>Рекомендуется всегда использовать строгое сравнение (<code>===</code> и <code>!==</code>), чтобы избежать неожиданных преобразований типов.</p>
+                </div>
+
+                <h3>Логические операции</h3>
+
+                <p>
+                    Логические операции обычно применяются к значениям типа <code>Boolean</code> - <span class="b">true</span> и <span class="b">false</span>. Результат логических операций также обычно представляет значение типа Boolean - <code>true</code> или <code>false</code>. 
+                    Часто этот вид операций используется проверки условий. В JavaScript есть следующие логические операции:
+                </p>
+
+                <h4>Логическое И</h4>
+
+                <p>Операция <span class="b">&amp;&amp;</span> возвращает <code>true</code>, если оба операнда возвращают <code>true</code>, иначе возвращает <code>false</code>:</p>
+                <div class="code-block"><code>console.log(true && true);  <code class="comment">// true</code>
+console.log(true && false); <code class="comment">// false</code>
+console.log(false && false); <code class="comment">// false</code></code></div>
+
+                <p>Нередко этот тип операций применяется, если надо проверить истинность двух условий, причем оба условия должны быть истины:</p>
+                <div class="code-block"><code>const money = 1000;
+const age = 21;
+<code class="comment">// проверяем, что age больше 18 и money больше 100</code>
+const access1 = age > 18 && money > 100;
+console.log(access1); <code class="comment">// true</code>
+ 
+<code class="comment">// проверяем, что age больше 18 и money больше 1000</code>
+const access2 = age > 18 && money > 1000;
+console.log(access2);</code></div>
+
+                <p>
+                    В данном случае константа <code>access1</code> будет равна true, если одновременно и <code>age больше 18</code>, и <code>money больше 100</code>. То есть условно говоря, если челевеку больше 18 лет, и у него больше 
+                    100 денежных единиц, то открываем ему доступ. Здесь оба эти условий истинны, поэтому и <code>access1</code> равна <code>true</code>.
+                </p>
+                <p>А вот константа <code>access2</code> будет равна <code>true</code>, если одновременно и <code>age больше 18</code>, и <code>money больше 1000</code>. Здесь второе условие не соблюдается, оно ложно, поэтому и <code>access2</code> равна <code>false</code>.</p>
+
+                <h4>Логическое ИЛИ</h4>
+
+                <p>Операция <span class="b">||</span> возвращает <code>true</code>, если хотя бы один из операндов равен <code>true</code>, иначе операция <span class="b">||</span> возвращает <code>false</code>:</p>
+                <div class="code-block"><code>console.log(true || true);  <code class="comment">// true</code>
+console.log(true || false); <code class="comment">// true</code>
+console.log(false || false); <code class="comment">// false</code></code></div>
+
+                <p>Эта операция также нередко применяется для проверки двух условий, когда достаточно, чтобы только одно условий было истинным, например:</p>
+                <div class="code-block"><code>const money = 1000;
+const age = 21;
+<code class="comment">// проверяем, что age больше 18 или money больше 1000</code>
+const access1 = age > 18 || money > 1000;
+console.log(access1); <code class="comment">// true</code>
+ 
+<code class="comment">// проверяем, что age больше 22 или money больше 1000</code>
+const access2 = age > 22 || money > 1000;
+console.log(access2);   <code class="comment">// false</code></code></div>
+
+                <p>
+                    В данном случае константа <code>access1</code> будет равна <code>true</code>, если одновременно или <code>age больше 18</code>, или <code>money больше 1000</code>. То есть условно говоря, если человеку либо больше 18 лет, либо 
+                    у него больше 1000 денежных единиц, то открываем ему доступ. То есть достаточно истинности одного условия. Здесь первое условие истинно, поэтому и <code>access1</code> равна <code>true</code>.
+                </p>
+                <p>А вот константа <code>access2</code> будет равна <code>true</code>, если одновременно и <code>age больше 22</code>, и <code>money больше 1000</code>. Здесь ни первое, ни второе условие не соблюдаются, они ложны, поэтому и <code>access2</code> равна <code>false</code>.</p>
+                
+                <h4>Логическое отрицание</h4>
+
+                <p>Операция <span class="b">!</span> возвращает <code>true</code>, если операнд равен <code>false</code>, и возвращает <code>false</code>, если операнд равен <code>true</code>:</p>
+
+                <div class="code-block"><code>console.log(!true);     <code class="comment">// false</code>
+console.log(!false);     <code class="comment">// true</code>
+ 
+const isAlive = true;
+const isDead = !isAlive;
+console.log(isDead);     <code class="comment">// false</code></code></div>
+
+                <h4>Логические операции с произвольными значениями</h4>
+
+                <p>
+                    Выше писалось, что логические операции <span class="b">обычно</span> в качестве операндо принимают значения Boolean - <span class="b">true</span> или 
+                    <span class="b">false</span>, а результатом операций также <span class="b">обычно</span> являются значения Boolean. Но это обычно, в рельности же операндами и результатами 
+                    этих операций могут быть произвольные значения. Иногда JavaScript может автоматически преобразовать определенные значения в тип Boolean:
+                </p>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Значение</th>
+                                <th>Во что преобразуется</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>null</code></td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>undefined</code></td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>0 (в том числе значение NaN)</code></td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>1 (любое ненулевое значение)</code></td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td><code>"" (пустая строка)</code></td>
+                                <td>false</td>
+                            </tr>
+                            <tr>
+                                <td><code>"некоторый текст" (непустая строка)</code></td>
+                                <td>true</td>
+                            </tr>
+                            <tr>
+                                <td><code>{} (любой объект)</code></td>
+                                <td>true</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <p>И если какие-то операнды не представляют значение <code>Boolean</code>, то в этом случае логические операции действуют в соответствии с некоторыми плавилами.</p>
+                <p>Если как минимум один операнд операции <span class="b">&amp;&amp;</span> не является значением типа <code>Boolean</code>, то выполняются следующие действия:</p>
+
+                <ul>
+                    <li>если первый операнд возвращает <code>false</code> (например, число <code>0</code>, пустая строка, <code>null</code>, <code>undefined</code>), то операция возвращает первый операнд.</li>
+                    <li>в остальных случаях возвращается второй операнд.</li>
+                </ul>
+
+                <div class="code-block"><code>let isAlive;        <code class="comment">// undefined</code>
+let name = "Tom";
+     
+const result = isAlive && name;
+console.log(result);  </code></div>
+
+                <p>Здесь первый операнд операции <span class="b">&amp;&amp;</span> - переменная <code>isAlive</code> равна <code>undefined</code> (так как переменная не инициализирована), что при преобразовании к Boolean даст <code>false</code>, поэтому операция возвратит значение переменной <code>isAlive</code>.</p>
+                <p>Еще несколько примеров:</p>
+                <div class="code-block"><code>console.log(false && "Tom");  <code class="comment">// false</code>
+console.log("Tom" && null);   <code class="comment">// null</code>
+console.log(true && "Tom");   <code class="comment">// Tom</code></code></div>
+
+                <p>Если один или оба операнда операции <span class="b">||</span> не являются значениями Boolean, то операция выполняет следующие действия:</p>
+                <ul>
+                    <li>Если первый операнд оценивается как <span class="b">true</span> (то есть не равен 0, пустой строки, null или undefined), то возвращается первый операнд</li>
+                    <li>Во всех остальных случаях возвращается второй операнд</li>
+                </ul>
+
+                <p>Примеры:</p>
+                <div class="code-block"><code>let isAlive;           <code class="comment">// undefined</code>
+console.log(!isAlive);  <code class="comment">// true</code>
+console.log(!null);     <code class="comment">// true</code>
+console.log(!0);        <code class="comment">// true</code>
+console.log(!10);       <code class="comment">// false</code>
+console.log(!"");       <code class="comment">// true (пустая строка)</code>
+console.log(!"Tom");    <code class="comment">// false</code></code></div>
+
+                <h4>Еще примеры:</h4>
+
+                <div class="code-block"><code><code class="comment">// && (И) - все условия должны быть true</code>
+let age = 25;
+let hasLicense = true;
+
+if (age >= 18 && hasLicense) {
+    console.log('Можно водить');
+}
+
+<code class="comment">// || (ИЛИ) - хотя бы одно условие true</code>
+let isWeekend = true;
+let isHoliday = false;
+
+if (isWeekend || isHoliday) {
+    console.log('Выходной!');
+}
+
+<code class="comment">// ! (НЕ) - инверсия</code>
+let isRaining = false;
+if (!isRaining) {
+    console.log('Можно идти гулять');
+}</code></div>
+
+
+                <h2 id="ch2-condition-constructions">📜 Условные конструкции</h2>
+
+                <p>
+                    Выше мы рассмотрели, что логические операции могут принимать значения произвольных типов, а не только Boolean. Казалось бы в этом нет особого смысла. Тем не менее подобные конструкции 
+                    могут быть очень удобны, когда нам надо проверить условие и в зависимости от проверки выполнить то или иное действие. Например:
+                </p>
+
+                <div class="code-block"><code>const age = 22;
+age &lt;= 17 && console.log("Вам меньше 18 лет. Доступ запрещен.");
+age &gt; 17 && console.log("Вам больше 17 лет. Доступ разрешен.");</code></div>
+
+                <p>
+                    Здесь в зависимости от значения константы <code>age</code> (которая представляет условный возраст) выводим на консоль ту или иную строку (условно в зависимости от возраста разрешаем или запрещаем доступ). 
+                    Напомню, что <code>&amp;&amp;</code> возвращает второй операнд, если первый равен <code>true</code>.<br>
+                    Сначала выполняется первая операция <code>&amp;&amp;</code>:
+                </p>
+                <div class="code-block"><code>age &lt;= 17 && console.log("Вам меньше 18 лет. Доступ запрещен.");</code></div>
+
+                <p>
+                    Здесь сначала проверяется первый операнд - выражение <code>age &lt;= 17</code>. Если оно истинно (то есть если <code>age</code> меньше 18), то выполняем метод <code>console.log()</code>. 
+                    Однако поскольку условие из первого операнда НЕ верно (так как <code>age</code> больше 17), поэтому не будет выполнять второй операнд, и операция возвратит false.
+                </p>
+                <p>Аналогично работает вторая операция <span class="b">&amp;&amp;</span> за тем исключением, что она проверяет истинность выражения <code>age &gt; 17</code> (то есть age должно быть больше 17)</p>
+                <div class="code-block"><code>age > 17 && console.log("Вам больше 17 лет. Доступ разрешен.");</code></div>
+
+                <p>Здесь же условие из первого операнда верно, поэтому будет выполняться второй операнд. В итоге на консоль браузера будет выведена строка</p>
+                <pre class="browser">Вам больше 17 лет. Доступ разрешен.</pre>
+
+                <p>
+                    Аналогично для построения условных конструкций можно использовать операцию <span class="b">||</span>, но она возвращает второй операнд, если первый операнд равен <code>false</code>. То есть получается наоброт: 
+                    операция <span class="b">&amp;&amp;</span> возвращает второй операнд, если условие первого операнда верно, а <span class="b">||</span> - если условие не верно. И мы могли бы переписать предыдущий пример с помощью операции <code>||</code> следующим образом:
+                </p>
+                <div class="code-block"><code>const age = 12;
+age &lt;= 17 || console.log("Вам больше 17 лет. Доступ разрешен.");
+age &gt; 17 || console.log("Вам меньше 18 лет. Доступ запрещен.");</code></div>
+
+                <h3>Операции присваивания</h3>
+
+                <p>В JavaScript также есть ряд операций, которые сочетают логические операции с присвоением:</p>
+
+                <ul>
+                    <li><p class="b">&amp;&amp;=</p>
+                        Аналогично выполнению <code>a = a &amp;&amp; b</code>:
+                        <div class="code-block"><code>let x = true;
+let y = false;
+y &&= x;
+console.log(y); <code class="comment">// false</code>
+ 
+let c = false;
+let d = true;
+c &&= d;
+console.log(c); <code class="comment">// false</code>
+ 
+let a = true;
+let b = true;
+a &&= b;
+console.log(a); <code class="comment">// true</code>
+ 
+let e = false;
+let f = false;
+e &&= f;
+console.log(e); <code class="comment">// false</code></code></div>
+                    </li>
+
+                    <li><p class="b">||=</p>
+                        <code>a ||= b</code> эквивалентно выражению <code>a = a || b</code>:
+                        <div class="code-block"><code>let x = true;
+let y = false;
+y ||= x;
+console.log(y); <code class="comment">// true</code>
+ 
+let a = true;
+let b = true;
+a ||= b;
+console.log(a); <code class="comment">// true</code>
+ 
+let c = false;
+let d = true;
+c ||= d;
+console.log(c); <code class="comment">// true</code>
+ 
+let e = false;
+let f = false;
+e ||= f;
+console.log(e); <code class="comment">// false</code></code></div>
+                    </li>
+                </ul>
+
+                <h2 id="ch2-ternary">📜 Условные операторы ?: и ??</h2>
+
+                <p>
+                    Условные операторы позволяют проверить некоторое условие и в зависимости от результата проверки выполнить определенные действия. 
+                    Здесь мы рассмотрим оператор <span class="b">?:</span> или так называемый тернарный оператор и операцию <span class="b">??</span>.
+                </p>
+
+                <h3>Тернарная операция</h3>
+
+                <p>Тернарная операция состоит из трех операндов и имеет следующее определение:</p>
+                <div class="code-block"><code>[первый операнд - условие] ? [второй операнд] : [третий операнд]</code></div>
+
+                <p>
+                    В зависимости от условия в первом операнде тернарная операция возвращает второй или третий операнд. Если условие в первом операнде равно <code>true</code>, 
+                    то возвращается второй операнд; если условие равно <code>false</code>, то третий. Например:
+                </p>
+                <div class="code-block"><code>const a = 1;
+const b = 2;
+const result = a &lt; b ? a: b;
+console.log(result); <code class="comment">// 1</code></code></div>
+
+                <p>
+                    Здесь первый операнд представляет следующее условие <code>a &lt; b</code>. 
+                    Если значение константы <code>a</code> меньше значения константы <code>b</code>, то возвращается второй операнд - 
+                    <code>a</code>, то есть константа <code>result</code> будет равна <code>a</code>.
+                </p>
+                <p>Если значение константы <code>a</code> больше или равно значению константы <code>b</code>, то возвращается третий операнд - 
+                    <code>b</code>, поэтому константа <code>result</code> будет равна значению <code>b</code>.
+                </p>
+                <p>В качестве операндов также могут выступать выражения:</p>
+                <div class="code-block"><code>const a = 1;
+const b = 2;
+const result = a &lt; b ? a + b : a - b;
+console.log(result); <code class="comment">// 3</code></code></div>
+
+                <p>
+                    В этом примере кода первый операнд представляет то же самое условие, что и в предыдущем примере, однако второй и третий операнды представляют арифметические операции. 
+                    Если значение константы <code>a</code> меньше значения константы <code>b</code>, то возвращается второй операнд - 
+                    <code>a + b</code>. Соответственно константа <code>result</code> будет равна сумме a и b.
+                </p>
+                <p>
+                    Если значение константы <code>a</code> больше или равно значению константы <code>b</code>, то возвращается третий операнд - 
+                    <code>a - b</code>. Соответственно константа <code>result</code> будет равна разности a и b.
+                </p>
+
+                <h3>Оператор ??</h3>
+
+                <p>Оператор <span class="b">??</span> (nullish coalescing operator) позволяет проверить значение на <code>null</code> и <code>undefined</code>. Он принимает два операнда:</p>
+                <div class="code-block"><code>левый_операнд ?? правый_операнд</code></div>
+
+                <p>Оператор возвращает значение левого операнда, если оно НЕ равно <code>null</code> и <code>undefined</code>. Иначе возвращается значение правого операнда. Например:</p>
+
+                <div class="code-block"><code>const result = "hello" ?? "world";
+console.log(result);                 <code class="comment">// hello</code>
+ 
+console.log(0 ?? 5);                 <code class="comment">// 0</code>
+ 
+console.log("" ?? "javascript");     <code class="comment">// "" - пустая строка</code>
+ 
+console.log(false ?? true);          <code class="comment">// false</code>
+ 
+console.log(null ?? "not null");     <code class="comment">// not null</code>
+ 
+console.log(undefined ?? "defined"); <code class="comment">// defined</code>
+ 
+console.log(null ?? null);           <code class="comment">// null</code>
+console.log(undefined ?? undefined); <code class="comment">// undefined</code></code></div>
+
+                <h3>Оператор ??=</h3>
+
+                <p>Оператор <code>??</code> имеет модификацию в виде оператора <span class="b">??=</span>, который также позволяет проверить значение на <code>null</code> и <code>undefined</code>. Он принимает два операнда:</p>
+                <div class="code-block"><code>левый_операнд ??= правый_операнд</code></div>
+
+                <div class="code-block"><code>const message = "Hello JavaScript";
+let text = "Hello work!"
+text ??= message;
+console.log(text);  <code class="comment">// Hello work!</code></code></div>
+
+                <p>
+                    Если левый операнд равен <code>null</code> и <code>undefined</code>, то ему присваивается значение правого операнда. 
+                    Иначе левый операнд сохраняет свое значение. Например:
+                </p>
+                <div class="code-block"><code>const message = "Hello JavaScript";
+let text = "Hello work!"
+text ??= message;
+console.log(text);  <code class="comment">// Hello work!</code></code></div>
+
+                <p>Здесь переменная <code>text</code> не равна <code>null</code> или <code>undefined</code>, поэтому она сохраняет свое значение. Обратный пример:</p>
+                <div class="code-block"><code>const message = "Hello JavaScript";
+let text = null;
+text ??= message;
+console.log(text);  <code class="comment">// Hello JavaScript</code></code></div>
+
+                <p>Здесь переменная <code>text</code> равна null, поэтому при посредстве оператора <code>??=</code> она получает значение переменной <code>message</code>.</p>
+
+
+
                 <h3>if-else</h3>
                 <div class="code-block"><code>let age = 20;
 
@@ -1272,7 +2440,7 @@ if (age >= 18) {
     console.log('Несовершеннолетний');
 }
 
-// else if
+<code class="comment">// else if</code>
 let score = 85;
 
 if (score >= 90) {
@@ -1374,52 +2542,7 @@ for (let i = 0; i < 5; i++) {
     console.log(i); // 0, 1, 3, 4
 }</code></div>
 
-                <h2>Логические операторы</h2>
-                <div class="code-block"><code>// && (И) - все условия должны быть true
-let age = 25;
-let hasLicense = true;
 
-if (age >= 18 && hasLicense) {
-    console.log('Можно водить');
-}
-
-// || (ИЛИ) - хотя бы одно условие true
-let isWeekend = true;
-let isHoliday = false;
-
-if (isWeekend || isHoliday) {
-    console.log('Выходной!');
-}
-
-// ! (НЕ) - инверсия
-let isRaining = false;
-if (!isRaining) {
-    console.log('Можно идти гулять');
-}</code></div>
-
-                <h2>Операторы сравнения</h2>
-                <div class="code-block"><code>// == (нестрогое равенство - приводит типы)
-console.log(5 == '5');   // true
-console.log(0 == false); // true
-
-// === (строгое равенство - сравнивает и тип)
-console.log(5 === '5');   // false
-console.log(0 === false); // false
-
-// != и !== (неравенство)
-console.log(5 != '5');   // false
-console.log(5 !== '5');  // true
-
-// Больше, меньше
-console.log(5 > 3);   // true
-console.log(5 < 3);   // false
-console.log(5 >= 5);  // true
-console.log(5 <= 4);  // false</code></div>
-
-                <div class="info-box note">
-                    <div class="info-box-title">💡 Всегда используйте ===</div>
-                    <p>Рекомендуется всегда использовать строгое сравнение (<code>===</code> и <code>!==</code>), чтобы избежать неожиданных преобразований типов.</p>
-                </div>
             </section>
 
             <!-- ГЛАВА 3: Функции -->
