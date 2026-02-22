@@ -364,6 +364,11 @@
             overflow: hidden;
             margin: 1.5rem 0;
         }
+
+        .table-base {
+            width: unset;
+            border-collapse: unset;
+        }
         
         th, td {
             padding: 1rem;
@@ -532,6 +537,8 @@
                                 <li class="nav-subitem" data-target="ch2-condition-expr">📜 Условные выражения</li>
                                 <li class="nav-subitem" data-target="ch2-condition-constructions">📜 Условные конструкции</li>
                                 <li class="nav-subitem" data-target="ch2-ternary">📜 Условные операторы ?: и ??</li>
+                                <li class="nav-subitem" data-target="ch2-converting-data">📜 Преобразования данных</li>
+                                <li class="nav-subitem" data-target="ch2-intro-arrays">📜 Введение в массивы</li>
                             </ul>
                         </li>
                         <li class="nav-item" data-target="ch3">Глава 3. Функции</li>
@@ -2429,7 +2436,253 @@ console.log(text);  <code class="comment">// Hello JavaScript</code></code></div
 
                 <p>Здесь переменная <code>text</code> равна null, поэтому при посредстве оператора <code>??=</code> она получает значение переменной <code>message</code>.</p>
 
+                <h2 id="ch2-converting-data">📜 Преобразования данных</h2>
 
+                <p>Нередко возникает необходимость преобразовать одни данные в другие. Некоторые преобразования javascript выполняет автоматически. Например:</p>
+                <div class="code-block"><code>const number1 = "56";
+const number2 = 4;
+cont result = number1 + number2;
+console.log(result); // 564</code></div>
+
+                <p>
+                    Здесь константа <code>number1</code> представляет строку, а точнее строковое представление числа. А константа <code>number2</code> представляет число. 
+                    И в итоге мы получим не число <code>60</code>, а строку <code>564</code>.
+                </p>
+                <p>При сложении преобразования в JavaScript производятся по принципу:</p>
+
+                <ul>
+                    <li>Если оба операнда представляют числа, то происходит обычное арифметическое сложение</li>
+                    <li>Если предыдущее условие не выполняется, то оба операнда преобразуются в строки и производится объединение строк.</li>
+                </ul>
+
+                <p>
+                    Соответственно в примере выше, поскольку первый операнд - строка, то второй операнд - число также преобразуется в строку, и в итоге 
+                    получаем строку <code>"564"</code>, а не число <code>60</code>. Фактически мы получаем:
+                </p>
+                <div class="code-block"><code>const number1 = "56";
+const number2 = 4;
+const result = number1 + String(number2);
+console.log(result); <code class="comment">// 564</code></code></div>
+
+                <p>Выражение <code>String(number2)</code> позволяет получить строковое представление константы <code>number2</code>, то есть из числа <code>4</code> получает строку <code>"4"</code>.</p>
+                <p>
+                    Но поведение по умолчанию не всегда может быть желательно. Например, в примере выше мы хотим, чтобы значения складывались не как строки, а как 
+                    числа. В этом случае мы можем использовать функции преобразования.
+                </p>
+
+                <h3>parseInt()</h3>
+
+                <p>Для преобразования строки в целое число применяется функция <span class="b">parseInt()</span>:</p>
+                <div class="code-block"><code>const number1 = "56";
+const number2 = 4;
+const result = parseInt(number1) + number2;
+console.log(result); <code class="comment">// 60</code></code></div>
+
+                <p>
+                    При этом строка может иметь смешанное содержимое, например, <code>"123hello"</code>, то есть в данном случае есть цифры, но есть и обычные символы. 
+                    Функция <code>parseInt()</code> все равно попытается выполнить преобразование - она последовательно, начиная с первого символа, считывает цифры, пока не встретит первый 
+                    нецифровой символ:
+                </p>
+                <div class="code-block"><code>const num1 = "123hello";
+const num2 = parseInt(num1);
+console.log(num2); <code class="comment">// 123</code></code></div>
+
+                <p>Стоит учитывать, что преобразуемое значение, которое преобразуется в число, всегда сначала преобразуется в строку. Это может приводить к неожиданным, на первый взгляд, результатам:</p>
+
+                <div class="code-block"><code>const number1 = parseInt(0.000005);   <code class="comment">// 0</code>;
+console.log(number1);
+ 
+const number2 = parseInt(0.0000005);  <code class="comment">// 5</code>
+console.log(number2);</code></div>
+
+                <p>Выше в функцию <span class="b">parseInt</span> передаются дробные числа, и мы ожидаем в обоих случаях получить число <code>0</code>. Однако при преобразовании <code>number2</code> мы получаем число <code>5</code>. Почему?</p>
+                <p>Пример выше будет эквивалентен следующему:</p>
+                <div class="code-block"><code>const number1 = parseInt(String(0.000005));   <code class="comment">// 0</code>;
+console.log(number1);
+ 
+const number2 = parseInt(String(0.0000005));  <code class="comment">// 5</code>
+console.log(number2);</code></div>
+
+                <p>Для дробных чисел меньше <span class="b">10<sup>-6</sup></span> (0.000001) применяется экспоненциональная запись, то есть число 0.0000005 представляется как <code>5e-7</code>:</p>
+                <div class="code-block"><code>console.log(0.0000005);     <code class="comment">// 5e-7</code></code></div>
+
+                <p>Далее число <code>5e-7</code> преобразуется в строку <code>"5e-7"</code>, и эту строку <span class="b">parseInt</span> пытается преобразовать в число. Соответственно на выходе получается число <code>5</code>.</p>
+                <p>То же самое касается очень больших чисел типа <code>999999999999999999999</code>, которые также представляются к экспоненциальной форме.</p>
+
+                <h3>NaN и isNaN</h3>
+
+                <p>Если функции <code>parseInt()</code> не удастся выполнить преобразование, то он возвращает значение <span class="b">NaN</span> (Not a Number), которое говорит о том, 
+что строка не представляет число и не может быть преобразована.</p>
+
+                <div class="code-block"><code>console.log(parseInt("abc"));   <code class="comment">// NaN</code>
+cont type = typeof NaN;
+console.log(type);              <code class="comment">// number</code></code></div>
+
+                <p>Что интересно, само значение <code>NaN (не число)</code> представляет тип <code>number</code>, то есть число.</p>
+
+                <p>С помощью специальной функции <span class="b">isNaN()</span> можно проверить, представляет ли строка число. Если строка не является числом, то функция возвращает 
+<code>true</code>, если это число - то <code>false</code>:</p>
+
+                <div class="code-block"><code>const num1 = "javascript";
+const num2 = "22";
+let result = isNaN(num1);
+console.log(result);        <code class="comment">// true - num1 не является числом</code>
+     
+result = isNaN(num2);
+console.log(result);        <code class="comment">// false - num2 - это число</code></code></div>
+
+                <h3>parseFloat</h3>
+
+                <p>Для преобразования строк в дробные числа применяется функция <span class="b">parseFloat()</span>, которая работает аналогичным образом:</p>
+                <div class="code-block"><code>const number1 = "46.07";
+const number2 = "4.98";
+let result = parseFloat(number1) + parseFloat(number2);
+console.log(result);        <code class="comment">// 51.05</code></code></div>
+
+                <h3>Преобразование из строки в число и оператор +</h3>
+
+                <p>Стоит отметить, что для преобразования строки в число в JavaScript мы можем использовать оператор унарного плюса <code>+</code> перед преобразуемым значением:</p>
+
+                <div class="code-block"><code>const number1 = "56";
+const number2 = 4;
+const result = +number1 - number2;
+console.log(result);        <code class="comment">// 52</code></code></div>
+
+                <p>Здесь выражение <code>+number1</code> преобразует строку "56" в число 56.</p>
+                <p>Если надо получить отрицательное представление числа, то аналогичным образом применяется знак унарного минуса (как перед отрицательными числами):</p>
+
+                <div class="code-block"><code>const number1 = "56";
+const number2 = 4;
+const result = -number1 - number2;  <code class="comment">// -56 - 4 = -60</code>
+console.log(result);                <code class="comment">// -60</code></code></div>
+
+                <p>Однако в примерах выше строка <code>number1</code> могла быть преобразована в числа. Если это не возможно, то результатом преобразования будет значение <span class="b">NaN</span>:</p>
+                <div class="code-block"><code>const number1 = "56hek";
+console.log(+number1);              <code class="comment">// NaN</code></code></div>
+
+                
+                <h2 id="ch2-intro-arrays">📜 Введение в массивы</h2>
+
+                <p>
+                    Для работы с наборами данных предназначены массивы. Для создания массива применяются квадратные скобки <span class="b">[]</span>. 
+                    Внутри квадратных скобок определяются элементы массива. (Далее в отдельной главе, посвященной <a href="./5.3.php">массивам</a>, мы рассмотрим дополнительные способы создания массивов и вцелом более подробно работу с массивами)
+                </p>
+
+                <p>Простейшее определение массива:</p>
+                <div class="code-block"><code>const myArray = [];</code></div>
+
+                <p>
+                    В данном случае мы создаем массив, который называется <code>myArray</code>. Он пустой, поскольку внутри квадратных скобок не определено ни одного элемента. 
+                    Но можно также добавить в него начальные данные:
+                </p>
+                <div class="code-block"><code>const people = ["Tom", "Alice", "Sam"];
+console.log(people);    <code class="comment">    // ["Tom", "Alice", "Sam"];</code></code></div>
+
+                <p>Для обращения к отдельным элементам массива используются индексы. Отсчет начинается с нуля, то есть первый элемент будет иметь индекс <code>0</code>, а последний <code>- 2</code>:</p>
+                <div class="code-block"><code>const people = ["Tom", "Alice", "Sam"];
+console.log(people[0]);     <code class="comment">// Tom</code>
+const person3 = people[2];  <code class="comment">// Sam</code>
+console.log(person3);       <code class="comment">// Sam</code></code></div>
+
+                <p>Если мы попробуем обратиться к элементу по индексу больше размера массива, то мы получим <code>undefined</code>:</p>
+
+                <div class="code-block"><code>const people = ["Tom", "Alice", "Sam"];
+console.log(people[7]);     <code class="comment">// undefined</code></code></div>
+
+                <p>Также по индексу осуществляется установка значений для элементов массива:</p>
+                <div class="code-block"><code>const people = ["Tom", "Alice", "Sam"];
+console.log(people[0]);     <code class="comment">// Tom</code>
+people[0] = "Bob";
+console.log(people[0]);     <code class="comment">// Bob</code></code></div>
+
+                <p>Причем в отличие от других языков, как C# или Java, можно установить элемент, который изначально не установлен:</p>
+                <div class="code-block"><code>const people = ["Tom", "Alice", "Sam"];
+console.log(people[7]);     <code class="comment">// undefined - в массиве только три элемента</code>
+people[7] = "Bob";
+console.log(people[7]);     <code class="comment">// Bob</code></code></div>
+
+                <p>Также стоит отметить, что в отличие от ряда языков программирования в JavaScript массивы не являются строго типизированными, один массив может хранить данные разных типов:</p>
+                <div class="code-block"><code>const objects = ["Tom", 12, true, 3.14, false];
+console.log(objects);</code></div>
+
+                <h3>Многомерные массивы</h3>
+
+                <p>
+                    Массивы могут быть одномерными и многомерными. Каждый элемент в многомерном массиве может представлять собой отдельный массив. 
+                    Выше мы рассматривали одномерный массив, теперь создадим многомерный массив:
+                </p>
+                <div class="code-block"><code>const numbers1 = [0, 1, 2, 3, 4, 5 ];    <code class="comment">// одномерный массив</code>
+const numbers2 = [[0, 1, 2], [3, 4, 5] ]; <code class="comment">// двумерный массив</code></code></div>
+
+                <p>Визуально оба массива можно представить следующим образом:</p>
+
+                <h4>Одномерный массив <code>numbers1</code></h4>
+
+                <table class="table-base" border="1" cellpadding="4">
+                    <tbody>
+                        <tr><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+                    </tbody>
+                </table>
+
+                <h4>Двухмерный массив numbers2</h4>
+
+                <table class="table-base" border="1" cellpadding="4">
+                    <tbody>
+                        <tr><td>0</td><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td><td>5</td></tr>
+                    </tbody>
+                </table>
+
+                <p>Поскольку массив <code>numbers2</code> двухмерный, он представляет собой простую таблицу. Каждый его элемент может представлять отдельный массив.</p>
+
+                <p>Рассмотрим еще один двумерный массив:</p>
+                <div class="code-block"><code>const people = [
+        ["Tom", 25, false],
+        ["Bill", 38, true],
+        ["Alice", 21, false]
+];
+ 
+console.log(people[0]);     <code class="comment">// ["Tom", 25, false]</code>
+console.log(people[1]);     <code class="comment">// ["Bill", 38, true]</code></code></div>
+
+                <p>Массив <code>people</code> можно представить в виде следующей таблицы:</p>
+
+                <table class="table-base" border="1" cellpadding="4">
+                    <tbody>
+                        <tr><td>Tom</td><td>25</td><td>false</td></tr>
+                        <tr><td>Bill</td><td>38</td><td>true</td></tr>
+                        <tr><td>Alice</td><td>21</td><td>false</td></tr>
+                    </tbody>
+                </table>
+
+                <p>Чтобы получить отдельный элемент массива, также используется индекс:</p>
+                <div class="code-block"><code>const tomInfo = people[0];</code></div>
+
+                <p>Только теперь переменная <code>tomInfo</code> будет представлять массив. Чтобы получить элемент внутри вложенного массива, нам надо использовать его вторую размерность:</p>
+                <div class="code-block"><code>console.log("Имя: ", people[0][0]);     <code class="comment">// Tom</code>
+ console.log("Возраст: ", people[0][1]); <code class="comment">// 25</code></code></div>
+
+                <p>
+                    То есть если визуально двумерный массив мы можем представить в виде таблицы, то элемент <code>people[0][1]</code> будет ссылаться на ячейку таблицы, 
+                    которая находится на пересечении первой строки и второго столбца (первая размерность - 0 - строка, вторая размерность - 1 - столбец).
+                </p>
+                <p>Также мы можем выполнить присвоение:</p>
+                <div class="code-block"><code>const people = [
+        ["Tom", 25, false],
+        ["Bill", 38, true],
+        ["Alice", 21, false]
+];
+people[0][1] = 56;              <code class="comment">// присваиваем отдельное значение</code>
+console.log(people[0][1]);      <code class="comment">// 56</code>
+     
+people[1] = ["Bob", 29, false]; <code class="comment">// присваиваем массив</code>
+console.log(people[1][0]);      <code class="comment">// Bob</code></code></div>
+
+                <p>При создании многомерных массивов мы не ограничены только двумерными, но также можем использовать массивы больших размерностей:</p>
+                <div class="code-block"><code>const numbers = [];
+numbers[0] = [];                <code class="comment">// теперь numbers - двумерный массив</code>
+numbers[0][0]=[];               <code class="comment">// теперь numbers - трехмерный массив</code>
+numbers[0][0][0] = 5;           <code class="comment">// первый элемент трехмерного массива равен 5</code>
+console.log(numbers[0][0][0]);</code></div>
 
                 <h3>if-else</h3>
                 <div class="code-block"><code>let age = 20;
