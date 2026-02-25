@@ -168,6 +168,7 @@
         .nav-list {
             list-style: none;
             margin-left: 0.5rem;
+            overflow-y: auto/scroll;
         }
         
         .nav-item {
@@ -547,7 +548,11 @@
                         <li class="nav-item has-subitems" data-target="ch3"><span class="ch-emoj"></span> Глава 3. Функции
                             <ul class="nav-sublist">
                                 <li class="nav-subitem" data-target="ch3-definition">📜 Определение функций</li>
-                                <li class="nav-subitem" data-target="ch2-debugger">📜 Отладка и отладчик</li>
+                                <li class="nav-subitem" data-target="ch3-params">📜 Параметры функций</li>
+                                <li class="nav-subitem" data-target="ch3-return">📜 Результат функции</li>
+                                <li class="nav-subitem" data-target="ch3-arrow">📜 Стрелочные функции</li>
+                                <li class="nav-subitem" data-target="ch3-scope">📜 Область видимости (Scope)</li>
+                                <li class="nav-subitem" data-target="ch3-closures">📜 Замыкания (Closures)</li>
                             </ul>
                         </li>
                         <li class="nav-item" data-target="ch4">Глава 4-5. ООП</li>
@@ -3643,9 +3648,134 @@ const double = x => x * 2;</code></div>
                     </ul>
                 </div>
 
-                <h2>Параметры функций</h2>
-                
-                <h3>Параметры по умолчанию</h3>
+                <h2 id="ch3-params">📜 Параметры функций</h2>
+
+                <p>Функция в JavaScript может принимать параметры. Параметры представляют способ передачи в функцию данных. Параметры указываются в скобках после названия функции.</p>
+                <p>Например, определим простейшую функцию, которая принимает один параметр:</p>
+                <div class="code-block"><code>function print(message){
+    console.log(message);
+}
+ 
+print("Hello JavaScript");
+print("Hello METANIT.COM");
+print("Function in JavaScript");</code></div>
+
+                <p>Функция <span class="b">print()</span> принимает один параметр - <code>message</code>. Поэтому при вызове функции мы можем передать для него значение, например, некоторую строку:</p>
+                <div class="code-block"><code>print("Hello JavaScript");</code></div>
+
+                <p>Передаваемые параметрам значения еще называют <code>аргументами</code>.</p>
+                <p>При этом в отличие от ряда других языков программирования мы в принципе можем не передавать значения параметрам. Например:</p>
+                <div class="code-block"><code>function print(message){
+    console.log(message);
+}
+print();</code></div>
+
+                <p>Если параметру не передается значение, тогда он будет иметь значение <code>undefined</code>.</p>
+                <p>Если функция принимает несколько параметров, то они перечисляются через запятую:</p>
+                <div class="code-block"><code>function sum(a, b){
+    const result = a + b;
+    console.log(result);
+}
+ 
+sum(2, 6);          <code class="comment">// 8</code>
+sum(4, 5);          <code class="comment">// 9</code>
+sum(109, 11);       <code class="comment">// 120</code></code></div>
+
+                <p>При вызове функции с несколькими параметрами значения передаются параметрам по позиции. То есть первое значение передается первому параметру, второе значение - второму и так далее. Например, в вызове:</p>
+                <div class="code-block"><code>sum(2, 6);</code></div>
+
+                <p>Число 2 передается параметру <code>a</code>, а число 6 - параметру <code>b</code>.</p>
+
+                <h3>Передача массива в качестве параметра и spread-оператор</h3>
+
+                <p>
+                    Какие-то связанные данные удобно держать в виде массива. И, возможно, у нас возникнет необходимость передать весь этот набор данных в функцию. В общем случае мы можем 
+                    передавать массив в качестве параметра и внутри функции обращаться к его отдельным элементам:
+                </p>
+
+                <div class="code-block"><code>function printPerson(person) {
+    console.log("Name:", person[0]);
+    console.log("Age:", person[1]);
+    console.log("Email:", person[2]);
+    console.log("=========================");
+}
+const tom = ["Tom", 39, "tom@example.com"]; 
+const bob = ["Bob", 43, "bob@example.com"]; 
+ 
+printPerson(tom);
+printPerson(bob);</code></div>
+
+                <p>В данном случае функция <span class="b">printPerson</span> принимает массив, который, как предполагается, имеет три элемента. И внутри функции происходит обращение к этим элементам.</p>
+                <p>Но рассмотрим другую ситуацию, когда <strong>функция принимает данные в виде отдельных параметров</strong>. И в этом случае удобнее использовать <span class="b">spread-оператор</span> <code>...</code>:</p>
+
+                <div class="code-block"><code>function printPerson(username, age, email) {
+    console.log("Name:", username);
+    console.log("Age:", age);
+    console.log("Email:", email);
+    console.log("=========================");
+}
+ 
+const tom = ["Tom", 39, "tom@example.com"]; 
+const bob = ["Bob", 43, "bob@example.com"]; 
+ 
+printPerson(...tom);
+printPerson(...bob);</code></div>
+
+                <p>Чтобы последовательно передать элементы массива параметрам функции перед именем массива указывается spread-оператор <code>...</code>:</p>
+                <div class="code-block"><code>printPerson(...tom);</code></div>
+
+                <p>Это все равно, что если бы мы написали</p>
+                <div class="code-block"><code>printPerson(tom[0], tom[1], tom[2]);</code></div>
+
+                <p>только spread-оператор позволяет сделать передачу значений лаконичней.</p>
+
+
+                <h3>Необязательные параметры и значения по умолчанию</h3>
+
+                <p>
+                    Функция может принимать множество параметров, но при этом часть или все параметры могут быть необязательными. Если для параметров не передается значение, то по умолчанию 
+                    они имеют значение <code>"undefined"</code>. Однако иногда бывает необходимо, чтобы параметры обязательно имели какие-то значения, например, значения по умолчанию. 
+                    До стандарта <code>ES6</code> необходимо было проверять значения параметров на <code>undefined</code>:
+                </p>
+                <div class="code-block"><code>function sum(x, y){
+    if(y === undefined) y = 5;
+    if(x === undefined) x = 8;
+    const z = x + y;
+    console.log(z);
+}
+
+sum();          <code class="comment">// 13</code>
+sum(6);         <code class="comment">// 11</code>
+sum(6, 4)       <code class="comment">// 10</code></code></div>
+
+                <p>
+                    Здесь функция <span class="b">sum()</span> принимает два параметра. При вызове функции мы можем проверить их значения. 
+                    При этом, вызывая функцию, необязательно передавать для этих параметров значения. Для проверки наличия значения параметров используется сравнение со значением <code>undefined</code>.
+                </p>
+
+                <p>Также мы можем напрямую определять для параметров значения по умолчанию:</p>
+                <div class="code-block"><code>function sum(x = 8, y = 5){
+    const z = x + y;
+    console.log(z);
+}
+
+sum();      <code class="comment">// 13</code>
+sum(6);     <code class="comment">// 11</code>
+sum(6, 4)   <code class="comment">// 10</code></code></div>
+
+                <p>Если параметрам <code>x</code> и <code>y</code> не передаются значения, то они получаются в качестве значений числа 5 и 10 соответствено. Такой способ более лаконичен и интуитивен, чем сравнение с <code>undefined</code>.</p>
+                <p>При этом значение параметра по умолчанию может быть производным, представлять выражение:</p>
+                <div class="code-block"><code>function sum(x = 8, y = 10 + x){
+    const z = x + y;
+    console.log(z);
+}
+
+sum();      <code class="comment">// 26</code>
+sum(6);     <code class="comment">// 22</code>
+sum(6, 4)   <code class="comment">// 10</code></code></div>
+
+                <p>В данном случае значение параметра <code>y</code> зависит от значения <code>x</code>.</p>
+
                 <div class="code-block"><code><code class="comment">// ES6: значения по умолчанию</code>
 function greet(name = 'Гость') {
     console.log('Привет, ' + name + '!');
@@ -3654,7 +3784,128 @@ function greet(name = 'Гость') {
 greet();        <code class="comment">// "Привет, Гость!"</code>
 greet('Alice'); <code class="comment">// "Привет, Alice!"</code></code></div>
 
-                <h3>Rest параметры (...)</h3>
+                <h3>Функции с произвольным количеством параметров</h3>
+
+                <p>JavaScript позволяет определять так называемые <span class="b">variadic function</span> или функции с произвольным количеством параметров. Для этого можно использовать ряд инструментов.</p>
+
+                <h4>Объект arguments</h4>
+
+                <p>При необходимости мы можем получить все переданные параметры через доступный внутри функции объект <span class="b">arguments</span>:</p>
+
+                <div class="code-block"><code>function sum(){
+    let result = 0;
+    for(const n of arguments)
+        result += n;
+    console.log(result);
+}
+
+sum(6);             <code class="comment">// 6</code>
+sum(6, 4)           <code class="comment">// 10</code>
+sum(6, 4, 5)        <code class="comment">// 15</code></code></div>
+
+                <p>При этом даже не важно, что при определении функции мы не указали никаких параметров, мы все равно можем их передать и получить их значения через <span class="b">arguments</span>.</p>
+
+                <div class="code-block"><code>function sum(a, b, c){
+    console.log("a =", a);
+    console.log("b =", b);
+    console.log("c =", c);
+ 
+    let result = 0;
+    for(const n of arguments)
+        result += n;
+    console.log("result =", result);
+}
+
+sum(6, 4, 5, 8)     <code class="comment">// 23</code></code></div>
+
+                <p>Несмотря на то, что функция формально принимает 3 параметра, мы можем передать ей большее количество аргументов и получить их через массив <code>arguments</code>. Консольный вывод программы:</p>
+                <pre class="browser">a = 6
+b = 4
+c = 5
+result = 23</pre>
+
+                <p>
+                    Хотя мы можем перебрать объект <span class="b">arguments</span> как массив, тем не менее это не массив. Но, мы можем получить его длину с помощью 
+                    свойства <code>length</code> и обращаться к переданным в функцию аргументам, используя индекс:
+                </p>
+                <div class="code-block"><code>function sum(nums){
+    let result = 0;                     <code class="comment">// результат функции</code>
+    if(arguments.length >=1)            <code class="comment">// если передан как минимум один параметр</code>
+    {    
+        result = result + arguments[0]; <code class="comment">// обращаемся к первому параметру</code>
+    }
+    if(arguments.length >=2)            <code class="comment">// если передано как минимум два параметра</code>
+    {    
+        result = result + arguments[1]; <code class="comment">// обращаемся ко второму параметру</code>
+    }
+    console.log("result =", result);
+}
+ 
+sum(6)          <code class="comment">// result = 6</code>
+sum(6, 5)       <code class="comment">// result = 11</code>
+sum(6, 5, 4)    <code class="comment">// result = 11 - третий параметр не учитывается</code></code></div>
+
+
+
+
+                <h3>Rest-оператор/параметры (...)</h3>
+
+                <p>С помощью оператора <span class="b">...</span> (rest-оператор) также можно передать переменное количество значений:</p>
+                <div class="code-block"><code>function sum(...numbers){
+    let result = 0;
+    for(const n of numbers)
+        result += n;
+    console.log(result);
+}
+
+sum(6, 4, 5)     <code class="comment">// 15</code></code></div>
+
+                <p>
+                    В данном случае параметр <code>...numbers</code> указывает, что вместо него можно передать разное количество значений. В самой функции <code>numbers</code> 
+                    фактически представляет массив переданных значений, которые мы можем получить. При этом несмотря на это, при вызове функции в нее передается не массив, а именно отдельные значения.
+                </p>
+
+                <p>Подобные <code>rest-параметры</code> можно комбинировать с обычными параметрами:</p>
+                <div class="code-block"><code>function display(season, ...temps){
+    console.log(season);
+    for(index in temps){
+        console.log(temps[index]);
+    }
+}
+
+display("Весна", -2, -3, 4, 2, 5);
+display("Лето", 20, 23, 31);</code></div>
+
+                <p>Здесь первое значение, передаваемое в функцию, будет интерпретироваться как значение для параметра season, все остальные значения перейдут параметру <code>temps</code>.</p>
+                <p>Консольный вывод:</p>
+                <pre class="browser">Весна
+-2
+-3
+4
+2
+5
+Лето
+20
+23
+31</pre>
+
+                <h3>Массив как параметр</h3>
+
+                <p>
+                    <strong>Третий способ</strong> передачи неопределенного количества данных представляет передача их через <code>параметр-массив</code>. Хотя формально параметр у нас один (количество параметров определено), 
+                    тем не менее количество конкретных данных в этом массиве неопределенно (как и в случае с массивом arguments):
+                </p>
+                <div class="code-block"><code>function sum(numbers){
+    let result = 0;
+    for(const n of numbers)
+        result += n;
+    console.log("result =", result);
+}
+const nums = [6, 4, 5, 8];
+sum(nums)     <code class="comment">// result = 23</code></code></div>
+
+                <h4>Другой пример:</h4>
+
                 <div class="code-block"><code><code class="comment">// Собираем все аргументы в массив</code>
 function sum(...numbers) {
     return numbers.reduce((total, num) => total + num, 0);
@@ -3663,58 +3914,642 @@ function sum(...numbers) {
 console.log(sum(1, 2, 3));       <code class="comment">// 6</code>
 console.log(sum(1, 2, 3, 4, 5)); <code class="comment">// 15</code></code></div>
 
+                <h3>Функции в качестве параметров</h3>
+
+                <p>Функции могут выступать в качестве параметров других функций:</p>
+                <div class="code-block"><code>function sum(x, y){
+    return x + y;
+}
+ 
+function subtract(x, y){
+    return x - y;
+}
+ 
+function operation(x, y, func){
+  
+    const result = func(x, y);
+    console.log(result);
+}
+ 
+console.log("Sum");
+operation(10, 6, sum);      <code class="comment">// 16</code>
+ 
+console.log("Subtract");
+operation(10, 6, subtract); <code class="comment">// 4</code></code></div>
+
+                <p>
+                    Функция <span class="b">operation</span> принимает три параметра: <code>x</code>, <code>y</code> и <code>func</code>. <code>func</code> - представляет функцию, причем на момент определения <code>operation</code> 
+                    не важно, что это будет за функция. Единственное, что известно, что функция <code>func</code> может принимать два параметра и возвращать значение, которое затем 
+                    отображается в консоли браузера. Поэтому мы можем определить различные функции (например, функции <span class="b">sum</span> и <span class="b">subtract</span> в данном случае) и передавать их 
+                    в вызов функции <code>operation</code>.
+                </p>
+
                 <h3>Деструктуризация параметров</h3>
-                <div class="code-block"><code>// Объект как параметр
+                <div class="code-block"><code><code class="comment">// Объект как параметр</code>
 function printUser({name, age}) {
     console.log(`${name}, ${age} лет`);
 }
 
-printUser({name: 'Alice', age: 25}); // "Alice, 25 лет"
+printUser({name: 'Alice', age: 25}); <code class="comment">// "Alice, 25 лет"</code>
 
-// Массив как параметр
+<code class="comment">// Массив как параметр</code>
 function printCoordinates([x, y]) {
     console.log(`X: ${x}, Y: ${y}`);
 }
 
-printCoordinates([10, 20]); // "X: 10, Y: 20"</code></div>
+printCoordinates([10, 20]); <code class="comment">         // "X: 10, Y: 20"</code></code></div>
 
-                <h2>Область видимости (Scope)</h2>
+                <h2 id="ch3-return">📜 Результат функции</h2>
+
+                <p>Функция может возвращать результат. Для этого используется оператор <span class="b">return</span>, после которого указывается возвращаемое значение:</p>
+                <div class="code-block"><code>function sum (a, b) {
+    const result = a + b;
+    return result;
+}</code></div>
+
+                <p>
+                    В данном случае функция <span class="b">sum()</span> принимает два параметра и возвращает их сумму. После оператора <span class="b">return</span> 
+                    идет возвращаемое значение. В данном случае это значение константы <code>result</code>, в реальности это может быть любое выражение, в том числе и результат другой функции.
+                </p>
+                <p>После получения результата функции мы можем присвоить его какой-либо другой переменной или константе:</p>
+                <div class="code-block"><code>function sum (a, b) {
+  return a + b;
+}
+let num1 = sum(2, 4);
+console.log(num1);  <code class="comment">//</code> 6
+ 
+const num2 = sum(6, 34);
+console.log(num2);  <code class="comment">// 40</code></code></div>
+
+                <p>Функция может возвратить только <code>одно</code> значение. Если же нам надо возвратить несколько значений, то мы можем возвратить их в виде <code>массива</code>:</p>
+                <div class="code-block"><code>function rectangle(width, height){
+ 
+    const perimeter = width *2 + height * 2;
+    const area = width * height;
+    return [perimeter, area];
+}
+ 
+const rectangleData = rectangle(20, 30);
+console.log(rectangleData[0]);  <code class="comment">// 100 - периметр прямоугольника</code>
+console.log(rectangleData[1]);  <code class="comment">// 600 - площадь прямоугольника</code></code></div>
+
+                <p>В данном случае в функцию <span class="b">rectangle</span> передаются ширина и высота прямоугольника, а внутри функции по этим данным вычисяем периметр и площадь прямоугольника и в виде массива возвращаем из функции.</p>
                 
+                <p>В качестве альтернативы можно поместить многочисленные возвращаемые данные в один объект:</p>
+                <div class="code-block"><code>function rectangle(width, height){
+ 
+    const rectPerimeter = width *2 + height * 2;
+    const rectArea = width * height;
+    return {perimeter: rectPerimeter, area: rectArea};
+}
+ 
+const rectangleData = rectangle(20, 30);
+console.log("Perimeter:", rectangleData.perimeter);  <code class="comment">// 100 - периметр прямоугольника</code>
+console.log("Area:", rectangleData.area);            <code class="comment">// 600 - площадь прямоугольника</code></code></div>
+
+                <h3>Возвращение функции из функции</h3>
+
+                <p>Одна функция может возвращать другую функцию:</p>
+                <div class="code-block"><code>function menu(n){
+  
+    if(n==1) return function(x, y){ return x + y;}
+    else if(n==2) return function(x, y){ return x - y;}
+    else if(n==3) return function(x, y){ return x * y;}
+    return function(){ return 0;}
+}
+ 
+const action = menu(1);         <code class="comment">// выбираем первый пункт - сложение</code>
+const result = action(2, 5);    <code class="comment">// выполняем функцию и получаем результат в константу result</code>
+console.log(result);            <code class="comment">// 7</code>
+</code></div>
+
+                <p>В данном случае функция <span class="b">menu()</span> в зависимости от переданного в нее значения возвращает одну из трех функций или пустую функцию, которая просто возвращает число <code>0</code>.</p>
+                <p>Далее мы вызываем функцию <span class="b">menu</span> и получаем результат этой функции - другую функцию в константу <code>action</code>.</p>
+                <div class="code-block"><code>const action = menu(1);</code></div>
+
+                <p>
+                    То есть здесь <span class="b">action</span> будет представлять функцию, которая принимает два параметра и возвращает число. Затем через имя константы мы 
+                    можем вызвать эту функцию и получить ее результат в константу <code>result</code>:
+                </p>
+                <div class="code-block"><code>const result = action(2, 5);</code></div>
+
+                <p>Подобным образом мы можем получить и другие возвращаемые функции:</p>
+                <div class="code-block"><code>function menu(n){
+  
+    if(n==1) return function(x, y){ return x + y;}
+    else if(n==2) return function(x, y){ return x - y;}
+    else if(n==3) return function(x, y){ return x * y;}
+    return function(){ return 0;};
+}
+ 
+let action = menu(1);
+console.log(action(2, 5));          <code class="comment">// 7</code>
+ 
+action = menu(2);
+console.log(action(2, 5));          <code class="comment">// -3</code>
+ 
+action = menu(3);
+console.log(action(2, 5));          <code class="comment">// 10</code>
+ 
+action = menu(190);
+console.log(action(2, 5));          <code class="comment">// 0</code></code></div>
+
+                <p>Аналогичным образом можно возвращать функции по имени:</p>
+                <div class="code-block"><code>function sum(x, y){ return x + y;}
+function subtract(x, y){ return x - y;}
+function multiply(x, y){ return x * y;}
+function zero(){ return 0;}
+ 
+function menu(n){
+   
+    switch(n){
+        case 1: return sum;
+        case 2: return subtract;
+        case 3: return multiply;
+        default: return zero;
+    }
+     
+}
+  
+let action = menu(1);
+console.log(action(5, 4));          <code class="comment">// 9</code>
+  
+action = menu(2);
+console.log(action(5, 4));          <code class="comment">// 1</code>
+  
+action = menu(3);
+console.log(action(5, 4));          <code class="comment">// 20</code>
+  
+action = menu(190);
+console.log(action(5, 4));          <code class="comment">// 0</code></code></div>
+
+                <h2 id="ch3-arrow">📜 Стрелочные функции</h2>
+
+                <p>
+                    Стрелочные функции <code>(arrow functions)</code> позоляют сократить определение обычных функций. Стрелочные функции определяются с помощью оператора =&gt;, перед которым в скобках идут 
+                    параметры функции, а после - собственно тело функции.
+                </p>
+                <div class="code-block"><code>(параметры) => действия_функции</code></div>
+
+                <p>Для примера возьмем сначала обычную примитивную функцию, которая выводит сообщение на консоль:</p>
+                <div class="code-block"><code>function hello(){
+    console.log("Hello");
+}
+hello();    <code class="comment">// вызываем функцию</code></code></div>
+
+                <p>Теперь переделаем ее в стрелочную функцию:</p>
+                <div class="code-block"><code>const hello = ()=> console.log("Hello");
+hello();</code></div>
+
+                <p>В данном случае стрелочная функция присваивается константе <code>hello</code>, через которую затем можно вызвать данную функцию.</p>
+                <p>Здесь мы не используем параметры, поэтому указываются пустые скобки <code><span class="b">()</span>=&gt; console.log("Hello");</code></p>
+                <p>Далее через имя переменной мы можем вызвать данную функцию.</p>
+
+                <h3>Передача параметров</h3>
+
+                <p>Теперь определим стрелочную функцию, которая принимает один параметр:</p>
+                <div class="code-block"><code>const print = (mes)=> console.log(mes);
+ 
+print("Hello Metanit.com");
+print("Welcome to JavaScript");</code></div>
+
+                <p>Здесь стрелочная функция принимает один параметр <code>mes</code>, значение которого выводится на консоль браузера.</p>
+
+                <p>Если стрелочная функция имеет только один параметр, то скобки вокруг списка параметров можно опустить:</p>
+                <div class="code-block"><code>const print = mes=> console.log(mes);
+ 
+print("Hello Metanit.com");
+print("Welcome to JavaScript");</code></div>
+
+                <p>Другой пример - <strong>передадим два параметра</strong>:</p>
+                <div class="code-block"><code>const sum = (x, y)=> console.log("Sum =", x + y);
+ 
+sum(1, 2);      <code class="comment">// Sum = 3</code>
+sum(4, 3);      <code class="comment">// Sum = 7</code>
+sum(103, 2);    <code class="comment">// Sum = 105</code></code></div>
+
+                <h3>Возвращение результата</h3>
+
+                <p>Чтобы возвратить значение из стрелочной функции, нам достаточно указать его после стрелки. Например, определим функцию, которая возвращает сумму двух чисел:</p>
+                <div class="code-block"><code>const sum = (x, y)=> x + y;
+ 
+console.log(sum(1, 2));     <code class="comment">// 3</code>
+console.log(sum(4, 3));     <code class="comment">// 7</code>
+console.log(sum(102, 5));   <code class="comment">// 107</code></code></div>
+
+                <h4>Другой пример - возвратим отфарматированную строку:</h4>
+                <div class="code-block"><code>const hello = name => `Hello, ${name}`;
+ 
+console.log(hello("Tom"));              <code class="comment">// Hello, Tom</code>
+console.log(hello("Bob"));              <code class="comment">// Hello, Bob</code>
+console.log(hello("Frodo Baggins"));    <code class="comment">// Hello, Frodo Baggins</code></code></div>
+
+                <p>В данном случае функция <span class="b">hello</span> принимает один параметр <code>name</code> - условное имя и создает на его основе сообщение с приветствием.</p>
+
+                <h3>Возвращение объекта</h3>
+
+                <p>Особо следует остановиться на случае, когда стрелочная функция возвращает объект:</p>
+                <div class="code-block"><code>const user = (userName, userAge) => ({name: userName, age: userAge});
+ 
+let tom = user("Tom", 34);
+let bob = user("Bob", 25);
+ 
+console.log(tom.name, tom.age);     <code class="comment">// "Tom", 34</code>
+console.log(bob.name, bob.age);     <code class="comment">// "Bob", 25</code></code></div>
+
+                <p>Объект также определяется с помощью фигурных скобок, но при этом он заключается в круглые скобки.</p>
+
+                <h3>Функция из нескольких инструкций</h3>
+
+                <p>Выше в примерах все стрелочные функции имели только одну инструкцию. Если же функция должна выполнять больше действий, то они, как и в обычной функции, заключаются в фигурные скобки:</p>
+                <div class="code-block"><code>const square = n => {
+    const result = n * n;
+    console.log(result);
+}
+  
+square(5);     <code class="comment">// 25</code>
+square(6);     <code class="comment">// 36</code></code></div>
+
+                <p>А если надо возвратить результат, применяется оператор <code>return</code>, как в обычной функции:</p>
+                <div class="code-block"><code>const square = n => {
+    const result = n * n;
+    return result;
+}
+  
+console.log(square(5));     <code class="comment">// 25</code></code></div>
+
+
+                <h2 id="ch3-scope">📜 Область видимости (Scope)</h2>
+
+                <p>Все переменные и константы в JavaScript имеют определенную область видимости, в пределах которой они могут действовать.</p>
+
+                <h3>Глобальные переменные</h3>
+
+                <p>Все переменные и константы, которые объявлены вне функций, являются глобальными:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+&lt;script>
+    var a = 5;
+    let b = 8;
+    const c = 9;
+    function displaySum(){
+        var d = a + b + c;
+        console.log(d);
+    }
+    displaySum(); <code class="comment">// 22</code>
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <p>Здесь переменные <code>a и b и константа c</code> являются глобальными. Они доступны из любого места программы.</p>
+                <p>А вот переменная <code>d</code> глобальной не является, так как она определена внутри функции и видна только в этой функции.</p>
+
+                <h3>Определение локальной области видимости</h3>
+
+                <p>
+                    Для определения локальной области видимости в JavaScript используются фигурные скобки <span class="b">{ }</span>, которые создают блок кода. 
+                    Этот блок кода может быть безымянным, может быть именнованным, например, функция, либо может представлять условную или циклическую конструкцию. 
+                    Например, определение переменных в безымянном блоке кода:
+                </p>
+                <div class="code-block"><code>{
+    var a = 5;
+    let b = 8;
+    const c = 9;
+}</code></div>
+
+                <p>
+                    Однако в этом случае поведение переменной зависит от способа ее определения (через <code>var</code> или через <code>let</code>) и от типа блока. 
+                    <span class="b">var</span> определяет локальные переменные <span class="b">уровня функции</span>, а <span class="b">let</span> определяет локальные переменные 
+                    <span class="b">уровня блока кода</span> (подобным образом <span class="b">const</span> определяет константы <span class="b">уровня блока кода</span>). Рассмотрим, в чем состоит отличие.
+                </p>
+
+                <h3>Переменные и константы функции</h3>
+
+                <p>Переменные и константы, определенные внутри функции, видны (то есть могут использоваться) только внутри этой функции:</p>
+                <div class="code-block"><code>function print(){
+    var a = 5;
+    let b = 8;
+    const c = 9;
+    console.log("Function print: a =", a);
+    console.log("Function print: b =", b);
+    console.log("Function print: c =", c);
+}
+
+print();
+console.log("Global: a =", a);  <code class="comment">// Uncaught ReferenceError: a is not defined</code></code></div>
+
+                <p>Переменные <code>a и b и константа c</code> являются локальными, они существуют только в пределах функции. Вне функции их нельзя использовать, поэтому мы получим следующий консольный вывод:</p>
+                <pre class="browser">Function print: a= 5
+Function print: b= 8
+Function print: c= 9
+<span style="color=red;">Uncaught ReferenceError: a is not defined</span></pre>
+
+                <p>
+                    Здесь мы видим, что при попытке обратиться к переменной <code>a</code> вне функции <code>print()</code>, браузер выводит ошибку. При этом подобное поведение 
+                    не зависит от того, что это за переменная - <code>var</code> или <code>let</code>, либо это константа. Подобное поведение для всех переменных и констант одинаково.
+                </p>
+
+                <h3>Локальные переменные в блоках кода, условиях и циклах</h3>
+
+                <p>С переменными, которые определяются в безымянных блоках кода, а также в циклах и условных конструкциях ситуация чуть сложнее.</p>
+                <div class="code-block"><code><code class="comment">// безымянный блок</code>
+{
+    var a = 5;
+}
+console.log("a =", a);  <code class="comment">// a = 5</code>
+ 
+<code class="comment">// условная конструкция</code>
+if(true){
+    var b = 6;
+}
+console.log("b =", b);  <code class="comment">// b = 6</code>
+ 
+<code class="comment">// цикл</code>
+for(let i = 0; i < 5; i++){
+    var c = 7;
+}
+console.log("c =", c);  <code class="comment">// c = 7</code></code></div>
+
+                <p>
+                    Единственное условие, что блок кода должен срабатывать, чтобы инициализировать переменную. Так, в примере выше условие в конструкции if и в цикле for установлено так, что блок 
+                    этих конструкций будет выполняться. Однако, что если условие будет иным, и блок не будет выполняться?
+                </p>
+                <div class="code-block"><code>if(false){
+    var b = 6;
+}
+console.log("b =", b);  <code class="comment">// b = undefined</code>
+ 
+<code class="comment">// цикл</code>
+for(let i = 1; i < 0; i++){
+    var c = 7;
+}
+console.log("c =", c);  <code class="comment">// c = undefined</code></code></div>
+
+                <p>В таком случае мы опять же сможем обращаться к переменным, только они будут иметь значение <span class="b">undefined</span>.</p>
+
+                <h4>Переменная let и константы</h4>
+
+                <p>Теперь посмотрим, как будут вести себя в подобной ситуации переменные, определенные с помощью <span class="b">let</span>:</p>
+                <div class="code-block"><code>{
+    let a = 5;
+}
+console.log("a =", a);  <code class="comment">// Uncaught ReferenceError: a is not defined</code></code></div>
+
+                <p>В данном случае мы получим ошибку. Мы можем использовать переменные <span class="b">let</span>, определенные внутри блока кода, только <span class="b">внутри этого блока кода</span>.</p>
+
+                <p>Тоже самое относится и к константам:</p>
+                <div class="code-block"><code>{
+    const b = 5;
+}
+console.log("b =", b);  <code class="comment">// Uncaught ReferenceError: b is not defined</code></code></div>
+
+                <h3>Скрытие переменных</h3>
+
+                <p>Что если у нас есть две переменных - одна глобальная, а другая локальная, которые имеют одинаковое имя:</p>
+                <div class="code-block"><code>var z = 89;
+function print(){
+    var z = 10;
+    console.log(z); <code class="comment">// 10</code>
+}
+
+print(); <code class="comment">           // 10</code></code></div>
+
+                <p>
+                    В этом случае в функции будет использоваться та переменная z, которая определена непосредственно в функции. То есть локальная переменная скроет глобальную. 
+                    Однако конкретное поведение при скрытии зависит от того, как определяется переменная.
+                </p>
+
+                <h4>Скрытие переменной var</h4>
+
+                <p>
+                    Выше было указано, что <span class="b">var</span> определяет переменную <span class="b">уровня функции</span>. 
+                    Поэтому с помощью оператора <span class="b">var</span> мы <code>НЕ можем</code> определить одновременно две переменных с одним и тем же именем и в функции, и в 
+                    блоке кода в этой функции. Если мы это сделаем, то при объявлении переменной на уровне блока мы меняем значение переменной уровня функции:
+                </p>
+                <div class="code-block"><code>function displayZ(){
+    var z = 20;
+    {
+        <code class="comment">// Не определяет новую переменную, а изменяет значение переменной z уровня функции</code>
+        var z = 30;
+        console.log("Block:", z);
+    }
+    console.log("Function:", z);
+}
+
+displayZ();</code></div>
+
+                <p>Здесь определение переменной z внутри блока фактически будет равноценно изменению значения переменной уровня функции и фактически это будет одна и та же переменная. Консольный вывод:</p>
+                <pre class="browser">Block: 30
+Function: 30</pre>
+
+                <h4>Скрытие переменной let</h4>
+
+                <p>
+                    Как писалось выше, оператор <span class="b">let</span> определяет переменную <span class="b">уровня блока кода</span>. 
+                    То есть каждый блок кода определяет новую область видимости, в которой существует переменная. Вне блока кода, где определена переменная, она не существует. 
+                    Соответственно мы можем одновременно определить переменную на уровне блока и на уровне функции (в отличие от <code>var</code>):
+                </p>
+
+                <div class="code-block"><code>let z = 10;
+function displayZ(){
+    let z = 20;
+     
+    {
+        let z = 30;
+        console.log("Block:", z);
+    }
+     
+    console.log("Function:", z);
+}
+ 
+displayZ();
+console.log("Global:", z);</code></div>
+
+                <p>
+                    Здесь внутри функции <span class="b">displayZ</span> определен блок кода, в котором определена переменная <code>z</code> (вместо безымянного блока это мог быть и блок условной конструкции или цикла). 
+                    Она скрывает глобальную переменную и переменную <code>z</code>, определенную на уровне функции.
+                </p>
+                <p>И в данном случае мы получим следующий консольный вывод:</p>
+                <pre class="browser">Block: 30
+Function: 20
+Global: 10</pre>
+
+                <h4>Константы</h4>
+
+                <p>
+                    Все, что относится к оператору <code>let</code>, относится и к оператору <span class="b">const</span>, который определяет константы <span class="b">уровня блока кода</span>. 
+                    Блоки кода задают область видимости констант, а константы, определенные на вложенных блоках кода, скрывают внешние константы с тем же именем:
+                </p>
+                <div class="code-block"><code>const z = 10;
+function displayZ(){
+    const z = 20;
+     
+    {
+        const z = 30;
+        console.log("Block:", z);   <code class="comment">// 30</code>
+    }
+    console.log("Function:", z);    <code class="comment">// 20</code>
+}
+ 
+displayZ();
+console.log("Global:", z);          <code class="comment">// 10</code></code></div>
+
+                <h3>Scope chain / Цепочка областей видимости</h3>
+
+                <p>При выполнении кода, когда интерпретатор сталкивается с каким-то идентификатором (название переменной, константы, функции), то вначале он ищет опеределение этого идентификатора в текущей области видимости, благодаря чему собственно и работает скрытие переменных и констант. Например, </p>
+                <div class="code-block"><code>const z = 10;
+function displayZ(){
+    const z = 20;
+    console.log(z); <code class="comment">// 20</code>
+}
+ 
+displayZ();         <code class="comment">// 20</code></code></div>
+
+                <p>
+                    Здесь интепретатор увидит, что в функции <span class="b">displayZ</span> идет обращение к идентификатору <code>z</code>, и будет искать определение этого идентификатора внутри функции <code>displayZ</code>. 
+                    И поскольку в этой функции есть определение константы <code>const z = 20</code>, то именно эта константа и будет использоваться. 
+                </p>
+
+                <h4>Другой пример:</h4>
+
+                <div class="code-block"><code>const z = 10;
+function displayZ(){
+    console.log(z); <code class="comment">// 10</code>
+}
+ 
+displayZ();         <code class="comment">// 10</code></code></div>
+
+                <p>
+                    Теперь внутри функции <code>displayZ</code> нет определения идентификатора <code>z</code>, поэтому для его поиска применяется <code>scope chain</code> - интерпретатор обращается к окружающей 
+                    области видимости и выполняет поиск там. То есть смотри области видимости по цепочке от текущей - к внешним вплоть до глобальной области видимости.
+                </p>
+
+                <h3>Необъявленные переменные</h3>
+
+                <p>При определении переменных в JavaScript мы можем не использовать ключевое слово <span class="b">let</span> или <span class="b">var</span>. Например:</p>
+                <div class="code-block"><code>&lt;script>
+    {
+        username = "Tom"; 
+    }
+    console.log(username);      <code class="comment">// ошибки нет</code>
+    {
+        console.log(username);  <code class="comment">// ошибки нет, доступна внутри других блоков кода</code>
+    }
+&lt;/script></code></div>
+
+                <p>Если мы не используем это ключевое слово <span class="b">let</span>/<span class="b">var</span> при определении переменной в функции, то такая переменная будет глобальной. Например::</p>
+                <div class="code-block"><code>function setAge(){
+    userage = 39;
+}
+setAge();
+console.log(userage);   <code class="comment">// 39</code></code></div>
+
+                <p>Несмотря на то, что вне функции <span class="b">setAge</span> переменная <code>userage</code> нигде не определяется, тем не менее она доступна вне функции во внешнем контексте. Единственное условие - мы вызываем функцию, где определена такая переменная..</p>
+
+                <p>Однако если мы не вызовем функцию, переменная будет не определена:</p>
+                <div class="code-block"><code>function setAge(){
+    userage = 39;
+}
+ 
+<code class="comment">// setAge();    Функция НЕ вызывается</code>
+console.log(userage);   <code class="comment">// ошибка - Uncaught ReferenceError: userage is not defined</code></code></div>
+
+                <p>Ту же ошибку мы получили бы, если бы мы не только присваивали значение переменной, но и определяли бы ее как локальную по отношению к функции:</p>
+                <div class="code-block"><code>function setAge(){
+    var userage = 39;
+}
+ 
+setAge();
+console.log(userage);   <code class="comment">// ошибка - Uncaught ReferenceError: userage is not defined</code>
+</code></div>
+
+                <h3>strict mode</h3>
+
+                <p>
+                    Определение глобальных переменных в функциях может вести к потенциальным ошибкам. Чтобы их избежать используется строгий режим или <code>strict mode</code>. 
+                    Установить режим <code>strict mode</code> можно двумя способами:
+                </p>
+                <ul>
+                    <li>добавить выражение "use strict" в начало кода JavaScript, тогда <code>strict mode</code> будет применяться для всего кода</li>
+                    <li>добавить выражение "use strict" в начало тела функции, тогда <code>strict mode</code> будет применяться только для этой функции.</li>
+                </ul>
+
+                <p>Глобальное применение <code>strict mode</code>:</p>
+
+                <div class="code-block"><code>&lt;script>
+    "use strict";       <code class="comment">// используем строгий режим</code>
+
+    username = "Tom";   <code class="comment">// Uncaught ReferenceError: username is not defined</code>
+    console.log(username);
+&lt;/script></code></div>
+
+                <p>В этом случае мы получим ошибку <code>SyntaxError: Unexpected identifier</code>, которая говорит о том, что переменная username не определена.</p>
+                <p>Аналогичную ошибку мы получим при определении глобальной переменной в функции:</p>
+                <div class="code-block"><code>&lt;script>
+    "use strict";           <code class="comment">// используем строгий режим</code>
+    function setAge(){
+        userage = 39;       <code class="comment">// Uncaught ReferenceError: userage is not defined</code>
+    }
+    setAge();
+    console.log(userage);
+&lt;/script></code></div>
+
+                <h4>Пример использования строгого режима на уровне функции:</h4>
+
+                <div class="code-block"><code>&lt;script>
+    username = "Tom";       <code class="comment">// норм</code>
+    console.log(username);  <code class="comment">// Tom</code>
+
+    function setAge(){
+        "use strict";       <code class="comment">// используем строгий режим на уровне функции</code>
+        userage = 39;       <code class="comment">// Uncaught ReferenceError: userage is not defined</code>
+    }
+    setAge();
+    console.log(userage);
+&lt;/script></code></div>
+
                 <h3>Глобальная и локальная область видимости</h3>
-                <div class="code-block"><code>// Глобальная переменная
+                <div class="code-block"><code><code class="comment">// Глобальная переменная</code>
 let globalVar = 'Я глобальная';
 
 function test() {
-    // Локальная переменная
+    <code class="comment">//</code> Локальная переменная
     let localVar = 'Я локальная';
-    console.log(globalVar); // OK - доступна
-    console.log(localVar);  // OK - доступна
+    console.log(globalVar); <code class="comment">// OK - доступна</code>
+    console.log(localVar);  <code class="comment">// OK - доступна</code>
 }
 
 test();
-console.log(globalVar); // OK
-// console.log(localVar); // Ошибка! localVar не определена</code></div>
+console.log(globalVar);   <code class="comment">// OK</code>
+<code class="comment">// console.log(localVar); // Ошибка! localVar не определена</code></code></div>
 
                 <h3>Блочная область видимости (let, const)</h3>
                 <div class="code-block"><code>if (true) {
     let blockVar = 'Я в блоке';
     const PI = 3.14;
-    console.log(blockVar); // OK
+    console.log(blockVar); <code class="comment">// OK</code>
 }
 
-// console.log(blockVar); // Ошибка!
-// console.log(PI);       // Ошибка!
+<code class="comment">// console.log(blockVar); // Ошибка!</code>
+<code class="comment">// console.log(PI);       // Ошибка!</code>
 
-// var не имеет блочной области видимости
+<code class="comment">// var не имеет блочной области видимости</code>
 if (true) {
     var oldVar = 'Я доступна снаружи';
 }
-console.log(oldVar); // OK (но это плохо!)</code></div>
+console.log(oldVar); <code class="comment">// OK (но это плохо!)</code></code></div>
 
-                <h2>Замыкания (Closures)</h2>
+                <h2 id="ch3-closures">📜 Замыкания (Closures)</h2>
+                
                 <div class="code-block"><code>// Функция возвращает функцию
 function makeCounter() {
-    let count = 0; // Приватная переменная
+    let count = 0;      // Приватная переменная
     
     return function() {
         count++;
@@ -38496,15 +39331,31 @@ setInterval(() =&gt; showSlide(currentSlide + 1), 3000);</code></div>
                 scrollToSection(targetId);
             });
         });
-        
+
+        // Если высота header может меняться (например, на мобилке), лучше брать её динамически:
+        const headerOffset = document.querySelector('header').offsetHeight;
         // Функция плавного скролла к секции
         function scrollToSection(targetId) {
             const targetElement = document.getElementById(targetId);
             if (targetElement) {
+                /* Вместо scrollIntoView используем window.scrollTo с ручным вычислением позиции:
+                 берём координату элемента относительно viewport (getBoundingClientRect().top), 
+                 добавляем текущий скролл страницы (window.scrollY), и вычитаем высоту header.*/
+                //const headerOffset = 80; // высота вашего header
+                const elementPosition = targetElement.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.scrollY - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+
+                /* При данном переходе заголовок главы прячется под header
                 targetElement.scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
                 });
+                */
             }
         }
         
@@ -38532,11 +39383,12 @@ setInterval(() =&gt; showSlide(currentSlide + 1), 3000);</code></div>
             sections.forEach(section => {
                 // console.log("section: ", section);
                 const rect = section.getBoundingClientRect();
-                const distance = Math.abs(rect.top - 100);
-
+                // Секция "активна" если её верх прошёл header (ушёл выше или на уровне)
+                // const distance = Math.abs(rect.top - 100);
                 // Если секция в верхней части экрана (с учетом header)
                 // Ищем ближайшую к верху экрана секцию
-                if (rect.top <= 150 && rect.bottom >= 100) {
+                if (rect.top <= headerOffset + 10) {
+                    const distance = headerOffset - rect.top;
                     if (distance < bestDistance) {
                         bestDistance = distance;
                         bestMatch = section;
@@ -38544,59 +39396,97 @@ setInterval(() =&gt; showSlide(currentSlide + 1), 3000);</code></div>
                 }
             });
             
+            // выносим логику подсветки из updateActiveSection в отдельную функцию:
             // Если нашли секцию
             if (bestMatch) {
-                currentSection = bestMatch.id;
-                // Убираем активность со всех
-                removeActive();
+                highlightNavItem(bestMatch.id);
+            }
+        }
 
-                // Сначала проверяем, есть ли подраздел с таким ID
-                const activeSubitem = document.querySelector(
-                    `.nav-subitem[data-target="${currentSection}"]`
-                );
+        /**
+         *  Авто-скролл меню к активному пункту (по центру)
+         * Добавляем функцию scrollNavToActive и вызываем её внутри highlightNavItem:
+        */
+       function scrollNavToActive(activeElement) {
+            const nav = document.querySelector('.nav-list'); // ваш контейнер меню (уточните селектор)
+            if (!nav || !activeElement) return;
 
-                // Добавляем активность нужному подразделу
-                if (activeSubitem) {
-                    // Это подраздел - подсвечиваем его
-                    activeSubitem.classList.add('active');
-                    
-                    // Автоматически раскрываем родительскую главу
-                    const parentList = activeSubitem.closest('.nav-sublist');
-                    const parentItem = parentList ? parentList.previousElementSibling : null;
-                    
-                    if (parentItem && parentItem.classList.contains('has-subitems')) {
-                        if (!parentList.classList.contains('expanded')) {
-                            parentItem.classList.add('expanded');
-                            parentList.classList.add('expanded');
+            const navRect = nav.getBoundingClientRect();
+            const itemRect = activeElement.getBoundingClientRect();
+
+            // Позиция элемента относительно nav
+            const itemOffsetTop = itemRect.top - navRect.top + nav.scrollTop;
+            // Скроллим так, чтобы элемент был по центру nav
+            const targetScrollTop = itemOffsetTop - (nav.clientHeight / 2) + (itemRect.height / 2);
+
+            nav.scrollTo({
+                top: targetScrollTop,
+                behavior: 'smooth'
+            });
+        }
+
+        /**
+         * Фикс раскрытия промежуточных глав
+         * Проблема: при скролле через несколько глав updateActiveSection срабатывает на каждой и раскрывает все.
+         * Решение — закрывать все остальные при раскрытии новой:
+         */ 
+        function collapseAllExcept(activeItem) {
+            document.querySelectorAll('.nav-item.has-subitems').forEach(item => {
+                if (item !== activeItem) {
+                    item.classList.remove('expanded');
+                    const sublist = item.querySelector('.nav-sublist');
+                    if (sublist) sublist.classList.remove('expanded');
+                }
+            });
+        }
+
+        /**
+         * Итоговая функция highlightNavItem
+         * Собираем всё вместе — выносим логику подсветки
+         * из updateActiveSection в отдельную функцию:
+         */ 
+        function highlightNavItem(currentSection) {
+            removeActive();
+
+            const activeSubitem = document.querySelector(`.nav-subitem[data-target="${currentSection}"]`);
+
+            if (activeSubitem) {
+                activeSubitem.classList.add('active');
+
+                const parentList = activeSubitem.closest('.nav-sublist');
+                const parentItem = parentList?.previousElementSibling;
+
+                if (parentItem?.classList.contains('has-subitems')) {
+                    // Закрываем все остальные, раскрываем только нужную
+                    collapseAllExcept(parentItem);
+                    parentItem.classList.add('expanded');
+                    parentList.classList.add('expanded');
+                }
+
+                scrollNavToActive(activeSubitem); // скроллим меню к активному
+
+            } else {
+                const activeItem = document.querySelector(`.nav-item[data-target="${currentSection}"]`);
+                if (!activeItem) return;
+
+                if (activeItem.classList.contains('has-subitems')) {
+                    collapseAllExcept(activeItem);
+                    const sublist = activeItem.querySelector('.nav-sublist');
+                    activeItem.classList.add('expanded');
+                    sublist?.classList.add('expanded');
+
+                    const firstVisibleSubitem = findFirstVisibleSubitem(currentSection);
+                    if (firstVisibleSubitem) {
+                        const firstSubitemNav = document.querySelector(`.nav-subitem[data-target="${firstVisibleSubitem}"]`);
+                        if (firstSubitemNav) {
+                            firstSubitemNav.classList.add('active');
+                            scrollNavToActive(firstSubitemNav);
                         }
                     }
                 } else {
-                    // Это глава - проверяем, есть ли у неё подразделы
-                    const activeItem = document.querySelector(`.nav-item[data-target="${currentSection}"]`);
-
-                    if (activeItem && activeItem.classList.contains('has-subitems')) {
-                        // У главы есть подразделы - раскрываем меню, но НЕ подсвечиваем саму главу
-                        const sublist = activeItem.querySelector(".nav-sublist");
-                        if (sublist && !sublist.classList.contains("expanded")) {
-                            activeItem.classList.add("expanded");
-                            sublist.classList.add("expanded");
-                        }
-
-                        // Пытаемся найти первый видимый подраздел
-                        const firstVisibleSubitem =
-                            findFirstVisibleSubitem(currentSection);
-                        if (firstVisibleSubitem) {
-                            const firstSubitemNav = document.querySelector(
-                                `.nav-subitem[data-target="${firstVisibleSubitem}"]`
-                            );
-                            if (firstSubitemNav) {
-                                firstSubitemNav.classList.add("active");
-                            }
-                        }
-                    } else {
-                        // Обычная глава без подразделов
-                        activeItem.classList.add("active");
-                    }
+                    collapseAllExcept(null); // закрываем все
+                    activeItem.classList.add('active');
+                    scrollNavToActive(activeItem);
                 }
             }
         }
