@@ -553,6 +553,14 @@
                                 <li class="nav-subitem" data-target="ch3-arrow">📜 Стрелочные функции</li>
                                 <li class="nav-subitem" data-target="ch3-scope">📜 Область видимости (Scope)</li>
                                 <li class="nav-subitem" data-target="ch3-closures">📜 Замыкания (Closures)</li>
+                                <li class="nav-subitem" data-target="ch3-iife">📜 Функции IIFE</li>
+                                <li class="nav-subitem" data-target="ch3-recursion">📜 Рекурсия</li>
+                                <li class="nav-subitem" data-target="ch3-override">📜 Переопределение функций</li>
+                                <li class="nav-subitem" data-target="ch3-callback">📜 Callback функции</li>
+                                <li class="nav-subitem" data-target="ch3-obj-methods">📜 Методы объектов</li>
+                                <li class="nav-subitem" data-target="ch3-pure-func">📜 Чистые функции (Pure Functions)</li>
+                                <li class="nav-subitem" data-target="ch3-hoisting">📜 Hoisting</li>
+                                <li class="nav-subitem" data-target="ch3-params-passing">📜 Передача параметров по значению и по ссылке</li>
                             </ul>
                         </li>
                         <li class="nav-item" data-target="ch4">Глава 4-5. ООП</li>
@@ -4546,10 +4554,136 @@ if (true) {
 console.log(oldVar); <code class="comment">// OK (но это плохо!)</code></code></div>
 
                 <h2 id="ch3-closures">📜 Замыкания (Closures)</h2>
-                
-                <div class="code-block"><code>// Функция возвращает функцию
+
+                <p>
+                    <span class="b">Замыкание</span> (<span class="b">closure</span>) представляют собой конструкцию, когда функция, 
+                    созданная в одной области видимости, запоминает свое лексическое окружение даже в том случае, когда она выполняет вне своей области видимости.
+                </p>
+
+                <p>Для организации замыкания необходимы три компонента:</p>
+                <ul>
+                    <li><span class="b">внешняя функция</span>, которая определяет некоторую область видимости и в которой определены некоторые переменные - лексическое окружение</li>
+                    <li><span class="b">переменные (лексическое окружение)</span>, которые определены во внешней функции</li>
+                    <li><span class="b">вложенная функция</span>, которая использует эти переменные</li>
+                </ul>
+
+                <div class="code-block"><code>function outer(){       <code class="comment">// внешняя функция</code>
+    let n;              <code class="comment">// некоторая переменная</code>
+    return inner(){     <code class="comment">// вложенная функция</code>
+        <code class="comment">// действия с переменной n</code>
+    }
+}</code></div>
+
+                <p>Грубо говоря, функция <code>inner</code> и представляет в данном случае замыкание, которое запонимание свое лексического окружение - переменную <code>х</code>.</p>
+
+                <p>Рассмотрим замыкания на простейшем примере:</p>
+                <div class="code-block"><code>function outer(){
+    let x = 5;
+    function inner(){
+        x++;
+        console.log(x);
+    };
+    return inner;
+}
+const fn = outer(); <code class="comment">// fn = inner, так как функция outer возвращает функцию inner</code>
+<code class="comment">//</code> вызываем внутреннюю функцию inner
+fn();   <code class="comment">// 6</code>
+fn();   <code class="comment">// 7</code>
+fn();   <code class="comment">// 8</code></code></div>
+
+                <p>
+                    Здесь функция <span class="b">outer</span> задает область видимости, в которой определены внутренняя функция <span class="b">inner</span> и переменная <code>x</code>. Переменная <code>x</code> представляет 
+                    лексическое окружение для функции <span class="b">inner</span>. В самой функции <code>inner</code> инкрементируем переменную x и выводим ее значение на консоль. 
+                    В конце функция <code>outer</code> возвращает функцию <code>inner</code>.
+                </p>
+                <p>Далее вызываем функцию <span class="b">outer</span>:</p>
+                <div class="code-block"><code>const fn = outer();</code></div>
+
+                <p>
+                    Поскольку функция <code>outer</code> возвращает функцию <code>inner</code>, то константа <code>fn</code> будет хранить ссылку на функцию <code>inner</code>. При этом эта функция 
+                    запомнила свое окружение - то есть внешнюю переменную <code>x</code>.
+                </p>
+                <p>Далее мы фактически три раза вызываем функцию <code>inner</code>, и мы видим, что переменная <code>x</code>, которая определена вне функции <code>inner</code>, инкрементируется:</p>
+                <div class="code-block"><code>fn();   <code class="comment">// 6</code>
+ fn();   <code class="comment">// 7</code>
+ fn();   <code class="comment">// 8</code></code></div>
+
+                <p>
+                    То есть несмотря на то, что переменная <code>x</code> определена вне функции <code>inner</code>, эта функция запомнила свое окружение и может его использовать, несомотря на то, что 
+                    она вызывается вне функции <code>outer</code>, в которой была определена. В этом и суть замыканий.
+                </p>
+
+                <p>Причем для каждой копии замыкания определяется своя копия лексического окружения:</p>
+                <div class="code-block"><code><code class="comment">// определяем объект-пространство имен</code>
+function outer(){
+    let x = 5;
+    function inner(){
+        x++;
+        console.log(x);
+    };
+    return inner;
+}
+const fn1 = outer();
+const fn2 = outer();
+fn1();  <code class="comment">// 6</code>
+fn1();  <code class="comment">// 7</code>
+fn2();  <code class="comment">// 6</code>
+fn2();  <code class="comment">// 7</code></code></div>
+
+                <p>Здесь видно, что для <code>fn1</code> и <code>fn2</code> есть своя копия переменной <code>х</code>, которой они манипулируют независимо друг от друга.</p>
+
+                <h4>Рассмотрим еще один пример:</h4>
+
+                <div class="code-block"><code>function multiply(n){
+    let x = n;
+    return function(m){ return x * m;};
+}
+const fn1 = multiply(5);
+const result1 = fn1(6);     <code class="comment">// 30</code>
+console.log(result1);       <code class="comment">// 30</code>
+ 
+const fn2= multiply(4);
+const result2 = fn2(6);     <code class="comment">// 24</code>
+console.log(result2);       <code class="comment">// 24</code></code></div>
+
+                <p>Итак, здесь вызов функции <code>multiply()</code> приводит к вызову другой внутренней функции. Внутренняя же функция:</p>
+                <div class="code-block"><code>function(m){ return x * m;};</code></div>
+                <p>запоминает окружение, в котором она была создана, в частности, значение переменной <code>x</code>.</p>
+
+                <p>
+                    В итоге при вызове функции <code>multiply</code> определяется константа <code>fn1</code>, которая и представляет собой замыкание, то есть 
+                    объединяет две вещи: функцию и окружение, в котором функция была создана. Окружение состоит из любой локальной переменной, которая была в области действия 
+                    функции <code>multiply</code> во время создания замыкания.
+                </p>
+                <p>
+                    То есть <code>fn1</code> — это замыкание, которое содержит и внутреннюю функцию 
+                    <code>function(m){ return x * m;}</code>, и переменную <code>x</code>, которая существовала во время создания замыкания.
+                </p>
+                <p>При создании двух замыканий: <code>fn1</code> и <code>fn2</code>, для каждого из этих замыканий создается свое окружение.</p>
+
+                <p>При этом важно не запутаться в параметрах. При определении замыкания:</p>
+                <div class="code-block"><code>const fn1 = multiply(5);</code></div>
+
+                <p>Число <code>5</code> передается для параметра <code>n</code> функции <span class="b">multiply</span>.</p>
+
+                <p>При вызове внутренней функции:</p>
+                <div class="code-block"><code>const result1 = fn1(6);</code></div>
+
+                <p>Число <code>6</code> передается для параметра <code>m</code> во внутреннюю функцию <code>function(m){ return x * m;};</code>.</p>
+
+                <p>Также мы можем использовать <strong>другой вариант для вызова замыкания:</strong></p>
+                <div class="code-block"><code>function multiply(n){
+    let x = n;
+    return function(m){ return x * m;};
+}
+const result = multiply(5)(6); <code class="comment">// 30</code>
+console.log(result);</code></div>
+
+                <h4>Еще пример:</h4>
+
+                <div class="code-block"><code><code class="comment">// Функция возвращает функцию</code>
 function makeCounter() {
-    let count = 0;      // Приватная переменная
+    let count = 0;      <code class="comment">// Приватная переменная</code>
     
     return function() {
         count++;
@@ -4558,109 +4692,320 @@ function makeCounter() {
 }
 
 const counter1 = makeCounter();
-console.log(counter1()); // 1
-console.log(counter1()); // 2
-console.log(counter1()); // 3
+console.log(counter1()); <code class="comment">// 1</code>
+console.log(counter1()); <code class="comment">// 2</code>
+console.log(counter1()); <code class="comment">// 3</code>
 
 const counter2 = makeCounter();
-console.log(counter2()); // 1 (новый счётчик)</code></div>
+console.log(counter2()); <code class="comment">// 1 (новый счётчик)</code></code></div>
 
                 <div class="info-box note">
                     <div class="info-box-title">💡 Замыкание</div>
                     <p>Замыкание — это функция, которая запоминает переменные из своей внешней области видимости, даже после того, как внешняя функция завершила выполнение.</p>
                 </div>
 
-                <h2>Рекурсия</h2>
-                <div class="code-block"><code>// Факториал
-function factorial(n) {
-    if (n === 0 || n === 1) {
-        return 1; // Базовый случай
+                <h3>Замыкания и объектно-ориентированное программирование</h3>
+
+                <p>
+                    Хотя объектно-ориентированное программирование будет рассматриваться далее, тем не менее нельзя не заметить, что замыкания по сути явились предтечей объектно-ориентированного программирования. И использование 
+                    замыканий в некоторой степени позволяет имитировать создание объектов и работу с ними. Например, рассмотрим следующий код:
+                </p>
+                <div class="code-block"><code>function person(name, age){
+    console.log("Person", name, "created");
+ 
+    function print(){
+         console.log("Person ", name, " (" +age +")");
     }
-    return n * factorial(n - 1); // Рекурсивный вызов
-}
-
-console.log(factorial(5)); // 120 (5 * 4 * 3 * 2 * 1)
-
-// Числа Фибоначчи
-function fibonacci(n) {
-    if (n <= 1) return n;
-    return fibonacci(n - 1) + fibonacci(n - 2);
-}
-
-console.log(fibonacci(7)); // 13</code></div>
-
-                <div class="info-box warning">
-                    <div class="info-box-title">⚠️ Осторожно с рекурсией!</div>
-                    <p>Рекурсия может привести к переполнению стека (stack overflow), если не задан правильный базовый случай или глубина рекурсии слишком велика.</p>
-                </div>
-
-                <h2>Callback функции</h2>
-                <div class="code-block"><code>// Функция принимает другую функцию как аргумент
-function processArray(arr, callback) {
-    for (let i = 0; i < arr.length; i++) {
-        callback(arr[i]);
+    function work(){
+         console.log("Person ", name, " works");
     }
+    function incrementAge(value){
+        age = age + value;
+    }
+    return [print, work, incrementAge];
 }
+ 
+const tom = person("Tom", 39);
 
-// Передаём callback
-processArray([1, 2, 3], function(item) {
-    console.log(item * 2);
-});
-// Вывод: 2, 4, 6
+tom[0]();       <code class="comment">// print</code>
+tom[1]();       <code class="comment">// work</code>
+tom[2](1);      <code class="comment">// incrementAge</code>
+tom[0]();       <code class="comment">// print</code></code></div>
 
-// С arrow function
-processArray([1, 2, 3], item => console.log(item * 2));</code></div>
+                <p>Функция <span class="b">person</span> принимает два параметра и определяет три вложенных функции. По сути эти вложенных функции и образуют замыкания, а в качестве лексического окружения используют параметры функции <span class="b">person</span>.</p>
+                <p>
+                    Здесь функция <span class="b">person</span> выступает своего рода конструктором объекта <span class="b">person</span> - условного человека, а ее параметры <code>name</code> и <code>age</code> принимают извне соответственно имя и возраст человека. Три вложенных функции - 
+                    <code>print, work, incrementAge</code> могут обращаться к своему лексическому окружению - параметрам функции <span class="b">person</span>.
+                </p>
+                <p>Чтобы к этим функциям можно было обратиться извне, функция person возвращает вложенные функции в виде массива:</p>
+                <div class="code-block"><code>return [print, work, incrementAge];</code></div>
 
-                <h2>IIFE (Immediately Invoked Function Expression)</h2>
-                <div class="code-block"><code>// Функция, которая вызывается сразу после создания
+                <p>Далее мы можем вызвать функцию <code>person</code>, передав в нее некоторые параметры, и получить ее результат - условного человека:</p>
+                <div class="code-block"><code>const tom = person("Tom", 39);</code></div>
+
+                <p>Что такое в данном случае константа <code>tom</code>? По сути это возвращенный массив из трех функций, котоорые позволяют манипулировать человеком <code>tom</code>. Соответственно, обратившись к определенному элементу в массиве, мы можем вызвать соответствующую функцию:</p>
+                <div class="code-block"><code>tom[0]();       <code class="comment">// print</code></code></div>
+
+                <p>То есть выражение <code>tom[0]</code> возвращает функцию <span class="b">print</span>, а выражение <code>tom[0]()</code> вызывает ее. В итоге в данном случае вывод консоли браузера будет следующим:</p>
+                <pre class="sh">Person Tom created
+Person  Tom  (39)
+Person  Tom  works
+Person  Tom  (40)</pre>
+
+                <h2 id="ch3-iife">IIFE (Immediately Invoked Function Expression)</h2>
+
+                <h3>Самовызывающиеся функции</h3>
+
+                <p>
+                    Обычно определение функции отделяется от ее вызова: сначала мы определяем функцию, а потом вызываем. Но это необязательно. Мы также можем 
+                    создать такие функции, которые будут вызываться сразу при определении. Такие функции еще называют <span class="b">Immediately Invoked Function Expression</span> или <span class="b">IIFE</span>. 
+                    Подобные функции заключаются в скобки, и после определения функции идет в скобках передача параметров:
+                </p>
+                <div class="code-block"><code><code class="comment">// самозывающаяся функция</code>
+(function(){
+    console.log("Привет мир");
+}());</code></div>
+
+                <p>Здесь всю это небольшую программу можно разбить на несколько частей. В скобках идет определение анонимной функции:</p>
+                <div class="code-block"><code>function(){
+    console.log("Привет мир");
+}</code></div>
+
+                <p>Это обычная функция, которая выводит некоторую строку. Но также в скобках после определения функции идут пустые скобки:</p>
+                <div class="code-block"><code>function(){
+    console.log("Привет мир");
+}()</code></div>
+
+                <p>
+                    Эти скобки представляют те же скобки, которые идут при вызове функции и в которые помещаются значения для параметров функции. Однако наша анонимная функция не имеет параметров, 
+                    поэтому и скобки пустые. То есть здесь фактически идет вызов функции сразу после ее определения. И вся эта конструкция обертывается в скобки.
+                </p>
+                <p>В итоге мы определяем анонимную функцию и сразу же ее вызываем.</p>
+
+                <p>Подобным образом можно создать и вызывать функцию, которые принимают параметры:</p>
+                <div class="code-block"><code>(function (a, b){
+    const result = a + b;
+    console.log(`${a} + ${b} = ${result}`);
+}(4, 5));</code></div>
+
+                <p>
+                    Здесь функция принимает два параметра, значения которых складываются, а результат выводится на консоль. И сразу после определения функции мы передаем ее параметрам два числа - <code>4 и 5</code>. 
+                    То есть, при выполнении программы будет определяться и сразу же выполняться функция, которая подсчитает сумму чисел <code>4 и 5</code>.
+                </p>
+
+                <div class="code-block"><code><code class="comment">// Функция, которая вызывается сразу после создания</code>
 (function() {
     console.log('Я выполнилась сразу!');
 })();
 
-// С параметрами
+<code class="comment">// С параметрами</code>
 (function(name) {
     console.log('Привет, ' + name + '!');
 })('Alice');
 
-// Arrow IIFE
+<code class="comment">// Arrow IIFE</code>
 (() => {
     console.log('Arrow IIFE!');
 })();</code></div>
+
+                <h3>Функциональный стиль</h3>
+
+                <p>Замыкания и IIFE-функции упрощают написание программ в функциональном стиле. Так, рассмотрим следующий пример:</p>
+                <div class="code-block"><code>console.log(
+    ((x,y) => (
+        ((proc2) =>(
+            ((proc1)=>proc1(5,30))((x,y) => [x, proc2(), y])
+        ))(()=>x + y)
+    ))(10, 15)
+);      <code class="comment">// [5, 25, 30]</code></code></div>
+
+                <p>Рассмотрим, что здесь делается. Прежде всего в функции <code>console.log()</code> выводится результат самовызывающейся функции:</p>
+                <div class="code-block"><code>((x,y) => (
+    ((proc2) =>(
+            ((proc1)=>proc1(5,30))((x,y) => [x, proc2(), y])
+    ))(()=>x + y)
+))(10, 15)</code></div>
+
+                <p>Эта первая IIFE-функция принимает параметры <code>x и y</code>, которым передаются числа <code>10 и 15</code>.</p>
+                
+                <p>Эта функция, в свою очередь использует вложенную функцию и возвращает ее результат:</p>
+                <div class="code-block"><code>((proc2) =>(
+    ((proc1) => proc1(5,30))((x,y) => [x, proc2(), y])
+))(()=>x + y)</code></div>
+
+                <p>
+                    Эта вторая IIFE-функция. Она в качестве параметра <code>proc2</code> принимет другую функцию. В данном случае это функция <code>()=&gt;x + y</code>, которая возвращает сумму значений. Поскольку для вложенной функции лексическое окружение 
+                    представлено параметрами <code>x и y</code> внешней функции, то функция-параметр <code>proc2</code> получает эти значения и возвращает их сумму - <code>10 + 15=25</code>.
+                </p>
+                <p>Однако вложенная функция возвращает результат своей вложенной функции:</p>
+                <div class="code-block"><code>((proc1) => proc1(5,30))((x,y) => [x, proc2(), y])</code></div>
+
+                <p>Эта третья функция также является IIFE-функцией. В качестве параметр <code>proc1</code> она принимает также некоторую функцию-коллбек. И в эту функцию <code>proc1</code> передаются числа <code>5, 30</code>. И тут идет наиболее сложный момент - далее в скобках передается сама функция <code>proc1</code>:</p>
+                <div class="code-block"><code>(x,y) => [x, proc2(), y]</code></div>
+
+                <p>
+                    Она определяет параметры <code>x и y</code> и возвращает в качестве результата массив из трех чисел. Прежде всего первое и третье числа - <code>х и y</code>. Эти параметры не стоит путать с параметрами <code>х и y</code> 
+                    первой IIFE-функции самого верхнего уровня:
+                </p>
+                <div class="code-block"><code>((x,y) => (.....))(10, 15)</code></div>
+
+                <p>
+                    Итак, самая третья функция возвращает массив <code>[x, proc2(), y]</code>. <code>x и y</code> представляют параметры этой функции. Второе значение в массиве представляет результат вызова функции <code></code>proc2. Вспомним, что это за функция, 
+                    и для этого поднимемся на уровень выше ко второй функции:
+                </p>
+                <div class="code-block"><code>((proc2) =>(
+    .................
+))(()=>x + y)</code></div>
+
+                <p>
+                    <code>proc2</code> возвращает сумму значений <code>x и y</code>. Для этой второй функции лексическое окружение определяется первой IIFE-функцией, которая принимает параметры <code>x и y</code>, поэтому в <code>proc2</code> передаются числа <code>10 и 15</code>, 
+                    соответственно функция возвращает <code>25</code>. И, таким образом, результат будет представлять массив <code>[5, 25, 30]</code>.
+                </p>
 
                 <div class="info-box note">
                     <div class="info-box-title">💡 Зачем нужен IIFE?</div>
                     <p>IIFE используется для создания изолированной области видимости, чтобы не загрязнять глобальное пространство имён.</p>
                 </div>
 
-                <h2>Методы объектов</h2>
+                <h2 id="ch3-recursion">📜 Рекурсия</h2>
+
+                <p>Среди функций отдельно можно выделить рекурсивные функции. Их суть состоит в том, что функция вызывает саму себя.</p>
+                <p>Например, рассмотрим функцию, определяющую факториал числа:</p>
+
+                <div class="code-block"><code><code class="comment">// Факториал</code>
+function factorial(n) {
+    if (n === 0 || n === 1) {
+        return 1;                <code class="comment">// Базовый случай</code>
+    }
+    return n * factorial(n - 1); <code class="comment">// Рекурсивный вызов</code>
+}
+
+console.log(factorial(5));       <code class="comment">// 120 (5 * 4 * 3 * 2 * 1)</code>
+
+<code class="comment">// Числа Фибоначчи</code>
+function fibonacci(n) {
+    if (n &lt;= 1) return n;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+console.log(fibonacci(7));        <code class="comment">// 13</code></code></div>
+
+                <p>
+                    Функция <code>factorial()</code> возвращает значение <code>1</code>, если параметр <code>n равен 1</code>, либо возвращает результат опять же функции <span class="b">factorial</span>, то в 
+                    нее передается значение <code>n - 1</code>. Например, при передаче числа <code>4</code>, у нас образуется следующая цепочка вызовов:
+                </p>
+                <div class="code-block"><code>result = 4 * factorial(3);
+result = 4 * 3 * factorial(2);
+result = 4 * 3 * 2 * factorial(1);
+result = 4 * 3 * 2 * 1;            <code class="comment">// 24</code></code></div>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Осторожно с рекурсией!</div>
+                    <p>Рекурсия может привести к переполнению стека (stack overflow), если не задан правильный базовый случай или глубина рекурсии слишком велика.</p>
+                </div>
+
+                <h2 id="ch3-override">📜 Переопределение функций</h2>
+
+                <p>
+                    Функции обладают возможностью для переопределения поведения. Переопределение происходит с помощью присвоения анонимной функции переменной, 
+                    которая называется так же, как и переопределяемая функция:
+                </p>
+                <div class="code-block"><code>function print(){
+    console.log("Доброе утро");
+    print = function(){
+        console.log("Добрый день");
+    }
+}
+ 
+print();    <code class="comment">// Доброе утро</code>
+print();    <code class="comment">// Добрый день</code></code></div>
+
+                <p>
+                    При первом срабатывании функции действует основной блок операторов функции, в частности, в данном случае выводится сообщение <code>"Доброе утро"</code>. 
+                    И при первом срабатывании функции <span class="b">print</span> также происходит ее переопределение. Поэтому при всех последующих вызовах функции срабатывает ее 
+                    переопределенная версия, а на консоль будет выводиться сообщение <code>"Добрый день"</code>.
+                </p>
+
+                <p>Но при переопределении функции надо учитывать некоторые нюансы. В частности, попробуем присвоить ссылку на функцию переменной и через эту переменную вызвать функцию:</p>
+                <div class="code-block"><code>function print(){
+    console.log("Доброе утро");
+    print = function(){
+        console.log("Добрый день");
+    }
+}
+
+<code class="comment">// присвоение ссылки на функцию до переопределения</code>
+const printMessage = print;
+
+print(); <code class="comment">// Доброе утро</code>
+print(); <code class="comment">// Добрый день</code>
+
+printMessage();     <code class="comment">// Доброе утро</code>
+printMessage();     <code class="comment">// Доброе утро</code></code></div>
+
+                <p>Здесь переменная <code>printMessage</code> получает ссылку на функцию <span class="b">print</span> до ее переопределения. Поэтому при вызове <span class="b">printMessage()</span> будет вызываться непереопределенная версия функции <code>print</code>.</p>
+
+                <p>Но допустим, мы определили переменную printMessage уже после вызова функции print:</p>
+                <div class="code-block"><code>print();           <code class="comment">// Доброе утро</code>
+ print();           <code class="comment">// Добрый день</code>
+
+const printMessage = print;
+
+printMessage();     <code class="comment">// Добрый день</code>
+printMessage();     <code class="comment">// Добрый день</code></code></div>
+
+                <p>В этом случае переменная <code>printMessage</code> будет указывать на переопределенную версию функции <span class="b">print</span>.</p>
+
+                <h2 id="ch3-callback">📜 Callback функции</h2>
+
+                <div class="code-block"><code><code class="comment">// Функция принимает другую функцию как аргумент</code>
+function processArray(arr, callback) {
+    for (let i = 0; i < arr.length; i++) {
+        callback(arr[i]);
+    }
+}
+
+<code class="comment">// Передаём callback</code>
+processArray([1, 2, 3], function(item) {
+    console.log(item * 2);
+});
+<code class="comment">// Вывод: 2, 4, 6</code>
+
+<code class="comment">// С arrow function</code>
+processArray([1, 2, 3], item => console.log(item * 2));</code></div>
+
+
+                <h2 id="ch3-obj-methods">📜 Методы объектов</h2>
+
                 <div class="code-block"><code>const user = {
     name: 'Alice',
     age: 25,
     
-    // Метод объекта
+    <code class="comment">// Метод объекта</code>
     greet: function() {
         console.log('Привет, я ' + this.name);
     },
     
-    // Сокращённая запись (ES6)
+    <code class="comment">// Сокращённая запись (ES6)</code>
     sayAge() {
         console.log('Мне ' + this.age + ' лет');
     }
 };
 
-user.greet();   // "Привет, я Alice"
-user.sayAge();  // "Мне 25 лет"</code></div>
+user.greet();   <code class="comment">// "Привет, я Alice"</code>
+user.sayAge();  <code class="comment">// "Мне 25 лет"</code></code></div>
 
-                <h2>Чистые функции (Pure Functions)</h2>
-                <div class="code-block"><code>// Чистая функция - не изменяет внешнее состояние
+                <h2 id="ch3-pure-func">📜 Чистые функции (Pure Functions)</h2>
+
+                <div class="code-block"><code><code class="comment">// Чистая функция - не изменяет внешнее состояние</code>
 function pureAdd(a, b) {
-    return a + b; // Только вычисление
+    return a + b; <code class="comment">// Только вычисление</code>
 }
 
-// Нечистая функция - имеет побочные эффекты
+<code class="comment">// Нечистая функция - имеет побочные эффекты</code>
 let total = 0;
 function impureAdd(value) {
-    total += value; // Изменяет внешнюю переменную
+    total += value; <code class="comment">// Изменяет внешнюю переменную</code>
     return total;
 }</code></div>
 
@@ -4673,6 +5018,196 @@ function impureAdd(value) {
                         <li>Можно безопасно переиспользовать</li>
                     </ul>
                 </div>
+
+                <h2 id="ch3-hoisting">📜 Hoisting</h2>
+
+                <p>
+                    <code>Hoisting</code> представляет процесс доступа к переменным до их определения. Возможно, данная концепция выглядит немного странно, но она связана с работой компилятора 
+                    JavaScript. Компиляция кода происходит в два прохода. При первом проходе компилятор получает все объявления переменных, все идентификаторы. При этом никакой код 
+                    не выполняется, методы не вызываются. При втором проходе собственно происходит выполнение. И даже если переменная определена после непосредственного использования, 
+                    ошибки не возникнет, так как при первом проходе компилятору уже известны все переменные.
+                </p>
+                <p>
+                    То есть как будто происходит поднятие кода с определением переменных и функций вверх до их непосредственного использования. Поднятие на английский переводится 
+                    как <code>hoisting</code>, сообственно поэтому данный процесс так и называется.
+                </p>
+
+                <h3>Переменные var</h3>
+
+                <p><code>var-переменные</code>, которые попадают под <code>hoisting</code>, по умолчанию получают значение <code>undefined</code>. Например, возьмем следующий простейший код:</p>
+                <div class="code-block"><code>console.log(foo);</code></div>
+
+                <p>Его выполнение вызовет ошибку <code>ReferenceError: foo is not defined</code></p>
+                <p>Добавим определение переменной:</p>
+                <div class="code-block"><code>console.log(foo);   <code class="comment">// undefined</code>
+ var foo = "Tom";</code></div>
+
+                <p>
+                    В этом случае консоль выведет значение<code>"undefined"</code>. При первом проходе компилятор узнает про существование переменной <code>foo</code>. Она получает значение <code>undefined</code>. 
+                    При втором проходе вызывается метод <code>console.log(foo)</code>.
+                </p>
+
+                <p>Возьмем другой пример:</p>
+                <div class="code-block"><code>var c = a * b;
+var a = 7;
+var b = 3;
+console.log(c); <code class="comment">// NaN</code></code></div>
+
+                <p>Здесь та же ситуация. Переменные <code>a и b</code> используются до опеределения. По умолчанию им присваиваются значения <code>undefined</code>. А если умножить <code>undefined</code> на <code>undefined</code>, то получим <code>Not a Number (NaN)</code>.</p>
+
+                <p>Все то же самое относится и к использованию функций. Мы можем сначала вызвать функцию, а потом уже ее определить:</p>
+                <div class="code-block"><code>display();
+ 
+function display(){
+    console.log("Hello Hoisting");
+}</code></div>
+
+                <p>Здесь функция <span class="b">display</span> благополучно отработает, несмотря на то, что она определена после вызова.</p>
+
+                <p>Но от этой ситуации надо отличать тот случай, когда функция определяется в виде переменной:</p>
+                <div class="code-block"><code>display();
+ 
+var display = function (){
+    console.log("Hello Hoisting");
+}</code></div>
+
+                <p>
+                    В данном случае мы получим ошибку <code>TypeError: display is not a function</code>. При первом проходе компилятор также получит переменную <code>display</code> и присвоет ей значение <code>undefined</code>. 
+                    При втором проходе, когда надо будет вызывать функцию, на которую будет ссылаться эта переменная, компилятор увидит, что вызывать то нечего: переменная 
+                    <code>display</code> пока еще равна <code>undefined</code>. И будет выброшена ошибка.
+                </p>
+
+                <h3>let-переменные и константы</h3>
+
+                <p>
+                    Процесс <code>hoisting</code> для <span class="b">let-переменных и констант</span> будет отличаться: в отличие от <code>var-переменных</code> константам и let-переменным при хостинге <span class="b">не присваивается начальное значение</span>.
+                    Итак, выше мы видели, что если мы используем <code>var-переменные</code> до объявления, то они 
+                    получают по умолчанию значение <span class="b">undefined</span>. Теперь посмотрим, что будет с <code>let-переменной</code>:
+                </p>
+                <div class="code-block"><code>console.log(foo);   <code class="comment">// Uncaught ReferenceError: Cannot access 'foo' before initialization</code>
+let foo = "Tom";
+console.log(foo);   <code class="comment">// не будет выполняться</code></code></div>
+
+                <p>В данном случае в первой строке мы получим ошибку</p>
+                <pre class="browser"><span style="color:red;">Uncaught ReferenceError: Cannot access 'foo' before initialization</span></pre>
+
+                <p>От этой ситуации следует отличать момент, когда <span class="b">let</span>-переменная объявлена, но не инициализирована:</p>
+                <div class="code-block"><code>let foo;            <code class="comment">// по умолчанию foo = undefined</code>
+console.log(foo);   <code class="comment">// undefined</code>
+foo = "Tom";
+console.log(foo);   <code class="comment">// Tom</code></code></div>
+
+                <p>Неинициализированная <span class="b">let</span>-переменная по умолчанию будет иметь значение <span class="b">undefined</span>, и в данном случае ошибки не будет.</p>
+
+                <p>То же самое касается и констант:</p>
+                <div class="code-block"><code>console.log(foo);   <code class="comment">// Uncaught ReferenceError: Cannot access 'foo' before initialization</code>
+const foo = "Tom";
+console.log(foo);   <code class="comment">// не будет выполняться</code></code></div>
+
+                <h2 id="ch3-params-passing">📜 Передача параметров по значению и по ссылке</h2>
+
+                <h3>Передача параметров по значению</h3>
+
+                <p>
+                    Строки, числа, логические значения передаются в функцию <span class="b">по значению</span>. Иными словами при передаче значения в функцию, эта функция получает копию данного значения. 
+                    Рассмотрим, что это значит в практическом плане:
+                </p>
+                <div class="code-block"><code>function change(x){
+    x = 2 * x;
+    console.log("x in change:", x);
+}
+ 
+let n = 10;
+console.log("n before change:", n); <code class="comment">// n before change: 10</code>
+change(n);                          <code class="comment">// x in change: 20</code>
+console.log("n after change:", n);  <code class="comment">// n after change: 10</code></code></div>
+
+                <p>
+                    Функция <span class="b">change</span> получает некоторое число и увеличивает его в два раза. При вызове функции <span class="b">change</span> ей передается число <code>n</code>. Однако после вызова функции мы 
+                    видим, что число <code>n</code> не изменилось, хотя в самой функции произошло увеличение значения параметра. Потому что при вызове функция <span class="b">change</span> получает копию значения 
+                    переменной <code>n</code>. И любые изменения с этой копией никак не затрагивают саму переменную <code>n</code>. В итоге мы получим следующий вывод в консоли браузера
+                </p>
+                <pre class="browser">n before change: 10
+x in change: 20
+n after change: 10</pre>
+
+                <h3>Передача по ссылке</h3>
+
+                <p>
+                    <code>Объекты и массивы</code> представляют ссылочные типы. То есть переменная или константы, которая представляет объект или массив, по сути хранит ссылку или иными словами указатель, 
+                    которые указывают на адрес в памяти, где хранится объект. Например:
+                </p>
+                <div class="code-block"><code>let bob ={ 
+    name: "Bob"
+};</code></div>
+
+                <p>Переменная <span class="b">bob</span> формально хранит объект, в котором определено одно поле <code>name</code>. Фактически же переменная <code>bob</code> хранит ссылку на объект, который расположен где-то в памяти.</p>
+
+                <p>И ссылочные типы - <code>объекты и массивы</code> передаются в функцию <span class="b">по ссылке</span>. То есть функция получает копию ссылки на объект, а не копию самого объекта.</p>
+                <div class="code-block"><code>function change(user){
+    user.name = "Tom";
+}
+ 
+let bob ={ 
+    name: "Bob"
+};
+
+console.log("before change:", bob.name);    <code class="comment">// Bob</code>
+change(bob);
+console.log("after change:", bob.name);     <code class="comment">// Tom</code></code></div>
+
+                <p>В данном случае функция <span class="b">change</span> получает некоторый объект  и меняет его свойство <code>name</code>. При вызове этой функции в нее передается значение переменной <code>bob</code>:</p>
+                <div class="code-block"><code>change(bob);</code></div>
+
+                <p>
+                    Но, поскольку переменная <code>bob</code> представляет объект и хранит ссылку на некоторый объект в памяти, то функция <span class="b">change</span> получае копию этой ссылки, 
+                    которая указывает на тот же объект в памяти, что и переменная <code>bob</code>.
+                </p>
+                <p>В итоге мы увидим, что после вызова функции изменился оригинальный объект <code>bob</code>, который передавался в функцию.</p>
+                <pre class="browser">before change: Bob
+after change: Tom</pre>
+
+                <p>Однако если мы попробуем переустановить объект или массив полностью, оригинальное значение не изменится.</p>
+                <div class="code-block"><code>function change(user){
+    <code class="comment">// полная переустановка объекта</code>
+    user = { name: "Tom" };
+}
+ 
+let bob ={ 
+    name: "Bob"
+};
+console.log("before change:", bob.name);    <code class="comment">// Bob</code>
+change(bob);
+console.log("after change:", bob.name);     <code class="comment">// Bob</code></code></div>
+
+                <p>Почему здесь данные не изменяются? Потому что, как писалось выше, функция получает <span class="b">копию ссылки</span>. То есть при передачи в функцию параметру <code>user</code> значения переменной <code>bob</code>:</p>
+                <div class="code-block"><code>change(bob);</code></div>
+
+                <p>Переменная <code>bob</code> и параметр <code>user</code> представляют две разные ссылки, но которые указывают на один и тот же объект.</p>
+                <p>При присвоении параметру в функции другого объекта:</p>
+                <div class="code-block"><code>user = { name: "Tom" };</code></div>
+
+                <p>ссылка <code>user</code> начиначет указывать на другой объект в памяти. То есть после этого <code>bob</code> и <code>user</code> - две разные ссылки, которые указывают на два разных объекта в памяти.</p>
+
+                <p>То же самое касается массивов:</p>
+                <div class="code-block"><code>function change(array){
+    array[0] = 8;
+}
+
+function changeFull(array){
+    array = [9, 8, 7];
+}
+ 
+let numbers = [1, 2, 3];
+ 
+console.log("before change:", numbers);     <code class="comment">// [1, 2, 3]</code>
+
+change(numbers);
+console.log("after change:", numbers);      <code class="comment">// [8, 2, 3]</code>
+
+changeFull(numbers);
+console.log("after changeFull:", numbers);  <code class="comment">// [8, 2, 3]</code></code></div>
+
             </section>
 
             <!-- ГЛАВА 4-5: ООП -->
