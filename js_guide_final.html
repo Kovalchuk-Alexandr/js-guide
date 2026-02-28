@@ -563,7 +563,16 @@
                                 <li class="nav-subitem" data-target="ch3-params-passing">📜 Передача параметров по значению и по ссылке</li>
                             </ul>
                         </li>
-                        <li class="nav-item" data-target="ch4">Глава 4-5. ООП</li>
+                        <li class="nav-item has-subitems" data-target="ch4"><span class="ch-emoj"></span> Глава 4-5. ООП
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch4-objects">📜 Объекты</li>
+                                <li class="nav-subitem" data-target="ch4-methods">📜 Методы объектов</li>
+                                <li class="nav-subitem" data-target="ch4-this">📜 Ключевое слово "this"</li>
+                                <li class="nav-subitem" data-target="ch4-array-syntax">📜 Синтаксис массивов</li>
+                                <li class="nav-subitem" data-target="ch4-nested-objects">📜 Вложенные объекты и массивы в объектах</li>
+                                <li class="nav-subitem" data-target="ch4-obj-copy">📜 Копирование и сравнение объектов</li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
 
@@ -5213,23 +5222,50 @@ console.log("after changeFull:", numbers);  <code class="comment">// [8, 2, 3]</
             <!-- ГЛАВА 4-5: ООП -->
             <section class="chapter" id="ch4">
                 <h1>Глава 4-5. Объектно-ориентированное программирование</h1>
+
+                <p>
+                    Объектно-ориентированное программирование на сегодняшний день является одной из господствующих парадигм в разработке приложений, и в 
+                    JavaScript мы также можем использовать все преимущества ООП. В то же время применительно к JavaScript объектно-ориентированное программирование 
+                    имеет некоторые особенности.
+                </p>
                 
-                <h2>Объекты</h2>
+                <h2 id="ch4-objects">📜 Объекты</h2>
+
+                <p>
+                    В прошлых темах мы работали с примитивными данными - числами, строками, но данные не всегда представляют примитивные типы. Например, если в нашей 
+                    программе нам надо описать сущность человека, у которого есть имя, возраст, пол и так далее, то естественно мы не сможем представить сущность человека в виде 
+                    числа или строки. Нам потребуется несколько строк или чисел, чтобы должным образом описать человека. В этом плане человек будет выступать как сложная комплексная структура, 
+                    у которого будут отдельные свойства - возраст, рост, имя, фамилия и т.д.
+                </p>
+                <p>
+                    Для работы с подобными структурами в JavaScript используются <span class="b">объекты</span>. Каждый объект может хранить свойства, которые описывают его 
+                    <span class="b">состояние</span>, и методы, которые описывают его <span class="b">поведение</span>
+                </p>
                 
                 <h3>Создание объектов</h3>
-                <div class="code-block"><code>// Литерал объекта
+
+                <p><strong>Первый способ</strong> заключается в использовании конструктора <code>Object</code>:</p>
+                <div class="code-block"><code>const user = new Object();</code></div>
+
+                <p>В данном случае объект называется <code>user</code>.</p>
+                <p>Выражение <code>new Object()</code> представляет вызов конструктора - функции, создающей новый объект. Для вызова конструктора применяется оператор <span class="bb">new</span>. Вызов конструктора фактически напоминает вызов обычной функции.</p>
+
+                <p><strong>Второй способ</strong> создания объекта представляет использование фигурных скобок <code>{} - (литеральная нотация)</code>:</p>
+                <p>На сегодняшний день более распространенным является второй способ.</p>
+
+                <div class="code-block"><code><code class="comment">// Литерал объекта</code>
 const user = {
     name: 'Alice',
     age: 25,
     isAdmin: false
 };
 
-// Через конструктор Object
+<code class="comment">// Через конструктор Object</code>
 const person = new Object();
 person.name = 'Bob';
 person.age = 30;
 
-// Object.create()
+<code class="comment">// Object.create()</code>
 const proto = {
     greet() {
         console.log('Hello!');
@@ -5238,83 +5274,931 @@ const proto = {
 const obj = Object.create(proto);</code></div>
 
                 <h3>Доступ к свойствам</h3>
+
+                <p>После создания объекта мы можем определить в нем свойства. Чтобы определить свойство, надо после названия объекта через точку указать имя свойства и присвоить ему значение:</p>
+                <div class="code-block"><code>const user = {};
+user.name = "Tom";
+user.age = 26;</code></div>
+
+                <p>
+                    В данном случае объявляются два свойства <code>name</code> и <code>age</code>, которым присваиваются соответствующие значения. После этого мы можем использовать 
+                    эти свойства, например, вывести их значения в консоли:
+                </p>
+                <div class="code-block"><code>console.log(user.name);
+console.log(user.age);</code></div>
+
+                <p>Также можно определить свойства при определении объекта:</p>
+                <div class="code-block"><code>const user = {
+    name: "Tom",
+    age: 26
+};</code></div>
+
+                <p>В этом случае для присвоения значения свойству используется символ двоеточия, а после определения свойства ставится запятая (а не точка с запятой).</p>
+  
+                <p>Кроме того, доступен сокращенный способ определения свойств:</p>
+                <div class="code-block"><code>const name = "Tom";
+const age = 34;
+const user = {name, age};
+console.log(user.name);     <code class="comment">// Tom</code>
+console.log(user.age);      <code class="comment">// 34</code></code></div>
+
+                <p>В данном случае названия переменных также являются и названиями свойств объекта. И таким образом можно создавать более сложные конструкции:</p>
+                <div class="code-block"><code>const name = "Tom";
+const age = 34;
+const user = {name, age};
+ 
+const teacher = {user, course: "JavaScript"};
+console.log(teacher.user);      <code class="comment">// {name: "Tom", age: 34}</code>
+console.log(teacher.course);    <code class="comment">// JavaScript</code></code></div>
+
+                <h4>Еще пример:</h4>
                 <div class="code-block"><code>const user = {
     name: 'Alice',
     age: 25
 };
 
-// Точечная нотация
-console.log(user.name); // "Alice"
+<code class="comment">// Точечная нотация</code>
+console.log(user.name); <code class="comment">// "Alice"</code>
 
-// Квадратные скобки
-console.log(user['age']); // 25
+<code class="comment">// Квадратные скобки</code>
+console.log(user['age']); <code class="comment">// 25</code>
 
-// Динамический ключ
+<code class="comment">// Динамический ключ</code>
 const key = 'name';
-console.log(user[key]); // "Alice"</code></div>
+console.log(user[key]); <code class="comment">// "Alice"</code></code></div>
 
                 <h3>Добавление и удаление свойств</h3>
                 <div class="code-block"><code>const user = {
     name: 'Alice'
 };
 
-// Добавление
+<code class="comment">// Добавление</code>
 user.age = 25;
 user['isAdmin'] = false;
 
-// Удаление
+<code class="comment">// Удаление</code>
 delete user.age;
 
-// Проверка наличия свойства
-console.log('name' in user);  // true
-console.log('age' in user);   // false
+<code class="comment">// Проверка наличия свойства</code>
+console.log('name' in user);  <code class="comment">// true</code>
+console.log('age' in user);   <code class="comment">// false</code>
 
-// hasOwnProperty (не проверяет прототип)
-console.log(user.hasOwnProperty('name')); // true</code></div>
+<code class="comment">// hasOwnProperty (не проверяет прототип)</code>
+console.log(user.hasOwnProperty('name')); <code class="comment">// true</code></code></div>
 
-                <h2>Методы объектов</h2>
+                <h2 id="ch4-methods">📜 Методы объектов</h2>
+
+                <p>Методы объекта определяют его поведение или действия, которые он производит. Методы представляют собой функции. Например, определим метод, который бы выводил имя и возраст человека:</p>
+
+                <div class="code-block"><code>const user = {};
+user.name = "Tom";
+user.age = 26;
+
+user.display = function(){
+    console.log(user.name);
+    console.log(user.age);
+};
+ 
+<code class="comment">// вызов метода</code>
+user.display();</code></div>
+
+                <p>Как и в случае с функциями методы сначала определяются, а потом уже вызываются.</p>
+                <p>Также методы могут определяться непосредственно при определении объекта:</p>
+                <div class="code-block"><code>const user = {
+    name: "Tom",
+    age: 26,
+
+    display: function(){
+        console.log(this.name);
+        console.log(this.age);
+    }
+};</code></div>
+
+                <p>Как и в случае со свойствами, методу присваивается ссылка на функцию с помощью знака двоеточия.</p>
+                <p>Чтобы обратиться к свойствам или методам объекта внутри этого объекта, используется ключевое слово <span class="b">this</span>. Оно означает ссылку на текущий объект.</p>
+
+                <p>Также можно использовать сокращенный способ определения методов, когда двоеточие и слово <code>function</code> опускаются:</p>
+                <div class="code-block"><code>let user = {
+    name: "Tom",
+    age: 26,
+
+    display(){
+        console.log(this.name, this.age);
+    },
+    move(place){
+        console.log(this.name, "goes to", place);
+    }
+};
+
+user.display();         <code class="comment">// Tom 26</code>
+user.move("the shop");  <code class="comment">// Tom goes to the shop</code></code></div>
+
+                <h4>Другой пример:</h4>
+
                 <div class="code-block"><code>const user = {
     name: 'Alice',
     age: 25,
     
-    // Метод
+    <code class="comment">//</code> Метод
     greet() {
         console.log(`Привет, я ${this.name}`);
     },
     
-    // Метод с параметром
+    <code class="comment">//</code> Метод с параметром
     celebrate(years) {
         this.age += years;
         console.log(`Мне теперь ${this.age}`);
     }
 };
 
-user.greet();        // "Привет, я Alice"
-user.celebrate(1);   // "Мне теперь 26"</code></div>
+user.greet();        <code class="comment">// "Привет, я Alice"</code>
+user.celebrate(1);   <code class="comment">// "Мне теперь 26"</code></code></div>
 
-                <h2>this в JavaScript</h2>
+                <h2 id="ch4-this">📜 Ключевое слово "this" в JavaScript</h2>
+
+                <p>Чтобы обратиться к свойствам или методам объекта внутри этого объекта, используется ключевое слово <span class="b">this</span>. Оно означает ссылку на текущий объект.</p>
+
                 <div class="code-block"><code>const user = {
     name: 'Alice',
     
     regularFunction: function() {
-        console.log(this.name); // this = user
+        console.log(this.name); <code class="comment">// this = user</code>
     },
     
     arrowFunction: () => {
-        console.log(this.name); // this = window/undefined
+        console.log(this.name); <code class="comment">// this = window/undefined</code>
     }
 };
 
-user.regularFunction(); // "Alice"
-user.arrowFunction();   // undefined (this не связан с объектом)</code></div>
+user.regularFunction();         <code class="comment">// "Alice"</code>
+user.arrowFunction();           <code class="comment">// undefined (this не связан с объектом)</code></code></div>
 
                 <div class="info-box warning">
                     <div class="info-box-title">⚠️ Arrow functions и this</div>
                     <p>Стрелочные функции не имеют собственного <code>this</code>. Они берут <code>this</code> из внешнего контекста. Не используйте их как методы объектов!</p>
                 </div>
 
+                <p>Поведение ключевого слова <span class="b">this</span> зависит от контекста, в котором оно используется, и от того, в каком режиме оно используется - строгом или нестрогом.</p>
+
+                <h3>Глобальный контекст и объект globalThis</h3>
+
+                <p>
+                    В глобальном контексте <code>this</code> ссылается на глобальный объект. Что такое "глобальный объект" в JavaScript? Это зависит от среды, в которой выполняется код. 
+                    Так, в веб-браузере <code>this</code> представляет объект <span class="b">window</span> - объект, который представляет окно браузера. 
+                    В среде Node.js <code>this</code> представляет объект <span class="b">global</span>. А для веб-воркеров <code>this</code> представляет объект 
+                    <span class="b">self</span>
+                </p>
+
+                <p>Например, в веб-браузере при выполнении следующего кода:</p>
+                <div class="code-block"><code>console.log(this);</code></div>
+
+                <p>мы получим консольный вывод вроде следующего</p>
+                <pre class="browser">Window&nbsp;{window: Window, self: Window, document: document, name: "", location: Location,&nbsp;…}</pre>
+
+                <p>
+                    В стандарт ES2020 было добавлено определение объекта <span class="b">globalThis</span>, который позволяет ссылаться на глобальный конекст вне зависимости, 
+                    в какой среде и в какой ситуации выполняется код:
+                </p>
+                <div class="code-block"><code>console.log(globalThis);</code></div>
+
+                <h3>Контекст функции</h3>
+
+                <p>В пределах функции <code>this</code> ссылается на внешний контекст. Для функций, определенных в глобальном контексте, - это объект <span class="b">globalThis</span>. Например:</p>
+                <div class="code-block"><code>function foo(){
+    var bar = "local";
+    console.log(this.bar);
+}
+ 
+var bar = "global";
+ 
+foo();  <code class="comment">// global</code></code></div>
+
+                <p>Если бы мы не использовали бы <code>this</code>, то обращение шло бы к локальной переменной, определенной внутри функции.</p>
+                <div class="code-block"><code>function foo(){
+    var bar = "local";
+    console.log(bar);
+}
+ 
+var bar = "global";
+ 
+foo();  <code class="comment">// local</code></code></div>
+
+                <p>Но если бы мы использовали строгий режим <code>(strict mode)</code>, то <code>this</code> в этом случае имело бы значение <code>undefined</code>:</p>
+                <div class="code-block"><code>"use strict";
+function foo(){
+    var bar = "local";
+    console.log(this.bar);
+}
+ 
+var bar = "global";
+ 
+foo();  <code class="comment">// ошибка - this - undefined</code></code></div>
+
+                <h3>Контекст объекта</h3>
+
+                <p>В контексте объекта, в том числе в его методах, ключевое слово <code>this</code> ссылается на этот же объект:</p>
+                <div class="code-block"><code>const obj = {
+    bar: "object",
+
+    foo: function(){
+        console.log(this.bar);
+    }
+}
+
+var bar = "global";
+obj.foo();  <code class="comment">// object</code></code></div>
+
+                <h3>Динамическое определение контекста</h3>
+
+                <p>Код функции всегда использует в качестве <code>this</code> внешний контекст, в которым этот код <strong>вызывается (именно вызывается, а не определяется)</strong>. Рассмотрим более сложный пример:</p>
+                <div class="code-block"><code>function foo(){
+    var bar = "foo_bar";
+    console.log(this.bar);
+}
+  
+const obj1 = {bar:"obj1_bar", foo: foo};
+const obj2 = {bar:"obj2_bar", foo: foo};
+  
+var bar = "global_bar";
+  
+foo();  <code class="comment">// global_bar</code>
+obj1.foo();   <code class="comment">// obj1_bar</code>
+obj2.foo();   <code class="comment">// obj2_bar</code></code></div>
+
+                <p>
+                    Здесь определена глобальная переменная <code>bar ("global_bar")</code>. И также в функции <span class="b">foo</span> определена локальная переменная <code>bar ("foo_bar")</code>. 
+                    Значение какой переменной будет выводиться в функции <span class="b">foo</span>? Функция <span class="b">foo</span> использует определение переменной, которое определено во внешнем контексте. 
+                    Для функции <code>foo</code> по умолчанию это глобальный контекст, поэтому она выводит значение глобальной переменной (так как данный скрипт запускается в нестрогом режиме, а значит ключевое слово <code>this</code> в функции <code>foo</code> 
+                    ссылается на внешний контекст).
+                </p>
+                <p>
+                    Иначе дело обстоит с объектами. Они определяют свой собственный контекст, в котором существует свое свойство <code>bar</code>. И при вызове метода <span class="b">foo</span> внешним 
+                    контекстом по отношению к функции будет контекст объектов <code>obj1 и obj2</code>.
+                </p>
+                <p>Подобное поведение может привести к некоторому непонимаю в отдельных случаях. Так, рассмотрим другую ситуацию:</p>
+
+                <div class="code-block"><code>var bar = "global_bar";
+ 
+const obj1 = {
+    bar: "obj1_bar",
+    foo: function(){
+        console.log(this.bar);                 <code class="comment">// bar = "obj1_bar"</code>
+    }
+}
+const obj2 = {bar: "obj2_bar", foo: obj1.foo}; <code class="comment">// bar = "obj2_bar"</code>
+ 
+const foo = obj1.foo;                          <code class="comment">// bar = "global_bar"</code>
+ 
+obj1.foo();                                    <code class="comment">// obj1_bar</code>
+obj2.foo();                                    <code class="comment">// obj2_bar</code>
+foo();                                         <code class="comment">// global_bar</code></code></div>
+
+                <p>Здесь в объекте <span class="b">obj1</span> определена функция <code>foo</code>:</p>
+                <div class="code-block"><code>const obj1 = {
+    bar: "obj1_bar",
+    foo: function(){
+        console.log(this.bar);  <code class="comment">// bar = "obj1_bar"</code>
+    }
+}</code></div>
+
+                <p>Эта функция <span class="b">foo</span> будет брать значение для <code>this.bar</code> из внешнего контекста - из объекта <span>obj1</span>, соответственно <code>this.bar = "obj1_bar"</code>.</p>
+
+                <p>Объект <span class="b">obj2</span> использует функцию <span>foo</span> из объекта <span class="b">obj1</span>:</p>
+                <div class="code-block"><code>const obj2 = {bar: "obj2_bar", foo: obj1.foo};</code></div>
+
+                <p>
+                    Однако функция <code>obj1.foo</code> также будет искать значение для <code>this.bar</code> 
+                    опять же во внешнем котексте, а здесь это объект obj2. А в объекте obj2 это значение равно "obj2_bar".
+                </p>
+                <p>То же самое с глобальной переменной <code>foo</code>, которая ссылается на ту же функцию, что и метод <code>obj1.foo</code>:</p>
+                <div class="code-block"><code>const foo = obj1.foo;</code></div>
+
+                <p>В этом случае также будет происходить поиск значения для <code>this.bar</code>, но теперь в контексте функции foo. А это глобальный контекст, где определена переменная <code>var bar = "global_bar"</code>.</p>
+
+                <h3>Контекст во вложенных функциях</h3>
+
+                <p>Если мы вызываем функцию из другой функции, вызываемая функция также будет использовать внешний контекст:</p>
+                <div class="code-block"><code>var bar = "global bar";
+  
+function foo(){
+    var bar = "foo bar";
+    function moo(){
+        console.log(this.bar);
+    }
+
+    moo();
+}
+
+foo();  <code class="comment">// global bar</code></code></div>
+
+                <p>
+                    Здесь функция <code>foo()</code> в качестве <code>this.bar</code> использует значение переменной bar из внешнего контекста, то есть значение глобальной переменной bar. 
+                    Функция <code>moo()</code> также в качестве <code>this.bar</code> использует значение переменной bar из внешнего контекста, то есть <code>this.bar</code> для внешней функции foo, 
+                    которое в свою очередь представляет значение глобальной переменной bar. Поэтому в итоге консоль выведет "global bar", а не "foo bar".
+                </p>
+
+                <h3>Явная привязка</h3>
+
+                <p>С помощью методов <code>call()</code> и <code>apply()</code> можно задать явную привязку функции к определенному контексту:</p>
+                <div class="code-block"><code>function foo(){
+    console.log(this.bar);
+}
+ 
+var obj = {bar: "obj_bar"}
+var bar = "global_bar";
+
+foo();              <code class="comment">// global_bar</code>
+foo.apply(obj);     <code class="comment">// obj_bar</code>
+
+<code class="comment">// или</code>
+<code class="comment">// foo.call(obj);</code></code></div>
+
+                <p>Во втором случае функция <code>foo</code> привязывается к объекту <code>obj</code>, который и определяет ее контекст. Поэтому во втором случае консоль выведет <code>"obj_bar"</code>.</p>
+
+                <h3>Метод bind</h3>
+
+                <p>Метод <code>f.bind(o)</code> позволяет создать новую функцию с тем же телом и областью видимости, что и функция <code>f</code>, но с привязкой к объекту <code>o</code>:</p>
+                <div class="code-block"><code>function foo(){
+    console.log(this.bar);
+}
+ 
+const obj = {bar: "object"}
+var bar = "global";
+
+foo();  <code class="comment">// global</code>
+
+const func = foo.bind(obj);
+func(); <code class="comment">// object</code></code></div>
+
+                <h3>this и стрелочные функции</h3>
+
+                <p>В стрелочных функциях в качестве <span class="b">this</span> используется контекст окружения, а не само окружение, в котором определена стрелочная функция. Рассмотрим следующий пример:</p>
+                <div class="code-block"><code>const person = {
+    name: "Tom",
+    say:()=> console.log(`Меня зовут ${this.name}`)
+}
+
+person.say();   <code class="comment">// Меня зовут</code></code></div>
+
+                <p>
+                    Здесь стрелочная функция <code>say()</code> обращается к некому свойству <code>this.name</code>, но что здесь представляет <code>this</code>? Для внешнего контекста, 
+                    в котором определена стрелочная функция - то есть для контекста объекта <span class="b">person</span> <code>this</code> представляет глобальный объект (объект окна браузера). Однако глобальной переменной <code>name</code> не определено, 
+                    поэтому на консоль будет выведено:
+                </p>
+                <pre class="browser">Меня зовут</pre>
+
+                <p>Теперь немного изменим пример:</p>
+                <div class="code-block"><code>const person = {
+    name: "Tom",
+
+    hello(){
+        console.log("Привет");
+        let say = ()=> console.log(`Меня зовут ${this.name}`);
+        say();
+    }
+}
+
+person.hello();</code></div>
+
+                <p>
+                    Теперь стрелочная функция определена в методе <code>hello()</code>. <code>this</code> для этого метода представляет текущий объект <span class="b">person</span>, где определен данный метод. 
+                    Поэтому и в стрелочной функции <code>this</code> будет представлять объект <span class="b">person</span>, а <code>this.name</code> - свойство <code>name</code> этого объекта. Поэтому при выполнении программы мы получим:
+                </p>
+                <pre class="browser">Привет
+Меня зовут Tom</pre>
+
+                <p>Несмотря на то что, стрелочные функции могут добавить забот при работе <code>this</code>, в то же время они могут решить ряд проблем. Так, при работе с несколькими контекстами мы вынуждены учитывать, в каком контексте определяется переменная. Например, возьмем следующий код:</p>
+                <div class="code-block"><code>const school ={
+    title: "Oxford",
+    courses: ["JavaScript", "TypeScript", "Java", "Go"],
+    printCourses(){
+        this.courses.forEach(function(course){
+            console.log(this.title, course);
+        })
+    }
+}
+
+school.printCourses();</code></div>
+
+                <p>
+                    Функция <span class="b">printCourses</span> проходит по всем курсам из массива и при их выводе предваряет их значением свойства <code>title</code>. 
+                    Однако на консоли при запуске программы мы увидим следующее:
+                </p>
+                <pre class="browser">undefined "JavaScript"
+undefined "TypeScript"
+undefined "Java"
+undefined "Go"</pre>
+
+                <p>
+                    Мы видим, что значение <code>this.title</code> не определено, так как <code>this</code> как контекст объекта замещается глобальным контекстом. 
+                    В этом случае нам надо передать подобное значение <code>this.title</code> или весь контекст объекта.
+                </p>
+                <div class="code-block"><code>const school ={
+    title: "Oxford",
+    courses: ["JavaScript", "TypeScript", "Java", "Go"],
+
+    printCourses(){
+        const that = this;
+        this.courses.forEach(function(course){
+            console.log(that.title, course);
+        })
+    }
+}
+
+school.printCourses();</code></div>
+
+                <p>Стрелочные функции также позволяют решить данную проблему:</p>
+                <div class="code-block"><code>const school ={
+    title: "Oxford",
+    courses: ["JavaScript", "TypeScript", "Java", "Go"],
+
+    printCourses(){
+        this.courses.forEach((course)=>console.log(this.title, course))
+    }
+}
+
+school.printCourses();</code></div>
+
+                <p>Контекстом для стрелочной функции в данном случае будет выступать контекст объекта <span class="b">school</span>. Соответственно, нам не надо определять дополнительные переменые для передачи данных в функцию.</p>
+
+
+                <h2 id="ch4-array-syntax">📜 Синтаксис массивов</h2>
+
+                <p>Существует также альтернативный способ определения свойств и методов с помощью синтаксиса массивов:</p>
+                <div class="code-block"><code>const user = {};
+user["name"] = "Tom";
+user["age"] = 26;
+user["display"] = function(){
+     
+    console.log(user.name);
+    console.log(user.age);
+};
+ 
+<code class="comment">// вызов метода</code>
+user["display"]();</code></div>
+
+                <p>Название каждого свойства или метода заключается в кавычки и в квадратные скобки, затем им также присваивается значение. Например, <code>user["age"] = 26</code>.</p>
+                <p>При обращении к этим свойствам и методам можно использовать либо нотацию точки (<code>user.name</code>), либо обращаться так: <code>user["name"]</code></p>
+
+                <p>Также можно определить свойства и методы через синтаксис массивов напрямую при создании объекта:</p>
+                <div class="code-block"><code>const user = {
+    ["name"]: "Tom",
+    ["age"]: 26,
+    ["display"]: function(){
+      
+        console.log(user.name);
+        console.log(user.age);
+    }
+};
+user["display"]();</code></div>
+
+                <h3>Строки в качестве свойств и методов</h3>
+
+                <p>Также следует отметить, что названия свойств и методов объекта всегда представляют строки. То есть мы могли предыдущее определение объекта переписать так:</p>
+                <div class="code-block"><code>const user = {
+    "name": "Tom",
+    "age": 26,
+
+    "display": function(){
+        console.log(user.name);
+        console.log(user.age);
+    }
+};
+
+<code class="comment">// вызов метода</code>
+user.display();</code></div>                
+
+                <p>
+                    С одной стороны, разницы никакой нет между двумя определениями. С другой стороны, бывают случаи, где заключение названия в кавычки может помочь. Например, 
+                    если название свойства состоит из двух слов, разделенных пробелом:
+                </p>
+                <div class="code-block"><code>const user = {
+    name: "Tom",
+    age: 26,
+
+    "full name": "Tom Johns",
+    "display info": function(){
+        console.log(user.name);
+        console.log(user.age);
+    }
+};
+
+console.log(user["full name"]);
+user["display info"]();</code></div>
+
+                <p>Только в этом случае для обращении к подобным свойствам и методам мы должны использовать синтаксис массивов.</p>
+                
+                <h3>Динамическое определение имен свойств и методов</h3>
+
+                <p>Синтаксис массивов открывает нам другую возможность - определение имени свойства вне объекта:</p>
+                <div class="code-block"><code>const prop1  = "name";
+const prop2  = "age";
+const tom = { 
+    [prop1]: "Tom",
+    [prop2]: 37
+};
+
+console.log(tom);           <code class="comment">// {name: "Tom", age: 37}</code>
+console.log(tom.name);      <code class="comment">// Tom</code>
+console.log(tom["age"]);    <code class="comment">// 37</code></code></div>
+
+                <p>Благодая этому, например, можно динамически создавать объекты с произвольными названиями свойств:</p>
+                <div class="code-block"><code>function createObject(propName, propValue){
+    return {
+            [propName]: propValue,
+            print(){ 
+                console.log(`${propName}: ${propValue}`);
+            }
+    };
+}
+
+const person = createObject("name", "Tom");
+person.print();     <code class="comment">// name: Tom</code>
+ 
+const book = createObject("title", "JavaScript Reference");
+book.print();       <code class="comment">// title: JavaScript Reference</code></code></div>
+
+                <h3>Удаление свойств</h3>
+
+                <p>
+                    Выше мы посмотрели, как можно динамически добавлять новые свойства к объекту. Однако также мы можем удалять свойства и методы с помощью оператора 
+                    <span class="b">delete</span>. И как и в случае с добавлением мы можем удалять свойства двумя способами.
+                </p>
+
+                <h4>Первый способ - использование нотации точки:</h4>
+                <div class="code-block"><code>delete объект.свойство</code></div>
+
+                <h4>Либо использовать синтаксис массивов:</h4>
+                <div class="code-block"><code>delete объект["свойство"]</code></div>
+
+                <p>Например, удалим свойство:</p>
+                <div class="code-block"><code>let user = {};
+user.name = "Tom";
+user.age = 26;
+
+user.display = function(){
+    console.log(user.name);
+    console.log(user.age);
+};
+ 
+console.log(user.name); <code class="comment">// Tom</code>
+delete user.name;       <code class="comment">// удаляем свойство</code>
+
+<code class="comment">// альтернативный вариант</code>
+<code class="comment">// delete user["name"];</code>
+console.log(user.name); <code class="comment">// undefined</code></code></div>
+
+                <p>После удаления свойство будет не определено, поэтому при попытке обращения к нему, программа вернет значение <span class="b">undefined</span>.</p>
+
+                <h3>Создание объекта из переменных и констант</h3>
+
+                <p>При создании объекта его свойствам могут передаваться значения переменных, констант или динамически вычисляемые результаты функций:</p>
+                <div class="code-block"><code>function getSalary(status){
+    if(status==="senior") return 1500;
+    else return 500;
+}
+
+const name = "Tom";
+const age = 37;
+const person = { name: name, age: age, salary: getSalary()};
+ 
+console.log(person);    <code class="comment">// {name: "Tom", age: 37, salary: 500}</code></code></div>
+
+                <p>Но если названия констант/переменных совпадает с названиями свойств, то можно сократить передачу значений:</p>
+                <div class="code-block"><code>const name = "Tom";
+const age = 37;
+const salary = 500;
+
+const person = { name, age, salary};
+ 
+console.log(person);    <code class="comment">// {name: "Tom", age: 37, salary: 500}</code></code></div>
+
+                <p>В данном случае объект <span class="b">person</span> автоматически получит свойства, названия которых будут соответствовать названиям констант, а в качестве значений иметь значения этих констант.</p>
+
+                <p>То же самое относится к передаче функций методам объекта:</p>
+                <div class="code-block"><code>function display(){ 
+    console.log(this.name, this.age);
+}
+
+const move = function(place){ console.log(this.name, "goes to", place)};
+
+const name = "Tom";
+const age = 37;
+const salary = 500;
+
+const person = { name, age, salary, display, move};
+ 
+person.display();       <code class="comment">// Tom 37</code>
+person.move("cinema");  <code class="comment">// Tom goes to cinema</code></code></div>
+
+                <p>
+                    В данном случае объект <span class="b">person</span> имеет два метода, которые соответствуют переданным в объект функциям - <code>display()</code> и <code>move()</code>. 
+                    Стоит отметить, что при такой передаче функций методам объекта, мы по прежнему можем использовать в этих функциях ключевое слово <code>this</code> для обращения к функциональности объекта. 
+                    Однако стоит быть осторожным при передаче лямбд-выражений, поскольку для глобальных лямбд-выражений this будет представлять объект окна браузера:
+                </p>
+
+                <div class="code-block"><code>const move = (place)=>{ console.log(this.name, "goes to", place); console.log(this);};
+const name = "Tom";
+ 
+const person = { name, move};
+person.move("cinema");  <code class="comment">//  goes to cinema</code></code></div>
+
+                <h3>Фукция Object.fromEntries()</h3>
+
+                <p>С помощью функции <span class="b">Object.fromEntries()</span> можно создать объект из набора пар ключ-значение, где ключ потом будет представляет название свойства. Например, создадим объект из массивов:</p>
+                <div class="code-block"><code>const personData = [ ["name", "Tom"], ["age", 37]];
+
+const person = Object.fromEntries(personData);
+
+console.log(person);         <code class="comment">// {name: "Tom", age: 37}</code>
+console.log(person.name);    <code class="comment">// Tom</code></code></div>
+
+                <p>
+                    Здесь объект создается из массива <code>personData</code>, который содержит два подмассива. Каждый подмассив содержит два элемента и фактически представляет пару ключ-значение. 
+                    Первый элемент представляет ключ, а второй - значение.
+                </p>
+
+                <h2 id="ch4-nested-objects">📜 Вложенные объекты и массивы в объектах</h2>
+
+                <h3>Вложенные объекты</h3>
+                <p>
+                    Одни объекты могут содержать в качестве свойств другие объекты. Например, есть объект страны, у которой можно выделить ряд свойств. Одно из 
+                    этих свойств может представлять столицу. Но у столицы мы также можем выделить свои свойства, например, название, численность населения, год основания:
+                </p>
+                <div class="code-block"><code>const country = {
+    name: "Германия",
+    language: "немецкий",
+    capital:{
+        name: "Берлин",
+        population: 3375000,
+        year: 1237
+    }
+};
+
+console.log("Столица:", country.capital.name);               <code class="comment">// Берлин</code>
+console.log("Население:", country["capital"]["population"]); <code class="comment">// 3375000</code>
+console.log("Год основания:", country.capital["year"]);      <code class="comment">// 1237</code></code></div>
+
+                <p>Консольный вывод:</p>
+                <pre class="browser">Столица: Берлин
+Население: 3375000
+Год основания: 1237</pre>
+
+                <p><code>Для доступа к свойствам</code> таких вложенных объектов мы можем использовать:</p>
+                <ul>
+                    <li>
+                        стандартную <span class="b">нотацию точки</span>
+                        <div class="code-block"><code>country.capital.name</code></div>
+                    </li>
+                    <li>
+                        Либо обращаться к ним как к <span class="b">элементам массивов</span>:
+                        <div class="code-block"><code>country["capital"]["population"]</code></div>
+                    </li>
+                    <li>
+                        <p>Также допустим <span class="b">смешанный вид обращения</span>:</p>
+                        <div class="code-block"><code>country.capital["year"]</code></div>
+                    </li>
+                </ul>
+
+                <h3>Массивы в качестве свойств</h3>
+
+                <p>В качестве свойств также могут использоваться массивы, в том числе массивы других объектов:</p>
+
+                <div class="code-block"><code>const country = {
+    name: "Швейцария",
+    languages: ["немецкий", "французский", "итальянский"],
+
+    capital:{
+        name: "Берн",
+        population: 126598
+    },
+
+    cities: [
+        { name: "Цюрих", population: 378884},
+        { name: "Женева", population: 188634},
+        { name: "Базель", population: 164937}
+    ]
+};
+ 
+<code class="comment">// вывод всех элементов из country.languages</code>
+console.log("Официальные языки Швейцарии:");
+for(const lang of country.languages){
+  console.log(lang);
+}
+
+console.log("\n");  <code class="comment">// для разделения языков от городов</code>
+ 
+<code class="comment">// вывод всех элементов из country.cities</code>
+console.log("Города Швейцарии:");
+for(const city of country.cities){
+  console.log(city.name);
+}</code></div>
+
+                <p>В объекте <span class="b">country</span> имеется свойство <code>languages</code>, содержащее массив строк, а также свойство <code>cities</code>, хранящее массив однотипных объектов.</p>
+                <p>С этими массивами мы можем работать также, как и с любыми другими, например, перебрать с помощью цикла <span class="b">for</span>. При переборе массива объектов каждый текущий элемент будет представлять отдельный объект, поэтому мы можем обратиться к его свойствам и методам:</p>
+                <div class="code-block"><code>for(const city of country.cities){
+  console.log(city.name);
+}</code></div>
+
+                <p>Либо для перебора мы могли бы использовать другой тип цикла <span class="b">for</span> и также пройтись по всем элементам массива:</p>
+                <div class="code-block"><code>for(let i=0; i < country.cities.length; i++){
+    console.log(country.cities[i].name);
+}</code></div>
+
+                <p>В итоге браузер выведет содержимое этих массивов:</p>
+                <pre class="browser">Официальные языки Швейцарии:
+немецкий
+французский
+итальянский
+
+Города Швейцарии:
+Цюрих
+Женева
+Базель</pre>
+
+                <h2 id="ch4-obj-copy">📜 Копирование и сравнение объектов</h2>
+
+                <h3>Копирование объектов</h3>
+
+                <p>В отличие от данных примитивных типов данные объектов копируются по ссылке. Что это значит?<br>Рассмотрим следующий пример:</p>
+                <div class="code-block"><code>const tom = { name: "Tom"};
+const bob = tom;
+
+<code class="comment">// проверяем свойство name у обоих констант</code>
+console.log(tom.name);  <code class="comment">// Tom</code>
+console.log(bob.name);  <code class="comment">// Tom</code>
+         
+<code class="comment">// меняем свойство name у константы bob</code>
+bob.name = "Bob";
+
+<code class="comment">// повторно проверяем свойство name у обоих констант</code>
+console.log("После изменения")
+console.log(tom.name);  <code class="comment">// Bob</code>
+console.log(bob.name);  <code class="comment">// Bob</code></code></div>
+
+                <p>Вначале определяется обычный объект <code>tom</code> с одним свойством <code>name</code>. Затем присваиваем значение этого объекта константе <code>bob</code></p>
+                <div class="code-block"><code>const bob = tom;</code></div>
+
+                <p>
+                    В данном случае константа <code>bob</code> получае ссылку или условно говоря адрес константы <code>tom</code>, поэтому после этого присвоения обе константы 
+                    по сути указывают на один и тот же объект в памяти. Соответственно изменения, произведенные через одну константу:
+                </p>
+                <div class="code-block"><code>bob.name = "Bob";</code></div>
+
+                <p>Затронут и другую константу - <code>tom</code>:</p>
+                <div class="code-block"><code>console.log(tom.name);  <code class="comment">// Bob</code></code></div>
+
+                <p>Более того, добавим к объекту новое свойство через одну из констант:</p>
+                <div class="code-block"><code>const tom = { name: "Tom"};
+const bob = tom;
+
+<code class="comment">// добавляем константе bob новое свойство - age</code>
+bob.age = 37;
+
+<code class="comment">// и видим, что для tom тоже добавлено новое свойство</code>
+console.log(tom.age);   <code class="comment">// 37</code></code></div>
+
+                <p>
+                    После добавления свойства <code>age</code> константе <code>bob</code> можно увидеть, что у константы <code>tom</code> то же появилось это свойство, потому что 
+                    опять же обе константы представляют один и тот же объект.
+                </p>
+
+                <h3>Метод Object.assign</h3>
+
+                <p>
+                    Что же если мы хотим скопировать из свойства объекта, но при этом обе константы или переменных указывали бы на совершенно разные объекты, изменения одного из которых никак бы не 
+                    затрагивали другой? В этом случае мы можем воспользоваться встроенным методом <span class="b">Object.assign()</span>.
+                </p>
+                <p>Метод <span class="b">Object.assign()</span> принимает два параметра:</p>
+                <div class="code-block"><code>Object.assign(target, ...sources)</code></div>
+
+                <p>
+                    Первый параметр - <code>target</code> представляет объект, в который надо скопировать свойства. Второй параметр - <code>...sources</code> - набор объектов, из 
+                    которых надо скопировать свойства (то есть мы можем скопировать свойства сразу из нескольких объектов)
+                </p>
+
+                <p>Возвращает метод объект <code>target</code>, в который скопированы свойства из объектов <code>sources</code>.</p>
+
+                <p>Например:</p>
+                <div class="code-block"><code>const tom = { name: "Tom", age: 37};
+const bob = Object.assign({}, tom);
+bob.name = "Bob";
+bob.age = 41;
+         
+console.log(`Объект tom. Name: ${tom.name}   Age: ${tom.age}`);
+console.log(`Объект bob. Name: ${bob.name}   Age: ${bob.age}`);</code></div>
+
+                <p>
+                    В данном случае вызов <code>Object.assign({}, tom)</code> означает, что мы копируем данные из объекта <code>tom</code> в пустой объект <code>{}</code>. 
+                    Результатом этого копирования стал объект <code>bob</code>. Причем это совсем другой объект, нежели <code>tom</code>. И любые изменения с константой <code>bob</code> 
+                    здесь никак не затронут константу <code>tom</code>.
+                </p>
+
+                <p>Консольный вывод программы:</p>
+                <pre class="browser">Объект tom. Name: Tom   Age: 37
+Объект bob. Name: Bob   Age: 41</pre>
+
+                <h4>Копирование из нескольких объектов</h4>
+
+                <p>Подобным образом можно копировать данные из нескольких объектов:</p>
+                <div class="code-block"><code>const tom = { name: "Tom"};
+const sam = { age: 37};
+const person = { height: 170};
+
+Object.assign(person, tom, sam);  <code class="comment">// копируем из tom и sam в person</code>
+console.log(person);              <code class="comment">// {height: 170, name: "Tom", age: 37}</code></code></div>
+
+                <p>Здесь копируются все свойства из объектов <code>tom</code> и <code>sam</code> в объект <code>person</code>. В итоге после копирования объект <code>person</code> будет иметь три свойства.</p>
+
+                <h4>Копирование одноименных свойств</h4>
+
+                <p>Если объекты, из которых выполняется копирование, содержат одинаковые свойства, то свойства из последних объектов замещают свойства предыдущих:</p>
+                <div class="code-block"><code>const tom = { name: "Tom", age: 37};
+const sam = { age: 45};
+const person = { height: 170};
+
+Object.assign(person, tom, sam);
+console.log(person);    <code class="comment">// {height: 170, name: "Tom", age: 45}</code></code></div>
+
+                <p>
+                    Здесь оба объекта - <span class="b">tom</span> и <span class="b">sam</span> содержат свойство <code>age</code>, но в объекте <span class="b">person</span> свойство <code>age равно 45</code> - значение из объекта <span class="b">sam</span>, потому что 
+                    копирование из объекта <span class="b">sam</span> произодится в последнюю очередь.
+                </p>
+
+                <h4>Копирование свойств-объектов</h4>
+
+                <p>Несмотря на то, что <code>Object.assign()</code> прекрасно работает для простых объектов, но что будет, если свойство копируемого объекта также представляет объект:</p>
+                <div class="code-block"><code>const tom = &#0123; name: "Tom", company: &#0123;title: "Microsoft"&#0125;&#0125;;
+const bob = Object.assign({}, tom);
+
+bob.name = "Bob";
+bob.company.title = "Google";
+
+console.log(tom.name);              <code class="comment">// Tom</code>
+console.log(tom.company.title);     <code class="comment">// Google</code></code></div>
+
+                <p>
+                    Здесь свойство <code>company</code> объекта <code>tom</code> представляет объект с одним свойством. И при копировании объект bob получит не копию значения <code>tom.company</code>, 
+                    а ссылку на этот объект. Поэтому изменения <code>bob.company</code> затронут и <code>tom.company</code>.
+                </p>
+
+                <h3>Копирование объекта с помощью spread-оператора</h3>
+
+                <p><span class="b">spread-оператор ...</span> позволяет разложить объект на различные пары <code>свойство-значение</code>, которые можно передать другому объекту.</p>
+                <div class="code-block"><code>const tom = { name: "Tom", age: 37, company: "Google"};
+const bob = {...tom}
+bob.name = "Bob";
+          
+console.log(tom);   <code class="comment">// {name: "Tom", age: 37, company: "Google"}</code>
+console.log(bob);   <code class="comment">// {name: "Bob", age: 37, company: "Google"}</code></code></div>
+
+                <p>В данном случае объекту <code>bob</code> передаются копии свойств объекта <code>tom</code>.</p>
+
+                <p>Если какие-то свойства нового объекта должны иметь другие значения (как в примере выше свойство <code>name</code>), то их можно указать в конце:</p>
+                <div class="code-block"><code>const tom = { name: "Tom", age: 37, company: "Google"};
+const bob = {...tom, name: "Bob"};
+          
+console.log(bob);   <code class="comment">// {name: "Bob", age: 37, company: "Google"}</code></code></div>
+
+                <p>Как видно из предыдущего примера, обе константы после копирования представляют ссылки на разные объекты, и изменения одного из них никак не затронет другой объект.</p>
+                <p>Тем не менее если объекты содержат вложенные объекты, то эти вложенные объекты при копировании опять же по сути будут представлять ссылки на один и тот же объект:</p>
+                <div class="code-block"><code>const tom = &#0123; name: "Tom", age: 37, company: &#0123;title: "Microsoft"&#0125;&#0125;
+const bob = {...tom}
+
+bob.name = "Bob";
+bob.company.title = "Google";
+ 
+console.log(`${tom.name} - ${tom.company.title}`);  <code class="comment">// Tom - Google</code>
+console.log(`${bob.name} - ${bob.company.title}`);  <code class="comment">// Bob - Google</code></code></div>
+
+                <h3>Сравнение объектов</h3>
+
+                <p>Сравним два объекта с помощью стандартных операций сравнения и эквивалентности:</p>
+                <div class="code-block"><code>const tom = { name: "Tom"};
+const bob = { name: "Bob"};
+
+console.log(tom == bob);    <code class="comment">// false</code>
+console.log(tom === bob);   <code class="comment">// false</code></code></div>
+
+                <p>Оба оператора в данном случае возвратят значение <code>false</code>, то есть объекты не равны. Причем даже если значения свойств объектов будет одинаковым, то мы все равно в обоих случаях получим <code>false</code></p>
+                <div class="code-block"><code>const tom = { name: "Tom"};
+const bob = { name: "Tom"};
+
+console.log(tom == bob);    <code class="comment">// false</code>
+console.log(tom === bob);   <code class="comment">// false</code></code></div>
+
+                <p>Однако, что будет, если обе константы (переменных) хранят ссылку на один и тот же объект:</p>
+                <div class="code-block"><code>const tom = { name: "Tom"};
+const bob = tom;
+
+console.log(tom == bob);    <code class="comment">// true</code>
+console.log(tom === bob);   <code class="comment">// true</code></code></div>
+
+                <p>В этом случае в обоих случаях мы получим <code>true</code>, поскольку значения обоих констант равны, так как по сути это одно и то же значение.</p>
+
+
                 <h2>Функции-конструкторы</h2>
-                <div class="code-block"><code>// Конструктор (с большой буквы)
+                <div class="code-block"><code><code class="comment">// Конструктор (с большой буквы)</code>
 function User(name, age) {
     this.name = name;
     this.age = age;
@@ -5324,12 +6208,12 @@ function User(name, age) {
     };
 }
 
-// Создание экземпляра через new
+<code class="comment">// Создание экземпляра через new</code>
 const user1 = new User('Alice', 25);
 const user2 = new User('Bob', 30);
 
-user1.greet(); // "Привет, я Alice"
-user2.greet(); // "Привет, я Bob"</code></div>
+user1.greet(); <code class="comment">// "Привет, я Alice"</code>
+user2.greet(); <code class="comment">// "Привет, я Bob"</code></code></div>
 
                 <h2>Прототипы</h2>
                 <div class="code-block"><code>// Добавление метода в прототип
