@@ -571,6 +571,10 @@
                                 <li class="nav-subitem" data-target="ch4-array-syntax">📜 Синтаксис массивов</li>
                                 <li class="nav-subitem" data-target="ch4-nested-objects">📜 Вложенные объекты и массивы в объектах</li>
                                 <li class="nav-subitem" data-target="ch4-obj-copy">📜 Копирование и сравнение объектов</li>
+                                <li class="nav-subitem" data-target="ch4-check-search">📜 Проверка наличия и перебор методов и свойств</li>
+                                <li class="nav-subitem" data-target="ch4-obj-in-func">📜 Объекты в функциях</li>
+                                <li class="nav-subitem" data-target="ch4-constructor">📜 Функции-конструкторы</li>
+                                <li class="nav-subitem" data-target="ch4-prototype">📜 Прототипы</li>
                             </ul>
                         </li>
                     </ul>
@@ -6196,9 +6200,400 @@ console.log(tom === bob);   <code class="comment">// true</code></code></div>
 
                 <p>В этом случае в обоих случаях мы получим <code>true</code>, поскольку значения обоих констант равны, так как по сути это одно и то же значение.</p>
 
+                <h2 id="ch4-check-search">📜 Проверка наличия и перебор методов и свойств</h2>
 
-                <h2>Функции-конструкторы</h2>
-                <div class="code-block"><code><code class="comment">// Конструктор (с большой буквы)</code>
+                <p>
+                    При динамическом определении в объекте новых свойств и методов перед их использованием бывает важно проверить, а есть ли уже такие методы и свойства. 
+                    Для этого в javascript может использоваться оператор <span class="b">in</span>. Он имеет следующий синтаксис:
+                </p>
+
+                <ul>
+                    <li>
+                        Для этого в javascript может использоваться оператор <span class="b">in</span>. Он имеет следующий синтаксис:
+                        <div class="code-block"><code>"свойство|метод" in объект</code></div>
+                        <p>
+                            в кавычках идет название свойства или метода, а после <span class="b">in</span> - название объекта. 
+                            Если свойство или метод с подобным именем имеется, то оператор возвращает <code>true</code>. Если нет - то возвращается <code>false</code>.
+                            <p>Например, узнаем, есть ли в объекте ряд свойств:</p>
+                            <div class="code-block"><code>const user = {};
+    user.name = "Tom";
+    user.age = 26;
+
+    user.print = function(){
+        console.log(this.name);
+        console.log(this.age);
+};
+
+const hasNameProp = "name" in user;
+console.log(hasNameProp);   <code class="comment">// true - свойство name есть в user</code>
+    
+const hasWeightProp = "weight" in user;
+console.log(hasWeightProp); <code class="comment">// false - в user нет свойства или метода под названием weight</code>
+</code></div>
+                        </p>
+                        <p>
+                            С помощью выражения <code>"name" in user</code> проверяем, есть ли в объекте user свойство "name" и результат проверки передаем в константу hasNameProp. 
+                            Далее анологичным образом проверяем наличие свойства <code>wheight</code>.
+                        </p>
+                        <p>Подобным образом можно проверить и наличие методов:</p>
+                        <div class="code-block"><code>const hasPrintMethod = "print" in user;
+ console.log(hasPrintMethod); <code class="comment">// true - в user есть метод print</code></code></div>
+                    </li>
+                    <li>
+                        <p><strong>Альтернативный способ</strong> заключается в проверке на значение <span class="b">undefined</span>. Если свойство или метод равен undefined, то эти свойство или метод не определены:</p>
+                        <div class="code-block"><code>const hasNameProp = user.name!==undefined;
+console.log(hasNameProp);   <code class="comment">// true</code>
+
+const hasWeightProp = user.weight!==undefined;
+console.log(hasWeightProp); <code class="comment">// false</code></code></div>
+                    </li>
+                    <li>
+                        <p>
+                            И так как объекты представляют тип <code>Object</code>, а значит, имеет все его методы и свойства, то объекты также могут использовать метод 
+                            <span class="b">hasOwnProperty()</span>, который определен в типе <code>Object</code>:
+                        </p>
+                        <div class="code-block"><code>const hasNameProp = user.hasOwnProperty("name");
+console.log(hasNameProp);    <code class="comment">// true</code>
+
+const hasPrintMethod = user.hasOwnProperty("print");
+console.log(hasPrintMethod); <code class="comment">// true</code>
+
+const hasWeightProp = user.hasOwnProperty("weight");
+console.log(hasWeightProp);  <code class="comment">// false</code></code></div>
+                    </li>
+                </ul>
+
+                <h3>Перебор свойств и методов</h3>
+
+                <p>С помощью цикла <span class="b">for</span> мы можем перебрать объект как обычный массив и получить все его свойства и методы и их значения:</p>
+
+                <div class="code-block"><code>const tom = {
+    name: "Tom",
+    age: 26,
+
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+};
+ 
+for(const prop in tom) {
+    console.log(prop, " : ", tom[prop]);
+}</code></div>
+
+                <p>И при запуске консоль браузера отобразит следующий вывод:</p>
+                <pre class="browser">name : Tom
+age : 26
+print : print(){
+	console.log(`Name: ${this.name}  Age: ${this.age}`);
+}</pre>
+
+                <h3>Функции Object.entries, Object.keys, Object.values</h3>
+
+                <p>
+                    С помощью дополнительных функций <span class="b">Object.entries</span>, <span class="b">Object.keys</span> и <span class="b">Object,values</span> 
+                    можно получить все свойства (в том числе методы) объекта и их значения.
+                </p>
+
+                <h4>Object.entries()</h4>
+
+                <p>Функция <span class="b">Object.entries()</span> в качестве параметра принимает объект и возвращает массив пар "название_свойства - значение", где каждая пара свойство-значение представляет массив. Например:</p>
+                <div class="code-block"><code>const tom = {
+    name: "Tom",
+    age: 26,
+
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+};
+  
+for(const prop of Object.entries(tom)) {
+    console.log(prop);
+}</code></div>
+
+                <p>Консольный вывод:</p>
+                <pre class="browser">["name", "Tom"]
+["age", 26]
+["print", ƒ]</pre>
+
+                <h4>Object.keys()</h4>
+
+                <p>Функция <span class="b">Object.keys()</span> позволяет получить массив названий всех свойств объекта. Например, возьмем выше определенный объект <code>tom</code>:</p>
+                <div class="code-block"><code>const tom = {
+    name: "Tom",
+    age: 26,
+
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+};
+
+ console.log(Object.keys(tom)); <code class="comment">// ["name", "age", "print"]</code></code></div>
+
+                <p>Соответственно можно перебрать этот набор и получить значения свойств:</p>
+                <div class="code-block"><code>for(const prop of Object.keys(tom)) {
+    const value = tom[prop];    <code class="comment">// получаем по названию значение свойства</code>
+    console.log(prop,value);
+}</code></div>
+
+                <p>Консольный вывод:</p>
+                <pre class="browser">name Tom
+age 26
+print ƒ print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+}</pre>
+
+                <h4>Object.values()</h4>
+
+                <p>Функция <span class="b">Object.values()</span> возвращает массив, который содержит все значения свойств объекта:</p>
+                <div class="code-block"><code>const tom = {
+    name: "Tom",
+    age: 26,
+
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+};
+
+ console.log(Object.values(tom)); <code class="comment">// ["Tom", 26, print()]</code></code></div>
+
+
+                <h2 id="ch4-obj-in-func">📜 Объекты в функциях</h2>
+
+                <h3>Объект как результат функции</h3>
+
+                <p>Функции могут возвращать объекты. Этот может потребоваться в различных задачах. Например, вынесем создание объекта в отдельную функцию:</p>
+                <div class="code-block"><code>function createUser(pName, pAge) {
+    return {
+        name: pName,
+        age: pAge,
+        print: function() {
+            console.log(`Name: ${this.name}  Age: ${this.age}`);
+        }
+    };
+};
+
+const tom = createUser("Tom", 26);
+tom.print();
+
+const alice = createUser("Alice", 24);
+alice.print();</code></div>
+
+                <p>Здесь функция <span class="b">createUser()</span> получает значения <code>pName</code> и <code>pAge</code> и по ним создает новый объект, который является возвращаемым результатом. Результат работы программы:</p>
+                <pre class="browser">Name: Tom  Age: 26
+Name: Alice  Age: 24</pre>
+
+                <p>
+                    Преимуществом вынесения создания объекта в функцию является то, что далее мы можем создать несколько однотипных объектов с разными значениями, то есть выступать в роли фабрики или конструктора. 
+                    Кроме того, в подобной функции мы можем проверить переданные значения на корректность и в случае их некорректности как-то прореагировать:
+                </p>
+                <div class="code-block"><code>function createUser(pName, pAge) {
+ 
+  if(pAge &lt; 1 || pAge &gt; 110){       <code class="comment">//</code> если возраст меньше 1 или больще 110
+      console.log("Age is invalid")
+      pAge=1;
+  }
+
+    return {
+        name: pName,
+        age: pAge,
+        print: function() {
+            console.log(`Name: ${this.name}  Age: ${this.age}`);
+        }
+    };
+};
+
+const tom = createUser("Tom", 26);
+tom.print();
+
+const alice = createUser("Alice", 12345);
+alice.print();</code></div>
+
+                <p>
+                    Здесь проверяется параметр <code>pAge</code>, который представляет возвраст пользователя. Понятно, что теоретически это может быть любое число, которое может выходить за разумные пределы, например, быть 
+                    отрицательным. И в данном случае мы проверяем <code>pAge</code> на соответствие этому пределу. Если значение <code>pAge</code> не соответствует пределу, то присваиваем ему значение по умолчанию - в данном случае <code>1</code>, 
+                    и выводим диагностическое сообщение. Консольный вывод программы:
+                </p>
+                <pre class="browser">Name: Tom  Age: 26
+Age is invalid
+Name: Alice  Age: 1</pre>
+
+                <p>
+                    Также возращение объекта может быть полезно, если нам надо ввернуть из функции больше одного результата - в этом случае мы можем объединить их в один объект. 
+                    Например, функция принимает массив и находит в нем минимальное и максимальное значения:
+                </p>
+                <div class="code-block"><code>function getMinMax(numbers){
+ 
+  <code class="comment">// если массив пуст, минимальное и максимальное значения неопределены</code>
+  if(numbers.length === 0) return {min: undefined, max: undefined};
+ 
+  let minNumber = numbers[0];
+  let maxNumber = numbers[0];
+  for(let i=1; i &lt; numbers.length; i++){
+     
+    if(minNumber &gt; numbers[i]) minNumber = numbers[i];
+    if(maxNumber &lt; numbers[i]) maxNumber = numbers[i];
+  }
+
+  return {min: minNumber, max: maxNumber};
+}
+ 
+const nums = [1, 2, 3, 4, 5];
+const result = getMinMax(nums);
+
+console.log("Min:", result.min);    <code class="comment">// Min: 1</code>
+console.log("Max:", result.max);    <code class="comment">// Max: 5</code></code></div>
+
+                <p>
+                    Здесь в функции <span class="b">getMinMax</span> получаем массив. Если массив не содержит чисел, то возвращаем объект, где поля <code>min</code> и <code>max</code> имеют значения <code>undefined</code>. Иначе проходим по всему массиву и 
+                    вычисляем максимальное и минимальное значения и возвращаем их в виде одного объекта.
+                </p>
+
+                <h3>Объект как параметр</h3>
+
+                <p>Как и все другие значения, объект может передаваться в качестве параметра в функцию:</p>
+                <div class="code-block"><code>function printPerson(person){
+  console.log("Name:", person.name);
+  console.log("Age:", person.age);
+}
+ 
+const tom = {name: "Tom", age: 39};
+const alice = {name: "Alice", age: 35};
+ 
+printPerson(tom);
+printPerson(alice);</code></div>
+
+                <p>Здесь в функцию <span class="b">printPerson</span> передается объект, который, как предполагается, будет иметь два свойства: <code>name</code> и <code>age</code>.</p>
+                <p>
+                    При этом стоит учитывать, что объект - ссылочный тип, а переменная/константа/параметр, которые представляют объект, фактически хранят ссылку на объект в памяти, а не сам объект. 
+                    Соответственно при передаче в функцию объекта параметру передается копия ссылки на этот объект. И через эту ссылку функция может изменять различные свойства объекта:
+                </p>
+                <div class="code-block"><code>function setAge(person, pAge){
+  person.age = pAge;
+}
+ 
+const sam = {name: "Sam", age: 29};
+console.log("Before setAge:", sam.age);
+
+setAge(sam, 30);
+console.log("After setAge:", sam.age);</code></div>
+
+                <p>Здесь сначала определяем константу <code>sam</code>, которая представляет объект со свойствами <code>name</code> и <code>age</code>:</p>
+                <div class="code-block"><code>const sam = {name: "Sam", age: 29};</code></div>
+
+                <p>Фактически константа <code>sam</code> хранит ссылку на область памяти, где расположен объект.</p>
+                <p>Затем вызывается функция <span class="b">setAge</span>, которая получает объект <code>person</code> и изменяет у него свойство <code>age</code>.</p>
+                <div class="code-block"><code>setAge(sam, 30);</code></div>
+
+                <p>
+                    Поскольку объекты передаются по ссылке, то функция <span class="b">setAge</span> получит <span class="b">копию ссылки</span>, которая хранится в константе <code>sam</code>. То есть после этого константа <code>sam</code> и первый параметр функции 
+                    <code>setAge</code> будут представлять <span class="b">две разные ссылки</span>, но указывать они будут на один и тот же объект в памяти. Поэтому если внутри функции <code>setAge</code> мы изменим свойство этого объекта, 
+                    то при обращении у объекта <code>sam</code> свойство тоже изменится, так как в реальности это один и тот же объект. В итоге браузер нам выведет:
+                </p>
+                <pre class="browser">Before setAge: 29
+After setAge: 30</pre>
+
+                <p>Но если параметру внутри функции присваивается другой объект, то фактически ссылка меняет свое значение и начинает указывать на дргую область памяти:</p>
+                <div class="code-block"><code>function setDefault(person){
+  person = {name: "Undefined", age: 0};
+}
+ 
+let sam = {name: "Sam", age: 29};
+console.log("Before setDefault:", sam.name);
+
+setDefault(sam);
+console.log("After setDefault:", sam.name);</code></div>
+
+                <p>При передаче переменной <code>sam</code> в функцию <span class="b">setDefault</span> параметр этой функции и переменная <code>sam</code> будут представлять две разные ссылки, но указывать на один и тот же обеъект в памяти:</p>
+                <div class="code-block"><code>setDefault(sam);</code></div>
+
+                <p>Но потом внутри функции мы изменяем значение параметра:</p>
+                <div class="code-block"><code>person = {name: "Undefined", age: 0};</code></div>
+
+                <p>В итоге ссылке, которая хранится в параметре <code>person</code>, присвается новый объект. Но поскольку переменная <code>sam</code> и параметр <code>person</code> представляют две разные ссылки, то это присваивание никак не затронет объект <code>sam</code>.</p>
+
+
+                <h2 id="ch4-constructor">📜 Функции-конструкторы объектов</h2>
+
+                <p>Кроме создания новых объектов JavaScript предоставляет нам возможность создавать новые типы объектов с помощью специальных функций - <span class="b">конструкторов</span>. <code><em>Конструктор позволяет определить новый тип объекта</em></code>. Определение типа может состоять из функции конструктора, методов и свойств.</p>
+                <p>Для начала определим конструктор:</p>
+                <div class="code-block"><code>function Person(pName, pAge) {
+    this.name = pName;
+    this.age = pAge;
+
+    this.print = function(){
+        console.log("Name: ", this.name);
+        console.log("Age: ", this.age);
+    };
+}</code></div>
+
+                <p><span class="b">Конструктор</span> - это обычная функция за тем исключением, что в ней мы можем установить свойства и методы. Для установки свойств и методов используется ключевое слово <span class="bb">this</span>:</p>
+                <div class="code-block"><code>this.name = pName;</code></div>
+
+                <p>В данном случае устанавливаются два свойства <code>name</code> и <code>age</code> и один метод <span class="b">print</span>.</p>
+                <p>Как правило, названия конструкторов в отличие от названий обычных функций начинаются с большой буквы.</p>
+
+                <p>После этого в программе мы можем определить объект типа Person и использовать его свойства и методы:</p>
+                <div class="code-block"><code><code class="comment">// определение конструктора объектов типа Person</code>
+function Person(pName, pAge) {
+    this.name = pName;
+    this.age = pAge;
+
+    this.print = function(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    };
+}
+
+<code class="comment">// определение объекта типа Person</code>
+const tom = new Person("Tom", 39);
+
+<code class="comment">// обращение к свойству объекта</code>
+console.log(tom.name);              <code class="comment">// Том</code>
+
+<code class="comment">// обращение к методу объекта</code>
+tom.print();                        <code class="comment">// Name: Tom  Age: 39</code></code></div>
+
+                <p>Чтобы вызвать конструктор, то есть создать объект типа <code>Person</code>, надо использовать ключевое слово <span class="b">new</span>:</p>
+                <div class="code-block"><code>const tom = new Person("Tom", 39);</code></div>
+
+                <p>Далее через имя объекта можно обращаться к его свойствам и методам, которые определены внутри функции конструктора:</p>
+                <div class="code-block"><code><code class="comment">// обращение к свойству объекта</code>
+console.log(tom.name);               <code class="comment">// Том</code>
+<code class="comment">// обращение к методу объекта</code>
+tom.print();</code></div>
+
+                <p>Стоит отметить, что, конечно, мы могли бы определить объект стандартным образом:</p>
+                <div class="code-block"><code>const tom = {
+    name: "Tom",
+    age: 39,
+    print: function(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+}</code></div>
+
+                <p>
+                    Однако использование <em>функций-конструкторов</em> позволяет упростить многократное создание однотипных объектов, которые имеют одинаковый набор свойств и методов. То есть 
+                    фактически мы определяем новый тип объектов. Например:
+                </p>
+
+                <div class="code-block"><code>function Person(pName, pAge) {
+    this.name = pName;
+    this.age = pAge;
+
+    this.print = function(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    };
+}
+
+const tom = new Person("Tom", 39);
+const bob = new Person("Bob", 43);
+const sam = new Person("Sam", 28);
+ 
+tom.print();    <code class="comment">// Name: Tom  Age: 39</code>
+bob.print();    <code class="comment">// Name: Bob  Age: 43</code>
+sam.print();    <code class="comment">// Name: Sam  Age: 28</code></code></div>
+
+                <h4>Другой пример:</h4>
+                 <div class="code-block"><code><code class="comment">// Конструктор (с большой буквы)</code>
 function User(name, age) {
     this.name = name;
     this.age = age;
@@ -6215,14 +6610,281 @@ const user2 = new User('Bob', 30);
 user1.greet(); <code class="comment">// "Привет, я Alice"</code>
 user2.greet(); <code class="comment">// "Привет, я Bob"</code></code></div>
 
-                <h2>Прототипы</h2>
-                <div class="code-block"><code>// Добавление метода в прототип
+
+                <p>Объекты подобных типов можно также передавать в функции или возвращать из функций, они могут выступать в качестве свойств других объектов, могут храниться в массивах и т.д. Например:</p>
+                <div class="code-block"><code>function Person(pName, pAge) {
+    this.name = pName;
+    this.age = pAge;
+
+    this.print = function(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    };
+}
+
+function printPersonName(person){
+    console.log(person.name);
+}
+
+<code class="comment">// массив из трех объектов Person</code>
+const people = [new Person("Tom", 39), new Person("Bob", 43), new Person("Sam", 28)];
+ 
+for(person of people){
+    printPersonName(person);
+}</code></div>
+
+                <h3>Оператор instanceof</h3>
+
+                <p>Оператор <span class="b">instanceof</span> позволяет проверить, с помощью какого конструктора создан объект. Если объект создан с помощью определенного конструктора, то оператор возвращает <code>true</code>:</p>
+                <div class="code-block"><code><code class="comment">// определение конструктора объектов типа Person</code>
+function Person(pName, pAge) {
+    this.name = pName;
+    this.age = pAge;
+
+    this.print = function(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    };
+}
+
+<code class="comment"><code class="comment">// определение конструктора объектов типа Employee</code></code>
+function Employee(eName, eCompany) {
+    this.name = eName;
+    this.company = eCompany;
+
+    this.print = function(){
+        console.log(`Name: ${this.name}  Company: ${this.company}`);
+    };
+}
+
+const tom = new Person("Tom", 39); 
+const bob = new Employee("Bob", "Google");
+ 
+console.log(tom instanceof Person);     <code class="comment">// true - tom является объектом типа Person</code>
+console.log(bob instanceof Employee);   <code class="comment">// true - bob является объектом типа Employee</code>
+console.log(tom instanceof Employee);   <code class="comment">// false - tom НЕ является объектом типа Employee</code></code></div>
+
+               
+                <h2 id="ch4-prototype">📜 Расширение объектов. Прототипы</h2>
+
+                <p>
+                    JavaScript — это язык, основанный на прототипах, поэтому он не знает никаких классов — по крайней мере, реальных. Вместо этого все в JavaScript основано на объектах. 
+                    Почти каждый объект в JavaScript основан на прототипе. Исключения - тип <code>Object</code> (основа всех объектов) или объекты, прототип которых явно 
+                    установлен в <code>null</code> — не имеют прототипа. Каждый объект также может служить шаблоном, то есть прототипом другого объекта. 
+                    В этом случае новый объект наследует свойства и методы прототипа.
+                </p>
+                <p>
+                    Прототип объекта хранится в свойстве <span class="b">__proto__</span>, которое реализованно как псевдоним внутреннего свойства <code>[[Prototype]]</code>. 
+                    Кроме того получить прототип объекта можно с помощью метода <span class="b">getPrototypeOf()</span>. Например:
+                </p>
+                <div class="code-block"><code>const tom = {name: "Tom", age: 39};
+ 
+<code class="comment">// получаем прототип</code>
+console.log(tom.__proto__);                 <code class="comment">// Object</code>
+console.log(Object.getPrototypeOf(tom));    <code class="comment">// Object</code></code></div>
+                
+
+                <p>В обоих случаях мы получим один и тот же результат в виде определения типа <code>Object</code>:</p>
+                <pre class="browser">Object
+    constructor: ƒ Object()
+    hasOwnProperty: ƒ hasOwnProperty()
+    isPrototypeOf: f isPrototypeOf()
+    propertyIsEnumerable: f propertyIsEnumerable()
+    toLocaleString: f toLocaleString()
+    toString: f toString()
+    valueOf: f valueOf()
+    __defineGetter__: f __defineGetter__()
+    __defineSetter__: f __defineSetter__()
+    __lookupGetter__: f __lookupGetter__()
+    __lookupSetter__: f __lookupSetter__()
+    __proto__: null
+    get __proto__: f __proto__()
+    set __proto__: f __proto__()
+</pre>
+
+                <h3>Прототип функций-конструкторов</h3>
+
+                <p>
+                    В прошлой теме были рассмотрены функции-конструкторы, который позволяют определить тип объекта и создать объект этого типа. 
+                    Каждая такая функция-конструктор определяет свой <span class="b">прототип</span>, который служит основой для создаваемых объектов. 
+                    Этот прототип также можно получить с помощью свойства <span class="b">prototype</span>. Например:
+                </p>
+
+                <div class="code-block"><code>function Person(name, age) {
+    this.name = name;
+    this.age = age;
+    this.print = function(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    };
+}
+ 
+const tom = new Person("Tom", 39);
+ 
+<code class="comment">// получаем прототип</code>
+console.log(Person.prototype);
+console.log(tom.__proto__);
+console.log(Object.getPrototypeOf(tom));</code></div>
+
+                <p>Здесь получаем прототип функции-конструктора Person. Все три использованных способа получения прототипа аналогичны, и при выводе на консоль во всех трех случаях мы увидим что-то наподобие:</p>
+                <pre class="browser">{constructor: ƒ}
+constructor : ƒ Person(name, age)
+[[Prototype]] : Object
+</pre>
+
+                <h3>Конструктор и прототип</h3>
+
+                <p>Важно отличать конструктор и прототип. <code>Прототип - это по сути план объекта</code>, который может состоять из различных частей - методов и переменных, а собственно конструктор - только часть прототипа. Например, возьме выше определенную функцию <span class="b">Person</span>:</p>
+                <div class="code-block"><code>function Person(name, age) {
+    this.name = name;
+    this.age = age;
+    this.print = function(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    };
+}
+
+console.log(Person.prototype);</code></div>
+
+                <p>Консольный вывод:</p>
+                <pre class="browser">{constructor: ƒ}
+	constructor: ƒ Person(name, age)
+	[[Prototype]]: Object
+</pre>
+
+                <p>Схематично мы можем представить прототип следующим образом:</p>
+
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500" height="219" xml:space="preserve" version="1.1" viewBox="0 0 500 219">
+                    <image width="500" height="219" xlink:href="data:image/png;base64,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"/>
+                </svg>
+
+                <p>
+                    Фактически прототип функции-конструктора <span class="b">Person</span> состоит только из конструктора (в который неявно также входят унаследованные от типа <code>Object</code> методы типа <code>toString()</code>). 
+                    мы можем получить этот конструктор, использовав свойство <span class="b">constructor</span>:
+                </p>
+                <div class="code-block"><code>console.log(Person.prototype.constructor);</code></div>
+
+                <p>Консоль должна вывести что-то наподобие:</p>
+                <pre class="browser">ƒ Person(name, age) {
+	this.name = name;
+	this.age = age;
+	this.print = function(){
+		console.log(`Name: ${this.name}  Age: ${this.age}`);
+	};
+</pre>
+
+                <p>Поскольку свойство <code>constructor</code> - это часть прототипа, то к нему обратиться можно и через имя объекта:</p>
+                <div class="code-block"><code>const tom = new Person("Tom", 39);
+ console.log(tom.constructor); </code></div>
+
+                <p>Теперь уберем метод <code>print()</code> из конструктора и определим его как часть прототипа:</p>
+                <div class="code-block"><code>function Person (name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+<code class="comment">// функция print определена как часть прототипа</code>
+Person.prototype.print = function(){
+    console.log(`Name: ${this.name}  Age: ${this.age}`);
+};
+ 
+console.log(Person.prototype);</code></div>
+
+                <p>Консольный вывод браузера:</p>
+                <pre class="browser">{print: ƒ, constructor: ƒ}
+	print: ƒ ()
+	constructor: ƒ Person(name, age)
+	[[Prototype]]: Object
+</pre>
+
+                <p>Теперь прототип состоит из функции <span class="b">print</span> и конструктора:</p>
+
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="500" height="193" xml:space="preserve" version="1.1" viewBox="0 0 500 193">
+                    <image width="500" height="193" xlink:href="data:image/png;base64,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"/>
+                </svg>
+
+                <p>При этом вне зависимости от того, как мы определяем методы и свойства - внутри конструктора или как часть прототипа, мы их равным образом можем использовать для объектов данного типа:</p>
+
+                <div class="code-block"><code>function Person(name, age) {
+    this.name = name;
+    this.age = age;
+
+    this.print = function(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    };
+}
+ 
+const tom = new Person("Tom", 39);
+const bob = new Person("Bob", 43);
+ 
+<code class="comment">// измененияем прототип</code>
+Person.prototype.sayHello = function(){
+    console.log(this.name, "says: Hello");
+};
+
+tom.print();            <code class="comment">// Name: Tom  Age: 39</code>
+tom.sayHello();         <code class="comment">// Tom says: Hello</code>
+
+bob.print();            <code class="comment">// Name: Bob  Age: 43</code>
+bob.sayHello();         <code class="comment">// Bob says: Hello</code></code></div>
+
+                <p>Причем мы можем определить одни и те же свойства и методы как внутри конструктора, так и как часть прототипа:</p>
+                <div class="code-block"><code><code class="comment">// конструктор пользователя</code>
+function Person (name, age) {
+    this.name = name;
+    this.age = age;
+
+    this.print = function(){
+        console.log(`[Конструктор] Name: ${this.name}  Age: ${this.age}`);
+    };
+}
+
+Person.prototype.print = function(){
+    console.log(`[Прототип] Name: ${this.name}  Age: ${this.age}`);
+};
+ 
+const tom = new Person("Tom", 39);
+const bob = new Person("Bob", 43);
+
+tom.print();                        <code class="comment">// [Конструктор] Name: Tom  Age: 39</code>
+bob.print();                        <code class="comment">// [Конструктор] Name: Bob  Age: 43</code></code></div>
+
+                <p>В этом случае методы, определенные внутри конструктора, будут скрывать одноименные методы прототипа.</p>
+
+                <h3>Определение свойств прототипа</h3>
+
+                <p>Подобным образом можно добавлять и свойства. Например, добавим свойство <code>company</code>, которое представляет компанию:</p>
+                <div class="code-block"><code>const tom = new Person("Tom", 39);
+const bob = new Person("Bob", 43);
+ 
+<code class="comment">// добавляем в прототип свойство company</code>
+Person.prototype.company = <span style="color: #DB003E;">"SuperCorp"</span>;
+console.log(tom.company);            <code class="comment">// SuperCorp</code>
+console.log(bob.company);            <code class="comment">// SuperCorp</code></code></div>
+
+                <p>
+                    Но важно заметить, что значение свойства <code>company</code> будет одно и то же для всех объектов, это разделяемое статическое свойство. В отличие, скажем, от свойства 
+                    <code>this.name</code>, которое хранит значение для определенного объекта.
+                </p>
+
+                <p>
+                    В то же время мы можем определить в объекте свойство, которое будет назваться также, как и свойство прототипа. В этом случае собственное свойство 
+                    объекта будет иметь приоритет перед свойством прототипа:
+                </p>
+                <div class="code-block"><code>const tom = new Person("Tom", 39);
+const bob = new Person("Bob", 43);
+ 
+Person.prototype.company = <span style="color: #DB003E;">"SuperCorp"</span>;
+bob.company = <span style="color: #DB003E;">"MegaCorp"</span>;   <code class="comment">// определяем свойство с тем же именем на уровне одного объекта</code>
+
+console.log(bob.company);   <code class="comment">// MegaCorp - берет свойство из объекта bob</code>
+console.log(tom.company);   <code class="comment">// SuperCorp - берет свойство из прототипа Person</code></code></div>
+
+                <p>И при обращении к свойству <code>company</code> javascript сначала ищет это свойство среди свойств объекта, и если оно не было найдено, тогда обращается к свойствам прототипа. То же самое касается и методов.</p>
+
+                <div class="code-block"><code><code class="comment">// Добавление метода в прототип</code>
 function User(name, age) {
     this.name = name;
     this.age = age;
 }
 
-// Метод в прототипе (экономия памяти)
+<code class="comment">// Метод в прототипе (экономия памяти)</code>
 User.prototype.greet = function() {
     console.log(`Привет, я ${this.name}`);
 };
@@ -6233,13 +6895,15 @@ User.prototype.celebrate = function() {
 };
 
 const user1 = new User('Alice', 25);
-user1.greet();     // "Привет, я Alice"
-user1.celebrate(); // "Мне 26"</code></div>
+user1.greet();     <code class="comment">// "Привет, я Alice"</code>
+user1.celebrate(); <code class="comment">// "Мне 26"</code></code></div>
 
                 <div class="info-box note">
                     <div class="info-box-title">💡 Зачем прототипы?</div>
                     <p>Методы в прототипе создаются один раз и используются всеми экземплярами. Это экономит память по сравнению с созданием метода внутри конструктора.</p>
                 </div>
+
+                
 
                 <h2>Классы (ES6)</h2>
                 
