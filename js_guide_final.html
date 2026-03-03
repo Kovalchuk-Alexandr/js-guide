@@ -563,7 +563,7 @@
                                 <li class="nav-subitem" data-target="ch3-params-passing">📜 Передача параметров по значению и по ссылке</li>
                             </ul>
                         </li>
-                        <li class="nav-item has-subitems" data-target="ch4"><span class="ch-emoj"></span> Глава 4-5. ООП
+                        <li class="nav-item has-subitems" data-target="ch4"><span class="ch-emoj"></span> Глава 4. ООП. Объекты.
                             <ul class="nav-sublist">
                                 <li class="nav-subitem" data-target="ch4-objects">📜 Объекты</li>
                                 <li class="nav-subitem" data-target="ch4-methods">📜 Методы объектов</li>
@@ -575,6 +575,9 @@
                                 <li class="nav-subitem" data-target="ch4-obj-in-func">📜 Объекты в функциях</li>
                                 <li class="nav-subitem" data-target="ch4-constructor">📜 Функции-конструкторы</li>
                                 <li class="nav-subitem" data-target="ch4-prototype">📜 Прототипы</li>
+                                <li class="nav-subitem" data-target="ch4-call-apply">📜 Функция как объект. Методы call и apply</li>
+                                <li class="nav-subitem" data-target="ch4-obj-create">📜 Функция Object.create. Конфигурация свойств объектов</li>
+                                <li class="nav-subitem" data-target="ch4-inheritance-proto">📜 Наследование прототипов</li>
                             </ul>
                         </li>
                     </ul>
@@ -5225,7 +5228,7 @@ console.log("after changeFull:", numbers);  <code class="comment">// [8, 2, 3]</
 
             <!-- ГЛАВА 4-5: ООП -->
             <section class="chapter" id="ch4">
-                <h1>Глава 4-5. Объектно-ориентированное программирование</h1>
+                <h1>Глава 4. Объектно-ориентированное программирование</h1>
 
                 <p>
                     Объектно-ориентированное программирование на сегодняшний день является одной из господствующих парадигм в разработке приложений, и в 
@@ -6903,7 +6906,423 @@ user1.celebrate(); <code class="comment">// "Мне 26"</code></code></div>
                     <p>Методы в прототипе создаются один раз и используются всеми экземплярами. Это экономит память по сравнению с созданием метода внутри конструктора.</p>
                 </div>
 
+
+                <h2 id="ch4-call-apply">📜 Функция как объект. Методы call и apply</h2>
+
+                <p>
+                    В JavaScript функция тоже является объектом - объектом <span class="b">Function</span> и тоже имеет прототип, свойства, методы. Все функции, которые используются в программе, 
+                    являются объектами <code>Function</code> и имеют все его свойства и методы.
+                </p>
+                <p>Например, мы можем создать функцию с помощью конструктора <span class="b">Function</span>:</p>
+                <div class="code-block"><code>const square = new Function("n", "return n * n;");
+ console.log(square(5));     <code class="comment">// 25</code></code></div>
+
+                <p>
+                    В конструктор <span class="b">Function</span> может передаваться ряд параметров. Последний параметр представляет собой само тело функции в виде строки. Фактически 
+                    строка содержит код javascript. Предыдущие аргументы содержат названия параметров. В данном случае определяется функция возведения числа в квадрат, которая имеет один параметр <code>n</code>.
+                </p>
+
+                <p>Среди свойств объекта <code>Function</code> можно выделить следующие:</p>
+                <ul>
+                    <li><span class="b">arguments</span>: массив аргументов, передаваемых в функцию</li>
+                    <li><span class="b">length</span>: определяет количество аргументов, которые ожидает функция</li>
+                    <li><span class="b">caller</span>: определяет функцию, вызвавшую текущую выполняющуюся функцию</li>
+                    <li><span class="b">name</span>: имя функции</li>
+                    <li><span class="b">prototype</span>: прототип функции</li>
+                </ul>
+
+                <p>С помощью прототипа мы можем определить дополнительные свойства:</p>
+                <div class="code-block"><code>function sayHello(){
+    console.log("Hello");
+}
+
+<code class="comment">// изменяем прототип для всех функций</code>
+Function.prototype.program ="Hello World";
+ 
+console.log(sayHello.program); <code class="comment">// Hello World</code></code></div>
+
+
+                <h3>Методы call() и apply()</h3>
+
+                <p>Метод <span class="b">call()</span> вызывает функцию с указанным значением <code>this</code> и аргументами:</p>
+                <div class="code-block"><code>function sum(x, y){
+    return x + y;
+}
+
+const result = sum.call(this, 3, 8);
+ 
+console.log(result); <code class="comment">// 11</code></code></div>
+
+                <p><span class="b">this</span> указывает на объект, для которого вызывается функция - в данном случае это глобальный объект <code>window</code>. После <code>this</code> передаются значения для параметров.</p>
+                <p>При передаче объекта через первый параметр, мы можем ссылаться на него через ключевое слово <span class="b">this</span>:</p>
+                <div class="code-block"><code>function User (name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+const tom = new User("Tom", 39);
+
+function print(){
+    console.log("Name:", this.name);
+}
+
+print.call(tom);     <code class="comment">// Name: Tom</code></code></div>
+
+                <p>В данном случае передается только одно значение, поскольку функция <span class="b">print</span> не принимает параметров. То есть функция будет вызываться для объекта <code>tom</code>.</p>
                 
+                <p>Если нам не важен объект, для которого вызывается функция, то можно передать значение <code>null</code>:</p>
+                <div class="code-block"><code>function sum(x, y){
+    return x + y;
+}
+
+const result = sum.call(null, 3, 8);
+ 
+console.log(result); <code class="comment">// 11</code></code></div>
+
+                <p>
+                    На метод <code>call()</code> похож метод <span class="b">apply()</span>, который также вызывает функцию и в качестве первого параметра также 
+                    получает объект, для которого функция вызывается. Только теперь в качестве второго параметра передается массив аргументов:
+                </p>
+                <div class="code-block"><code>function sum(x, y){
+    return x + y;
+}
+
+const result = sum.apply(null, [3, 8]);
+ 
+console.log(result); <code class="comment">// 11</code></code></div>
+
+
+                <h2 id="ch4-obj-create">📜 Функция Object.create. Конфигурация свойств объектов</h2>
+
+                <h3>Функция Object.create</h3>
+
+                <p>Еще один способ создания объекта предоставляет функция <span class="b">Object.create</span>, которая принимает два параметра:</p>
+                <ul>
+                    <li> <code>Первый параметр</code> - <i>прототип</i>, на основе которого будет создаваться объект</li>
+                    <li><code>Второй параметр</code> - <i>определение свойств и методов объекта</i></li>
+                </ul>
+
+                <div class="code-block"><code>const tom = Object.create(прототип, {  свойства и методы });</code></div>
+
+                <p>Например:</p>
+                <div class="code-block"><code>const tom = Object.create(Object.prototype, &#123;
+    name: {    
+        value: "Tom"
+    },  
+    age: { 
+        value: 39  
+    },  
+    print: &#123;    
+        value: function() { console.log(`Name: ${this.name}  Age: ${this.age}`);&#125;   
+    }  
+&#125;);
+ 
+console.log(tom.name);  <code class="comment">// Tom</code>
+console.log(tom.age);   <code class="comment">// 39</code>
+
+tom.print();            <code class="comment">// Name: Tom  Age: 39</code></code></div>
+
+                <p>Здесь в качестве прототипа в функцию <code>Object.create()</code> передается прототип <span class="b">Object</span> - <code>Object.prototype</code>. Второй параметр функции - определение свойств вида:</p>
+                <div class="code-block"><code>имя_свойства/метода: {
+    value: значение_свойства/метода
+}</code></div>
+
+                <p>Имени <em>свойства/метода</em> сопоставляется объект, в котором есть свойство <span class="b">value</span> - это свойство собственно и хранит значение <em>свойства/метода</em>. Например, свойство <code>age</code> равно <code>39</code>:</p>
+                <div class="code-block"><code>age: { 
+    value: 39  
+}</code></div>
+
+                <p>Для метода значением выступает определение функции.</p>
+                <p>После создания объекта мы можем обращаться к его свойствам и методам, как и в общем случае:</p>
+                <div class="code-block"><code>console.log(tom.age);   <code class="comment">// 39</code></code></div>
+
+                <p>
+                    Подобный способ создания объектов может показаться чересчур громоздким и избыточным. Тем не менее он позволяет чуть детальнее настроить конфигурацию свойств. 
+                    Так, кроме поля <span class="b">value</span> при конфигурации свойства мы можем задать дополнительные поля:
+                </p>
+                <ul>
+                    <li>
+                        <span class="b">writeable</span>: хранит логическое значение, которое указывает, доступно ли это свойство для записи, 
+                        то есть можно ли ему присвоить новое значение. По умолчанию этот атрибут имеет значение false.
+                    </li>
+                    <li>
+                        <span class="b">enumerable</span>: хранит логическое значение, которое указывает, является ли соответствующее свойство перечислимым, 
+                        то есть включается ли это свойство при переборе свойств соответствующего объекта (например, с использованием цикла for...in). По умолчанию 
+                        имеет значение false.
+                    </li>
+                    <li>
+                        <span class="b">configurable</span>: хранит логическое значение, которое указывает, можно ли изменить сам атрибут для соответствующего 
+                        свойства, то есть можно ли впоследствии настроить свойство с помощью атрибутов. Значение по умолчанию для этого атрибута также равно false
+                    </li>
+                    <li><span class="b">set</span>: определяет, какая функция вызывается при изменении значения свойства</li>
+                    <li><span class="b">get</span>: определяет, какая функция вызывается при чтении значения свойства</li>
+                </ul>
+
+                <p>Применим некоторые из этих атрибутов:</p>
+                <div class="code-block"><code>const tom = Object.create(Object.prototype, {  
+    name: {    
+        value: "Tom",
+        enumerable: true,       <code class="comment">// доступно для перебора</code>
+        writable: false         <code class="comment">// НЕ доступно для записи</code>
+    },  
+    age: { 
+        value: 39,
+        enumerable: true,       <code class="comment">// доступно для перебора</code>
+        writable: true          <code class="comment">// доступно для записи</code>
+    },  
+    print: {    
+        value: function() { console.log(`Name: ${this.name}  Age: ${this.age}`);},
+        enumerable: false,      <code class="comment">// не доступно для перебора</code>
+        writable: false,        <code class="comment">// НЕ доступно для записи</code>
+    }  
+});
+ 
+console.log(tom.name);          <code class="comment">// Tom</code>
+tom.name = "Tomas";
+console.log(tom.name);          <code class="comment">// Tom - свойство name не доступно для изменения</code>
+ 
+console.log(tom.age);           <code class="comment">// 39</code>
+tom.age = 22;
+console.log(tom.age);           <code class="comment">// 22 - свойство age доступно для изменения </code>
+ 
+tom.print();                    <code class="comment">// Name: Tom  Age: 22</code>
+ 
+<code class="comment">// перебор объекта (не доступно для перебора)</code>
+for(prop in tom){
+    console.log(prop);
+}
+
+<code class="comment">// Консольный вывод:</code>
+<code class="comment">// name</code>
+<code class="comment">// age</code></code></div>
+
+
+                <h3>Функция: Object.defineProperty:</h3>
+
+                <p>
+                    В примере выше функция <code>Object.create</code> использует много кода для создания объекта. Но что, если у нас есть куча свойств и методов, но некоторая конфигурация (например, сделать 
+                    свойство доступно только для чтения) нужна только для одного свойства? В этом случае мы можем создать объект стандартным образом, а все дополнительные свойства, которые требуют конфигурации, 
+                    определить с помощью функции <span class="b">Object.defineProperty</span>:
+                </p>
+                <div class="code-block"><code>const tom = {
+    age:39, 
+    print: function() { console.log(`Name: ${this.name}  Age: ${this.age}`);}
+};
+
+Object.defineProperty(tom, "name", {    
+        value: "Tom",
+        writable: false     <code class="comment">// НЕ доступно для записи</code>
+});
+ 
+console.log(tom.name);      <code class="comment">// Tom</code>
+tom.name = "Tomas";
+console.log(tom.name);      <code class="comment">// Tom - свойство name не доступно для изменения</code>
+ 
+tom.print();                <code class="comment">// Name: Tom  Age: 22</code></code></div>
+
+                <p>Функция <span class="b">Object.defineProperty()</span> принимает три параметра:</p>
+                <ul>
+                    <li><em>Первый параметр</em> - объект, для которого определяется свойство.</li>
+                    <li><em>Второй параметр</em> - название свойства.</li>
+                    <li>
+                        <em>Третий параметр</em> - конфигурационный объект. То есть в данном случае доопределяем для объекта <span class="b">tom</span> свойство <code>name</code>, которое будет достпуно только для чтения.
+                    </li>
+                </ul>
+
+                <p>Если надо подобным образом доопределить несколько свойств, то применяется функция <span class="b">Object.defineProperties</span>, которая принимает объект и набор конфигурационных настроек для добавляемых свойств:</p>
+                <div class="code-block"><code>const tom = { age:39 };
+<code class="comment">//  доопределяем свойства для объекта tom</code>
+Object.defineProperties(tom, {    
+    name: {                 <code class="comment">// определяем свойство name</code>
+        value: "Tom",       
+        writable: false     <code class="comment">// НЕ доступно для записи</code>
+    }, 
+    print: {                <code class="comment">// определяем метод print</code>
+        value: function() { console.log(`Name: ${this.name}  Age: ${this.age}`);},
+        writable: false,    <code class="comment">// НЕ доступно для записи</code>
+    }  
+});
+ 
+tom.name = "Tomas";         <code class="comment">// свойство name не доступно для изменения</code>
+tom.print = function(){console.log("Hello Word");}  <code class="comment">// метод print не доступен для изменения</code>
+ 
+tom.print();                <code class="comment">// Name: Tom  Age: 39</code></code></div>
+
+                <p>Стоит отметить, что подобным образом мы можем не только добавлять новые свойства, но и переопределять конфигурацию уже существующих свойств. Например:</p>
+                <div class="code-block"><code>const tom = {name: "Tom"};
+<code class="comment">// для свойства name запрещаем изменение</code>
+Object.defineProperty(tom, "name", { writable: false});
+
+tom.name = "Tomas";
+console.log(tom.name);      <code class="comment">// Tom - значение свойства не изменилось</code></code></div>
+
+
+
+                <h2 id="ch4-inheritance-proto">📜 Наследование прототипов</h2>
+
+                <p>
+                    JavaScript поддерживает наследование, что позволяет нам при создании новых типов объектов при необходимости унаследовать их функционал от уже существующих. Однако
+                    нужно понимать, что наследование в JavaScript отличается от наследования в других распространенных и популярных языках типа Java, C++, C# и ряде других. В JavaScript 
+                    наследование - это <span class="b">наследование объектов</span> (а не наследование классов или типов), которое еще называют <span class="b">наследование прототипов</span> или 
+                    <span class="b">прототипное наследование</span>.
+                </p>
+
+                <p>Для создания объекта на основе некоторого прототипа применяется функция <span class="b">Object.create()</span>, в которую передается наследуемый прототип:</p>
+                <div class="code-block"><code>const person = {
+    name: "", 
+    age: 0,  
+    print: function(){ 
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+};
+ 
+const employee = Object.create(person);  <code class="comment">// employee использует прототип объекта person</code>
+ 
+<code class="comment">// получаем прототип</code>
+console.log(employee.__proto__);         <code class="comment">// {name: "", age: 0, print: ƒ}</code>
+ 
+employee.name = "Tom";
+employee.age = 39;
+employee.print();                        <code class="comment">// Name: Tom  Age: 39</code></code></div>
+
+                <p>
+                    В данном случае объект <span class="b">employee</span> создан на основе прототипа объекта <code>person</code>, по сути объект <code>employee</code> <span class="b">наследует</span> прототип объекта <code>person</code>. Благодаря такому 
+                    наследованию объект <code>employee</code> обладает всеми теми же свойствами и методами, которые определены в объекте <code>person</code>.
+                </p>
+
+                <p>В дополнение объекты могут определять свои свойства и методы. Например:</p>
+                <div class="code-block"><code>const person = {
+    name: "", 
+    age: 0,  
+    print: function(){ 
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+};
+ 
+const employee = Object.create(person);  <code class="comment">// employee использует прототип объекта person</code>
+ 
+employee.name = "Tom";
+employee.age = 39;
+employee.company = "Google";             <code class="comment">// новое свойство</code>
+
+<code class="comment">// новый метод</code>
+employee.work = function(){ 
+    console.log(`${this.name} works in ${this.company}`);
+}
+
+employee.print();                        <code class="comment">// Name: Tom  Age: 39</code>
+employee.work();                         <code class="comment">// Tom works in Google</code>
+</code></div>
+
+                <p>В данном случае объект <span class="b">employee</span> дополнительно определяет свойство <code>company</code> и метод <code>work</code>.</p>
+
+                <p>При необходимости можно переопределить унаследованные методы:</p>
+                <div class="code-block"><code>const person = {
+    name: "", 
+    age: 0,  
+    print: function(){ 
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+};
+
+const employee = Object.create(person);
+ 
+employee.name = "Tom";
+employee.age = 39;
+employee.company = "Google";
+
+<code class="comment">// переопределяем метод print</code>
+employee.print = function(){ 
+    console.log(`Name: ${this.name}  Age: ${this.age} Company: ${this.company}`);
+}
+
+employee.print();    <code class="comment">// Name: Tom  Age: 39  Company: Google</code></code></div>
+
+                <p>Здесь переопределяем функцию <code>print</code>, чтобы она также выводила компанию работника. Можно пойти дальше и увеличить цепочку наследования:</p>
+
+                <div class="code-block"><code>const person = {
+    name: "", 
+    age: 0,  
+    print: function(){ 
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+};
+
+<code class="comment">// объект employee наследует прототип объекта person</code>
+const employee = Object.create(person);
+employee.company = "";
+ 
+<code class="comment">// объект manager наследует прототип объекта employee</code>
+const manager = Object.create(employee);
+
+<code class="comment">// переопределяем метод print</code>
+manager.print = function(){ 
+    console.log(`Name: ${this.name}  Age: ${this.age}\nManager in ${this.company}`);
+}
+
+manager.name = "Bob";
+manager.age = 43;
+manager.company = "Microsoft";
+manager.print();    <code class="comment">// Name: Bob  Age: 43  </code>
+                    <code class="comment">// Manager in Microsoft</code></code></div>
+
+                <p>Таким образом, получаем цепочку прототипов - <code>person-employee-manager</code>: employee наследует прототип от <code>person</code>, <code>manager</code> наследует прототип от <code>employee</code></p>
+
+                <h4>Вызов методов базового прототипа</h4>
+
+                <p>
+                    Иногда может быть необходимо вызвать методы, которые определены в прототипе. Это может быть полезно для сокращения кода, уменьшения дублирования, особенно когда 
+                    код переопределенного метода повторяет логику метода из прототипа. Получив прототип объекта, мы можем вызвать у него методы с помощью функции <span class="b">call()</span>:
+                </p>
+                <div class="code-block"><code>const person = {
+    name: "", 
+    age: 0,  
+    print: function(){ 
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+};
+
+<code class="comment">// объект employee наследует прототип объекта person</code>
+const employee = Object.create(person);
+employee.name = "Tom";
+employee.age = 39;
+employee.company = "Google";
+
+<code class="comment">// переопределяем метод print</code>
+employee.print = function(){ 
+    this.__proto__.print.call(this);                  <code class="comment">// вызываем версию метода из person</code>
+    <code class="comment">// Object.getPrototypeOf(this).print.call(this);  // альтернативный вариант</code>
+    console.log(`Company: ${this.company}`);
+}
+ 
+employee.print();                                     <code class="comment">// Name: Tom  Age: 39</code>
+                                                      <code class="comment">// Company: Google</code></code></div>
+
+                <p>В данном случае в переопределенном методе <span class="b">print</span> у типа <code>employee</code> вызываем через прототип версию метода <span class="b">print</span> из <code>person</code>.</p>
+
+                <h3>Проверка наследования прототипов и Object.isPrototypeOf()</h3>
+
+                <p>С помощью метода <span class="b">Object.isPrototypeOf()</span> можно проверить, является ли объект прототипом другого объекта:</p>
+                <div class="code-block"><code>const person = {
+    name: "",
+    print: ()=>console.log("Name:", this.name)
+};
+
+const user = {
+    name: "",
+    print: ()=>console.log("Name:", this.name)
+};
+ 
+<code class="comment">// объект employee наследует прототип объекта person</code>
+const employee = Object.create(person);
+ 
+console.log(person.isPrototypeOf(employee));    <code class="comment">// true</code>
+console.log(user.isPrototypeOf(employee));      <code class="comment">// false</code></code></div>
+
+                <p>
+                    Здесь объект <span class="b">employee</span> наследует прототип от <code>person</code>. Соответственно вызов <code>person.isPrototypeOf(employee)</code> возвратит <code>true</code>. 
+                    А объект <span class="b">user</span> не является прототипом для <code>employee</code> даже несмотря на то, что у него тот же набор методов и свойств.
+                </p>
 
                 <h2>Классы (ES6)</h2>
                 
