@@ -578,6 +578,9 @@
                                 <li class="nav-subitem" data-target="ch4-call-apply">📜 Функция как объект. Методы call и apply</li>
                                 <li class="nav-subitem" data-target="ch4-obj-create">📜 Функция Object.create. Конфигурация свойств объектов</li>
                                 <li class="nav-subitem" data-target="ch4-inheritance-proto">📜 Наследование прототипов</li>
+                                <li class="nav-subitem" data-target="ch4-proto-nesting">📜 Наследование прототипов конструкторов</li>
+                                <li class="nav-subitem" data-target="ch4-incapsulation">📜 Инкапсуляция свойств. Геттеры и сеттеры</li>
+                                <li class="nav-subitem" data-target="ch4-destructuring">📜 Деструктуризация</li>
                             </ul>
                         </li>
                     </ul>
@@ -7323,6 +7326,613 @@ console.log(user.isPrototypeOf(employee));      <code class="comment">// false</
                     Здесь объект <span class="b">employee</span> наследует прототип от <code>person</code>. Соответственно вызов <code>person.isPrototypeOf(employee)</code> возвратит <code>true</code>. 
                     А объект <span class="b">user</span> не является прототипом для <code>employee</code> даже несмотря на то, что у него тот же набор методов и свойств.
                 </p>
+
+
+                <h2 id="ch4-proto-nesting">📜 Наследование прототипов конструкторов</h2>
+
+                <p>
+                    В прошлой теме было рассмотрено наследование объектов или точнее их прототипов. Использование функций-конструкторов делает шаг вперед в этом плане, позволяя 
+                    наследовать прототипы в псевдоклассовом стиле, как наследование типов.
+                </p>
+                <p>
+                    Например, у нас может быть объект <span class="b">Person</span>, который представляет отдельного пользователя. И также может быть объект <span class="b">Employee</span>, который представляет работника. Но 
+                    работник также может являться пользователем и поэтому должен иметь все его свойства и методы. Например:
+                </p>
+                <div class="code-block"><code><code class="comment">// конструктор пользователя</code>
+function Person (name, age) {
+    this.name = name;
+    this.age = age;
+    this.sayHello = function(){
+        console.log(`Person ${this.name} says "Hello"`);
+    };
+}
+
+<code class="comment">// добавляем функцию в прототип</code>
+Person.prototype.print = function(){
+    console.log(`Name: ${this.name}  Age: ${this.age}`);
+};
+ 
+<code class="comment">// конструктор работника</code>
+function Employee(name, age, comp){
+    Person.call(this, name, age);         <code class="comment">// применяем конструктор Person</code>
+    this.company = comp;
+    this.work = function(){
+        console.log(`${this.name}  works in ${this.company}`);
+    };
+}
+
+<code class="comment">// наследуем прототип от Person</code>
+Employee.prototype = Object.create(Person.prototype);
+
+<code class="comment">// устанавливаем конструктор </code>
+Employee.prototype.constructor = Employee;</code></div>
+
+                <p>
+                    Здесь в начале определяет функция-конструктор <span class="b">Person</span>, который представляет пользователя. В <code>Person</code> определены два свойства и два метода. Для примера один метод - <code>sayHello</code> 
+                    определен внутри конструктора, а второй метод - <code>print</code> определен непосредственно в прототипе.
+                </p>
+                <p>Затем определяется функция-конструктор <span class="b">Employee</span>, которая представляет работника.</p>
+
+                <p>В конструкторе <code>Employee</code> происходит обращение к конструктору <code>Person</code> с помощью вызова:</p>
+                <div class="code-block"><code>Person.call(this, name, age);</code></div>
+
+                <p>
+                    Передача первого параметра позволяет вызвать функцию конструктора <code>Person</code> для объекта, создаваемого конструктором <code>Employee</code>. Благодаря этому 
+                    все свойства и методы, определенные в конструкторе <code>Person</code>, также переходят на объект <code>Employee</code>. Дополнительно определяется свойство <code>company</code>,  которое представляет компанию работника, 
+                    и метод <code>work</code>.
+                </p>
+                <p>
+                    Кроме того, необходимо унаследовать также и прототип <code>Person</code> и соответственно все определенные через прототип функции (например, в примере выше это функция 
+                    <code>Person.prototype.print</code>). Для этого служит вызов:
+                </p>
+                <div class="code-block"><code>Employee.prototype = Object.create(Person.prototype);</code></div>
+
+                <p>Метод <span class="b">Object.create()</span> позволяет создать объект прототипа <code>Person</code>, который затем присваивается прототипу <code>Employee</code>. </p>
+                <p>Нередко вместо вызова метода <code>Object.create()</code> для установки прототипа используется вызов наследуемого конструктора, например:</p>
+
+                <div class="code-block"><code>Employee.prototype = new Person();</code></div>
+
+                <p>В результате будет создан объект, у которого прототип (<code>Employee.prototype.__proto__</code>) будет указывать на прототип Person</p>
+                <p>Однако стоит учитывать, что созданный объект прототипа будет указывать на конструктор <span class="b">Person</span>. Поэтому также устанавливаем нужный конструктор:</p>
+                <div class="code-block"><code>Employee.prototype.constructor = Employee;</code></div>
+
+                <p>Конструктор редко используется сам по себе, и, возможно, осутствие установки конструктора никак не скажется на работе программы. Но тем не менее рассмотрим следующую ситуацию</p>
+                <div class="code-block"><code>const obj = new Employee.prototype.constructor("Bob", 23, "Google");
+console.log(obj); <code class="comment">// Employee или Person в зависимости от типа конструктора</code>
+obj.work();       <code class="comment">// Если obj -  Person, то будет ошибка</code></code></div>
+
+                <p>Здесь напрямую вызываем конструктор для создания объекта <code>obj</code>. И тип объекта <code>obj</code> здесь будет зависеть от того, какой конструктор установлен для <code>Employee.prototype.constructor</code></p>
+                <p>Протестируем выше определенные функции-конструкторы:</p>
+
+                <div class="code-block"><code><code class="comment">// конструктор пользователя</code>
+function Person (name, age) {
+    this.name = name;
+    this.age = age;
+    this.sayHello = function(){
+        console.log(`Person ${this.name} says "Hello"`);
+    };
+}
+
+Person.prototype.print = function(){
+    console.log(`Name: ${this.name}  Age: ${this.age}`);
+};
+ 
+<code class="comment">// конструктор работника</code>
+function Employee(name, age, comp){
+    Person.call(this, name, age);         <code class="comment">// применяем конструктор Person</code>
+    this.company = comp;
+    this.work = function(){
+        console.log(`${this.name}  works in ${this.company}`);
+    };
+}
+
+<code class="comment">// наследуем прототип от Person</code>
+Employee.prototype = Object.create(Person.prototype);
+ 
+<code class="comment">// устанавливаем конструктор </code>
+Employee.prototype.constructor = Employee;
+ 
+<code class="comment">// создаем объект Employee</code>
+const tom = new Employee("Tom", 39, "Google");
+
+<code class="comment">// обращение к унаследованному свойству</code>
+console.log("Age:", tom.age);
+
+<code class="comment">// обращение к унаследованному методу</code>
+tom.sayHello();    <code class="comment">// Person Tom says "Hello"</code>
+
+<code class="comment">// обращение к унаследованному методу прототипа</code>
+tom.print();       <code class="comment">// Name: Tom  Age: 39 </code>
+
+<code class="comment">// обращение к собственному методу</code>
+tom.work();        <code class="comment">// Tom works in Google</code></code></div>
+
+
+                <h3>Переопределение функций</h3>
+
+                <p>
+                    При наследовании мы можем переопределять наследуемый функционал. Например, в примере выше для <code>Person</code> определено два метода: <code>sayHello</code> (в конструкторе) и 
+                    <code>print()</code> (в прототипе). Но, допустим, для <code>Employee</code> мы хотим изменить их логику, например, в методе <code>print</code> также выводить компанию работника. 
+                    В этом случае мы можем определить для <code>Employee</code> методы с теми же именами:
+                </p>
+
+                <div class="code-block"><code>function Person (name, age) {
+    this.name = name;
+    this.age = age;
+    this.sayHello = function(){
+        console.log(`Person ${this.name} says "Hello"`);
+    };
+}
+
+Person.prototype.print = function(){
+    console.log(`Name: ${this.name}  Age: ${this.age}`);
+};
+ 
+function Employee(name, age, comp){
+    Person.call(this, name, age);
+    this.company = comp;
+
+    <code class="comment">//</code> переопределяем метод sayHello
+    this.sayHello = function(){
+        console.log(`Employee ${this.name} says "Hello"`);
+    };
+}
+
+Employee.prototype = Object.create(Person.prototype);
+Employee.prototype.constructor = Employee;
+ 
+<code class="comment">// переопределяем метод print</code>
+Employee.prototype.print = function(){
+    console.log(`Name: ${this.name}  Age: ${this.age}  Company: ${this.company}`);
+};
+ 
+const tom = new Employee("Tom", 39, "Google");
+tom.sayHello();    <code class="comment">// Employee Tom says "Hello"</code>
+tom.print();       <code class="comment">// Name: Tom  Age: 39  Company: Google</code></code></div>
+
+                <p>
+                    Метод <code>sayHello()</code> определен внутри конструктора <code>Person</code>, поэтому данный метод переопределяется внутри конструктора <code>Employee</code>. 
+                    Метод <code>print()</code> определен как метод прототипа Person, поэтому его можно переопределить в прототипе Employee.
+                </p>
+
+                <h3>Вызов метода родительского прототипа</h3>
+
+                <p>
+                    В <em>прототипе-наследнике</em> может потребоваться вызвать метод из родительского прототипа. Например, это может быть необходимо для сокращении логики кода, если логика 
+                    метода наследника повторяет логику метода родителя. В этом случае для обращения к методам родительского прототипа применяется функция <span class="b">call()()</span>:
+                </p>
+
+                <div class="code-block"><code>function Person (name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+Person.prototype.print = function(){
+    console.log(`Name: ${this.name}  Age: ${this.age}`);
+};
+ 
+function Employee(name, age, comp){
+    Person.call(this, name, age);
+    this.company = comp;
+}
+
+Employee.prototype = Object.create(Person.prototype);
+Employee.prototype.constructor = Employee;
+ 
+<code class="comment">// переопределяем метод print</code>
+Employee.prototype.print = function(){
+    Person.prototype.print.call(this); <code class="comment">// вызываем метод print из Person</code>
+    console.log(`Company: ${this.company}`);
+};
+ 
+const tom = new Employee("Tom", 39, "Google");
+tom.print();    <code class="comment">// Name: Tom  Age: 39  </code>
+                <code class="comment">// Company: Google</code></code></div>
+
+                <p>В данном случае при переопределении метода <code>print</code> в прототипе <code>Employee</code> вызывается метод <code>print</code> из прототипа <code>Person</code>:</p>
+                <div class="code-block"><code>Employee.prototype.print = function(){
+    Person.prototype.print.call(this); <code class="comment">// вызываем метод print из Person</code>
+    console.log(`Company: ${this.company}`);
+};</code></div>
+
+                <h3>Проблемы прототипного наследования</h3>
+
+                <p>Стоит отметить, что тип <span class="b">Employee</span> перенимает не только все текущие свойства и методы из прототипа <span class="b">Person</span>, но и также те, которые будут впоследствии добавляться динамически. Например:</p>
+                <div class="code-block"><code>const tom = new Employee("Tom", 39, "Google");
+Person.prototype.sleep = function() {console.log(`${this.name} sleeps`);}
+tom.sleep();</code></div>
+
+                <p>
+                    Здесь в прототип <span class="b">Person</span> добавляется метод <code>sleep</code>. Причем он добавляется уже после создания объекта <code>tom</code>, который представляет тип <code>Employee</code>. Тем не менее 
+                    даже у этого объекта мы можем вызвать метод <code>sleep</code>.
+                </p>
+
+                <p>Другой момент, который стоит учитывать, через прототип <em>конструктора-наследника</em> можно изменить прототип <em>конструктора-родителя</em>. Например:</p>
+                <div class="code-block"><code>function Person (name, age) {
+    this.name = name;
+    this.age = age;
+    this.sayHello = function(){
+        console.log(`Person ${this.name} says "Hello"`);
+    };
+}
+
+Person.prototype.print = function(){
+    console.log(`Name: ${this.name}  Age: ${this.age}`);
+};
+ 
+function Employee(name, age, comp){
+    Person.call(this, name, age);
+    this.company = comp;
+}
+
+<code class="comment">// наследуем прототип от Person</code>
+Employee.prototype = Object.create(Person.prototype);
+Employee.prototype.constructor = Employee;
+ 
+<code class="comment">// меняем метод print в базовом прототипе Person</code>
+Employee.prototype.__proto__.print = function(){ console.log("Person prototype hacked");};
+
+<code class="comment">// создаем объект Person</code>
+const bob = new Person("Bob", 43);
+bob.print();      <code class="comment">// Person prototype hacked</code></code></div>
+
+
+                <h2 id="ch4-incapsulation">📜 Инкапсуляция свойств. Геттеры и сеттеры</h2>
+
+                <p>
+                    <span class="b">Инкапсуляция</span> является одним из ключевых понятий объектно-ориентированного программирования и представляет сокрытие состояния объекта от прямого доступа извне для поддержания целостности данных. 
+                    По умолчанию все свойства объектов являются публичными, общедоступными, и мы к ним можем обратиться из любого места программы.
+                </p>
+                <div class="code-block"><code>function User(uName, uAge) {
+    this.name = uName;
+    this.age = uAge;
+    
+    this.print = function(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    };
+}
+ 
+const tom = new User("Tom", 39);
+
+tom.age = 11500;
+tom.print();                    <code class="comment">// Name: Tom  Age: 11500</code></code></div>
+
+                <p>Однако подобный способ доступа может быть нежелателен. Так, в примере выше свойству <code>age</code>, которое представляет возраст, мы можем присвоить самые разные, в том числе и недопустимые значения.</p>
+                <p>Но мы можем их скрыть от доступа извне. Для этого свойство определяется как локальная переменная/константа:</p>
+
+                <div class="code-block"><code>function User(uName, uAge) {
+    this.name = uName;
+    let _age = uAge;
+
+    this.print = function(){
+        console.log(`Name: ${this.name}  Age: ${_age}`);
+    };
+}
+ 
+const tom = new User("Tom", 39);
+
+tom._age = 11500;
+tom.print();                    <code class="comment">// Name: Tom  Age: 39</code></code></div>
+
+                <p>В конструкторе User объявляется локальная переменная <code>_age</code> вместо свойства <code>age</code>:</p>
+                <div class="code-block"><code>let _age = uAge;</code></div>
+
+                <p>
+                    Как правило, названия локальных переменных в конструкторах начинаются со знака подчеркивания. Причем такая переменная также может получать данные из параметров конструктора, и ее 
+                    можно использовать в функциях внутри конструктора. Однако обратиться извне к ней не получится:
+                </p>
+                <div class="code-block"><code>tom._age = 11500;</code></div>
+
+                <p>
+                    Здесь для объекта <span class="b">tom</span> определяется <em class=""><u>новое</u></em> свойство, которое называется, как и переменная <code>_age</code>. Но это свойство <em class="b">_age</em> не окажет никакого влияния на локальную 
+                    переменную <code>_age</code>, что мы можем увидеть по консольному выводу метода <code>print</code>.
+                </p>
+
+
+                <h3>Геттеры и сеттеры</h3>
+
+                <p>
+                    Выше мы скрыли от доступа извне значение возраста в локальную переменную <code>_age</code>, однако иногда все таки требуется некоторый доступ, например, для того же консольного вывода или 
+                    изменения. В этом случае мы можем определить специальные методы доступа:
+                </p>
+                <ul>
+                    <li><span class="b">геттер</span> - <em>для получения значения</em></li>
+                    <li><span class="b">сеттер</span> - <em>для изменения значения</em></li>
+                </ul>
+
+                <div class="code-block"><code>function User(uName, uAge) {
+    this.name = uName;
+    let _age = uAge;
+
+    <code class="comment">// геттер - возвращаем значение переменной</code>
+    this.getAge = function() { return _age; }
+
+    <code class="comment">// устанавливаем значение переменной</code>
+    this.setAge = function(age) {
+        if(age &gt; 0 && age &lt; 110){   <code class="comment">// если возраст больше 0 и меньше 110</code>
+            _age = age;
+        } else {
+            console.log("Недопустимое значение");
+        }
+    }
+ 
+    this.print = function(){
+        console.log(`Name: ${this.name}  Age: ${_age}`);
+    };
+}
+ 
+const tom = new User("Tom", 39);
+
+<code class="comment">// получаем значение</code>
+console.log(tom.getAge())           <code class="comment">// 39</code>
+
+<code class="comment">// устанавливаем новое значение</code>
+tom.setAge(22);
+
+console.log(tom.getAge())           <code class="comment">// 22</code>
+tom.setAge(11500);                  <code class="comment">// Недопустимое значение</code>
+console.log(tom.getAge())           <code class="comment">// 22</code></code></div>
+
+                <p>
+                    Для того, чтобы работать с возрастом пользователя извне, определяются два метода. Метод <span class="b">getAge()</span> предназначен для получения значения переменной 
+                    <code>_age</code>. Этот метод еще называется <em>геттер (getter)</em>. Второй метод - <span class="b">setAge</span>, который еще называется <em>сеттер (setter)</em>, предназначен для установки 
+                    значения переменной <code>_age</code>.
+                </p>
+                <p>
+                    Плюсом такого подхода является то, что мы имеем больший контроль над доступом к значению <code>_age</code>. Например, мы можем проверить какие-то сопутствующие условия, 
+                    как в данном случае проверяются тип значение (он должен представлять число), само значение (возраст не может быть меньше <code>0</code>).
+                </p>
+                <p>
+                    Стоит отметить, что JavaScript также предоставляет специальные конструкции для создания геттеров и сеттеров - <span class="b">get</span> и 
+                    <span class="b">set</span> соответственно. Правда, в контексте функций-конструкторов они не имеют большого смысла, поэтому будут рассмотрены дальше.
+                </p>
+
+
+                <h2 id="ch4-destructuring">📜 Деструктуризация</h2>
+
+                <p><span class="b">Деструктуризация</span> <em>(destructuring)</em> позволяет извлечь из объекта отдельные значения в переменные или константы:</p>
+                <div class="code-block"><code>const user = {
+    name: "Tom",
+    age: 24,
+    phone: "+367438787",
+    email: "tom@gmail.com"
+};
+
+const {name, email} = user;
+console.log(name);              <code class="comment">// Tom</code>
+console.log(email);             <code class="comment">// tom@gmail.com</code></code></div>
+
+                <p>При деструктуризации объекта переменные помещаются в фигурные скобки и им присваивается объект. Сопоставление между свойствами объекта и переменными/константами идет по имени.</p>
+
+                <p>Мы можем указать, что мы хотим получить значения свойств объекта в переменные/константы с <span class="b">другим именем</span>:</p>
+                <div class="code-block"><code>const user = {
+    name: "Tom",
+    age: 24,
+    phone: "+367438787",
+    email: "tom@gmail.com"
+};
+
+const {name: userName, email: mailAddress} = user;
+
+console.log(userName);          <code class="comment">// Tom</code>
+console.log(mailAddress);       <code class="comment">// tom@gmail.com</code></code></div>
+
+                <p>В данном случае свойство <code>name</code> сопоставляется с переменной <code>userName</code>, а поле <code>email</code> - с переменной <code>mailAddress</code>.</p>
+
+                <p>Также можно задать для переменных/констант <span class="b">значения по умолчанию</span>, если в объекте вдруг не окажется соответствующих свойств:</p>
+                <div class="code-block"><code>const user = {
+    name: "Tom",
+    age: 24,
+};
+
+const {name  = "Sam", email: mailAddress = "sam@gmail.com"} = user;
+
+console.log(name);              <code class="comment">// Tom</code>
+console.log(mailAddress);       <code class="comment">// sam@gmail.com</code></code></div>
+
+                <p>
+                    Если переменная/константа при деструктуризации сопоставляется со свойством, который представляет <span class="b">сложный объект</span>, то после деструктуризации эта переменная/константа 
+                    также будет представлять сложный объект:
+                </p>
+                <div class="code-block"><code>const user = {
+    name: "Tom",
+    age: 24,
+    account: {
+        login: "tom555",
+        password: "qwerty"
+    }
+};
+
+const {account} = user;
+console.log(account.login);     <code class="comment">// tom555</code>
+console.log(account.password);  <code class="comment">// qwerty</code></code></div>
+
+                <p>
+                    Но, если мы хотим получить <span class="b">отдельные значения</span> <em>из вложенного сложного объекта</em>, как в примере выше объект <code>account</code> внутри объекта <code>user</code>, то нам необязательно 
+                    получать весь этот объект - мы также можем для его свойств предоставить отдельные переменные/константы:
+                </p>
+                <div class="code-block"><code>const user = {
+    name: "Tom",
+    age: 24,
+    account: {
+        login: "tom555",
+        password: "qwerty"
+    }
+};
+
+const &#123;name, account: &#123;login&#125;&#125; =  user;
+
+console.log(name);      <code class="comment">// Tom</code>
+console.log(login);     <code class="comment">// tom555</code></code></div>
+
+                <p>Здесь мы получаем в переменную <code>login</code> значение свойства <code>user.account.login</code>.</p>
+
+
+                <h3>Получение оставшихся свойств объекта с помощью rest-оператора</h3>
+
+                <p><span class="b">rest-оператор</span> или оператор <span class="b">. . .</span> позволяет получить оставшиеся свойства объекта, которые не сопоставлены с переменными/константами, в отдельную переменную/константу:</p>
+                <div class="code-block"><code>const tom = {
+    name: "Tom",
+    age: 24,
+    phone: "+367438787",
+    email: "tom@gmail.com"
+};
+
+const {name, age, ...contacts} = tom;
+
+console.log(name);      <code class="comment">// Tom</code>
+console.log(age);       <code class="comment">// 24</code>
+console.log(contacts);  <code class="comment">// {phone: "+367438787", email: "tom@gmail.com"}</code></code></div>
+
+                <p>
+                    В данном случае мы раскладываем объект <code>tom</code> на три константы: <code>name</code>, <code>age</code> и <code>contacts</code>. 
+                    Константы <code>name</code> и <code>age</code> сопоставляются со свойствами объекта <code>tom</code> по имени. А константа <code>contacts</code> получает все оставшиеся несопоставленные 
+                    свойства объекта. Однако чтобы их получить, перед названием константы указыватся оператор <span class="b">. . .</span> : <code>...contacts</code>. То есть 
+                    в данном случае константа <code>contacts</code> будет предлагать объект, который будет содержать свойства <code>email</code> и <code>phone</code> объекта <span class="b">tom</span>.
+                </p>
+                <p>Стоит отметить, что переменная/константа, которая получает все оставшиеся свойства объекта, всегда будет представлять объект, даже если она получит только одно свойства из объекта.</p>
+
+
+                <h3>Деструктуризация массивов</h3>
+
+                <p>Также можно разложить массивы:</p>
+                <div class="code-block"><code>const users = ["Tom", "Sam", "Bob"];
+const [a, b, c] = users;
+ 
+console.log(a);     <code class="comment">// Tom</code>
+console.log(b);     <code class="comment">// Sam</code>
+console.log(c);     <code class="comment">// Bob</code></code></div>
+
+                <p>При <strong>деструктуризации массива</strong> переменные помещаются в квадратные скобки и последовательно получают значения элементов массива.</p>
+
+                <p>Если переменных/констант <strong>меньше</strong>, чем элементов массива, то оставшиеся элементы массива просто опускаются.</p>
+                <div class="code-block"><code>const users = ["Tom", "Sam", "Bob"];
+const [a, b] = users;
+  
+console.log(a);     <code class="comment">// Tom</code>
+console.log(b);     <code class="comment">// Sam</code></code></div>
+
+                <p>Если переменных/констант <strong>больше</strong>, чем элементов массива, то несопоставленные переменные/константы получают значение <code>undefined</code>:</p>
+                <div class="code-block"><code>const users = ["Tom", "Sam", "Bob"];
+const [a, b, c, d] = users;
+  
+console.log(a);     <code class="comment">// Tom</code>
+console.log(b);     <code class="comment">// Sam</code>
+console.log(c);     <code class="comment">// Bob</code>
+console.log(d);     <code class="comment">// undefined</code></code></div>
+
+                <h3>Получение оставшихся элементов массива в другой массив</h3>
+
+                <p>С помощью <em>rest-оператора</em> <span class="b">. . .</span> также можно получить все оставшиеся элементы массива в виде другого массива:</p>
+                <div class="code-block"><code>const users = ["Tom", "Sam", "Bob", "Mike"];
+const [tom, ...others] = users;
+  
+console.log(tom);       <code class="comment">// Tom</code>
+console.log(others);    <code class="comment">// ["Sam", "Bob", "Mike"]</code></code></div>
+
+                <p>Здесь массив <code>others</code> будет содержать три последних элемента массива.</p>
+
+                <h3>Пропуск элементов</h3>
+
+                <p>При этом мы можем пропустить ряд элементов массива, оставив вместо имен переменных пропуски:</p>
+                <div class="code-block"><code>const users = ["Tom", "Sam", "Bob", "Ann", "Alice", "Kate"];
+const [first,,,,fifth] = users;
+ 
+console.log(first);     <code class="comment">// Tom</code>
+console.log(fifth);     <code class="comment">// Alice</code></code></div>
+
+                <p>Выражение <code>first,,,,fifth</code> указывает, что мы хотим получить первый элемент массива в переменную <code>first</code>, затем пропустить три элемента и получить пятый элемент в переменную <code>fifth</code>.</p>
+
+                <p>Подобным образом можно получить, например, второй и четвертый элементы:</p>
+                <div class="code-block"><code>const users = ["Tom", "Sam", "Bob", "Ann", "Alice", "Kate"];
+const [,second,,forth] = users;
+ 
+console.log(second);        <code class="comment">// Sam</code>
+console.log(forth);         <code class="comment">// Ann</code></code></div>
+
+                <h4>Деструктуризация многомерных массивов</h4>
+
+                <div class="code-block"><code>const coordinates = [[1,2,3], [4,5,6], [7,8,9]];
+ 
+const [  
+    [x1,y1,z1],
+    [x2,y2,z2],  
+    [x3,y3,z3]
+] = coordinates;</code></div>
+
+                <h3>Деструктуризация объектов из массивов</h3>
+
+                <p>Можно совместить получение данных из массива и объекта:</p>
+                <div class="code-block"><code>const people = [
+    {name: "Tom", age: 34},
+    {name: "Bob", age: 23},
+    {name: "Sam", age: 32}
+];
+
+const [,{name}] = people;
+ 
+console.log(name);      <code class="comment">// Bob</code></code></div>
+
+                <p>В данном случае получаем значение свойства <code>name</code> второго объекта в массиве.</p>
+
+                <p>Другой пример - деструктуризация объектов при переборе массива объектов:</p>
+                <div class="code-block"><code>const people = [
+    {name: "Tom", age: 34},
+    {name: "Bob", age: 23},
+    {name: "Sam", age: 32}
+];
+
+const [,{name}] = people;
+
+for(let {name: username, age: userage} of people){
+    console.log(`Name: ${username}  Age: ${userage}`);
+}
+
+<code class="comment">// консольный вывод</code>
+<code class="comment">// Name: Tom  Age: 34</code>
+<code class="comment">// Name: Bob  Age: 23</code>
+<code class="comment">// Name: Sam  Age: 32</code></code></div>
+
+
+                <h3>Деструктуризация параметров</h3>
+
+                <p>Если в функцию в качестве параметра передается массив или объект, то его также можно подобным образом разложить на отдельные значения:</p>
+                <div class="code-block"><code>function display({name:userName, age:userAge}){
+    console.log(userName, userAge);
+}
+
+function sum([a, b, c]){
+    const result = a + b + c;
+    console.log(result);
+}
+
+const user = {name:"Alice", age:33, email: "alice@gmail.com"};
+ 
+const numbers = [3, 5, 7, 8];
+ 
+display(user);  <code class="comment">// Alice 33</code>
+sum(numbers);   <code class="comment">// 15</code></code></div>
+
+
+                <h3>Обмен значениями</h3>
+
+                <p>Благодаря деструктуризации очень просто стало проводить обмен значениями между двумя переменными:</p>
+                <div class="code-block"><code>let first = "Tom";
+let second = "Bob";
+
+[first, second] = [second, first];
+  
+console.log(first);     <code class="comment">// Bob</code>
+console.log(second);    <code class="comment">// Tom</code></code></div>
+
+                <p>Что упрощает решение ряда задач. Например, используем деструктуризацию для простейшей сортировки массива:</p>
+                <div class="code-block"><code>let nums = [9, 3, 5, 2, 1, 4, 8, 6];
+for(let i = 0; i < nums.length; i++)
+    for(let j = 0; j < nums.length; j++)
+        if (nums[i] < nums[j]) [nums[j], nums[i]] = [nums[i], nums[j]];
+         
+console.log(nums);  <code class="comment">// [1, 2, 3, 4, 5, 6, 8, 9]</code></code></div>
+                
 
                 <h2>Классы (ES6)</h2>
                 
