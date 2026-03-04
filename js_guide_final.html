@@ -581,6 +581,8 @@
                                 <li class="nav-subitem" data-target="ch4-proto-nesting">📜 Наследование прототипов конструкторов</li>
                                 <li class="nav-subitem" data-target="ch4-incapsulation">📜 Инкапсуляция свойств. Геттеры и сеттеры</li>
                                 <li class="nav-subitem" data-target="ch4-destructuring">📜 Деструктуризация</li>
+                                <li class="nav-subitem" data-target="ch4-optional">📜 Оператор ?.</li>
+                                <li class="nav-subitem" data-target="ch4-const-obj">📜 Константные объекты. Запрет изменения объекта</li>
                             </ul>
                         </li>
                     </ul>
@@ -7927,12 +7929,305 @@ console.log(second);    <code class="comment">// Tom</code></code></div>
 
                 <p>Что упрощает решение ряда задач. Например, используем деструктуризацию для простейшей сортировки массива:</p>
                 <div class="code-block"><code>let nums = [9, 3, 5, 2, 1, 4, 8, 6];
-for(let i = 0; i < nums.length; i++)
-    for(let j = 0; j < nums.length; j++)
-        if (nums[i] < nums[j]) [nums[j], nums[i]] = [nums[i], nums[j]];
+for(let i = 0; i &lt; nums.length; i++)
+    for(let j = 0; j &lt; nums.length; j++)
+        if (nums[i] &lt; nums[j]) [nums[j], nums[i]] = [nums[i], nums[j]];
          
 console.log(nums);  <code class="comment">// [1, 2, 3, 4, 5, 6, 8, 9]</code></code></div>
+
+
+                <h2 id="ch4-optional">📜 Оператор ?. (optional chaning)</h2>
+
+                <p>Оператор <span class="b">?.</span> или <code>optional chaning</code>-оператор позволяет проверить объект и его свойства и методы на <em>null</em> и <em>undefined</em>, и если объект или его свойства/методы определены, то обратиться к его свойствам или методам:</p>
+                <div class="code-block"><code>const tom = null;
+const bob = {name: "Bob"};
+ 
+function printName(person){
+    console.log(person.name);
+}
+
+printName(tom);       <code class="comment">// Uncaught TypeError: Cannot read properties of null (reading "name")</code>
+printName(bob);</code></div>
+
+                <p>
+                    В данном случае переменная <code>tom</code> равна <code>null</code>, соответственно у нее нет свойства <code>name</code>. И при передаче этого объекта в функцию 
+                    <code>printName</code> мы получим ошибку. В этом случае мы можем перед обращением к объекту проверять его на <em>null</em> и <em>undefined</em>:
+                </p>
+                <div class="code-block"><code>const tom = null;
+const bob = {name: "Bob"};
+ 
+function printName(person){
+    if(person !== null && person !== undefined) console.log(person.name);
+}
+
+printName(tom); 
+printName(bob);       <code class="comment">// Bob</code></code></div>
+
+                <p>Также мы можем сократить проверку:</p>
+                <div class="code-block"><code>function printName(person){
+    if(person) console.log(person.name);
+}</code></div>
+
+                <p>Если <span class="b">person</span> равен <em>null</em> или <em>undefined</em>, то <code>if(person)</code> возвратит <em>false</em>.</p>
+
+                <p>Однако оператор <span class="b">?.</span> предлагает более элегантный способ решения:</p>
+                <div class="code-block"><code>const tom = null;
+const bob = {name: "Bob"};
+ 
+function printName(person){
+    console.log(person?.name);
+}
+
+printName(tom);       <code class="comment">// undefined</code>
+printName(bob);       <code class="comment">// Bob</code></code></div>
+
+                <p>
+                    После названия объекта указывается оператор <span class="b">?.</span> - если значение <em>не равно</em> <code>null</code> и <code>undefined</code>, то идет обращение к свойству/методу, которые указаны после точки. 
+                    Если же значени <em>равно</em> <code>null/undefined</code>, то обращения к свойству/методу не происходит. И на консоли мы увидим <code>undefined</code>.
+                </p>
+
+                <p>Данный оператор можно использовать перед обращением как к свойствам, так и к методам объекта:</p>
+                <div class="code-block"><code>const tom = undefined;
+const bob = {
+    name: "Bob", 
+    sayHi(){
+        console.log(`Hi! I am ${this.name}`);
+    }
+};
+ 
+console.log(tom?.name);     <code class="comment">// undefined</code>
+console.log(bob?.name);     <code class="comment">// Bob</code>
+
+tom?.sayHi();               <code class="comment">// не выполняется</code>
+bob?.sayHi();               <code class="comment">// Hi! I am Bob</code></code></div>
+
+                <p>В данном случае обращение к свойству <code>name</code> и методу <code>sayHi()</code> происходит только в том случае, если объекты <strong>tom</strong> и <strong>bob</strong> не равны <em>null/undefined</em>.</p>
+
+                <p>Более того далее по цепочке вызывов можно проверять наличие свойства или метода в объекте.</p>
+                <div class="code-block"><code>obj.val?.prop       <code class="comment">// проверка свойства</code>
+obj.arr?.[index]    <code class="comment">// провера массива</code>
+obj.func?.(args)    <code class="comment">// проверка функции</code></code></div>
+
+                    
+                <h3>Проверка свойства</h3>
+
+                <p>Объект может быть определен, однако не иметь какого-то свойства:</p>
+                <div class="code-block"><code>const tom = { name: "Tom"};
+const bob = {
+    name: "Bob", 
+    company: {
+        title: "Microsoft"
+    }
+};
+ 
+console.log(tom.company?.title);    <code class="comment">// undefined</code>
+console.log(bob.company?.title);    <code class="comment">// Microsoft</code></code></div>
+
+                <p>Подобным образом мы можем обращаться к свойствам объекта с помощью синтаксиса массивов:</p>
+                <div class="code-block"><code>const tom = { name: "Tom"};
+const bob = {
+    name: "Bob", 
+    company: {
+        title: "Microsoft"
+    }
+};
+ 
+console.log(tom.company?.["title"]);    <code class="comment">// undefined</code>
+console.log(bob.company?.["title"]);    <code class="comment">// Microsoft</code></code></div>
+
+
+                <h3>Проверка свойства-массива</h3>
+
+                <p>Аналогично мы можем проверять наличие <em>свойства-массива</em> перед обращением к его элементам:</p>
+                <div class="code-block"><code>const tom = { name: "Tom"};
+const bob = {
+    name: "Bob", 
+    languages: ["javascript", "typescript"]
+};
+ 
+console.log(tom.languages?.[0]);    <code class="comment">// undefined</code>
+console.log(bob.languages?.[0]);    <code class="comment">// javascript</code></code></div>
+
+
+                <h3>Проверка метода</h3>
+
+                <p>
+                    Объект также может не иметь вызываемого у него метода. Если метод не определен, то при обращении к неопределенному методу мы столкнемся с ошибкой, 
+                    и в этом случае также можно проверять наличие метода:
+                </p>
+                <div class="code-block"><code>const tom = { name: "Tom"};
+const bob = {
+    name: "Bob", 
+    say(words){
+        console.log(words);
+    }
+};
+ 
+console.log(tom.say?.("my name is Tom"));   <code class="comment">// undefined</code>
+console.log(bob.say?.("my name is Bob"));   <code class="comment">// my name is Bob</code></code></div>
+
+
+                <h3>Цепочка проверок</h3>
+
+                <p>С помощью оператора <span class="b">?.</span> можно создавать цепочки проверок, последовательно проверяя, представляет ли значение <code>null/undefined</code>:</p>
+                <div class="code-block"><code>const sam = {name: "Sam"};
+const tom = { 
+    name: "Tom", 
+    company: { title: "Google"}
+};
+
+const bob = {
+    name: "Bob", 
+    company: {
+        title: "Microsoft",
+        print(){
+            console.log(`Компания ${this.title}`)
+        }
+    }
+};
+
+sam?.company?.print?.();    <code class="comment">// не вызывается - нет свойства company</code>
+tom?.company?.print?.();    <code class="comment">// не вызывается - нет метода print</code>
+bob?.company?.print?.();    <code class="comment">// Компания Microsoft</code></code></div>
+
                 
+                <h2 id="ch4-const-obj">📜 Константные объекты. Запрет изменения объекта</h2>
+
+                <p>
+                    Язык JavaScript позволяет нам динамически менять свойства объектов, добавлять в объекты новые свойства и методы или удалять уже имеющиеся. Однако, подобные изменения 
+                    объекта могут быть нежелательны. И JavaScript предоставляет для этого три механизма:
+                </p>
+                <ul>
+                    <li>Запрет расширения объектов</li>
+                    <li>Закрытие <em>(sealing)</em> объектов</li>
+                    <li>Заморозка <em>(freezing)</em> объектов</li>
+                </ul>
+
+                <h3>Запрет расширения объектов</h3>
+
+                <p>
+                    Метод <span class="b">Object.preventExtensions()</span> позволяет запретить расширение объекта, то есть в этот объект 
+                    нельзя добавлять новые свойства и методы. Метод <span class="b">Object.preventExtensions()</span> в качестве параметра принимает целевой объект, 
+                    для которого надо установить запрет на расширение.
+                </p>
+                <p>Сначала возьмем пример, где мы успешно добавляем новое свойство:</p>
+                <div class="code-block"><code>const tom = {name: "Tom"};
+<code class="comment">// добавляем в объект tom новое свойство - company</code>
+tom.company = "Localhost";
+ 
+console.log(`Name: ${tom.name}  Company: ${tom.company}`); <code class="comment">// Name: Tom  Company: Localhost</code>
+</code></div>
+
+                <p>Здесь в объект <span class="b">tom</span> добавляется новое свойство <code>company</code>. После добавления мы можем использовать это свойство.</p>
+
+                <p>Теперь запретим расширение, применив метод <span class="b">Object.preventExtensions()</span>:</p>
+                <div class="code-block"><code>const tom = {name: "Tom"};
+Object.preventExtensions(tom);  <code class="comment">// запрещаем расширение объекта tom</code>
+
+tom.company = "Localhost";      <code class="comment">// пытаемся добавить в объект tom новое свойство</code>
+console.log(`Name: ${tom.name}  Company: ${tom.company}`); <code class="comment">// Name: Tom  Company: undefined</code></code></div>
+
+                <p>В итоге даже если мы попытаемся определить для объекта новое свойство, оно не будет добавлено. А при попытке обратиться к подобному свойству мы получим <span class="b">undefined</span></p>
+                <p>Иногда может возникнуть необходимость определить, является ли объект расширяемым. Например, если объект расширяем, мы можем добавить в его свойства и затем использовать эти свойства. Для проверки расширяемости можно использовать метод <span class="b">Object.isExtensible()</span>. В этот метод передается тестируемый объект. И если объект поддерживает расширение, то метод возвращает <span class="b">true</span>, иначе возвращается <span class="b">false</span>:</p>
+
+                <div class="code-block"><code>const tom = {name: "Tom"};
+console.log(Object.isExtensible(tom));  <code class="comment">// true</code>
+
+Object.preventExtensions(tom);          <code class="comment">// запрещаем расширение объекта tom</code>
+console.log(Object.isExtensible(tom));  <code class="comment">// false</code></code></div>
+
+                <h3>Закрытие объектов</h3>
+
+                <p><em>Закрытие или "запечатывание" объектов (sealing)</em> также позволяет запретить расширение объектов. Но кроме того, также запрещает настройку уже существующих свойств. Для закрытия объектов применяется метод <span class="b">Object.seal()</span>.</p>
+
+                <p>Сначала посмотрим, что мы можем сделать с объектом без применения <span class="b">Object.seal()</span>:</p>
+                <div class="code-block"><code>const tom = {name: "Tom"};
+ 
+<code class="comment">// для свойства name запрещаем изменение</code>
+Object.defineProperty(tom, "name", { writable: false});
+tom.name = "Tomas";
+ 
+<code class="comment">// добавляем новое свойство - age</code>
+tom.age = 39;
+console.log(`Name: ${tom.name}  Age: ${tom.age}`);  <code class="comment">// Name: Tom  Age: 39</code>
+ 
+<code class="comment">// для свойства name разрешаем изменение</code>
+Object.defineProperty(tom, "name", { writable: true});
+tom.name = "Tomas";
+console.log(`Name: ${tom.name}  Age: ${tom.age}`);  <code class="comment">// Name: Tomas  Age: 39</code></code></div>
+
+                <p>Итак, мы можем изменить конфигурацию свойства (здесь делаем свойство <code>name</code> недоступным для записи). И также мы можем добавить в объект новое свойство.</p>
+
+                <p>Теперь применим метод <span class="b">Object.seal()</span>:</p>
+                <div class="code-block"><code>const tom = {name: "Tom"};
+Object.seal(tom);       <code class="comment">// закрываем объект tom от расширения и изменения конфигурации</code>
+<code class="comment">// для свойства name запрещаем изменение</code>
+Object.defineProperty(tom, "name", { writable: false});
+tom.name = "Tomas";
+ 
+<code class="comment">// добавляем новое свойство - age</code>
+tom.age = 39;
+console.log(`Name: ${tom.name}  Age: ${tom.age}`);     <code class="comment">// Name: Tom  Age: undefined</code>
+ 
+<code class="comment">// для свойства name разрешаем изменение</code>
+Object.defineProperty(tom, "name", { writable: true}); <code class="comment">// Uncaught TypeError:</code> 
+                                                       <code class="comment">// Cannot redefine property: name</code>
+</code></div>
+
+                <p>
+                    После закрытия объекта методом <code>Object.seal(tom)</code> мы не сможем добавить в объект новое свойство. Соответственно в примере выше свойство 
+                    <code>tom.age</code> будет равно <code>undefined</code>. И также мы не сможем повторно изменить конфигурацию свойства. 
+                    Так, здесь при втором вызове метода <code>Object.defineProperty()</code> для свойства <code>name</code> мы столкнемся с ошибкой 
+                    "Uncaught TypeError: Cannot redefine property: name".
+                </p>
+
+                <p>Для проверки, является ли объект <em>закрытым</em>, мы можем использовать метод <span class="b">Object.isSealed()</span> - если объект закрыт, метод возвращает <code>true</code>. Стоит отметить, что поскольку закрытый объект нерасширяем, то метод <span class="b">Object.isExtensible()</span> возвращает для него <code>false</code>:</p>
+                <div class="code-block"><code>const tom = {name: "Tom"};
+console.log(Object.isExtensible(tom));  <code class="comment">// true</code>
+console.log(Object.isSealed(tom));      <code class="comment">// false</code>
+
+Object.seal(tom);                       <code class="comment">// закрываем объект tom</code>
+
+console.log(Object.isExtensible(tom));  <code class="comment">// false</code>
+console.log(Object.isSealed(tom));      <code class="comment">// true</code></code></div>
+
+
+                <h3>Запрет на изменение значений свойств</h3>
+
+                <p><em>Заморозка</em> или <span class="b">freezing</span> позволяет запретить изменение значений свойств, то есть позволяет сделать объект в полной мере константным. Так, просто определить объект как обычную константу с помощью оператора <span class="b">const</span> недостаточно. Например:</p>
+                <div class="code-block"><code>const tom = {name: "Tom"};
+tom.name= "Tomas";
+
+console.log(tom.name);  <code class="comment">// Tomas</code></code></div>
+
+                <p>Здесь мы видим, что свойство объекта изменило свое значение, хотя объект определен как константа.</p>
+
+                <p>Оператор <code>const</code> лишь влияет на то, что мы не можем присвоить константе новое значение, например, как в следующем случае:</p>
+                <div class="code-block"><code>const tom = {name: "Tom"};
+tom = {name: "Sam"};    <code class="comment">// Ошибка - нельзя константе присвоить значение второй раз</code></div></code>
+
+                <p>Тем не менее значения свойств объекта мы можем изменять.</p>
+
+                <p>Чтобы сделать объект действительно <em>константным</em>, необходимо применить специальный метод <span class="b">Object.freeze()</span>. В этот метод в качестве параметра передается объект, который надо сделать константным:</p>
+                <div class="code-block"><code>const tom = {name: "Tom"};
+Object.freeze(tom);
+
+tom.name= "Tomas";      <code class="comment">// значение свойства нельзя изменить</code>
+console.log(tom.name);  <code class="comment">// Tom</code></code></div>
+
+                <p>Для проверки, можно ли изменить значения свойств объекта, применяется метод <span class="b">Object.isFrozen()</span> - если значения свойств изменить нельзя, он возвращает <code>true</code></p>
+                <p>Следует отметить, что "замороженный" объект - это крайняя степень запрета изменений на объекте. Соответственно такой объект нерасширяем, и также нельзя изменить конфигурацию его свойств:</p>
+
+                <div class="code-block"><code>const tom = {name: "Tom"};
+console.log(Object.isExtensible(tom));  <code class="comment">// true</code>
+console.log(Object.isSealed(tom));      <code class="comment">// false</code>
+console.log(Object.isFrozen(tom));      <code class="comment">// false</code>
+
+Object.freeze(tom);
+
+console.log(Object.isExtensible(tom));  <code class="comment">// false</code>
+console.log(Object.isSealed(tom));      <code class="comment">// true</code>
+console.log(Object.isFrozen(tom));      <code class="comment">// true</code></code></div>
 
                 <h2>Классы (ES6)</h2>
                 
