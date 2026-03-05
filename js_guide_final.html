@@ -585,6 +585,14 @@
                                 <li class="nav-subitem" data-target="ch4-const-obj">📜 Константные объекты. Запрет изменения объекта</li>
                             </ul>
                         </li>
+                        <li class="nav-item has-subitems" data-target="ch5"><span class="ch-emoj"></span> Глава 5. ООП. Классы.
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch5-classes">📜 Классы</li>
+                                <li class="nav-subitem" data-target="ch5-private-fields">📜 Приватные поля и методы</li>
+                                <li class="nav-subitem" data-target="ch5-access-methods">📜 Свойства и методы доступа</li>
+                                
+                            </ul>
+                        </li>
                     </ul>
                 </div>
 
@@ -8229,17 +8237,296 @@ console.log(Object.isExtensible(tom));  <code class="comment">// false</code>
 console.log(Object.isSealed(tom));      <code class="comment">// true</code>
 console.log(Object.isFrozen(tom));      <code class="comment">// true</code></code></div>
 
-                <h2>Классы (ES6)</h2>
-                
+
+                <h1>ООП. Классы</h1>
+
+                <h2 id="ch5-classes">Классы (ES6)</h2>
+
+                <p>
+                    С внедрением стандарта ES2015 (ES6) в JavaScript появился <em>новый способ определения объектов - с помощью классов</em>. <strong>Класс</strong> <em>представляет описание объекта, его состояния и поведения,
+                    а объект является конкретным воплощением или экземпляром класса.</em> По сути синтаксис классов является альтернативной конструкцией, которая, как и функции-конструкторы, 
+                    позволяет определить новый тип объектов.
+                </p>
+                <p>
+                    Но стоит отметить, что несмотря на поддержку классов, JavaScript все же не является классическим объектно-ориентированным языком программирования как Java 
+                    или C#. Классы JavaScript по сути представляют то, что называют "синтаксический сахар" над функциями-конструкторами - более удобные конструкции для создания объектов. И в реальности в JavaScript объекты по прежнему создаются не на основе классов, а на основе объектов или прототипов.
+                </p>
+
+                <h3>Определение класса</h3>
+
+                <p>Для определения класса используется ключевое слово <span class="b">class</span>:</p>
+                <div class="code-block"><code>class Person{ }</code></div>
+
+                <p>После слова <code>class</code> идет название класса (в данном случае класс называется <snan class="b">Person</snan>), и затем в фигурных скобках определяется тело класса.</p>
+
+                <p>Это наиболее расспространенный способ определения класса. Но есть и другие способы. Так, также можно определить анонимный класс и присвоить его переменной или константе:</p>
+                <div class="code-block"><code>const Person = class{}</code></div>
+
+                <p>В принципе мы можем создать и неанонимный класс и присвоить его переменной или константе:</p>
+                <div class="code-block"><code>const User = class Person{}</code></div>
+
+                <h3>Создание объектов</h3>
+
+                <p><em>Класс</em> - это общее представление некоторых сущностей или объектов. Конкретным воплощением этого представления, класса является <code>объект</code>. 
+                    И после определения класса мы можем создать объекты класса с помощью конструктора:
+                </p>
+                <div class="code-block"><code>class Person{}
+ 
+const tom = new Person();
+const bob = new Person();</code></div>
+
+                <p>
+                    Для создания объекта с помощью конструктора сначала ставится ключевое слово <span class="b">new</span>. Затем собственно идет вызов конструктора - по сути 
+                    вызов функции по имени класса. По умолчанию классы имеют один конструктор без параметров. Поэтому в данном случае при вызове конструктора в него не передается 
+                    никаких аргументов.
+                </p>
+                <p>Стоит отметить, что в отличие от функций, чтобы использовать класс, его надо сначала определить. Например, в следующем коде мы получим ошибку, так как пытаемся использовать класс до его определения:</p>
+                <div class="code-block"><code>const tom = new Person();   <code class="comment">// ! Ошибка - Uncaught ReferenceError: </code>
+                             <code class="comment">// Cannot access 'Person' before initialization</code>
+ class Person{}</code></div>
+
+                <p>Если определение класса присвоено переменной или константе, то мы можем использовать имя этой <em>переменной/константы</em> для создания объектов класса:</p>
+                <div class="code-block"><code>const User = class Person{}
+ const tom = new User();
+ console.log(tom);</code></div>
+
+                <p>Выше в коде несмотря на то, что мы используем вызов <code>new User()</code>, в реальности создаваемый объект будет представлять класс <code>Person</code>.</p>
+
+                <p>Пример создания объекта анонимного класса:</p>
+                <div class="code-block"><code>const Person = class{}
+ const tom = new Person();
+ console.log(tom);</code></div>
+
+                <h3>Поля и свойства класса</h3>
+
+                <p><em>Для хранения данных или состояния объекта в классе используются <u>поля и свойства</u></em>.</p>
+                <p>
+                    Итак, выше был определен класс <code>Person</code>, который представлял человека. У человека есть отличительные признаки, например, <em>имя и возраст</em>. Определим 
+                    в классе <code>Person</code> поля для хранения этих данных:
+                </p>
+                <div class="code-block"><code>class Person{
+    name;
+    age;
+}
+
+const tom = new Person();
+
+tom.name = "Tom";
+tom.age = 37;
+
+console.log(tom.name);  <code class="comment">// Tom</code>
+console.log(tom.age);   <code class="comment">// 37</code></code></div>
+
+                <p>Определение поля фактически просто представляет его название:</p>
+                <div class="code-block"><code>name;
+ age;</code></div>
+
+                <p>Так, здесь определено поле <code>name</code> для хранения имени человека, и поле <code>age</code> для хранения возраста человека.</p>
+                <p>После создания объекта класса мы можем обратиться к этим полям. Для этого после имени объекта через точку указывается имя поля:</p>
+                <div class="code-block"><code>tom.name = "Tom";       <code class="comment">// установим значение поля</code>
+ console.log(tom.name);  <code class="comment">// получим значение свойства</code></code></div>
+
+                <p>
+                    В примере выше поля класса также можно назвать <span class="b">свойствами</span>. 
+                    По сути <span class="b">свойства</span> <em>представляют доступные извне или публичные поля класса</em>. Дальше мы подробно разберем, 
+                    когда поля бывают непубличные, то есть недоступными извне. Но пока стоит понимать, что свойства и публичные поля - это одно и то же. И в примере выше поля <code>name</code> и <code>age</code> также 
+                    можно назвать свойствами.
+                </p>
+
+                <p>При необходимости мы можем присвоить полям некоторые начальные значения:</p>
+                <div class="code-block"><code>class Person{
+    name = "Unknown";
+    age= 18;
+}
+
+const tom = new Person();
+console.log(tom.name);  <code class="comment">// Unknown</code>
+
+tom.name = "Tom";
+console.log(tom.name);  <code class="comment">// Tom</code></code></div>
+
+                <h3>Поведение класса и его методы</h3>
+
+                <p>
+                    Кроме хранения данных, которые определяют состояние объекта, класс может иметь <span class="b">методы</span>, которые <em>определяют поведение объекта - действия</em>, которые выполняет 
+                    объект. Например, определим в классе <span class="b">Person</span> пару методов:
+                </p>
+                <div class="code-block"><code>class Person{
+    name;
+    age;
+
+    move(place){
+        console.log(`Go to ${place}`);
+    }
+
+    eat(){
+        console.log("Eat apples");
+    }
+}
+
+const tom = new Person();
+
+tom.move("Hospital");   <code class="comment">// Go to Hospital</code>
+tom.move("Cinema");     <code class="comment">// Go to Cinema</code>
+tom.eat();              <code class="comment">// Eat apples</code></code></div>
+
+                <p>
+                    Здесь определен метод <code>move()</code>, который представляет условное передвижение человека. В качестве параметра метод принимает место, к которому идет человек. 
+                    Второй метод - <code>eat()</code> - представляет условный процесс питания.
+                </p>
+
+                <h3>Обращение к полям и методам внутри класса. Слово this</h3>
+
+                <p>
+                    Что если мы хотим в методах класса обратиться к полям класса или к другим его методам? В этом случае перед именем поля/свойства или метода указывается 
+                    ключевое слово <span class="b">this</span>, которое в данном случае указывает на текущий объект.
+                </p>
+                <p>Например, определим метод, который выводит информацию об объекте:</p>
+                <div class="code-block"><code>class Person{
+    name;
+    age;
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+}
+
+const tom = new Person();
+
+tom.name = "Tom";
+tom.age = 37;
+tom.print();    <code class="comment">// Name: Tom  Age: 37</code>
+ 
+const bob = new Person();
+
+bob.name = "Bob";
+bob.age = 41;
+bob.print();    <code class="comment">// Name: Bob  Age: 41</code></code></div>
+
+                <h3>Определение конструктора</h3>
+
+                <p>Для создания объекта класса используется конструктор:</p>
+                <div class="code-block"><code>const bob = new Person();</code></div>
+
+                <p>Вызов конструктора по умолчанию, который есть в классах, фактически представляет вызов метода, который имеет то же название, что и класс, и возвращает объект этого класса.</p>
+
+                <p>Но также мы можем определить в классах свои конструкторы:</p>
+                <div class="code-block"><code>class Person{
+    name;
+    age;
+
+    constructor(){
+        console.log("Вызов конструктора");
+    }
+
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+}
+
+const tom = new Person();   <code class="comment">// Вызов конструктора</code>
+const bob = new Person();   <code class="comment">// Вызов конструктора</code></code></div>
+
+                <p>
+                    <em>Конструктор определяется с помощью метода с именем</em> <span class="b">constructor</span>. По сути это обычный метод, который может принимать 
+                    параметры. В данном случае конструктор просто выводит на консоль некоторое сообщение. Соответственно при выполнении строки
+                </p>
+                <div class="code-block"><code>const tom = new Person();</code></div>
+
+                <p>Мы увидим в  консоли браузера соответствующее сообщение.</p>
+
+                <p>Как правило, <u>цель конструктора</u> - <em>инициализация объекта некоторыми начальными данными:</em></p>
+                <div class="code-block"><code>class Person{
+    name;
+    age;
+
+    constructor(pName, pAge){
+        this.name = pName;
+        this.age = pAge;
+    }
+
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+}
+
+const tom = new Person("Tom", 37);
+tom.print();                        <code class="comment">// Name: Tom  Age: 37</code>
+
+const bob = new Person("Bob", 41); 
+bob.print()                         <code class="comment">// Name: Bob  Age: 41</code></code></div>
+
+                <p>Здесь конструктор принимает два параметра и передает их значения полям класса. Соответственно при создании объекта мы можем передать в конструктор соответствующие значения для этих параметров:</p>
+                <div class="code-block"><code>const tom = new Person("Tom", 37);</code></div>
+
+                <p>
+                    Стоит отметить, что в примере выше определения полей класса избыточно. Обращение в конструкторе к полям через <code>this</code> фактически 
+                    будет аналогично их определению, и в данном случае мы можем убрать определение полей:
+                </p>
+                <div class="code-block"><code>class Person{
+ 
+    constructor(pName, pAge){
+        this.name = pName;
+        this.age = pAge;
+    }
+
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+}
+
+const tom = new Person("Tom", 37);
+tom.print();                        <code class="comment">// Name: Tom  Age: 37</code>
+
+const bob = new Person("Bob", 41); 
+bob.print()                         <code class="comment">// Name: Bob  Age: 41</code></code></div>
+
+                <h3>Выражения классов</h3>
+
+                <p>JavaScript также позволяет определять классы через <em>выражения классов (class expression)</em>. Класс присваивается переменной/константе, через которую далее можно ссылаться на этот класс:</p>
+                <div class="code-block"><code>const Person = class {
+    constructor(pName, pAge){
+        this.name = pName;
+        this.age = pAge;
+    }
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+}
+
+const tom = new Person("Tom", 38);
+tom.print();</code></div>
+
+                <h3>Получение прототипа</h3>
+
+                <p>Как и функция-конструктор, класс имеет прототип, который можно получить стандартными способами:</p>
+                <div class="code-block"><code>class Person{
+    constructor(pName, pAge){
+        this.name = pName;
+        this.age = pAge;
+    }
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+}
+
+const tom = new Person("Tom", 37);
+
+<code class="comment">// получаем прототип</code>
+console.log(Person.prototype);           <code class="comment">// через свойство prototype класса</code>
+console.log(tom.__proto__);              <code class="comment">// через свойство __proto__ объекта</code>
+console.log(Object.getPrototypeOf(tom)); <code class="comment">// через функцию Object.getPrototypeOf и объект</code>
+console.log(tom.constructor);            <code class="comment">// получение функции-конструктора (определения типа) объекта</code>
+</code></div>
+
                 <h3>Объявление класса</h3>
                 <div class="code-block"><code>class User {
-    // Конструктор
+    <code class="comment">// Конструктор</code>
     constructor(name, age) {
         this.name = name;
         this.age = age;
     }
     
-    // Методы
+    <code class="comment">// Методы</code>
     greet() {
         console.log(`Привет, я ${this.name}`);
     }
@@ -8251,8 +8538,143 @@ console.log(Object.isFrozen(tom));      <code class="comment">// true</code></co
 }
 
 const user = new User('Alice', 25);
-user.greet();     // "Привет, я Alice"
-user.celebrate(); // "Мне 26"</code></div>
+user.greet();     <code class="comment">// "Привет, я Alice"</code>
+user.celebrate(); <code class="comment">// "Мне 26"</code></code></div>
+
+
+                <h2 id="ch5-private-fields">📜 Приватные поля и методы</h2>
+
+                <p>В прошлых темах мы использовали класс, <em>свойства и методы которого были досупны извне</em>, и соответственно мы могли к им обратиться в любом месте программы. Например:</p>
+                <div class="code-block"><code>class Person{
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
+    }
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+}
+
+const tom = new Person("Tom", 37);
+
+tom.name = "Sam";
+tom.age = -45;
+tom.print();    <code class="comment">// Name: Sam  Age: -45</code></code></div>
+
+                <p>
+                    С одной стороны, это замечательно, что мы можем использовать функциональность класса в своей программе, обращаться к его свойствам, методам. Но это 
+                    может быть источником потенциальных проблем. Как видно в примере выше, мы можем изменить имя человека. Но что, если мы не хотим, чтобы в программе можно 
+                    было менять начальное имя? Также мы можем изменить возраст человека, но изменить его на любое число, которое может предствлять некорректный возраст (например, отрицательный).
+                </p>
+                <p>
+                    Иногда необходимо, чтобы к данным или действиям извне класса нельзя было обратиться, и чтобы к ним можно было обращаться только внутри этого 
+                    же класса. Или иными словами, сделать свойства и методы класса приватными - доступными только для этого класса. И язык JavaScript предоставляет для этого необходимый инструментарий. 
+                    Для этого название полей и методов должно начинаться с символа решетки <span class="b">#</span>.
+                </p>
+
+
+                <h3>Приватные поля</h3>
+
+                <p>Названия приватных полей предваряется символом <span class="b">#</span>:</p>
+                <div class="code-block"><code>class Person{
+    #name;
+    #age;
+    constructor(name, age){
+        this.#name = name;
+        this.#age = age;
+    }
+    print(){
+        console.log(`Name: ${this.#name}  Age: ${this.#age}`);
+    }
+}
+
+const tom = new Person("Tom", 37);
+
+ // tom.#name = "Sam";  <code class="comment">// ! Ошибка - нельзя обратиться к приватному полю</code>
+ // tom.#age = -45;     <code class="comment">//! Ошибка - нельзя обратиться к приватному полю</code>
+
+tom.print();            <code class="comment">// Name: Tom  Age: 37</code></code></div>
+
+                <p>
+                    В примере выше определены приватные поля <code>#name</code> и <code>#age</code>. Установить и получить их значение можно только внури класса <span class="b">Person</span>. 
+                    Вне его они не доступны. Поэтому при попытке обратиться к ним через имя объекта, мы получим ошибку:
+                </p>
+                <div class="code-block"><code>tom.#name = "Sam";  <code class="comment">// ! Ошибка - нельзя обратиться к приватному полю</code>
+ tom.#age = -45;     <code class="comment">// ! Ошибка - нельзя обратиться к приватному полю</code></code></div>
+
+                <p>
+                    Если потребуется как-то к ним все-таки обратиться, то мы можем определить для этого методы. Например, выше метод <code>print()</code> получает их значения и выводит на консоль. 
+                    Подобным образом можно определить и методы для установки значения:
+                </p>
+                <div class="code-block"><code>class Person{
+    #name;
+    #age= 1;
+    constructor(name, age){
+        this.#name = name;
+        this.setAge(age);
+    }
+    setAge(age){
+        if (age &gt; 0 && age &lt; 110) this.#age = age;
+    }
+    print(){
+        console.log(`Name: ${this.#name}  Age: ${this.#age}`);
+    }
+}
+
+const tom = new Person("Tom", 37);
+tom.print();                        <code class="comment">// Name: Tom  Age: 37</code>
+
+tom.setAge(22);
+tom.print();                        <code class="comment">// Name: Tom  Age: 22</code>
+
+tom.setAge(-1234);
+tom.print();                        <code class="comment">// Name: Tom  Age: 22</code></code></div>
+
+                <p>В данном случае метод <code>setAge</code> проверяет корректность переданного значения, и если оно корректно, переустанавливает возраст.</p>
+                
+                <h3>Приватные методы</h3>
+
+                <p>Названия приватных методов также предваряются символом <span class="b">#</span>:</p>
+
+                <div class="code-block"><code>class Person{
+    #name = "undefined";
+    #age = 1;
+    constructor(name, age){
+        this.#name = this.#checkName(name);
+        this.setAge(age);
+    }
+    #checkName(name){
+        if(name!=="admin") return name;
+    }
+    setAge(age){
+        if (age > 0 && age < 110) this.#age = age;
+    }
+    print(){
+        console.log(`Name: ${this.#name}  Age: ${this.#age}`);
+    }
+}
+
+const tom = new Person("Tom", 37);
+tom.print();    <code class="comment">// Name: Tom  Age: 37</code>
+
+const bob = new Person("admin", 41);
+bob.print();    <code class="comment">// Name: Undefined  Age 41</code>
+
+//let personName = bob.#checkName("admin"); <code class="comment">// ! Ошибка - нельзя обратится к приватному методу</code>
+</code></div>
+
+                <p>
+                    В примере выше определен приватный метод <code>#checkName()</code>, который выполняет условную проверку имени - ели оно не равно <code>"admin"</code>, то возвращает переданное значение. (К примеру, мы не хотим, 
+                    чтобы имя пользователя было "admin"). И также вне класса мы не можем обратиться к этому методу:
+                </p>
+                <div class="code-block"><code>let personName = bob.#checkName("admin");   <code class="comment">// ! Ошибка</code></code></div>
+
+                <p>Как правило, подобные приватные методы используются для выполнения каких-то вспомогательных действий, как, например, валидация в примере выше, и которые нет смысла делать доступнми из вне.</p>
+
+
+                <h2 id="ch5-access-methods">📜 Свойства и методы доступа</h2>
+
+                <p>Для опосредования доступа к свойствам класса в последних стандартах JavaScript была добавлена поддержка методов доступа - <span class="b">get</span> и <span class="b">set</span>. Сначала рассмотрим проблему, с которой мы можем столкнуться:</p>
 
                 <h3>Геттеры и сеттеры</h3>
                 <div class="code-block"><code>class User {
@@ -8261,25 +8683,25 @@ user.celebrate(); // "Мне 26"</code></div>
         this.birthYear = birthYear;
     }
     
-    // Геттер (обращение как к свойству)
+    <code class="comment">// Геттер (обращение как к свойству)</code>
     get age() {
         return new Date().getFullYear() - this.birthYear;
     }
     
-    // Сеттер
+    <code class="comment">// Сеттер</code>
     set age(value) {
         this.birthYear = new Date().getFullYear() - value;
     }
 }
 
 const user = new User('Alice', 1998);
-console.log(user.age);  // 27 (в 2025)
-user.age = 30;          // Устанавливаем возраст
-console.log(user.birthYear); // 1995</code></div>
+console.log(user.age);       <code class="comment">// 27 (в 2025)</code>
+user.age = 30;               <code class="comment">// Устанавливаем возраст</code>
+console.log(user.birthYear); <code class="comment">// 1995</code></code></div>
 
                 <h3>Статические методы</h3>
                 <div class="code-block"><code>class MathHelper {
-    // Статический метод (вызывается через класс)
+    <code class="comment">//</code> Статический метод (вызывается через класс)
     static sum(a, b) {
         return a + b;
     }
@@ -8289,12 +8711,12 @@ console.log(user.birthYear); // 1995</code></div>
     }
 }
 
-// Вызов без создания экземпляра
-console.log(MathHelper.sum(5, 3));      // 8
-console.log(MathHelper.multiply(4, 2)); // 8
+<code class="comment">//</code> Вызов без создания экземпляра
+console.log(MathHelper.sum(5, 3));      <code class="comment">// 8</code>
+console.log(MathHelper.multiply(4, 2)); <code class="comment">// 8</code>
 
-// const helper = new MathHelper();
-// helper.sum(5, 3); // Ошибка! Статический метод недоступен</code></div>
+<code class="comment">// const helper = new MathHelper();</code>
+<code class="comment">// helper.sum(5, 3); // Ошибка! Статический метод недоступен</code></div></code>
 
                 <h2>Наследование</h2>
                 <div class="code-block"><code>// Родительский класс
