@@ -312,6 +312,11 @@
             font-size: 1.4rem;
             margin: 1.5rem 0 0.8rem;
         }
+
+        .chapter h4 {
+            font-size: 1.2rem;
+            margin: 1.2rem 0 0.7rem;
+        }
         
         .chapter p {
             margin-bottom: 1rem;
@@ -572,6 +577,8 @@
                                 <li class="nav-subitem" data-target="ch4-nested-objects">📜 Вложенные объекты и массивы в объектах</li>
                                 <li class="nav-subitem" data-target="ch4-obj-copy">📜 Копирование и сравнение объектов</li>
                                 <li class="nav-subitem" data-target="ch4-check-search">📜 Проверка наличия и перебор методов и свойств</li>
+                                <li class="nav-subitem" data-target="ch4-usefull-func">📜 Функции Object.entries, Object.keys, Object.values</li>
+                                <li class="nav-subitem" data-target="ch4-usefull-methods">📜 Полезные методы Object</li>
                                 <li class="nav-subitem" data-target="ch4-obj-in-func">📜 Объекты в функциях</li>
                                 <li class="nav-subitem" data-target="ch4-constructor">📜 Функции-конструкторы</li>
                                 <li class="nav-subitem" data-target="ch4-prototype">📜 Прототипы</li>
@@ -581,6 +588,7 @@
                                 <li class="nav-subitem" data-target="ch4-proto-nesting">📜 Наследование прототипов конструкторов</li>
                                 <li class="nav-subitem" data-target="ch4-incapsulation">📜 Инкапсуляция свойств. Геттеры и сеттеры</li>
                                 <li class="nav-subitem" data-target="ch4-destructuring">📜 Деструктуризация</li>
+                                <li class="nav-subitem" data-target="ch4-spread-rest">📜 Spread и Rest с объектами</li>
                                 <li class="nav-subitem" data-target="ch4-optional">📜 Оператор ?.</li>
                                 <li class="nav-subitem" data-target="ch4-const-obj">📜 Константные объекты. Запрет изменения объекта</li>
                             </ul>
@@ -589,7 +597,9 @@
                             <ul class="nav-sublist">
                                 <li class="nav-subitem" data-target="ch5-classes">📜 Классы</li>
                                 <li class="nav-subitem" data-target="ch5-private-fields">📜 Приватные поля и методы</li>
+                                <li class="nav-subitem" data-target="ch5-static-fields">📜 Статические поля и методы</li>
                                 <li class="nav-subitem" data-target="ch5-access-methods">📜 Свойства и методы доступа</li>
+                                <li class="nav-subitem" data-target="ch5-inheritance">📜 Наследование</li>
                                 
                             </ul>
                         </li>
@@ -600,15 +610,57 @@
                 <div class="nav-section">
                     <div class="nav-title">📊 Типы данных</div>
                     <ul class="nav-list">
-                        <li class="nav-item" data-target="ch6">Глава 6. Массивы</li>
-                        <li class="nav-item" data-target="ch7">Глава 7. Строки и RegExp</li>
+                        <li class="nav-item has-subitems" data-target="ch6"><span class="ch-emoj"></span> Глава 6. Массивы.
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch6-creating">📜 Создание массивов</li>
+                                <li class="nav-subitem" data-target="ch6-spread">📜 Массивы и spread-оператор</li>
+                                <li class="nav-subitem" data-target="ch6-methods">📜 Методы массивов - Полная таблица</li>
+                                <li class="nav-subitem" data-target="ch6-applying">📜 Операции с массивами (применение)</li>
+                                <li class="nav-subitem" data-target="ch6-adding">&emsp;📃 Добавление данных</li>
+                                <li class="nav-subitem" data-target="ch6-delete">&emsp;📃 Удаление данных</li>
+                                <li class="nav-subitem" data-target="ch6-copy">&emsp;📃 Копирование массива</li>
+                                <li class="nav-subitem" data-target="ch6-tospliced-concat-join">&emsp;📃 toSpliced, concat, join</li>
+                                <li class="nav-subitem" data-target="ch6-sort">&emsp;📃 Сортировка</li>
+                                <li class="nav-subitem" data-target="ch6-search">&emsp;📃 Поиск</li>
+                                <li class="nav-subitem" data-target="ch6-includes">&emsp;📃 Проверка наличия элемента</li>
+                                <li class="nav-subitem" data-target="ch6-filter">&emsp;📃 filter()</li>
+                                <li class="nav-subitem" data-target="ch6-foreach">&emsp;📃 forEach()</li>
+                                <li class="nav-subitem" data-target="ch6-map">&emsp;📃 map(), flat()</li>
+                                <li class="nav-subitem" data-target="ch6-reduce">&emsp;📃 reduce()</li>
+                                <li class="nav-subitem" data-target="ch6-combination">&emsp;📃 Комбинация методов</li>
+                                <li class="nav-subitem" data-target="ch6-examp">📜 Примеры работы с массивами</li>
+                                <li class="nav-subitem" data-target="ch6-del-duplicates">📜 Пример: Удаление дубликатов</li>
+                                <li class="nav-subitem" data-target="ch6-set">Что такое Set?</li>
+                                <li class="nav-subitem" data-target="ch6-destructurisation">📜 Деструктуризация массивов</li>
+                                <li class="nav-subitem" data-target="ch6-multidimensional">📜 Многомерные массивы</li>
+                                <li class="nav-subitem" data-target="ch6-array-like">📜 Array-like объекты</li>
+                                <li class="nav-subitem" data-target="ch6-inheritance">📜 Наследование массивов</li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-subitems" data-target="ch7"><span class="ch-emoj"></span> Глава 7. Строки и RegExp.
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch7-intro">📜 Строки, объект String</li>
+                                <li class="nav-subitem" data-target="ch7-operation">📜 Работа со строками</li>
+                                <li class="nav-subitem" data-target="ch7-length">&emsp;📃 length, repeat</li>
+                                <li class="nav-subitem" data-target="ch7-search">&emsp;📃 Поиск (indexOf/lastIndexOf)</li>
+                                <li class="nav-subitem" data-target="ch7-includes">&emsp;📃 includes</li>
+                                <li class="nav-subitem" data-target="ch7-substring">&emsp;📃 Выбор подстроки</li>
+                                <li class="nav-subitem" data-target="ch7-register">&emsp;📃 Изменение регистра</li>
+                                <li class="nav-subitem" data-target="ch7-charat">&emsp;📃 charAt(), charCodeAt()</li>
+                                <li class="nav-subitem" data-target="ch7-trim">&emsp;📃 Удаление пробелов</li>
+                                <li class="nav-subitem" data-target="ch7-join-split">&emsp;📃 Разделение и объединение</li>
+                                <li class="nav-subitem" data-target="ch7-replace">&emsp;📃 replace()</li>
+                                <li class="nav-subitem" data-target="ch7-startswith">&emsp;📃 startsWith(), endsWith()</li>
+                                <li class="nav-subitem" data-target="ch7-pad">&emsp;📃 padStart(), padEnd()</li>
+                            </ul>
+                        </li>
                         <li class="nav-item" data-target="ch8">Глава 8. Обработка ошибок</li>
                         <li class="nav-item" data-target="ch9">Глава 9. Date и Number</li>
                         <li class="nav-item" data-target="ch10">Глава 10. Map и Set</li>
                     </ul>
                 </div>
 
-                <!-- DOM и события 📁📂📖📜-->
+                <!-- DOM и события 📁📂📖📜 📃📑-->
                 <div class="nav-section">
                     <div class="nav-title">🎨 DOM и события</div>
                     <ul class="nav-list">
@@ -5239,7 +5291,7 @@ console.log("after changeFull:", numbers);  <code class="comment">// [8, 2, 3]</
 
             </section>
 
-            <!-- ГЛАВА 4-5: ООП -->
+            <!-- ГЛАВА 4: ООП. Объекты-->
             <section class="chapter" id="ch4">
                 <h1>Глава 4. Объектно-ориентированное программирование</h1>
 
@@ -6303,14 +6355,14 @@ print : print(){
 	console.log(`Name: ${this.name}  Age: ${this.age}`);
 }</pre>
 
-                <h3>Функции Object.entries, Object.keys, Object.values</h3>
+                <h2 id="ch4-usefull-func">📜 Функции Object.entries, Object.keys, Object.values</h2>
 
                 <p>
                     С помощью дополнительных функций <span class="b">Object.entries</span>, <span class="b">Object.keys</span> и <span class="b">Object,values</span> 
                     можно получить все свойства (в том числе методы) объекта и их значения.
                 </p>
 
-                <h4>Object.entries()</h4>
+                <h3>Object.entries()</h3>
 
                 <p>Функция <span class="b">Object.entries()</span> в качестве параметра принимает объект и возвращает массив пар "название_свойства - значение", где каждая пара свойство-значение представляет массив. Например:</p>
                 <div class="code-block"><code>const tom = {
@@ -6331,7 +6383,7 @@ for(const prop of Object.entries(tom)) {
 ["age", 26]
 ["print", ƒ]</pre>
 
-                <h4>Object.keys()</h4>
+                <h3>Object.keys()</h3>
 
                 <p>Функция <span class="b">Object.keys()</span> позволяет получить массив названий всех свойств объекта. Например, возьмем выше определенный объект <code>tom</code>:</p>
                 <div class="code-block"><code>const tom = {
@@ -6358,7 +6410,7 @@ print ƒ print(){
         console.log(`Name: ${this.name}  Age: ${this.age}`);
 }</pre>
 
-                <h4>Object.values()</h4>
+                <h3>Object.values()</h3>
 
                 <p>Функция <span class="b">Object.values()</span> возвращает массив, который содержит все значения свойств объекта:</p>
                 <div class="code-block"><code>const tom = {
@@ -6371,6 +6423,37 @@ print ƒ print(){
 };
 
  console.log(Object.values(tom)); <code class="comment">// ["Tom", 26, print()]</code></code></div>
+
+                <h2 id="ch4-usefull-methods">📜 Полезные методы Object</h2>
+                <div class="code-block"><code>const user = {
+    name: 'Alice',
+    age: 25,
+    city: 'Moscow'
+};
+
+<code class="comment">//</code> Object.keys() - массив ключей
+console.log(Object.keys(user)); <code class="comment">//</code> ['name', 'age', 'city']
+
+<code class="comment">//</code> Object.values() - массив значений
+console.log(Object.values(user)); <code class="comment">//</code> ['Alice', 25, 'Moscow']
+
+<code class="comment">// Object.entries() - массив пар [ключ, значение]</code>
+console.log(Object.entries(user));
+<code class="comment">// [['name', 'Alice'], ['age', 25], ['city', 'Moscow']]</code>
+
+<code class="comment">// Object.assign() - копирование свойств</code>
+const copy = Object.assign({}, user);
+
+<code class="comment">// Object.freeze() - заморозка объекта</code>
+Object.freeze(user);
+user.age = 30; <code class="comment">// Не сработает</code>
+
+<code class="comment">// Object.seal() - запрет добавления/удаления свойств</code>
+const obj = {x: 1};
+Object.seal(obj);
+obj.x = 2;     <code class="comment">// OK</code>
+obj.y = 3;     <code class="comment">// Не сработает</code> 
+delete obj.x;  <code class="comment">// Не сработает</code></code></div>
 
 
                 <h2 id="ch4-obj-in-func">📜 Объекты в функциях</h2>
@@ -7944,6 +8027,31 @@ for(let i = 0; i &lt; nums.length; i++)
 console.log(nums);  <code class="comment">// [1, 2, 3, 4, 5, 6, 8, 9]</code></code></div>
 
 
+                <h2 id="ch4-spread-rest">📜 Spread и Rest с объектами</h2>
+                <div class="code-block"><code>const user = {
+    name: 'Alice',
+    age: 25
+};
+
+<code class="comment">// Spread - копирование объекта</code>
+const copy = {...user};
+
+<code class="comment">// Добавление свойств</code>
+const userWithEmail = {
+    ...user,
+    email: 'alice@example.com'
+};
+
+<code class="comment">// Слияние объектов</code>
+const address = {city: 'Moscow', country: 'Russia'};
+const fullUser = {...user, ...address};
+
+<code class="comment">// Rest - сбор оставшихся свойств</code>
+const {name, ...rest} = fullUser;
+console.log(name); <code class="comment">// "Alice"</code>
+console.log(rest); <code class="comment">// {age: 25, city: 'Moscow', country: 'Russia'}</code></code></div>
+
+
                 <h2 id="ch4-optional">📜 Оператор ?. (optional chaning)</h2>
 
                 <p>Оператор <span class="b">?.</span> или <code>optional chaning</code>-оператор позволяет проверить объект и его свойства и методы на <em>null</em> и <em>undefined</em>, и если объект или его свойства/методы определены, то обратиться к его свойствам или методам:</p>
@@ -8237,7 +8345,11 @@ console.log(Object.isExtensible(tom));  <code class="comment">// false</code>
 console.log(Object.isSealed(tom));      <code class="comment">// true</code>
 console.log(Object.isFrozen(tom));      <code class="comment">// true</code></code></div>
 
+            </section>
 
+
+            <!-- ГЛАВА 5: ООП. Классы-->
+            <section class="chapter" id="ch5">
                 <h1>ООП. Классы</h1>
 
                 <h2 id="ch5-classes">Классы (ES6)</h2>
@@ -8542,7 +8654,7 @@ user.greet();     <code class="comment">// "Привет, я Alice"</code>
 user.celebrate(); <code class="comment">// "Мне 26"</code></code></div>
 
 
-                <h2 id="ch5-private-fields">📜 Приватные поля и методы</h2>
+                <h2 id="ch5-private-fields">📜 Приватные поля и методы (ES2022)</h2>
 
                 <p>В прошлых темах мы использовали класс, <em>свойства и методы которого были досупны извне</em>, и соответственно мы могли к им обратиться в любом месте программы. Например:</p>
                 <div class="code-block"><code>class Person{
@@ -8631,6 +8743,30 @@ tom.setAge(-1234);
 tom.print();                        <code class="comment">// Name: Tom  Age: 22</code></code></div>
 
                 <p>В данном случае метод <code>setAge</code> проверяет корректность переданного значения, и если оно корректно, переустанавливает возраст.</p>
+
+                <h4>Еще пример:</h4>
+
+                <div class="code-block"><code>class BankAccount {
+    #balance = 0;               <code class="comment">// Приватное поле (начинается с #)</code>
+    
+    constructor(owner) {
+        this.owner = owner;
+    }
+    
+    deposit(amount) {
+        this.#balance += amount;
+        console.log(`Баланс: ${this.#balance}`);
+    }
+    
+    #validateAmount(amount) {     <code class="comment">// Приватный метод</code>
+        return amount > 0;
+    }
+}
+
+const account = new BankAccount('Alice');
+account.deposit(100);             <code class="comment">// "Баланс: 100"</code>
+
+// console.log(account.#balance); <code class="comment">// Ошибка! Приватное поле</code></code></div>
                 
                 <h3>Приватные методы</h3>
 
@@ -8672,11 +8808,413 @@ bob.print();    <code class="comment">// Name: Undefined  Age 41</code>
                 <p>Как правило, подобные приватные методы используются для выполнения каких-то вспомогательных действий, как, например, валидация в примере выше, и которые нет смысла делать доступнми из вне.</p>
 
 
+                <h2 id="ch5-static-fields">📜 Статические поля и методы</h2>
+
+                <p>Кроме обычных полей и методов класс может определять статические поля и методы. В отличие от обычных полей/свойств и методов они относятся ко всему классу, а не к отдельному объекту.</p>
+
+                <h3>Статические поля</h3>
+
+                <p>Статические поля хранят состояния класса в целом, а не отдельного объекта. Перед названием статического поля ставится ключевое слово <span class="b">static</span>. Например:</p>
+                <div class="code-block"><code>class Person{
+    static retirementAge = 65;
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
+    }
+    print(){ 
+        console.log(`Имя: ${this.name}  Возраст: ${this.age}`); 
+    }
+}
+ 
+console.log(Person.retirementAge);      <code class="comment">// 65</code>
+
+Person.retirementAge = 62;
+console.log(Person.retirementAge);      <code class="comment">// 62</code></code></div>
+
+                <p>Здесь в классе <span class="b">Person</span> определено статическое поле <code>retirementAge</code>, которое хранит условный возраст выхода на пенсию:</p>
+                <div class="code-block"><code>static retirementAge = 65;</code></div>
+
+                <p>
+                    Это поле относится ко всему классу <span class="b">Person</span> в целом и описывает состояние всего класса в целом. Ведь, 
+                    как правило, есть некий общий возраст выхода на пенсию, принтый для всех (не берем в расчет отдельные случаи для отдельных профессий). 
+                    И поэтому для обращения к статическому полю применяется имя класса, а не имя какого-либо объекта. Используя имя класса, мы можем получить или установить его значение:
+                </p>
+                <div class="code-block"><code>Person.retirementAge = 62;
+console.log(Person.retirementAge); <code class="comment">// 62</code></code></div>
+
+                <p>При этом мы <em>НЕ можем</em> в нестатических методах и конструкторе класса обращаться к этим полям через <code>this</code>, наподобие следующего:</p>
+                <div class="code-block"><code>print(){ 
+        console.log(`Имя: ${this.name}  Возраст: ${this.age}`); 
+        <code class="comment">// к статическому полю нельзя обратиться через this</code>
+        console.log(`Пенсионный возраст: ${this.retirementAge}`);
+}</code></div>
+
+                <p>Если мы все таки хотим обратиться к статическим полям и методам внутри нестатических методов и конструкторе класса, то опять же, как и в общем случае, необходимо использовать имя класса:</p>
+                <div class="code-block"><code>print(){ 
+    console.log(`Имя: ${this.name}  Возраст: ${this.age}`); 
+    console.log(`Пенсионный возраст: ${Person.retirementAge}`);
+}</code></div>
+
+                <h3>Статические методы</h3>
+                
+                <p>
+                    Статические методы, как и статические поля, определяются для всего класса в целом, а не для отдельного объекта. 
+                    Для их определения перед названием метода ставится оператор <span class="b">static</span>. Например:
+                </p>
+                <div class="code-block"><code>class Person{
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
+    }
+    print(){ 
+        console.log(`Имя: ${this.name}  Возраст: ${this.age}`);
+    }
+    static printClassInfo(){ 
+        console.log("Класс Person представляет человека");
+    }
+}
+
+Person.printClassInfo();    <code class="comment">// Класс Person представляет человека</code></code></div>
+
+                <p>
+                    Здесь определен статический метод <code>printClassInfo()</code>, который для простоты просто выводит некоторое сообщение. В отличие от обычных нестатических методов, которые определяют поведение объекта, 
+                    статические методы определяют поведение для всего класса. Поэтому для их вызова применяется имя класса, а не имя объекта:
+                </p>
+                <div class="code-block"><code>Person.printClassInfo();</code></div>
+
+                <p>Поскольку статический метод относится классу в целом, а не к объекту, то мы <em>НЕ можем</em> обращаться в нем к нестатическим полям/свойствам и методам объекта, наподобие следующего:</p>
+                <div class="code-block"><code>class Person{
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
+    }
+    print(){ 
+        console.log(`Имя: ${this.name}  Возраст: ${this.age}`);
+    }
+    static printAge(){  console.log(this.age); } <code class="comment">// для статического метода this.age не существует</code>
+}
+
+Person.printAge();  <code class="comment">// undefined</code></code></div>
+                
+
+                <p><em>Если необходимо в статическом методе обратиться к свойствам объекта</em>, то мы можем опеределить в методе параметр, через который в метод будет передаваться объект:</p>
+                <div class="code-block"><code>class Person{
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
+    }
+    static print(person){ 
+        console.log(`Имя: ${person.name}  Возраст: ${person.age}`);
+    }
+}
+
+const tom = new Person("Tom", 37);
+const bob = new Person("Bob", 41);
+
+Person.print(tom);  <code class="comment">// Tom 37</code>
+Person.print(bob);  <code class="comment">// Bob 41</code></code></div>
+
+                <p>Однако мы можем использовать в статических методах слово <span class="b">this</span> для обращения к статическим полям и другим статическим методам:</p>
+                <div class="code-block"><code>class Person{
+    static retirementAge = 65;
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
+    }
+    print(){ 
+        console.log(`Имя: ${this.name}  Возраст: ${this.age}`);
+    }
+    static calculateRestAges(person){
+        if(this.retirementAge &gt; person.age){
+            const restAges = this.retirementAge - person.age;
+            console.log(`До пенсии осталось ${restAges} лет`);
+        }
+        else console.log("Вы уже на пенсии");
+    }
+}
+
+const tom = new Person("Tom", 37);
+Person.calculateRestAges(tom);      <code class="comment">// До пенсии осталось 28 лет</code>
+
+const bob = new Person("Bob", 71);
+Person.calculateRestAges(bob);      <code class="comment">// Вы уже на пенсии</code></code></div>
+
+                <p>
+                    Здесь определен статический метод <code>calculateRestAges()</code>, который расчитывает, сколько определенному человеку осталось до пенсии. И для вычисления он 
+                    обращается к статическому полю <code>retirementAge</code>:
+                </p>
+
+                <h4>Еще пример:</h4>
+                <div class="code-block"><code>class MathHelper {
+    <code class="comment">//</code> Статический метод (вызывается через класс)
+    static sum(a, b) {
+        return a + b;
+    }
+    
+    static multiply(a, b) {
+        return a * b;
+    }
+}
+
+<code class="comment">//</code> Вызов без создания экземпляра
+console.log(MathHelper.sum(5, 3));      <code class="comment">// 8</code>
+console.log(MathHelper.multiply(4, 2)); <code class="comment">// 8</code>
+
+<code class="comment">// const helper = new MathHelper();</code>
+<code class="comment">// helper.sum(5, 3); // Ошибка! Статический метод недоступен</code></code></div>
+
+
+                <h3>Приватные статические поля и методы</h3>
+
+                <p>Как и обычные поля и методы статические поля и методы могут быть <em>приватными</em>. Такие поля и методы доступны только из других статических методов класса:</p>
+                <div class="code-block"><code>class Person{
+    static #retirementAge = 65;
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
+    }
+    print(){ 
+        console.log(`Имя: ${this.name}  Возраст: ${this.age}`);
+    }
+    static calculateRestAges(person){
+        if(this.#retirementAge > person.age){
+            const restAges = this.#retirementAge - person.age;
+            console.log(`До пенсии осталось ${restAges} лет`);
+        }
+        else console.log("Вы уже на пенсии");
+    }
+}
+
+// console.log(Person.#retirementAge);  <code class="comment">// ! Ошибка: поле retirementAge -приватное</code>
+
+const tom = new Person("Tom", 37);
+Person.calculateRestAges(tom);          <code class="comment">// До пенсии осталось 28 лет</code>
+
+const bob = new Person("Bob", 71);
+Person.calculateRestAges(bob);          <code class="comment">// Вы уже на пенсии</code></code></div>
+
+                <p>В отличие от предыдущего примера теперь статическое поле <code>retirementAge</code> - приватное. И теперь к нему можно обратиться только внутри статических методов класса.</p>
+
+
                 <h2 id="ch5-access-methods">📜 Свойства и методы доступа</h2>
 
                 <p>Для опосредования доступа к свойствам класса в последних стандартах JavaScript была добавлена поддержка методов доступа - <span class="b">get</span> и <span class="b">set</span>. Сначала рассмотрим проблему, с которой мы можем столкнуться:</p>
+                <div class="code-block"><code>class Person{
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
+    }
+}
+
+const tom = new Person("Tom", 37);
+console.log(tom.age);   <code class="comment">// 37</code>
+
+tom.age = -15;
+console.log(tom.age);   <code class="comment">// -15</code></code></div>
+
+                <p>
+                    Класс <span class="b">Person</span> определяет два свойства - <code>name</code> (имя) и <code>age</code> (возраст человека), значения которых мы можем получить или установить. Но что если 
+
+                    мы передадим некорректные значения? Так, в примере выше свойству <code>age</code> передается отрицательное число, но возраст не может быть отрицательным.
+                </p>
+                <p>
+                    Чтобы выйти из этой ситуации, мы можем определить приватное поле age, к которому можно было бы обратиться только из текущего класса. 
+                    А для получения или установки его значения создать специальные методы:
+                </p>
+                <div class="code-block"><code>class Person{
+    #ageValue = 1;
+    constructor(name, age){
+        this.name = name;
+        this.setAge(age);
+    }
+    getAge(){
+        return this.#ageValue;
+    }
+    setAge(value){ if(value &gt; 0 && value &lt; 110) this.#ageValue = value; }
+}
+
+const tom = new Person("Tom", 37);
+console.log(tom.getAge());  <code class="comment">// 37</code>
+
+tom.setAge(-15);
+console.log(tom.getAge());  <code class="comment">// 37</code></code></div>
+
+                <p>
+                    Теперь возраст хранится в приватном поле <code>ageValue</code>. При его установке в методе <code>setAge()</code> проверяется переданное значение. И 
+                    установка происходит, если только передано корректное значение. А метод <code>getAge()</code> возвращает значение этой переменной.
+                </p>
+
+                <p>Но есть и другое решение - <em>применение методов доступа</em> <span class="b">get</span> и <span class="b">set</span>.</p>
+                <div class="code-block"><code><code class="comment">// определение приватного поля</code>
+#field;
+set field(value){
+    this.#field= value;
+}
+get field(){
+    return this.#field;
+}</code></div>
+
+                <p>
+                    Оба метода - <code>get</code> и <code>set</code> имеют одинаковые названия. Как правило, они опосредуют доступ к некоторому приватному полю. 
+                    Метод <span class="b">set</span> предназначен для установки. Он принимает в качестве параметра новое значение. Далее в методе <code>set</code> мы можем выполнить ряд действий при установке.
+                </p>
+
+                <p>Метод <span class="b">get</span> предназначен для получения значения. Здесь мы можем определить какую-нибудь логику при возвращении значения.</p>
+                <div class="code-block"><code>class Person{
+    #ageValue = 1;
+
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
+    }
+
+    set age(value){
+        console.log(`Передано ${value}`);
+        if(value &gt; 0 && value &lt; 110) this.#ageValue = value;
+    }
+    get age(){
+        return this.#ageValue;
+    }
+}
+
+const tom = new Person("Tom", 37);
+console.log(tom.age);
+
+tom.age = -15;
+console.log(tom.age);</code></div>
+
+                <p>Стоит отметить, что работа с методами доступа производится также, как с обычными свойствами. Так, для получения значения и вывода на консоль применяется вызов:</p>
+                <div class="code-block"><code>console.log(tom.age);</code></div>
+
+                <p>а не</p>
+                <div class="code-block"><code>console.log(tom.age());</code></div>
+
+                <p>То есть при обращении <code>tom.age</code> фактически будет срабатывать метод <span class="b">get</span>, который возвратит значение поля <code>ageValue</code>.</p>
+                <p>А при вызове </p>
+                <div class="code-block"><code>tom.age = -15;</code></div>
+
+                <p>будет срабатывать метод <span class="b">set</span>, который получит передаваемое ему значение (здесь число -15) через единственный параметр. И далее в самом методе <code>set</code> мы можем решить, надо ли устанавливать это значение.</p>
+
+
+                <h3>Свойства, доступные только для чтения</h3>
+
+                <p>
+                    Выше применялись оба метода <code>get</code> и <code>set</code>, соответственно значение поля можно было и получить, и установить. Однако в реальност мы можем использовать только один из них. 
+                    Например, мы можем оставить только метод <span class="b">get</span> и тем самым сделать свойство доступным <span class="b">только для чтения</span>.
+                </p>
+
+                <p>Например, изменим пример выше и сделаем свойство <code>name</code> доступным только для чтения:</p>
+                <div class="code-block"><code>class Person{
+    #age = 1;
+    #name;
+    constructor(name, age){
+        this.#name = name;
+        this.age = age;
+    }
+
+    <code class="comment">//set name(value){ this.#name = value; }</code>
+    get name(){ return this.#name; }
+
+    set age(value){ if(value &gt; 0 && value &lt; 110) this.#age = value; }
+
+    get age(){ return this.#age; }
+}
+
+const tom = new Person("Tom", 37);
+console.log(tom.name);  <code class="comment">// Tom</code>
+
+tom.name = "Bob";       <code class="comment">// Это ничего не даст</code>
+console.log(tom.name);  <code class="comment">// Tom   - значение не изменилось</code></code></div>
+
+                <p>
+                    В данном случае вместо общедоступного свойства <code>name</code> определена приватное поле <code>#name</code>. Его можно установить только изнутри класса, что мы и делаем в конструкторе класса. 
+                    Однако из вне его можно только прочитать с помощью метода <code>get</code>. Поэтому попытка установки свойства
+                </p>
+                <div class="code-block"><code>tom.name = "Bob";</code></div>
+                
+                <p>ни к чему не приведет</p>
+
+
+                <h3>Свойства только для установки</h3>
+
+                <p>Также мы можем сделать свойство доступным <em>только для записи</em>, оставив только метод <span class="b">set</span>. Например, добавим новое свойство <code>id</code>, которое будет доступно только для записи:</p>
+                <div class="code-block"><code>class Person{
+    #id;
+    constructor(name, age, id){
+        this.name = name;
+        this.age = age;
+        this.id = id;
+    }
+    set id(value){ this.#id = value;}
+    print(){
+        console.log(`id: ${this.#id}   name: ${this.name}   age: ${this.age}`);
+    }
+}
+
+const tom = new Person("Tom", 37, 1);
+
+tom.print();            <code class="comment">// id: 1   name: Tom   age: 37</code>
+tom.id = 55;            <code class="comment">// устанавливаем значение свойства id</code>
+tom.print();            <code class="comment">// id: 55   name: Tom   age: 37</code>
+
+console.log(tom.id);    <code class="comment">// undefined - значение свойства id нельзя получит</code></code></div>
+
+                <p>
+                    Здесь определено свойство <code>id</code>, которое устанавливает значение приватного поля <code>#id</code>. Но поскольку метода <code>get</code> для этого свойства не определено, 
+                    то при попытке получить значение свойства <code>id</code>, мы получим <code>undefined</code>:
+                </p>
+                <div class="code-block"><code>console.log(tom.id);    <code class="comment">// undefined - значение свойства id нельзя получить</code></code></div>
+
+
+                <h3>Свойства без обращения к полям</h3>
+
+                <p>Стоит отметить, что методы <code>get</code> и <code>set</code> необязательно должны обращаться к приватным или неприватным полям. Это могут быть и вычисляемые свойства. Например:</p>
+                <div class="code-block"><code>class Person{
+    constructor(firstName, lastName){
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    get fullName(){ return `${this.firstName} ${this.lastName}` }
+}
+
+const tom = new Person("Tom", "Smith");
+console.log(tom.fullName);  <code class="comment">// Tom Smith</code></code></div>
+
+                <p>В данном случае свойство для чтения <code>fullName</code> возращает фактически объединение двух свойств - <code>firstName</code> и <code>lastName</code>.</p>
+
+                <p>Подобным образом можно определить и <em>свойство для записи</em>:</p>
+                <div class="code-block"><code>class Person{
+    constructor(firstName, lastName){
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    get fullName(){ return `${this.firstName} ${this.lastName}` }
+    set fullName(value){ 
+        [this.firstName, this.lastName] = value.split(" ");
+    }
+}
+
+const tom = new Person("Tom", "Smith");
+console.log(tom.fullName);  <code class="comment">// Tom Smith</code>
+
+tom.fullName = "Tomas Jefferson";
+console.log(tom.lastName);  <code class="comment">// Jefferson</code></code></div>
+
+                <p>
+                    В данном случае метод <code>set</code> свойства <code>fullName</code> в качестве параметра получает некоторую строку и с помощью ее метода <code>split</code> разбивает по пробелу и получает массив подстрок, которые были разделены пробелом. То есть, теоретически мы рассчитываем, 
+                    что будет передано что-то наподобие "Tom Smith", а после разделения по пробелу свойство <code>firstName</code> получит значение "Tom", а свойтсво 
+                    <code>lastName</code> - значение "Smith". Стоит отметить, что для простоты и целй демонстрации здесь мы не рассматриваем исключительные ситуации, 
+                    когда передается пустая строка или строка, которая не делится по пробелу на две части и т.д.
+                </p>
+
+                <p>В итоге при получении нового значения</p>
+                <div class="code-block"><code>tom.fullName = "Tomas Jefferson";</code></div>
+
+                <p>Метод <code>set</code> разобьет его по пробелу, и первый элемент массива будет передан свойству <code>firstName</code>, а второй - свойству <code>lastName</code>.</p>
+
 
                 <h3>Геттеры и сеттеры</h3>
+
                 <div class="code-block"><code>class User {
     constructor(name, birthYear) {
         this.name = name;
@@ -8696,30 +9234,128 @@ bob.print();    <code class="comment">// Name: Undefined  Age 41</code>
 
 const user = new User('Alice', 1998);
 console.log(user.age);       <code class="comment">// 27 (в 2025)</code>
+
 user.age = 30;               <code class="comment">// Устанавливаем возраст</code>
 console.log(user.birthYear); <code class="comment">// 1995</code></code></div>
 
-                <h3>Статические методы</h3>
-                <div class="code-block"><code>class MathHelper {
-    <code class="comment">//</code> Статический метод (вызывается через класс)
-    static sum(a, b) {
-        return a + b;
-    }
-    
-    static multiply(a, b) {
-        return a * b;
+
+                <h2 id="ch5-inheritance">📜 Наследование</h2>
+
+                <p><em>Одни классы могут наследоваться от других.</em> <span class="b">Наследование</span> <em>позволяет сократить объем кода в классах-наследниках</em>. Например, возьмем следующие классы:</p>
+                <div class="code-block"><code>class Person{
+    name;
+    age;
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
     }
 }
 
-<code class="comment">//</code> Вызов без создания экземпляра
-console.log(MathHelper.sum(5, 3));      <code class="comment">// 8</code>
-console.log(MathHelper.multiply(4, 2)); <code class="comment">// 8</code>
+class Employee{
+    name; 
+    age;
+    company;
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+    work(){
+        console.log(`${this.name} works in ${this.company}`);
+    }
+}
+  
+const tom = new Person();
 
-<code class="comment">// const helper = new MathHelper();</code>
-<code class="comment">// helper.sum(5, 3); // Ошибка! Статический метод недоступен</code></div></code>
+tom.name = "Tom"; 
+tom.age= 34;
 
-                <h2>Наследование</h2>
-                <div class="code-block"><code>// Родительский класс
+const bob = new Employee();
+
+bob.name = "Bob"; 
+bob.age = 36; 
+bob.company = "Google";
+
+tom.print();    <code class="comment">// Name: Tom  Age: 34</code>
+bob.print();    <code class="comment">// Name: Bob  Age: 36</code>
+bob.work();     <code class="comment">// Bob works in Google</code></code></div>
+
+                <p>
+                    Здесь определены два класса - <span class="b">Person</span>, который представляет человека, и <span class="b">Employee</span>, который представляет работника предприятия. Оба класса прекрасно работают, мы можем создавать их объекты, но мы также видим, что 
+                    класс <span class="b">Employee</span> повторяет функционал класса <span class="b">Person</span>, так как работник также является человеком, для которого также можно определить свойства <code>name</code> и <code>age</code> и метод <code>print</code>.
+                </p>
+                <p>Наследование позволяет одним классам автоматически получить функцонал других классов и тем самым сократить объем кода. Для наследования одного класса от другого применяется ключевое слово <span class="b">extends</span>:</p>
+                <div class="code-block"><code>class Base{}
+class Derived extends Base{}</code></div>
+
+                <p>После названия класса-наследника ставится ключевое слово <span class="b">extends</span>, после которого идет имя класса, от которого мы хотим унаследовать функционал.</p>
+
+                <p>Так, изменим классы <code>Person</code> и <code>Employee</code>, применив наследование:</p>
+
+                <div class="code-block"><code>class Person{
+    name;
+    age;
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+}
+
+class Employee extends Person{
+    company;
+    work(){
+        console.log(`${this.name} works in ${this.company}`);
+    }
+}
+  
+const tom = new Person();
+
+tom.name = "Tom"; 
+tom.age= 34;
+
+const bob = new Employee();
+
+bob.name = "Bob"; 
+bob.age = 36; 
+bob.company = "Google";
+
+tom.print();    <code class="comment">// Name: Tom  Age: 34</code>
+bob.print();    <code class="comment">// Name: Bob  Age: 36</code>
+bob.work();     <code class="comment">// Bob works in Google</code></code></div>
+
+                <p>
+                    Теперь класс <code>Employee</code> наследуется от класса <code>Person</code>. В этом отношении класс <code>Person</code> еще называется <em>базовым или родительским классом</em>, а <code>Employee</code> - 
+                    <em>производным классом или классом-наследником</em>. Поскольку класс <code>Employee</code> наследует функционал от <code>Person</code>, то нам нет необходимости заново определять в нем свойства <code>name</code>, <code>age</code> и метод <code>print</code>. В итоге код класса <code>Employee</code> 
+                    получился короче, а результат программы тот же.
+                </p>
+
+                <h3>Наследование класса с конструктором</h3>
+
+                <p>Вместе со всем функционалом производный класс наследует и конструктор базового класса. Например, определим в базовом классе <code>Person</code> конструктор:</p>
+                <div class="code-block"><code>class Person{
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
+    }
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+}
+
+class Employee extends Person{
+    company;
+    work(){
+        console.log(`${this.name} works in ${this.company}`);
+    }
+}
+  
+const tom = new Person("Tom", 34);
+tom.print();                          <code class="comment">// Name: Tom  Age: 34</code>
+ 
+const sam = new Employee("Sam", 25);  <code class="comment">// унаследованный конструктор</code>
+sam.print();                          <code class="comment">// Name: Sam  Age: 25</code></code></div>
+
+                <p>В данном случае класс <code>Person</code> определяет конструктор с двумя параметрами. В этом случае класс <code>Employee</code> наследует его и использует для создания объекта <code>Employee</code>.</p>
+
+                <h4>Еще пример:</h4>
+
+                <div class="code-block"><code><code class="comment">// Родительский класс</code>
 class Animal {
     constructor(name) {
         this.name = name;
@@ -8730,29 +9366,73 @@ class Animal {
     }
 }
 
-// Дочерний класс
+<code class="comment">// Дочерний класс</code>
 class Dog extends Animal {
     constructor(name, breed) {
-        super(name); // Вызов конструктора родителя
+        super(name); <code class="comment">// Вызов конструктора родителя</code>
         this.breed = breed;
     }
     
-    // Переопределение метода
+    <code class="comment">// Переопределение метода</code>
     speak() {
         console.log(`${this.name} лает`);
     }
     
-    // Новый метод
+    <code class="comment">// Новый метод</code>
     wagTail() {
         console.log(`${this.name} виляет хвостом`);
     }
 }
 
 const dog = new Dog('Бобик', 'Овчарка');
-dog.speak();    // "Бобик лает"
-dog.wagTail();  // "Бобик виляет хвостом"</code></div>
+dog.speak();    <code class="comment">// "Бобик лает"</code>
+dog.wagTail();  <code class="comment">// "Бобик виляет хвостом"</code></code></div>
 
-                <h3>super в наследовании</h3>
+                
+                <h3>Определение конструктора в классе-наследнике и ключевое слово super.</h3>
+
+                <p>
+                    Производный класс также может определить свой конструктор. Если производный класс определяет конструктор, то в нем <span class="b">должен быть</span> вызван конструктор базового класса. Для обращения в производном классе к функциональности 
+                    базового класса, в том числе для обращения к конструктору базового класса, применяется ключевое слово <span class="b">super</span>
+                </p>
+
+                <div class="code-block"><code>class Person{
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
+    }
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+}
+
+class Employee extends Person{
+    constructor(name, age, company){
+        super(name, age);
+        this.company = company;
+    }
+    work(){
+        console.log(`${this.name} works in ${this.company}`);
+    }
+}
+  
+const tom = new Person("Tom", 34);
+tom.print();                        <code class="comment">// Name: Tom  Age: 34</code>
+ 
+const sam = new Employee("Sam", 25, "Google");
+sam.print();                        <code class="comment">// Name: Sam  Age: 25</code>
+sam.work();                         <code class="comment">// Sam works in Google</code></code></div>
+
+                <p>Класс <code>Employee</code> определяет свой конструктор с тремя параметрами, первой строкой в котором идет обращение к конструктору базового класса <code>Person</code>:</p>
+                <div class="code-block"><code>super(name, age);</code></div>
+
+                <p>
+                    Поскольку конструктор класса <code>Person</code> имеет два параметра, соответственно в него передаются два значения. При этом конструктор базового класса должен вызываться до 
+                    обращения к свойствам текущего объекта через <code>this</code>.
+                </p>
+
+                <h4>Другой пример:</h4>
+
                 <div class="code-block"><code>class Animal {
     constructor(name) {
         this.name = name;
@@ -8765,122 +9445,307 @@ dog.wagTail();  // "Бобик виляет хвостом"</code></div>
 
 class Cat extends Animal {
     constructor(name, color) {
-        super(name); // Обязательно перед использованием this!
+        super(name);            <code class="comment">// Обязательно перед использованием this!</code>
         this.color = color;
     }
     
     eat() {
-        super.eat(); // Вызов метода родителя
+        super.eat();            <code class="comment">// Вызов метода родителя</code>
         console.log(`${this.name} мурлычет`);
     }
 }
 
 const cat = new Cat('Мурка', 'рыжий');
 cat.eat();
-// "Мурка ест"
-// "Мурка мурлычет"</code></div>
+<code class="comment">// "Мурка ест"</code>
+<code class="comment">// "Мурка мурлычет"</code></code></div>
 
-                <h2>Приватные поля (ES2022)</h2>
-                <div class="code-block"><code>class BankAccount {
-    #balance = 0; // Приватное поле (начинается с #)
-    
-    constructor(owner) {
-        this.owner = owner;
+                <h3>Переопределение методов базового класса.</h3>
+
+                <p>
+                    Производный класс, как и в случае с конструктором, может переопределять методы базового класса. Так, в примере выше метод <code>print()</code> класса <span class="b">Person</span> 
+                    выводит имя и возраст человека. Но что, если мы хотим, чтобы для работника метод <code>print()</code> выводил также и компанию? В этом случае мы можем определить в классе <span class="b">Employee</span> 
+                    свой метод <code>print()</code>:
+                </p>
+
+                <div class="code-block"><code>class Person{
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
     }
-    
-    deposit(amount) {
-        this.#balance += amount;
-        console.log(`Баланс: ${this.#balance}`);
-    }
-    
-    #validateAmount(amount) { // Приватный метод
-        return amount > 0;
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
     }
 }
 
-const account = new BankAccount('Alice');
-account.deposit(100); // "Баланс: 100"
+class Employee extends Person{
+     
+    constructor(name, age, company){
+        super(name, age);
+        this.company = company;
+    }
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+        console.log(`Company: ${this.company}`);
+    }
+}
 
-// console.log(account.#balance); // Ошибка! Приватное поле</code></div>
+const sam = new Employee("Sam", 25, "Google");
+sam.print();    <code class="comment">// Name: Sam  Age: 25</code>
+                <code class="comment">// Company: Google</code></code></div>
 
-                <h2>Полезные методы Object</h2>
-                <div class="code-block"><code>const user = {
-    name: 'Alice',
-    age: 25,
-    city: 'Moscow'
-};
+                <p>
+                    Однако в коде выше мы видим, что первая строка метода <code>print()</code> в классе <span class="b">Employee</span> по сути повторяет код метода <code>print()</code> из 
+                    класса <span class="b">Person</span>. В данном случае это всего одна строка, но в другой ситуации повторяемый код мог бы больше. И чтобы не повторяться, мы опять же можем 
+                    просто обратиться к реализации метода <code>print()</code> родительского класса <span class="b">Person</span> через <span class="b">super</span>:
+                </p>
 
-// Object.keys() - массив ключей
-console.log(Object.keys(user)); // ['name', 'age', 'city']
+                <div class="code-block"><code>class Person{
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
+    }
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+}
 
-// Object.values() - массив значений
-console.log(Object.values(user)); // ['Alice', 25, 'Moscow']
+class Employee extends Person{
+     
+    constructor(name, age, company){
+        super(name, age);
+        this.company = company;
+    }
+    print(){
+        super.print();
+        console.log(`Company: ${this.company}`);
+    }
+}
 
-// Object.entries() - массив пар [ключ, значение]
-console.log(Object.entries(user));
-// [['name', 'Alice'], ['age', 25], ['city', 'Moscow']]
+const sam = new Employee("Sam", 25, "Google");
+sam.print();    <code class="comment">// Name: Sam  Age: 25</code>
+                <code class="comment">// Company: Google</code></code></div>
 
-// Object.assign() - копирование свойств
-const copy = Object.assign({}, user);
+                <p>То есть в данном случае вызов</p>
+                <div class="code-block"><code>super.print();</code></div>
 
-// Object.freeze() - заморозка объекта
-Object.freeze(user);
-user.age = 30; // Не сработает
+                <p>представляет вызов реализации метода из базового класса. Таким образом, с помощью <code>this</code> и <code>super</code> мы можем разграничить обращение к функциональности текущего класса или его базового класса.</p>
 
-// Object.seal() - запрет добавления/удаления свойств
-const obj = {x: 1};
-Object.seal(obj);
-obj.x = 2;     // OK
-obj.y = 3;     // Не сработает
-delete obj.x;  // Не сработает</code></div>
+                <h3>Наследование и приватные поля и методы</h3>
 
-                <h2>Spread и Rest с объектами</h2>
-                <div class="code-block"><code>const user = {
-    name: 'Alice',
-    age: 25
-};
+                <p>При наследовании стоит учитывать, что производный класс может обращаться к любой функциональности базового класса, кроме приватных полей и методов. Например:</p>
+                <div class="code-block"><code>class Person{
+    #name;
+    constructor(name, age){
+        this.#name = name;
+        this.age = age;
+    }
+    print(){
+        console.log(`Name: ${this.#name}  Age: ${this.age}`);
+    }
+}
 
-// Spread - копирование объекта
-const copy = {...user};
+class Employee extends Person{
+    constructor(name, age, company){
+        super(name, age);
+        this.company = company;
+    }
+    print(){
+        super.print();
+        console.log(`Company: ${this.company}`);
+    }
+    work(){
+        console.log(`${this.#name} works in ${this.company}`);  
+        <code class="comment">// ! Ошибка - поле #name недоступно из Employee</code>
+    }
+}</code></div>
 
-// Добавление свойств
-const userWithEmail = {
-    ...user,
-    email: 'alice@example.com'
-};
+                <p>
+                    В данном случае поле <code>#name</code> в классе <span class="b">Person</span> определено как приватное, поэтому достуно только внутри этого класса. Поытка обратиться 
+                    к этому полю в классе-наследнике <span class="b">Employee</span> приведет к ошибке вне зависимости будет идти обращение через <code>this.#name</code> или <code>super.#name</code>. 
+                    При необходимости в базовом классе можно определить геттеры и сеттеры, которые обращаются к приватным полям. А в классе-наследники через эти геттеры и сеттеры обращаться к приватным полям базового класса.
+                </p>
 
-// Слияние объектов
-const address = {city: 'Moscow', country: 'Russia'};
-const fullUser = {...user, ...address};
 
-// Rest - сбор оставшихся свойств
-const {name, ...rest} = fullUser;
-console.log(name); // "Alice"
-console.log(rest); // {age: 25, city: 'Moscow', country: 'Russia'}</code></div>
+                <h3>Проверка принадлежности объекта классу</h3>
+
+                <p>
+                    Тот факт, что класс-наследник унаследован от некоторого базового класса говорит о том, что объект класса-наследника также является объектом базового класса. 
+                    Объектом какого класса является объект, можно проверить с помощью оператора <span class="b">instanceof</span>:
+                </p>
+
+                <div class="code-block"><code>class Person{
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
+    }
+    print(){
+        console.log(`Name: ${this.name}  Age: ${this.age}`);
+    }
+}
+
+class Employee extends Person{
+    constructor(name, age, company){
+        super(name, age);
+        this.company = company;
+    }
+    print(){
+        super.print();
+        console.log(`Works in ${this.company}`);
+    }
+}
+
+class Manager extends Person{
+    constructor(name, age, company){
+        super(name, age);
+        this.company = company;
+    }
+    print(){
+        super.print();
+        console.log(`Manager in ${this.company}`);
+    }
+}
+
+const sam = new Employee("Sam", 25, "Google");
+
+console.log(sam instanceof Person);     <code class="comment">// true</code>
+console.log(sam instanceof Employee);   <code class="comment">// true</code>
+console.log(sam instanceof Manager);    <code class="comment">// false</code></code></div>
+
+                <p>
+                    Здесь константа <code>sam</code> представляет объект класса <span class="b">Employee</span>, который унаследован от Person, соответственно выражения <code>sam instanceof Person</code> 
+                    и <code>sam instanceof Employee</code> возвратят <code>true</code>. А вот объектом класса <span class="b">Manager</span> константа sam не является, поэтому выражение <code>sam instanceof Manager</code> 
+                    возвратит <code>false</code>.
+                </p>
+
             </section>
 
             <!-- ГЛАВА 6: Массивы -->
             <section class="chapter " id="ch6">
                 <h1>Глава 6. Массивы</h1>
 
-                <h2>Создание массивов</h2>
-                <div class="code-block"><code>// Способ 1: литерал массива
+                <h2 id="ch6-creating">📜 Создание массивов и объект Array</h2>
+
+                <p>
+                    Для хранения набора данных в языке JavaScript предназначены массивы. Массивы в JavaScript представлены объектом 
+                    <span class="b">Array</span>. Объект <span class="b">Array</span> предоставляет ряд свойств и методов, с помощью которых мы можем управлять массивом и его элементами.
+                </p>
+
+                <h3>Создание массива</h3>
+
+                <ul>
+                    <li>
+                        Можно создать пустой массив, используя квадратные скобки или конструктор <span class="b">Array</span>:
+                        <div class="code-block"><code>const users = new Array();
+ const people = [];
+         
+ console.log(users);        <code class="comment">// Array[0]</code>
+ console.log(people);       <code class="comment">// Array[0]</code></code></div>
+                    </li>
+                    <li>
+                        <p>Можно сразу же инициализировать массив некоторым количеством элементов:</p>
+                        <div class="code-block"><code>const users = new Array("Tom", "Bill", "Alice");
+const people = ["Sam", "John", "Kate"];
+ 
+console.log(users);         <code class="comment">// ["Tom", "Bill", "Alice"]</code>
+console.log(people);        <code class="comment">// ["Sam", "John", "Kate"]</code></code></div>
+                    </li>
+                    <li>
+                        <p>Можно определить массив и по ходу определять в него новые элементы:</p>
+                        <div class="code-block"><code>const users = [];
+users[1] = "Tom";
+users[2] = "Kate";
+console.log(users[1]);      <code class="comment">// "Tom"</code>
+console.log(users[0]);      <code class="comment">// undefined</code></code></div>
+                        <p>При этом не важно, что по умолчанию массив создается с нулевой длиной. С помощью индексов мы можем подставить на конкретный индекс в массиве тот или иной элемент.</p>
+                    </li>
+                    <li>
+                        <p>Еще один способ инициализации массивов представляет метод <span class="b">Array.of()</span> - он принимает элементы и инициизирует ими массив:</p>
+                        <div class="code-block"><code>const people = Array.of("Tom", "Bob", "Sam");
+ console.log(people);       <code class="comment">// ["Tom", "Bob", "Sam"]</code></code></div>
+                    </li>
+                </ul>
+
+
+                <h3>Array.from</h3>
+
+                <p>И еще один способ представляет функция <span class="b">Array.from()</span>. Она имеет много вариантов, рассмотрим самые распространенные:</p>
+                <div class="code-block"><code>Array.from(arrayLike)
+ Array.from(arrayLike, function mapFn(element) { ... })
+ Array.from(arrayLike, function mapFn(element, index) { ... })</code></div>
+
+                <ul>
+                    <li>
+                        <p>
+                            В качестве <strong>первого параметра</strong> - <code>arrayLike</code> функция принимает некий объект, который, условно говоря, "похож на массив", то есть может быть представлен в виде набора элементов. 
+                            Это может быть и другой массив, это может быть и строка, которая по сути предоставляет набор символов. Вообщем какой-то набор элементов, который можно 
+                            преобразовать в массив. Кроме того, это может и некий объект, в котором определено свойство <code>length</code>. Например:
+                        </p>
+                        <div class="code-block"><code>const array = Array.from("Hello");
+ console.log(array);        <code class="comment">// ["H", "e", "l", "l", "o"]</code></code></div>
+                        <p>В данном случае в функцию передается строка и возвращается массив, каждый элемент которого предоставляет один из символов этой строки.</p>
+                    </li>
+                    <li>
+                        <p>В качестве <strong>второго параметра</strong> передается <em>функция преобразования</em>, которая через первый параметр получает текущий элемент набора и возвращает некоторый результат его трансформации. Например:</p>
+                        <div class="code-block"><code>const numbers = [1, 2, 3, 4];
+ const array = Array.from(numbers, n => n * n);
+ console.log(array);        <code class="comment">// [1, 4, 9, 16]</code></code></div>
+                        <p>
+                            В данном случае в функцию <strong>Array.from()</strong> передается массив чисел. Второй параметр - функция (в данном случае в ее роли выступает лямбда-выражение) 
+                            запускается для каждого числа из этого массива и получает это число через параметр <code>n</code>. В самом лямбда-выражении возвращаем квадрат этого числа. В итоге <code>Array.from()</code> 
+                            возвратит новый массив, в котором будут квадраты чисел из массива <code>numbers</code>.
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            И еще одна <strong>версия функции</strong> <code>Array.from()</code> в качестве второго параметра принимает функцию преобразования, в которую кроме элемента из 
+                            перебираемого набора передается и индекс этого элемента:
+                        </p>
+                        <div class="code-block"><code>Array.from(arrayLike, function mapFn(element, index) { ... })</code></div>
+
+                        <p>Используем эту версию и передадим в функцию объект со свойством <code>length</code>:</p>
+                        <div class="code-block"><code>const array = Array.from({length:3}, (element, index) => { 
+    console.log(element);   <code class="comment">// undefined</code>
+    return index;
+});
+console.log(array);         <code class="comment">// [0, 1, 2]</code></code></div>
+                        <p>
+                            Здесь в функцию передается объект, у которого свойство <code>length</code> равно 3. Для функции <code>Array.from</code> это будет сигналом, в возвращаемом 
+                            массиве должно быть три элемента. При этом неважно, что функция преобразования из второго параметра принимает элемент набора (параметр <code>element</code>) - 
+                            в данном случае он будет всегда <code>undefined</code>, тем не менее значение <code>length:3</code> будет указателем, что возвращаемый массив будет иметь три элемента с соответственно индексами от 0 до 2. 
+                            И через второй параметр функции преобразования - параметр <code>index</code> мы можем и получить текущий индекс элемента.
+                        </p>
+                    </li>
+                </ul>
+
+                <p>Тем не менее мы можем передать объект, где в качестве названий свойств применяются индексы. В этом случае объект превратится в массивоподобный объект, который можно перебрать:</p>
+                <div class="code-block"><code>const array = Array.from({length:3, "0": "Tom", "1": "Sam", "2": "Bob"}, (element) => { 
+    console.log(element);   
+    return element;
+});
+
+console.log(array);         <code class="comment">// ["Tom", "Sam", "Bob"]</code></code></div>
+
+
+                <h4>Или так:</h4>
+
+                <div class="code-block"><code><code class="comment">// Способ 1: литерал массива</code>
 const arr1 = [1, 2, 3, 4, 5];
 
-// Способ 2: конструктор Array
+<code class="comment">// Способ 2: конструктор Array</code>
 const arr2 = new Array(1, 2, 3);
-const arr3 = new Array(5); // [empty × 5] - массив из 5 пустых элементов
+const arr3 = new Array(5); <code class="comment">// [empty × 5] - массив из 5 пустых элементов</code>
 
-// Способ 3: Array.of() - создаёт массив из аргументов
-// В отличие от new Array(), всегда создаёт массив из переданных значений
-const arr4 = Array.of(1, 2, 3);     // [1, 2, 3]
-const arr5 = Array.of(5);           // [5] - массив с одним элементом 5
-const arr6 = Array.of(1, 'two', 3); // [1, "two", 3]
+<code class="comment">// Способ 3: Array.of() - создаёт массив из аргументов</code>
+<code class="comment">// В отличие от new Array(), всегда создаёт массив из переданных значений</code>
+const arr4 = Array.of(1, 2, 3);     <code class="comment">// [1, 2, 3]</code>
+const arr5 = Array.of(5);           <code class="comment">// [5] - массив с одним элементом 5</code>
+const arr6 = Array.of(1, 'two', 3); <code class="comment">// [1, "two", 3]</code>
 
-// Способ 4: Array.from() - создаёт массив из итерируемого объекта
-const arr7 = Array.from('hello');           // ['h', 'e', 'l', 'l', 'o']
-const arr8 = Array.from([1, 2, 3], x => x * 2); // [2, 4, 6] - с функцией
-const arr9 = Array.from({length: 5}, (_, i) => i); // [0, 1, 2, 3, 4]</code></div>
+<code class="comment">// Способ 4: Array.from() - создаёт массив из итерируемого объекта</code>
+const arr7 = Array.from('hello');                  <code class="comment">// ['h', 'e', 'l', 'l', 'o']</code>
+const arr8 = Array.from([1, 2, 3], x => x * 2);    <code class="comment">// [2, 4, 6] - с функцией</code>
+const arr9 = Array.from({length: 5}, (_, i) => i); <code class="comment">// [0, 1, 2, 3, 4]</code></code></div>
 
                 <div class="info-box note">
                     <div class="info-box-title">💡 Array.of() vs new Array()</div>
@@ -8891,7 +9756,188 @@ const arr9 = Array.from({length: 5}, (_, i) => i); // [0, 1, 2, 3, 4]</code></di
                     </ul>
                 </div>
 
-                <h2>Методы массивов - Полная таблица</h2>
+                <h3>length</h3>
+
+                <p>Чтобы узнать длину массива, используется свойство <span class="b">length</span>:</p>
+                <div class="code-block"><code>const fruit = [];
+fruit[0] = "яблоки";
+fruit[1] = "груши";
+fruit[2] = "сливы";
+ 
+console.log("В массиве fruit ", fruit.length, " элемента");
+
+for(let i=0; i &lt; fruit.length; i++)
+    console.log(fruit[i]);</code></div>
+
+                <p>По факту длиной массива будет индекс последнего элемента с добавлением единицы. Например:</p>
+                <div class="code-block"><code>const users = []; <code class="comment">// в массиве 0 элементов</code>
+users[0] = "Tom";
+users[1] = "Kate";
+users[4] = "Sam";
+
+for(let i=0; i &lt; users.length;i++)
+    console.log(users[i]);</code></div>
+
+                <p>Вывод браузера:</p>
+                <pre class="browser">Tom
+Kate
+undefined
+undefined
+Sam</pre>
+
+                <p>Несмотря на то, что для индексов 2 и 3 мы не добавляли элементов, но длиной массива в данном случае будет число 5. Просто элементы с индексами 2 и 3 будут иметь значение <code>undefined</code>.</p>
+
+
+                <h2 id="ch6-spread">📜 Массивы и spread-оператор</h2>
+
+                <p><span class="b">spread-оператор</span> ( оператор <span class="b">. . .</span> ) позволяет разложить массив на отдельные значения. Для этого перед массивом ставится многоточие:</p>
+                <div class="code-block"><code>...массив</code></div>
+
+                <p>Простейший пример:</p>
+                <div class="code-block"><code>const users = ["Tom", "Sam", "Bob"];
+console.log(...users);   <code class="comment">// Tom Sam Bob</code></code></div>
+
+                <p>И, применяя этот оператор, мы можем наполнить один массив значениями из другого массива:</p>
+                <div class="code-block"><code>const users = ["Tom", "Sam", "Bob"];
+ console.log(users);     <code class="comment">//  ["Tom", "Sam", "Bob"]</code>
+
+const people1 = [...users];
+const people2 = new Array(...users);
+const people3 = Array.of(...users);
+
+console.log(people1);     <code class="comment">//  ["Tom", "Sam", "Bob"]</code>
+console.log(people2);     <code class="comment">//  ["Tom", "Sam", "Bob"]</code>
+console.log(people3);     <code class="comment">//  ["Tom", "Sam", "Bob"]</code></code></div>
+
+                <h4>Объединение массивов</h4>
+
+                <p>С помощью <code>spread-оператора</code> можно при создания нового массива передать ему значения сразу нескольких массивов. Например:</p>
+                <div class="code-block"><code>const men = ["Tom", "Sam", "Bob"];
+const women = ["Kate", "Alice", "Mary"];
+const people = [...men, "Alex", ...women];
+ 
+console.log(people);     <code class="comment">//  ["Tom", "Sam", "Bob", "Alex", "Kate", "Alice", "Mary"]</code></code></div>
+
+                <p>В данном случае в массив <code>people</code> передаются значения из массивов <code>men</code>, <code>women</code>, и, кроме того, мы можем дополнительно передать отдельные значения, которые не входят в эти массивы.</p>
+
+                <h3>Передача аргументов функции</h3>
+
+                <p>Подобным образом можно передавать из массива значения параметрам функции:</p>
+                <div class="code-block"><code>const people = ["Tom", "Sam", "Bob"];
+ 
+function print(first, second, third){
+    console.log(first);
+    console.log(second);
+    console.log(third);
+}
+
+print(...people); 
+
+<code class="comment">// Tom</code>
+<code class="comment">// Sam</code>
+<code class="comment">// Bob</code></code></div>
+
+                <p>В данном случае функция <code>print()</code> принимает три параметра. Операция <code>...people</code> при вызове функции позволяет разложить массив <code>people</code> на отдельные значения, которые передаются параметрам этой функции.</p>
+                <p>Стоит отметить, что это не то же самое, что передать при вызове функции массив:</p>
+                <div class="code-block"><code>print(people);</code></div>
+
+                <p>В этом случае весь массив будет передан первому параметру функции - параметру <code>first</code>, а остальные будут иметь значение <code>undefined</code>.</p>
+
+                <h4>Еще один пример передачи параметрам значений из массива:</h4>
+                <div class="code-block"><code>function sum(a, b, c){
+    const d = a + b + c;
+    console.log(d);
+}
+
+sum(1, 2, 3);
+
+const nums = [4, 5, 6];
+sum(...nums);</code></div>
+
+                <p>
+                    Во втором случае в функцию передается числа из массива <code>nums</code>. Но чтобы передавался не просто массив, как одно значение, а именно числа из этого массива, 
+                    применяется <em>spread-оператор</em> (многоточие <code>...</code>).
+                </p>
+
+                <p>
+                    Если количество параметров функции <em>меньше количества элементов массива</em>, то оставшие элементы массива просто будут <em>отброшены</em>. Если количество параметров <em>больше 
+                    количества элементов массива</em>, то параметры, которым не досталось значений, получат значение <code>undefined</code>:
+                </p>
+                <div class="code-block"><code>const people1 = ["Tom", "Sam", "Bob", "Mike"];
+const people2 = ["Alex", "Bill"];
+
+function print(first, second, third){
+    console.log(`${first}, ${second}, ${third}`);
+}
+
+print(...people1);  <code class="comment">// Tom, Sam, Bob</code>
+print(...people2);  <code class="comment">// Alex, Bill, undefined</code></code></div>
+
+
+                <h3>Копирование массивов</h3>
+
+                <p><em>spread-оператор</em> предоставляет самый простой способ скопировать элементы одного массива в другой. Однако тут надо соблюдать осторожность. Рассмотрим пример:</p>
+                <div class="code-block"><code>const people = ["Sam", "Tom", "Bob"];
+ const employees = [...people];
+
+employees[0] = "Dan";
+
+console.log(employees);     <code class="comment">// ["Dan", "Tom", "Bob"]</code>
+console.log(people);        <code class="comment">// ["Sam", "Tom", "Bob"]</code></code></div>
+
+                <p>
+                    Здесь создаются два массива. При этом массиву <code>employees</code> передаются элементы массива <code>people</code>. Далее мы меняем первый элемент массива <code>employees</code>. И по консольному 
+                    выводу мы можем увидеть, что изменение одного массива не повлияло на другой массив.
+                </p>
+
+                <h4>Однако что будет, если мы скопируем массив объектов:</h4>
+                <div class="code-block"><code>const people = [{name:"Sam"}, {name:"Tom"}, {name:"Bob"}];
+ const employees = [...people];
+
+<code class="comment">//employees[0] = {name: "Dan"};</code>
+employees[0].name = "Dan";
+
+console.log(employees);     <code class="comment">//  [{name:"Dan"}, {name:"Tom"}, {name:"Bob"}]</code>
+console.log(people);        <code class="comment">//  [{name:"Dan"}, {name:"Tom"}, {name:"Bob"}]</code></code></div>
+
+
+
+                <p>Теперь массив <code>people</code> предоставляет массив объектов, где каждый объект имеет одно свойство - <code>name</code>. Далее мы изменяем значение свойства <code>name</code> у первого элемента.</p>
+                <p>
+                    И консольный вывод нам покажет, что изменение одного массива привело к изменению второго массива. Поскольку объекты - представляют ссылочный тип, и при копировании 
+                    в новый массив передается не копия объекта (как в случае со строками), а сам объект. Поэтому первый элемент одного массива и первый элемент второго массива фактически будет представлять 
+                    один и тот же объект.
+                </p>
+                <p>Однако мы можем полностью заменить элемент одного массива на другой объект, и тогда элемент второго массива по прежнему будет хранить ссылку на старый объект и будет не зависеть от первого массива:</p>
+                <div class="code-block"><code>const people = [{name:"Sam"}, {name:"Tom"}, {name:"Bob"}];
+ const employees = [...people];
+
+employees[0] = {name: "Dan"};
+
+console.log(employees);     <code class="comment">//  [{name:"Dan"}, {name:"Tom"}, {name:"Bob"}]</code>
+console.log(people);        <code class="comment">//  [{name:"Sam"}, {name:"Tom"}, {name:"Bob"}]</code></code></div>
+
+                <p>В данном случае первый элемент массива employees заменяется на ссылку на новый объект, а первый элемент массива people по прежнему хранит ссылку на старый объект.</p>
+
+                <h4>Еще примеры:</h4>
+                <div class="code-block"><code>const arr1 = [1, 2, 3];
+ const arr2 = [4, 5, 6];
+
+<code class="comment">// Копирование массива</code>
+const copy = [...arr1];
+
+<code class="comment">// Объединение массивов</code>
+const combined = [...arr1, ...arr2]; <code class="comment">//</code> [1,2,3,4,5,6]
+
+<code class="comment">// Добавление элементов</code>
+const extended = [0, ...arr1, 4];    <code class="comment">//</code> [0,1,2,3,4]
+
+<code class="comment">// Максимум/минимум</code>
+const numbers = [3, 1, 4, 1, 5];
+console.log(Math.max(...numbers));   <code class="comment">// 5</code>
+console.log(Math.min(...numbers));   <code class="comment">// 1</code></code></div>
+
+                <h2 id="ch6-methods">📜 Методы массивов - Полная таблица</h2>
                 <div class="table-wrapper">
                     <table id="array-methods">
                         <thead>
@@ -8978,9 +10024,19 @@ const arr9 = Array.from({length: 5}, (_, i) => i); // [0, 1, 2, 3, 4]</code></di
                                 <td><code>[1,2,3].find(x => x > 1)</code> → 2</td>
                             </tr>
                             <tr>
+                                <td><code>findLast(callback)</code></td>
+                                <td>Возвращает последний элемент, который соответствует условию</td>
+                                <td><code>[1,2,3].findLast(x => x > 1)</code> → 3</td>
+                            </tr>
+                            <tr>
                                 <td><code>findIndex(callback)</code></td>
                                 <td>Находит индекс первого элемента</td>
                                 <td><code>[1,2,3].findIndex(x => x > 1)</code> → 1</td>
+                            </tr>
+                            <tr>
+                                <td><code>findLastIndex(callback)</code></td>
+                                <td>Возвращает индекс последнего элемента, который соответствует условию</td>
+                                <td><code>[1,2,3].findLastIndex(x => x > 1)</code> → 2</td>
                             </tr>
                             <tr>
                                 <td><code>reduce(callback, initial)</code></td>
@@ -9016,53 +10072,618 @@ const arr9 = Array.from({length: 5}, (_, i) => i); // [0, 1, 2, 3, 4]</code></di
                     </table>
                 </div>
 
-                <h2>Примеры работы с массивами</h2>
+                <h2 id="ch6-applying">📜 Операции с массивами (применение)</h2>
+
+                <h3 id="ch6-adding">Добавление данных</h3>
+
+                <h4>push()</h4>
+
+                <p>Метод <code>push()</code> добавляет элемент в конец массива:</p>
+                <div class="code-block"><code>const people = [];
+
+people.push("Tom");
+people.push("Sam");
+people.push("Bob","Mike");
+ 
+console.log("В массиве people элементов: ", people.length);
+console.log(people);        <code class="comment">// ["Tom", "Sam", "Bob", "Mike"]</code></code></div>
+
+                <h4>unshift()</h4>
+
+                <p>Метод <span class="b">unshift()</span> добавляет новый элемент в начало массива:</p>
+                <div class="code-block"><code>const people = ["Bob"];
+ 
+people.unshift("Alice");
+console.log(people);        <code class="comment">// ["Alice", "Bob"]</code>
+ 
+people.unshift("Tom", "Sam");
+console.log(people);        <code class="comment">// ["Tom", "Sam", "Alice", "Bob"]</code></code></div>
+
+                <h4>Добавление данных по определенному индексу ( splice() )</h4>
+
+                <p>Метод <span class="b">splice</span> позволяет вставить элементы на определенную позицию. </p>
+
+                <ul>
+                    <li><strong>Первый аргумент</strong> представляет <em>индекс в массиве</em>, по которому надо добавить новые элементы.</li>
+                    <li><strong>Второй аргумент</strong> представляет <em>количество элементов, которые необходимо удалить</em> (! этот метод также применяется для удаления). Для добавления для этого аргумента устанавливается значение <code>0</code>.</li>
+                    <li>Все <strong>остальные аргументы</strong> представляют элементы, которые необходимо добавить в массив.</li>
+                </ul>
+
+                <div class="code-block"><code>const people = ["Tom", "Sam", "Bob"];
+ people.splice(1, 0, "Alice");   <code class="comment">// добавляем элемент "Alice" по индексу 1</code>
+ console.log(people);            <code class="comment">// ["Tom", "Alice", "Sam", "Bob"]</code></code></div>
+
+                <p>В данном случае добавляем элемент <code>"Alice"</code> по индексу <code>1</code>.</p>
+
+                <p>Также можно добавляеть набор элементов, начиная с определенного индекса:</p>
+                <div class="code-block"><code>const people = ["Tom", "Sam", "Bob"];
+ people.splice(1, 0, "Alice", "Alex", "Kate");  <code class="comment">// добавляем элемент "Alice" по индексу 1</code>
+ console.log(people);                           <code class="comment">// ["Tom", "Alice", "Alex", "Kate", "Sam", "Bob"]</code></code></div>
+
+
+                <h3 id="ch6-delete">Удаление данных</h3>
+
+                <h4>pop()</h4>
+
+                <p>Метод <strong>pop()</strong> удаляет последний элемент из массива:</p>
+                <div class="code-block"><code>const people = ["Tom", "Sam", "Bob", "Mike"];
+ 
+const lastPerson = people.pop(); <code class="comment">// извлекаем из массива последний элемент</code>
+
+console.log(lastPerson );        <code class="comment">// Mike</code>
+console.log(people);             <code class="comment">// ["Tom", "Sam", "Bob"]</code></code></div>
+
+                <p>В качестве результата метод <span class="b">pop</span> возвращает удаленный элемент.</p>
+
+                <h4>shift()</h4>
+
+                <p>Метод <strong>shift()</strong> извлекает и удаляет первый элемент из массива:</p>
+                <div class="code-block"><code>const people = ["Tom", "Sam", "Bob", "Mike"];
+ 
+const first = people.shift(); <code class="comment">// извлекаем из массива первый элемент</code>
+console.log(first);           <code class="comment">// Tom</code>
+console.log(people);          <code class="comment">// ["Sam", "Bob", "Mike"]</code></code></div>
+                
+                <h4>Удаление элемента по индексу. splice()</h4>
+
+                <p>Метод <strong>splice()</strong> также удаляет элементы с определенного индекса. Например, удаление элементов с третьего индекса:</p>
+                <div class="code-block"><code>const people = ["Tom", "Sam", "Bill", "Alice", "Kate"];
+
+const deleted = people.splice(3);
+
+console.log(deleted);         <code class="comment">// [ "Alice", "Kate" ]</code>
+console.log(people);          <code class="comment">// [ "Tom", "Sam", "Bill" ]</code></code></div>
+
+                <p>Метод <strong>splice</strong> возвращает удаленные элементы в виде нового массива.</p>
+
+                <p>В данном случае удаление идет с начала массива. Если передать отрицательный индекс, то удаление будет производиться с конца массива. Например, удалим последний элемент:</p>
+                <div class="code-block"><code>const people = ["Tom", "Sam", "Bill", "Alice", "Kate"];
+const deleted = people.splice(-1);
+console.log(deleted);         <code class="comment">// [ "Kate" ]</code>
+console.log(people);          <code class="comment">// ["Tom", "Sam", "Bill", "Alice"]</code></code></div>
+                
+
+                <p><strong>Дополнительная версия</strong> метода позволяет задать <em>количество элементов для удаления</em>. Например, удалим с первого индекса три элемента:</p>
+                <div class="code-block"><code>const people = ["Tom", "Sam", "Bill", "Alice", "Kate"];
+const deleted = people.splice(1, 3);
+console.log(deleted);         <code class="comment">// ["Sam", "Bill", "Alice"]</code>
+console.log(people);          <code class="comment">// ["Tom", "Kate"]</code></code></div>
+
+                <h3>Замена элементов</h3>
+
+                <p>Метод <span class="b">splice()</span> позволяет как добавлять, так и удалять элементы. Мы можем сочетать две эти возможности для замены одних элементов массива на другие. Например:</p>
+                <div class="code-block"><code>const people = ["Tom", "Sam", "Bob", "Alice", "Kate"];
+const deleted = people.splice(1, 3, "Alex", "Mike");
+console.log(deleted);         <code class="comment">// ["Sam", "Bob", "Alice"]</code>
+console.log(people);          <code class="comment">// ["Tom", "Alex", "Mike", "Kate"]</code></code></div>
+
+                <p>Здесь удаляем с индекса <code>1</code> <em>(первый параметр splice)</em> <code>3 элемента</code> <em>(второй параметр splice)</em> и вместо них вставляет два элемента - <code>"Alex" и "Mike"</code></p>
+
+                <h3 id="ch6-copy">Копирование массива</h3>
+
+                <h4>slice()</h4>
+
+                <p>Копирование массива может быть <strong>поверхностным</strong> или <strong>неглубоким</strong> <em>(shallow copy)</em> и <strong>глубоким</strong> <em>(deep copy)</em>.</p>
+                <p>При <strong>неглубоком</strong> копировании достаточно присвоить переменной значение другой переменной, которая хранит массив:</p>
+                <div class="code-block"><code>const users = ["Tom", "Sam", "Bill"];
+console.log(users);           <code class="comment">//  ["Tom", "Sam", "Bill"]</code>
+const people = users;         <code class="comment">//  неглубокое копирование</code>
+ 
+people[1] = "Mike";           <code class="comment">//  изменяем второй элемент</code>
+console.log(users);           <code class="comment">//  ["Tom", "Mike", "Bill"]</code></code></div>
+
+                <p>
+                    В данном случае переменная <code>people</code> после копирования будет указывать на тот же массив, что и переменная <code>users</code>. Поэтому при изменении элементов в <code>people</code>, 
+                    изменятся элементы и в <code>users</code>, так как фактически это один и тот же массив.
+                </p>
+                <p>
+                    Такое поведение не всегда является желательным. Например, мы хотим, чтобы после копирования переменные указывали на отдельные массивы. И в этом случае 
+                    можно использовать <strong>глубокое</strong> копирование с помощью метода <span class="b">slice()</span>:
+                </p>
+                <div class="code-block"><code>const users = ["Tom", "Sam", "Bill"];
+console.log(users);            <code class="comment">//  ["Tom", "Sam", "Bill"]</code>
+const people = users.slice();  <code class="comment">//  глубокое копирование</code>
+ 
+people[1] = "Mike";            <code class="comment">//  изменяем второй элемент</code>
+console.log(users);            <code class="comment">//  ["Tom", "Sam", "Bill"]</code>
+console.log(people);           <code class="comment">//  ["Tom", "Mike", "Bill"]</code></code></div>
+
+                <p>В данном случае после копирования переменные будут указывать на разные массивы, и мы сможем изменять их отдельно друг от друга.</p>
+                <p>Но тут стоит отметить, что то же самое копирование по сути можно выполнить и с помощью <em>spread-оператора</em> <span class="b">. . .</span> :</p>
+                <div class="code-block"><code>const users = ["Tom", "Sam", "Bill"];
+console.log(users);            <code class="comment">//  ["Tom", "Sam", "Bill"]</code>
+const people = [...users];
+  
+people[1] = "Mike";            <code class="comment">//  изменяем второй элемент</code>
+console.log(users);            <code class="comment">//  ["Tom", "Sam", "Bill"]</code>
+console.log(people);           <code class="comment">//  ["Tom", "Mike", "Bill"]</code></code></div>
+
+                <p>Также метод <code>slice()</code> <strong>позволяет скопировать часть массива</strong>. Для этого он принимает два параметра:</p>
+                <div class="code-block"><code>slice(начальный_индекс, конечный_индекс)</code></div>
+                <ul>
+                    <li><strong>Первый параметр</strong> указывает на начальный индекс элемента, с которого производится выборка значений из массива.</li>
+                    <li><strong>Второй параметр</strong> - конечный индекс, по который надо выполнить копирование.</li>
+                </ul>
+
+                <p>Если указан только <em>начальный индекс</em>, и он <em>положительный</em>, то копирование выполняется с этого индекса до конца массива:</p>
+                <div class="code-block"><code>const users = ["Tom", "Sam", "Bill", "Alice", "Kate"];
+const people = users.slice(2);   <code class="comment">// со второго индекса до конца</code>
+console.log(people);             <code class="comment">// ["Bill", "Alice", "Kate"]</code></code></div>
+
+                <p>Если также указан только <em>начальный индекс</em>, но он <em>отрицательный</em>, индекс отсчитывается с конца массива, а копирование выполняется с конца массива до этого индекса:</p>
+                <div class="code-block"><code>const users = ["Tom", "Sam", "Bill", "Alice", "Kate"];
+const people = users.slice(-2);  <code class="comment">// до второго индекса с конца</code>
+console.log(people);             <code class="comment">// ["Alice", "Kate"]</code></code></div>
+                
+                <p>Второй параметр позволяет ограничить выборку копируемых элементов. Например, выберем в новый массив элементы, начиная с <code>1</code> индекса по индекс <code>4</code> не включая:</p>
+                <div class="code-block"><code>const users = ["Tom", "Sam", "Bill", "Alice", "Kate"];
+const people = users.slice(1, 4);
+console.log(people);             <code class="comment">// ["Sam", "Bill", "Alice"]</code></code></div>
+                
+                <p>И поскольку индексация массивов начинается с нуля, то в новом массиве окажутся второй, третий и четвертый элемент.</p>
+
+                <p>Второй параметр также может быть отрицательным. В этом случае второй индекс отсчитывается с конца:</p>
+                <div class="code-block"><code>const users = ["Tom", "Sam", "Bill", "Alice", "Kate"];
+const people = users.slice(2, -1);  <code class="comment">// с индекса 2 по индекс 1 с конца</code>
+console.log(people);                <code class="comment">// ["Bill", "Alice"]</code></code></div>
+
+
+                <h4>copyWithin</h4>
+
+                <p>Метод <span class="b">copyWithin()</span> позволяет копировать элементы внутри массива. Он принимает три параметра:</p>
+                <div class="code-block"><code>copyWithin(index1,  <code class="comment">// позиция, в которую вставляются копируемые элементы </code>
+            index2,  <code class="comment">// начальная позиция, с которой будут копироваться элементы</code>
+            index3   <code class="comment">// конечная позиция, до которой будут копироваться элементы</code>
+)</code></div>
+
+                <p>Пример применения:</p>
+                <div class="code-block"><code>const users = ["Tom", "Sam", "Bob", "Alice", "Kate"];
+const people = users.copyWithin(1, 3, 5);   <code class="comment">// элементы с индекса 3 по индекс 4 (два элемента)</code>
+                                            <code class="comment">// копируются по индексу 1</code>
+console.log(people);                        <code class="comment">// ["Tom", "Alice", "Kate", "Alice", "Kate"]</code></code></div>
+
+
+                <h3 id="ch6-tospliced-concat-join">Получение элементов вне диапазона. toSpliced</h3>
+
+                <p>
+                    Но, возможно, мы просто хотим получить элементы вне определенного диапазона без изменения текущего массива. В этом случае мы можем использовать метод 
+                    <span class="b">toSpliced()</span>. Этот метод возвращает массив из элементов, которые располагаются <span class="b">вне</span> диапазона:
+                </p>
+                <div class="code-block"><code>const people = ["Tom", "Sam", "Bill", "Alice", "Kate"];
+const range = people.toSpliced(1, 3);
+console.log(range);          <code class="comment">// ["Tom", "Kate"]</code>
+console.log(people);         <code class="comment">// ["Tom", "Sam", "Bill", "Alice", "Kate"]</code></code></div>
+                
+
+                <h3>concat()</h3>
+
+                <p>Метод <strong>concat()</strong> служит для объединения массивов. В качестве результата он возвращает объединенный массив:</p>
+                <div class="code-block"><code>const men = ["Tom", "Sam", "Bob"];
+const women = ["Alice", "Kate"];
+const people = men.concat(women);
+console.log(people);         <code class="comment">// ["Tom", "Sam", "Bob", "Alice", "Kate"]</code></code></div>
+
+
+                <h3>join()</h3>
+
+                <p>Метод <strong>join()</strong> объединяет все элементы массива в одну строку, используя определенный разделитель, который передается через параметр:</p>
+                <div class="code-block"><code>const people = ["Tom", "Sam", "Bob"];
+ 
+const peopleToString = people.join("; ");
+console.log(peopleToString);  <code class="comment">// Tom; Sam; Bob</code></code></div>
+
+                <p>В метод <strong>join()</strong> передается разделитель между элементами массива. В данном случае в качестве разделителя будет использоваться точка с запятой и пробел <code>("; ")</code>.</p>
+
+                <h3 id="ch6-sort">sort() и toSorted</h3>
+
+                <p>Метод <span class="b">sort()</span> сортирует массив по возрастанию:</p>
+                <div class="code-block"><code>const people = ["Tom", "Sam", "Bob"];
+ 
+people.sort();
+console.log(people);         <code class="comment">// ["Bob", "Sam", "Tom"]</code></code></div>
+
+                <p>
+                    Стоит отметить, что по умолчанию метод <strong>sort()</strong> рассматривает элементы массива как строки и сортирует их в алфавитном порядке. Что может 
+                    привести к неожиданным результатам, например:
+                </p>
+                <div class="code-block"><code>const numbers = [200, 15, 5, 35];
+ 
+numbers.sort();
+console.log(numbers);        <code class="comment">// [15, 200, 35, 5]</code></code></div>
+
+                <p>
+                    Здесь мы хотим отсортировать массив чисел, но результат может нас обескуражить: <code>[15, 200, 35, 5]</code>. В этом случае мы можем настроить метод, передав в него функцию 
+                    сортировки. Логику функции сортировки мы определяем сами:
+                </p>
+                <div class="code-block"><code>const numbers = [200, 15, 5, 35];
+ 
+numbers.sort( (a, b) =>  a - b);
+console.log(numbers);        <code class="comment">// [5, 15, 35, 200]</code></code></div>
+
+                <p>
+                    Функция сортировки получает два рядом расположенных элемента массива. Она возвращает <em>отрицательное число</em>, если первый элемент должен находится перед вторым элементом. 
+                    Если первый элемент должен располагаться после второго, то возвращается <em>положительное число</em>. Если элементы равны, возвращается <code>0</code>.
+                </p>
+
+                <p>JavaScript также предоставляет метод <span class="b">toSorted()</span>, который возвращает отсортированные элементы в виде нового массива, не изменяя текущий массив:</p>
+                <div class="code-block"><code>const numbers = [200, 15, 5, 35];
+ const sorted = numbers.toSorted();
+ console.log(sorted);        <code class="comment">// [15, 200, 35, 5]</code></code></div>
+
+                <p>По умолчанию метод <strong>toSorted()</strong> также сортирует в алфавитном порядке. Но также можно передать в метод функцию сравнения элементов:</p>
+                <div class="code-block"><code>const numbers = [200, 15, 5, 35];
+ const sorted = numbers.toSorted( (a, b) =>  a - b);
+ console.log(sorted);        <code class="comment">// [5, 15, 35, 200]</code></code></div>
+
+
+                <h3>reverse() и toReversed()</h3>
+
+                <p>Метод <span class="b">reverse()</span> меняет порядок элементов в массиве на обратный:</p>
+                <div class="code-block"><code>const people = ["Tom", "Sam", "Bob"];
+ people.reverse();
+ console.log(people);        <code class="comment">// ["Bob", "Sam", "Tom"]</code></code></div>
+
+                <p>Метод <span class="b">toReversed()</span> также меняет порядок элементов на обратный, но возвращает их в виде нового массива без изменения текущего:</p>
+                <div class="code-block"><code> const people = ["Tom", "Sam", "Bob"];
+ 
+const reversed = people.toReversed();
+console.log(people);         <code class="comment">// ["Tom", "Sam", "Bob"]</code>
+console.log(reversed);       <code class="comment">// ["Bob", "Sam", "Tom"]</code></code></div>
+
+
+                <h3 id="ch6-search">Поиск индекса элемента</h3>
+
+                <p>Методы <span class="b">indexOf()</span> и <span class="b">lastIndexOf()</span> возвращают индекс первого и последнего включения элемента в массиве. Например:</p>
+                <div class="code-block"><code>const people = ["Tom", "Sam", "Bob", "Tom", "Alice", "Sam"];
+ 
+const firstIndex = people.indexOf("Tom");
+const lastIndex = people.lastIndexOf("Tom");
+const otherIndex = people.indexOf("Mike");
+
+console.log(firstIndex);     <code class="comment">// 0</code>
+console.log(lastIndex);      <code class="comment">// 3</code>
+console.log(otherIndex);     <code class="comment">// -1</code></code></div>
+
+                <p><code>firstIndex</code> имеет значение <code>0</code>, так как первое включение строки <code>"Tom"</code> в массиве приходится на индекс <code>0</code>, а последнее на индекс <code>3</code>.</p>
+                <p>Если же элемент отсутствует в массиве, то в этом случае методы <code>indexOf()</code> и <code>lastIndexOf()</code> возвращают значение <code>-1</code>.</p>
+
+                <h3>Поиск в массиве</h3>
+
+                <p>Метод <span class="b">find()</span> возвращает первый элемент массива, который соответствует некоторому условию. В качестве параметр метод <code>find</code> принимает функцию условия:</p>
+                <div class="code-block"><code>const numbers = [1, 2, 3, 5, 8, 13, 21, 34];
+ 
+<code class="comment">// получаем первый элемент, который больше 10</code>
+let found = numbers.find(n => n > 10 );
+console.log(found);                     <code class="comment">// 13</code></code></div>
+
+                <p>В данном случае получаем первый элемент, который больше 10. Если элемент, соответствующий условию, не найден, то возвращается <code>undefined</code>.</p>
+                <p>Аналогично метод <span class="b">findLast()</span> возвращает последний элемент, который соответствует условию:</p>
+                <div class="code-block"><code>const numbers = [1, 2, 3, 5, 8, 13, 21, 34];
+ 
+<code class="comment">// получаем последний элемент, который меньше 10</code>
+let found = numbers.find(n => n &lt; 10 );
+console.log(found);                     <code class="comment">// 8</code></code></div>
+
+                <p>Метод <span class="b">findIndex</span> также принимает функцию условия, только возвращает индекс первого элемента массива, который соответствует этому условию:</p>
+                <div class="code-block"><code>const numbers = [1, 2, 3, 5, 8, 13, 21, 34];
+ 
+<code class="comment">// получаем индекс первого элемента, который больше 10</code>
+let foundIndex = numbers.findIndex(n => n > 10 );
+console.log(foundIndex);                <code class="comment">// 5</code></code></div>
+
+                <p>Если элемент не найден, то возвращается число -1.</p>
+
+                <p>Аналогично метод <span class="b">findLastIndex()</span> возвращает индекс последнего элемента, который соответствует условию:</p>
+                <div class="code-block"><code>const numbers = [1, 2, 3, 5, 8, 13, 21, 34];
+ 
+<code class="comment">// получаем индекс последнего элемента,  который меньше 10</code>
+let foundIndex = numbers.findIndex(n => n &lt; 10 );
+console.log(foundIndex);                <code class="comment">// 4</code></code></div>
+
+                <h3 id="ch6-includes">Проверка наличия элемента</h3>
+
+                <p>
+                    Метод <span class="b">includes()</span> проверяет, есть ли в массиве значение, переданное в метод через параметр. Если такое значение есть, то метод 
+                    возвращает <code>true</code>, если значения в массиве нет, то возвращается <code>false</code>. Например:
+                </p>
+                <div class="code-block"><code>const people = ["Tom", "Sam", "Bob", "Tom", "Alice", "Sam"];
+ 
+ console.log(people.includes("Tom"));    <code class="comment">// true - Tom есть в массиве</code>
+ console.log(people.includes("Kate"))    <code class="comment">// false - Kate нет в массиве</code></code></div>
+
+                <p>В качестве <em>второго параметра</em> метод <span class="b">includes()</span> принимает <em>индекс</em>, с которого надо начинать поиск:</p>
+                <div class="code-block"><code>const people = ["Tom", "Sam", "Bob", "Tom", "Alice", "Sam"];
+ 
+ console.log(people.includes("Bob", 2)); <code class="comment">// true</code>
+ console.log(people.includes("Bob", 4))  <code class="comment">// false</code></code></div>
+
+                <p>В данном случае мы видим, что при поиске <code>со 2-го индекса</code> в массиве есть строка <code>"Bob"</code>, тогда как начиная <code>с 4-го индекса</code> данная строка <em>отсутствует</em>.</p>
+                <p>Если если этот параметр не передается, то по умолчанию поиск идет с <code>0-го индекса</code>.</p>
+                <p>При передаче отрицательного значения поиск идет с конца</p>
+                <div class="code-block"><code>const people = ["Tom", "Sam", "Bob", "Tom", "Alice", "Sam"];
+ 
+ console.log(people.includes("Tom", -2)); <code class="comment">// false - 2-й индекс с конца</code>
+ console.log(people.includes("Tom", -3))  <code class="comment">// true - 3-й индекс с конца</code></code></div>
+
+                <h3>every()</h3>
+
+                <p>Метод <span class="b">every()</span> проверяет, все ли элементы соответствуют определенному условию:</p>
+                <div class="code-block"><code>const numbers = [ 1, -12, 8, -4, 25, 42 ];
+ const passed = numbers.every(n => n > 0);
+ console.log(passed);                    <code class="comment">// false</code></code></div>
+
+                <p>
+                    В метод <strong>every()</strong> в качестве параметра передается функция, которая представляет условие. Эта функция в качестве параметра 
+                    принимает элемент и возвращает <code>true</code> (если элемент соответствует условию) или <code>false</code> (если не соответствует).
+                </p>
+                <p>Если хотя бы один элемент не соответствует условию, то метод <strong>every()</strong> возвращает значение <code>false</code>.</p>
+                <p>В данном случае условие задается с помощью лямбда-выражения <code>n =&gt; n &gt; 0</code>, которое проверяет, больше ли элемент нуля.</p>
+
+                <h3>some()</h3>
+
+                <p>
+                    Метод <strong>some()</strong> похож на метод <strong>every()</strong>, только он проверяет, соответствует ли хотя бы один элемент условию. И в этом случае метод 
+                    <strong>some()</strong> возвращает <code>true</code>. Если элементов, соответствующих условию, в массиве нет, то возвращается значение 
+                    <code>false</code>:
+                </p>
+                <div class="code-block"><code>const numbers = [ 1, -12, 8, -4, 25, 42 ];
+ const passed = numbers.some(n => n > 0);
+ console.log(passed);                    <code class="comment">// true</code></code></div>
+
+ 
+                <h3 id="ch6-filter">filter()</h3>
+
+                <p>Метод <strong>filter()</strong>, как <code>some()</code> и <code>every()</code>, принимает функцию условия:</p>
+                <div class="code-block"><code>filter(callbackFn)
+ filter(callbackFn, thisArg)</code></div>
+
+                <p>В качестве параметра в <strong>filter</strong> передается функция-коллбек, которая будет вызываться для текущего перебираемого элемента массива. В эту функцию-коллбек можно передать до трех параметров:</p>
+                <div class="code-block"><code>callback(element, index, array)</code></div>
+
+                <p>В функцию-коллбек  последовательно передаются:</p>
+
+                <ul>
+                    <li>текущий элемент <code>( element )</code></li>
+                    <li>индекс элемента <code>( index )</code></li>
+                    <li>ссылка на сам перебираемый массив <code>( array )</code></li>
+                </ul>
+
+                <p>Коллбек возвращает <span class="b">true</span> (или значение, которое соответствует <code>true</code>), если элемент удовлетворяет условию. В ином случае возвращается <span class="b">false</span>.</p>
+                <p>Опционально в качестве второго параметра в метод <strong>filter()</strong> можно передать объект, который внутри функции-коллбека можно получить через <code>this</code></p>
+
+                <p>В качестве результата метод <strong>filter()</strong> возвращает массив тех элементов, которые соответствуют этому условию:</p>
+                <div class="code-block"><code>const numbers = [ 1, -12, 8, -4, 25, 42 ];
+ const filteredNumbers = numbers.filter(n => n > 0);
+ console.log(filteredNumbers);           <code class="comment">// [1, 8, 25, 42]</code></code></div>
+
+
+                <h3 id="ch6-foreach">Перебор элементов с помощью forEach()</h3>
+
+                <p>Метод <span class="b">forEach()</span> осуществляют перебор элементов и применяют к каждому из них определенное действие.</p>
+                <div class="code-block"><code>forEach(callbackFn)
+ forEach(callbackFn, thisArg)</code></div>
+
+                <p>В качестве параметра в <strong>forEach</strong> передается функция-коллбек, которая будет вызываться для текущего перебираемого элемента массива. В эту функцию-коллбек можно перебрать до трех параметров:</p>
+                <div class="code-block"><code>callback(element, index, array)</code></div>
+
+                <p>В функцию-коллбек  последовательно передются:</p>
+                <ul>
+                    <li>текущий элемент <code>( element )</code></li>
+                    <li>индекс элемента <code>( index )</code></li>
+                    <li>ссылка на сам перебираемый массив <code>( array )</code></li>
+                </ul>
+
+                <p>Опционально в качестве второго параметра в метод <strong>forEach()</strong> можно передать объект, который внутри функции-коллбека можно получить через <code>this</code></p>
+
+                <p>Например, используем метод <code>forEach()</code> для вычисления квадратов чисел в массиве:</p>
+                <div class="code-block"><code>const numbers = [ 1, 2, 3, 4, 5, 6];
+ 
+numbers.forEach(n => 
+    console.log("Квадрат числа", n, "равен", n * n )
+);</code></div>
+
+                <p>
+                    Метод <strong>forEach()</strong> в качестве параметра принимает функцию, которая имеет один параметр - текущий перебираемый элемент массива. А в теле функции 
+                    над этим элементом можно выполнить различные операции.
+                </p>
+                <p>Консольный вывод программы:</p>
+                <pre class="sh">Квадрат числа 1 равен 1
+Квадрат числа 2 равен 4
+Квадрат числа 3 равен 9
+Квадрат числа 4 равен 16
+Квадрат числа 5 равен 25
+Квадрат числа 6 равен 36</pre>
+
+
+                <h3 id="ch6-map">Трансформация массива и map()</h3>
+
+                <p>Метод <span class="b">map()</span> похож на метод <code>forEach</code>, он принимает те же параметры:</p>
+                <div class="code-block"><code>map(callbackFn)
+ map(callbackFn, thisArg)</code></div>
+
+                <p>
+                    <em>Первый параметр</em> - также функция-коллбек, в которую передаются текущий перебираемый элемент, его индекс и ссылка на массив. А <em>второй параметр</em> - значение для 
+                    <code>this</code> внутри функции-коллбека. Но при этом метод <strong>map()</strong> возвращает новый массив с результатами операций 
+                    над элементами массива.
+                </p>
+
+                <p>Например, применим метод <code>map</code> к вычислению квадратов чисел массива:</p>
+                <div class="code-block"><code>const numbers = [ 1, 2, 3, 4, 5, 6];
+ 
+ const squares = numbers.map(n => n * n);
+ console.log(squares);                  <code class="comment">//  [1, 4, 9, 16, 25, 36]</code></code></div>
+
+                <p>
+                    Функция, которая передается в метод <code>map()</code> получает текущий перебираемый элемент, выполняет над ним операции и 
+                    возвращает некоторое значение. Это значение затем попадает в результирующий массив <code>squares</code>
+                </p>
+
+
+                <h3>Метод flat и преобразование массива</h3>
+
+                <p>Метод <span class="b">flat()</span> упрощает массив с учетом указанной вложенности элементов:</p>
+                <div class="code-block"><code>const people = ["Tom", "Bob", ["Alice", "Kate", ["Sam", "Ann"]]];
+const flattenPeople = people.flat();
+console.log(flattenPeople);             <code class="comment">// ["Tom", "Bob", "Alice", "Kate", ["Sam", "Ann"]]</code></code></div>
+                
+                <p>
+                    То есть метод <strong>flat()</strong> фактически из вложенных массивов переводит элементы во внешний массив самого верхнего уровня. Однако мы видим, 
+                    что элементы массива второго уровня вложенности перешли в массив первого уровня вложенности, но тем не менее по-прежнему находятся во вложенном 
+                    массиве. Дело в том, что метод <code>flat()</code> по умолчанию применяется только к вложенным массивам первого уровня вложенности. Но мы можем передать 
+                    в метод уровень вложености:
+                </p>
+                <div class="code-block"><code>const people = ["Tom", "Bob", ["Alice", "Kate", ["Sam", "Ann"]]];
+const flattenPeople = people.flat(2);
+console.log(flattenPeople);             <code class="comment">// ["Tom", "Bob", "Alice", "Kate", "Sam", "Ann"]</code></code></div>
+
+                <p>
+                    Если массив содержит вложенные массивы гораздо более глубоких уровней вложенности, или мы даже не знаем, какие уровни вложенности есть в массиве, но 
+                    мы хотим, чтобы все элементы были преобразованы в один массив, то можно использовать значение <code>Infinity</code>:
+                </p>
+                <div class="code-block"><code>const people = ["Tom", "Bob", ["Alice", "Kate", ["Sam", "Ann"]]];
+const flattenPeople = people.flat(Infinity);
+console.log(flattenPeople);             <code class="comment">// ["Tom", "Bob", "Alice", "Kate", "Sam", "Ann"]</code></code></div>
+
+
+                <h3>with</h3>
+
+                <p>
+                    Иногда необходимо изменить элемент массива, но при этом также сохранить старое состояние массива. 
+                    Метод <span class="b">with()</span> автоматически создает копию старого массива, изменяет в ней элемент и возвращает новый массив с измененным элементом:
+                </p>
+                <div class="code-block"><code>const people = ["Tom", "Bob", "Sam"];
+const modified = people.with(0, "Tomas"); <code class="comment">// изменяем "Tom" на "Tomas"</code>
+console.log(people);                      <code class="comment">// ["Tom", "Bob", "Sam"] - начальный массив не изменился</code>
+console.log(modified);                    <code class="comment">// ["Tomas", "Bob", "Sam"] - изменилась копия</code></code></div>
+
+                <h3 id="ch6-reduce">reduce</h3>
+
+                <p>Метод <span class="b">reduce</span> позволяет свести все значения массива в одно значение, которое возвращается из метода. В качестве параметра метод принимает функцию с <em>4 параметрами</em>:</p>
+                <div class="code-block"><code>function (prev,current, curIndex, array){ .... }</code></div>
+
+                <p>Параметры:</p>
+                <ol>
+                    <li><code>prev</code>: предыдущий элемент (вначале - самый первый элемент)</li>
+                    <li><code>current</code>: текущий элемент (вначале - второй элемент)</li>
+                    <li><code>curIndex</code>: индекс текущего элемента</li>
+                    <li><code>array</code>: массив, для которого вызывается функция</li>
+                </ol>
+
+                <p>Применим метод <strong>reduce()</strong> для нахождения суммы массива чисел:</p>
+                <div class="code-block"><code>const numbers = [1, 2, 3, 4, 5];
+ const sum = numbers.reduce((prev,current) => prev +=current);
+ console.log(sum);                      <code class="comment">// 15</code></code></div>
+
+                <p>В данном случае в метод <strong>reduce()</strong> передается функция <code>(prev,current) =&gt; prev +=current</code>,  которая складывает предыдущий элемент с текущим и возвращает их сумму.</p>
+
+                <p>Другая форма метода <code>reduce</code> принимает два параметра. <em>Второй параметр</em> - начальное значение, с которого начинается отсчет:</p>
+                <div class="code-block"><code>const numbers = [1, 2, 3, 4, 5];
+ const sum = numbers.reduce((prev,current) => prev +current, 10);
+ console.log(sum);                      <code class="comment">// 25</code></code></div>
+
+                <p>В данном случае начальное значение <code>prev</code> будет равно <code>10</code>.</p>
+
+                <p>Если метод <strong>reduce</strong> просматривает элементы массива <em>с начала (слева направо)</em>, то метод <strong>reduceRight()</strong> делает это в обратном порядке - <em>справо налево</em>:</p>
+                <div class="code-block"><code>const numbers = [1, 2, 3, 4, 5];
+const reduced1 = numbers.reduce((prev,current) => prev +=current.toString());
+console.log(reduced1);                  <code class="comment">// 12345</code>
+
+const reduced2 = numbers.reduceRight((prev,current) => prev +=current.toString());
+console.log(reduced2);                  <code class="comment">// 54321</code></code></div>
+
+                <h3 id="ch6-combination">Комбинация методов</h3>
+
+                <p>При необходимости мы можем объединить несколько операций в <em>цепочку методов</em>. Например, у нас есть массив пользователей:</p>
+                <div class="code-block"><code>function Person(name, age){
+        this.name = name;
+        this.age = age;
+}
+
+const people = [
+        new Person("Tom", 38), new Person("Kate", 31), 
+        new Person("Bob", 42), new Person("Alice", 34), 
+        new Person("Sam", 25)
+    ];</code></div>
+
+                <p>Выведем из массива <code>people</code> имена всех пользователей, у которых возраст больше 33:</p>
+                <div class="code-block"><code>const isAgeMoreThan33 = (p)=>p.age > 33;
+const getPersonName = (p)=>p.name;
+const printPersonName = (p)=>console.log(p);
+
+ <code class="comment">// получаем из Person строку с именем</code>
+const view = people
+                .filter(isAgeMoreThan33)
+                .map(getPersonName)
+                .forEach(printPersonName);</code></div>
+
+
+                <h2 id="ch6-examp">📜 Примеры работы с массивами</h2>
 
                 <h3>map() - преобразование</h3>
                 <div class="code-block"><code>const numbers = [1, 2, 3, 4, 5];
 
-// Удвоить каждое число
+<code class="comment">// Удвоить каждое число</code>
 const doubled = numbers.map(num => num * 2);
-console.log(doubled); // [2, 4, 6, 8, 10]
+console.log(doubled); <code class="comment">// [2, 4, 6, 8, 10]</code>
 
-// Преобразование объектов
+<code class="comment">// Преобразование объектов</code>
 const users = [
     {name: 'Alice', age: 25},
     {name: 'Bob', age: 30}
 ];
 const names = users.map(user => user.name);
-console.log(names); // ['Alice', 'Bob']</code></div>
+console.log(names); <code class="comment">// ['Alice', 'Bob']</code></code></div>
 
                 <h3>filter() - фильтрация</h3>
                 <div class="code-block"><code>const numbers = [1, 2, 3, 4, 5, 6];
 
-// Только чётные
+<code class="comment">// Только чётные</code>
 const even = numbers.filter(num => num % 2 === 0);
-console.log(even); // [2, 4, 6]
+console.log(even); <code class="comment">// [2, 4, 6]</code>
 
-// Фильтрация объектов
+<code class="comment">// Фильтрация объектов</code>
 const users = [
     {name: 'Alice', age: 25},
     {name: 'Bob', age: 17},
     {name: 'Charlie', age: 30}
 ];
 const adults = users.filter(user => user.age >= 18);
-console.log(adults); // Alice и Charlie</code></div>
+console.log(adults);  <code class="comment">// Alice и Charlie</code></code></div>
 
                 <h3>reduce() - сведение к значению</h3>
                 <div class="code-block"><code>const numbers = [1, 2, 3, 4, 5];
 
-// Сумма
+<code class="comment">// Сумма</code>
 const sum = numbers.reduce((acc, num) => acc + num, 0);
-console.log(sum); // 15
+console.log(sum);     <code class="comment">// 15</code>
 
-// Произведение
+<code class="comment">// Произведение</code>
 const product = numbers.reduce((acc, num) => acc * num, 1);
-console.log(product); // 120
+console.log(product); <code class="comment">// 120</code>
 
-// Максимум
+<code class="comment">// Максимум</code>
 const max = numbers.reduce((max, num) => num > max ? num : max);
-console.log(max); // 5</code></div>
+console.log(max);     <code class="comment">// 5</code></code></div>
 
                 <h3>find() и findIndex()</h3>
                 <div class="code-block"><code>const users = [
@@ -9071,37 +10692,37 @@ console.log(max); // 5</code></div>
     {id: 3, name: 'Charlie'}
 ];
 
-// Найти пользователя
+<code class="comment">// Найти пользователя</code>
 const user = users.find(u => u.id === 2);
-console.log(user); // {id: 2, name: 'Bob'}
+console.log(user);    <code class="comment">// {id: 2, name: 'Bob'}</code>
 
-// Найти индекс
+<code class="comment">// Найти индекс</code>
 const index = users.findIndex(u => u.id === 2);
-console.log(index); // 1</code></div>
+console.log(index);   <code class="comment">// 1</code></code></div>
 
-                <h3>Практические примеры</h3>
+                <h2 id="ch6-del-duplicates">📜 Практические примеры</h2>
 
                 <div class="info-box success">
                     <div class="info-box-title">✅ Удаление дубликатов</div>
                     <div class="code-block"><code>const arr = [1, 2, 2, 3, 3, 4];
-const unique = [...new Set(arr)]; // [1, 2, 3, 4]
+const unique = [...new Set(arr)]; <code class="comment">// [1, 2, 3, 4]</code>
 
-// Разбор по шагам:
+<code class="comment">// Разбор по шагам:</code>
 // 1. new Set(arr) - создаёт Set из массива
 //    Set - коллекция уникальных значений (без дубликатов)
 //    Set {1, 2, 3, 4}
 
-// 2. ...new Set(arr) - spread оператор разворачивает Set
+<code class="comment">// 2. ...new Set(arr) - spread оператор разворачивает Set</code>
 //    1, 2, 3, 4
 
-// 3. [...new Set(arr)] - собираем обратно в массив
+<code class="comment">// 3. [...new Set(arr)] - собираем обратно в массив</code>
 //    [1, 2, 3, 4]
 
-// Альтернативные способы:
-// Способ 1: через filter
+<code class="comment">// Альтернативные способы:</code>
+<code class="comment">// Способ 1: через filter</code>
 const unique2 = arr.filter((item, index) => arr.indexOf(item) === index);
 
-// Способ 2: через reduce
+<code class="comment">// Способ 2: через reduce</code>
 const unique3 = arr.reduce((acc, item) => {
     if (!acc.includes(item)) {
         acc.push(item);
@@ -9109,44 +10730,44 @@ const unique3 = arr.reduce((acc, item) => {
     return acc;
 }, []);</code></div>
 
-                    <h4>Что такое Set?</h4>
-                    <div class="code-block"><code>// Set - коллекция уникальных значений
+                    <h4 id="ch6-set">Что такое Set?</h4>
+                    <div class="code-block"><code><code class="comment">// Set - коллекция уникальных значений</code>
 const set = new Set();
 
-// Добавление элементов
+<code class="comment">// Добавление элементов</code>
 set.add(1);
 set.add(2);
-set.add(2); // Игнорируется (дубликат)
+set.add(2);            <code class="comment">// Игнорируется (дубликат)</code>
 set.add(3);
 
-console.log(set); // Set {1, 2, 3}
-console.log(set.size); // 3
+console.log(set);      <code class="comment">// Set {1, 2, 3}</code>
+console.log(set.size); <code class="comment">// 3</code>
 
-// Проверка наличия
-console.log(set.has(2)); // true
+<code class="comment">// Проверка наличия</code>
+console.log(set.has(2)); <code class="comment">// true</code>
 
-// Удаление
+<code class="comment">// Удаление</code>
 set.delete(2);
-console.log(set); // Set {1, 3}
+console.log(set);      <code class="comment">// Set {1, 3}</code>
 
-// Очистка
+<code class="comment">// Очистка</code>
 set.clear();
-console.log(set); // Set {}
+console.log(set);      <code class="comment">// Set {}</code>
 
-// Создание Set из массива
+<code class="comment">// Создание Set из массива</code>
 const numbers = [1, 2, 2, 3, 3, 4];
-const uniqueSet = new Set(numbers); // Set {1, 2, 3, 4}
+const uniqueSet = new Set(numbers); <code class="comment">// Set {1, 2, 3, 4}</code>
 
-// Обратно в массив
-const uniqueArray = [...uniqueSet]; // [1, 2, 3, 4]
-// или
-const uniqueArray2 = Array.from(uniqueSet); // [1, 2, 3, 4]</code></div>
+<code class="comment">// Обратно в массив</code>
+const uniqueArray = [...uniqueSet]; <code class="comment">// [1, 2, 3, 4]</code>
+<code class="comment">// или</code>
+const uniqueArray2 = Array.from(uniqueSet); <code class="comment">// [1, 2, 3, 4]</code></code></div>
                 </div>
 
                 <div class="info-box success">
                     <div class="info-box-title">✅ Сумма элементов</div>
                     <div class="code-block"><code>const numbers = [1, 2, 3, 4, 5];
-const sum = numbers.reduce((acc, num) => acc + num, 0); // 15</code></div>
+const sum = numbers.reduce((acc, num) => acc + num, 0); <code class="comment">// 15</code></code></div>
                 </div>
 
                 <div class="info-box success">
@@ -9163,177 +10784,541 @@ const grouped = users.reduce((acc, user) => {
     return acc;
 }, {});
 
-// {25: [{...}, {...}], 30: [{...}]}</code></div>
+<code class="comment">// {25: [{...}, {...}], 30: [{...}]}</code></code></div>
                 </div>
 
                 <h3>split() и join() - работа со строками</h3>
-                <div class="code-block"><code>// split() - строка в массив
+                <div class="code-block"><code><code class="comment">// split() - строка в массив</code>
 const str = "JavaScript,Python,Ruby";
-const langs = str.split(','); // ['JavaScript', 'Python', 'Ruby']
+const langs = str.split(','); <code class="comment">// ['JavaScript', 'Python', 'Ruby']</code>
 
-// join() - массив в строку
+<code class="comment">// join() - массив в строку</code>
 const arr = ['Hello', 'World'];
-const result = arr.join(' '); // "Hello World"
+const result = arr.join(' '); <code class="comment">// "Hello World"</code>
 
-// Практический пример: разворот слов
+<code class="comment">// Практический пример: разворот слов</code>
 const text = "Hello World";
-const reversed = text.split(' ').reverse().join(' '); // "World Hello"</code></div>
+const reversed = text.split(' ').reverse().join(' '); <code class="comment">// "World Hello"</code></code></div>
 
-                <h2>Деструктуризация массивов</h2>
+                <h2 id="ch6-destructurisation">📜 Деструктуризация массивов</h2>
                 <div class="code-block"><code>const colors = ['red', 'green', 'blue'];
 
-// Деструктуризация
+<code class="comment">// Деструктуризация</code>
 const [first, second, third] = colors;
-console.log(first);  // "red"
-console.log(second); // "green"
+console.log(first);  <code class="comment">// "red"</code>
+console.log(second); <code class="comment">// "green"</code>
 
-// Пропуск элементов
+<code class="comment">// Пропуск элементов</code>
 const [, , third2] = colors;
-console.log(third2); // "blue"
+console.log(third2); <code class="comment">// "blue"</code>
 
-// Rest оператор
+<code class="comment">// Rest оператор</code>
 const [head, ...tail] = colors;
-console.log(head); // "red"
-console.log(tail); // ["green", "blue"]
+console.log(head);   <code class="comment">// "red"</code>
+console.log(tail);   <code class="comment">// ["green", "blue"]</code>
 
-// Значения по умолчанию
+<code class="comment">// Значения по умолчанию</code>
 const [a, b, c, d = 'yellow'] = colors;
-console.log(d); // "yellow"</code></div>
+console.log(d);      <code class="comment">// "yellow"</code></code></div>
 
-                <h2>Spread оператор</h2>
-                <div class="code-block"><code>const arr1 = [1, 2, 3];
-const arr2 = [4, 5, 6];
 
-// Копирование массива
-const copy = [...arr1];
-
-// Объединение массивов
-const combined = [...arr1, ...arr2]; // [1,2,3,4,5,6]
-
-// Добавление элементов
-const extended = [0, ...arr1, 4]; // [0,1,2,3,4]
-
-// Максимум/минимум
-const numbers = [3, 1, 4, 1, 5];
-console.log(Math.max(...numbers)); // 5
-console.log(Math.min(...numbers)); // 1</code></div>
-
-                <h2>Многомерные массивы</h2>
-                <div class="code-block"><code>// Двумерный массив (матрица)
+                <h2 id="ch6-multidimensional">📜 Многомерные массивы</h2>
+                <div class="code-block"><code><code class="comment">// Двумерный массив (матрица)</code>
 const matrix = [
     [1, 2, 3],
     [4, 5, 6],
     [7, 8, 9]
 ];
 
-// Доступ к элементам
-console.log(matrix[0][0]); // 1
-console.log(matrix[1][2]); // 6
+<code class="comment">// Доступ к элементам</code>
+console.log(matrix[0][0]); <code class="comment">// 1</code>
+console.log(matrix[1][2]); <code class="comment">// 6</code>
 
-// Перебор
+<code class="comment">// Перебор</code>
 for (let i = 0; i < matrix.length; i++) {
     for (let j = 0; j < matrix[i].length; j++) {
         console.log(matrix[i][j]);
     }
 }
 
-// Через forEach
+<code class="comment">// Через forEach</code>
 matrix.forEach(row => {
     row.forEach(item => {
         console.log(item);
     });
 });</code></div>
 
-                <h2>Array-like объекты</h2>
-                <div class="code-block"><code>// arguments - array-like объект
+                <h2 id="ch6-array-like">📜 Array-like объекты</h2>
+                <div class="code-block"><code><code class="comment">// arguments - array-like объект</code>
 function sum() {
-    // arguments не массив, но похож на него
-    console.log(arguments); // [1, 2, 3]
+    <code class="comment">// arguments не массив, но похож на него</code>
+    console.log(arguments); <code class="comment">// [1, 2, 3]</code>
     
-    // Преобразование в массив
+    <code class="comment">// Преобразование в массив</code>
     const arr = Array.from(arguments);
     return arr.reduce((sum, n) => sum + n, 0);
 }
 
-console.log(sum(1, 2, 3)); // 6
+console.log(sum(1, 2, 3));  <code class="comment">// 6</code>
 
-// NodeList тоже array-like
+<code class="comment">// NodeList тоже array-like</code>
 const divs = document.querySelectorAll('div');
 const divsArray = Array.from(divs);</code></div>
+
+                <h2 id="ch6-inheritance">📜 Наследование массивов</h2>
+
+                <p>Массив представляет наиболее простой способ определения набора данных. Но иногда базовых возможностей массивов может быть недсотаточно. Например, определим массив, который представляет некоторую команду:</p>
+                <div class="code-block"><code>const team = ["Tom", "Sam", "Bob"];
+for(const person of team) {
+    console.log(person);
+}</code></div>
+
+                <p>
+                    Но что, если мы хотим добавить к команде какие-то дополнительные атрибуты - имя тренера, страну или город, где базируется команда, название, какие-то другие признаки? 
+                    На первый взгляд, мы можем определить сложный объект:
+                </p>
+                <div class="code-block"><code>const team = { 
+    name: "Barcelona",              <code class="comment">// название</code>
+    members: ["Tom", "Sam", "Bob"]  <code class="comment">// игроки</code>
+};
+
+for(const person of team.members) {
+    console.log(person);
+}</code></div>
+
+                <p>Но есть и другое решение, которое позволяет нам определить свой тип коллекции: создать свой <em>класс</em>, который будет унаследован от <code>Array</code>.</p>
+                <div class="code-block"><code>class Team extends Array{
+    constructor(name, ...members){
+        super(...members);
+        this.name = name;
+    }
+}</code></div>
+
+                <p>
+                    Здесь мы предполагаем, что в качестве <code>первого</code> параметра конструктора класса выступает <em>имя команды</em>, а в качестве <code>второго</code> - <em>набор игроков команды</em>, 
+                    число которых не фиксировано.
+                </p>
+                <p>Благодаря наследованию от <code>Array</code> мы можем рассматривать объекты класса <strong>Team</strong> как наборы данных и применять к ним все те операции, которые применяются к массивам:</p>
+                <div class="code-block"><code>class Team extends Array{
+    constructor(name, ...members){
+        super(...members);
+        this.name = name;
+    }
+}
+
+<code class="comment">// создаем объект команды</code>
+const barcelona = new Team("Barcelona", "Tom", "Sam", "Bob");
+
+<code class="comment">// перебор набора</code>
+for(const person of barcelona) {
+    console.log(person);
+}
+
+console.log(barcelona);     <code class="comment">// Team(3) ["Tom", "Sam", "Bob"]</code>
+
+barcelona.push("Tim");      <code class="comment">// добавим один элемент</code>
+console.log(barcelona);     <code class="comment">// Team(4) ["Tom", "Sam", "Bob", "Tim"]</code>
+
+barcelona.splice(1, 1);     <code class="comment">// удалим второй элемент</code>
+console.log(barcelona);     <code class="comment">// Team(3) ["Tom", "Bob", "Tim"]</code></code></div>
+
+                <h3>Переопределение методов</h3>
+
+                <p>Как и в общем при наследоваании, мы можем переопределять унаследованные методы. Например, переопределим поведение метода добавления <span class="b">push()</span>, который отвечает за добавление в конец массива:</p>
+                <div class="code-block"><code>class Team extends Array{
+    constructor(name, ...members){
+        super(...members);
+        this.name = name;
+    }
+
+    <code class="comment">// Переопределяем метод push()</code>
+    push(person){
+        if(person !== "admin") super.push(person);
+    }
+}
+ 
+const snowbars = new Team("SnowBars", "Tom", "Sam", "Bob");
+ 
+snowbars.push("admin");     <code class="comment">// добавим один элемент - admin</code>
+console.log(snowbars);      <code class="comment">// Team(3) ["Tom", "Sam", "Bob"]</code>
+
+snowbars.push("Tim");       <code class="comment">// добавим один элемент - Tim</code>
+console.log(snowbars);      <code class="comment">// Team(4) ["Tom", "Sam", "Bob", "Tim"]</code></code></div>
+
+                <p>В данном случае если в метод передано любое имя, кроме <code>"admin"</code>, то оно добавляется в команду.</p>
+
             </section>
 
             <!-- ГЛАВА 7: Строки и регулярные выражения -->
             <section class="chapter" id="ch7">
                 <h1>Глава 7. Строки и регулярные выражения (RegExp)</h1>
 
-                <h2>Работа со строками</h2>
-                <p>Строки — наиболее часто встречающийся тип данных. JavaScript предоставляет множество полезных методов для работы со строками.</p>
+                <h2 id="ch7-intro">📜 Строки, объект String и его методы</h2>
 
-                <h3>Определение длины строки</h3>
+                <p><em>Строки</em> — наиболее часто встречающийся тип данных.</p> 
+                <p>Для создания строк мы можем как напрямую присваивать переменной или константе строку:</p>
+                <div class="code-block"><code>const message = "Hello";</code></div>
+
+                <p>Для работы со строками предназначен объект <span class="b">String</span>, поэтому также можно использовать <code>конструктор String</code>:</p>
+                <div class="code-block"><code>const message = new String("Hello");</code></div>
+
+                <p>
+                    Но, как правило, используется первый более краткий способ. В первом случае JavaScript при необходимости автоматически преобразует 
+                    переменную примитивного типа в объект <strong>String</strong>.
+                </p>
+
+                <p>С помощью индексов можно обращаться к отдельным символам строки, как к элементам массива (как и в массивах  индексация начинается с нуля):</p>
+                <div class="code-block"><code>const message = "Hello";
+ console.log(message[0]);    <code class="comment">// H</code>
+ console.log(message[4]);    <code class="comment">// o</code></code></div>
+
+                <p>Объект <strong>String</strong> имеет большой набор свойств и методов, с помощью которых мы можем манипулировать строками.</p>
+
+                <h2 id="ch7-operation">📜 Работа со строками</h2>
+                <p>JavaScript предоставляет множество полезных методов для работы со строками.</p>
+
+                <h3 id="ch7-length">📃 Определение длины строки</h3>
+                <p>Свойство <span class="b">length</span> указывает на длину строки:</p>
                 <div class="code-block"><code>const name = "JavaScript";
-console.log(name.length); // 10</code></div>
-
-
-                <h3>Изменение регистра</h3>
-                <div class="code-block">
-                    <code>const str = "JavaScript";
-console.log(str.toLowerCase()); // "javascript"
-console.log(str.toUpperCase()); // "JAVASCRIPT"</code></div>
-
-                <h3>Поиск в строке</h3>
-                <div class="code-block">
-<code>const text = "JavaScript is awesome";
-console.log(text.indexOf("is"));        // 11
-console.log(text.lastIndexOf("a"));     // 15
-console.log(text.includes("awesome"));  // true
-console.log(text.startsWith("Java"));   // true
-console.log(text.endsWith("some"));     // true</code></div>
-
-                <h3>Извлечение части строки</h3>
-                <div class="code-block"><code>const url = "http://example.com";
-
-// slice(start, end) - извлекает подстроку
-const domain = url.slice(7);  // "example.com"
-const protocol = url.slice(0, 4); // "http"
-
-// substring(start, end) - аналог slice, но не принимает отрицательные индексы
-const sub = url.substring(7, 14); // "example"
-
-// substr(start, length) - устарел
-const old = url.substr(7, 7); // "example"</code></div>
-
-                <h3>Замена в строке</h3>
-                <div class="code-block"><code>const text = "Hello World";
-
-// replace() - заменяет первое вхождение
-console.log(text.replace("World", "JavaScript")); // "Hello JavaScript"
-
-// replaceAll() - заменяет все вхождения (ES2021)
-const str = "cat cat cat";
-console.log(str.replaceAll("cat", "dog")); // "dog dog dog"</code></div>
-
-                <h3>Разделение и объединение</h3>
-                <div class="code-block"><code>// split() - строка в массив
-const csv = "apple,banana,orange";
-const fruits = csv.split(","); // ["apple", "banana", "orange"]
-
-// join() - массив в строку
-const arr = ["Hello", "World"];
-const text = arr.join(" "); // "Hello World"</code></div>
-
-                <h3>Удаление пробелов</h3>
-                <div class="code-block"><code>const str = "  Hello World  ";
-
-console.log(str.trim());      // "Hello World"
-console.log(str.trimStart()); // "Hello World  "
-console.log(str.trimEnd());   // "  Hello World"</code></div>
+ console.log(name.length);   <code class="comment">// 10</code></code></div>
 
                 <h3>Повторение строки</h3>
-                <div class="code-block"><code>const str = "Ha";
-console.log(str.repeat(3)); // "HaHaHa"
 
-// Практический пример
-const line = "=".repeat(50); // 50 знаков равенства</code></div>
+                <p>Метод <span class="b">repeat()</span> позволяет создать строку путем многократного повторения другой строки. Количество повторов передается в качестве аргумента:</p>
+                <div class="code-block"><code>const str = "Ha";
+console.log(str.repeat(3));  <code class="comment">// "HaHaHa"</code>
+
+<code class="comment">// Практический пример</code>
+const line = "=".repeat(50); <code class="comment">// 50 знаков равенства</code></code></div>
+
+                <h3 id="ch7-search">📃 Поиск в строке</h3>
+
+                <h4>indexOf / lastIndexOf</h4>
+
+                <p>Для поиска в строке некоторой подстроки используются методы:</p>
+                <ul>
+                    <li><span class="b">indexOf()</span> - индекс первого вхождения подстроки</li>
+                    <li><span class="b">lastIndexOf()</span> - индекс последнего вхождения подстроки</li>
+                </ul>
+                <p>Эти методы принимают два параметра:</p>
+                <div class="code-block"><code>indexOf(str, index)
+ lastIndexOf(str, index)</code></div>
+
+                <ul>
+                    <li><em>Подстроку</em>, которую надо найти</li>
+                    <li><em>Индекс</em>, с которого идет поиск (Необязательный параметр)</li>
+                </ul>
+
+                <p>Оба этих метода возвращают <em>индекс символа</em>, с которого в строке начинается подстрока. Если подстрока не найдена, то возвращается число <code>-1</code>.</p>
+                <div class="code-block"><code>const hello = "привет мир. пока мир";
+ const key = "мир";
+
+const firstPos = hello.indexOf(key);
+const lastPos = hello.lastIndexOf(key);
+
+console.log("Первое вхождение: ", firstPos);    <code class="comment">// 7</code>
+console.log("Последнее вхождение: ", lastPos);  <code class="comment">// 17</code></code></div>
+
+                <p>Применим поиск относительно индекса, например, начиная с индекса <code>10</code>:</p>
+                <div class="code-block"><code>const hello = "привет мир. пока мир";
+ const key = "мир";
+
+const firstPos = hello.indexOf(key, 10);        <code class="comment">// поиск с 10-го индекса</code>
+console.log("Первое вхождение: ", firstPos);    <code class="comment">// 17</code></code></div>
+
+                <p>Следует учитывать, что поиск <em>регистрозависимый</em>:</p>
+                <div class="code-block"><code>const hello = "привет мир. пока мир";
+ const key = "Мир";
+
+const firstPos = hello.indexOf(key);
+console.log(firstPos);                  <code class="comment">// -1</code></code></div>
+
+                <h4>Еще пример:</h4>
+
+                <div class="code-block"><code>const text = "JavaScript is awesome";
+
+console.log(text.indexOf("is"));        <code class="comment">// 11</code>
+console.log(text.lastIndexOf("a"));     <code class="comment">// 15</code>
+console.log(text.includes("awesome"));  <code class="comment">// true</code>
+console.log(text.startsWith("Java"));   <code class="comment">// true</code>
+console.log(text.endsWith("some"));     <code class="comment">// true</code></code></div>
+
+                <h3 id="ch7-includes">📃 includes</h3>
+
+                <p>Еще один метод - <span class="b">includes()</span> возвращает <code>true</code>, если строка содержит определенную подстроку.</p>
+                <div class="code-block"><code>const hello = "привет мир. пока мир";
+ 
+console.log(hello.includes("мир"));     <code class="comment">// true</code>
+console.log(hello.includes("миг"));     <code class="comment">// false</code></code></div>
+
+                <p>С помощью <strong>второго</strong> дополнительного параметра можно определить <em>индекс</em>, с которого будет начинаться поиск подстроки:</p>
+                <div class="code-block"><code>const hello = "привет мир. пока мир";
+ 
+console.log(hello.includes("мир", 5));      <code class="comment">// true</code>
+console.log(hello.includes("привет", 6));   <code class="comment">// false</code></code></div>
+
+
+                <h3 id="ch7-substring">📃 Извлечение части строки / Выбор подстроки</h3>
+
+                <p>Для того, чтобы вырезать из строки подстроку, применяются методы <span class="b">substring()</span> и <span class="b">slice()</span>.</p>
+
+                <h4>Substring</h4>
+
+                <p>Метод <span class="b">substring()</span> принимает два параметра:</p>
+                <div class="code-block"><code>substring(startIndex, endIndex)</code></div>
+
+                <ul>
+                    <li>индекс символа в строке, начиная с которого надо проводить обрезку строки. Обязательный параметр</li>
+                    <li>индекс, до которого надо обрезать строку. Необязательный параметра - если он не указан, то обрезается вся остальная часть строки</li>
+                </ul>
+
+                <div class="code-block"><code>const hello = "привет мир. пока мир";
+                    
+const world = hello.substring(7, 10); <code class="comment">// с 7-го по 10-й индекс</code>
+console.log(world);                   <code class="comment">// мир</code>
+
+const bye = hello.substring(12);      <code class="comment">// c 12 индекса до конца строки</code>
+console.log(bye);                     <code class="comment">// пока мир</code></code></div>
+
+                <h4>slice</h4>
+
+                <p>Метод <span class="b">slice()</span> также позволяет получить из строки какую-то ее часть. Он принимает два параметра:</p>
+                <div class="code-block"><code>slice(startIndex, endIndex)</code></div>
+
+                <ul>
+                    <li><em>Начальный индекс</em> подстроки в строке. Обязательный параметр</li>
+                    <li><em>Конечный индекс</em> подстроки в строке. Необязательный параметра - если он не указан, то получаем всю оставшуюся часть строки</li>
+                </ul>
+                <div class="code-block"><code>const hello = "привет мир. пока мир";
+
+const world = hello.slice(7, 10);     <code class="comment">// с 7-го по 10-й индекс</code>
+console.log(world);                   <code class="comment">// мир</code>
+
+const bye = hello.slice(12);          <code class="comment">// c 12 индекса до конца строки</code>
+console.log(bye);                     <code class="comment">// пока мир</code></code></div>
+
+                <h4>Различия substring() и slice()</h4>
+
+                <p>Можно заметить, что метод  <code>slice()</code>похож на <code>substring()</code>, тем не менее между ними есть различия:</p>
+
+                <ul>
+                    <li>
+                        В <code>slice()</code> начальный индекс должен быть меньше чем конечный.<br>
+                        В <code>substring()</code>, если начальный индекс больше конечного, то они меняются местами 
+                        (то есть <code>substring(5, 1)</code> будет равноценно <code>substring(1, 5)</code>):
+                        <div class="code-block"><code>const hello = "привет мир. пока мир";
+
+const world1 = hello.slice(6, 0);     <code class="comment">// не работает</code>
+console.log(world1);                  <code class="comment">// пустая строка</code>
+
+const world2 = hello.substring(6, 0); <code class="comment">// аналогично hello.substring(0, 6)</code>
+console.log(world2);                  <code class="comment">// привет</code></code></div>
+                    </li>
+                    <li>
+                        <p>
+                            Другое отличие, что <code>slice</code> позволяет использовать отрицательные индексы. Отрицательный индекс указывает на индекс символа относительно конца строки.<br>
+                            <code>substring()</code> же отрицательные индексы не поддерживает:
+                        </p>
+                        <div class="code-block"><code>const hello = "привет мир. пока мир";
+        
+const bye1 = hello.slice(-8, -4);     <code class="comment">// с 8-го индекса с конца до 4 индекса с конца</code>
+console.log(bye1);                    <code class="comment">// пока</code>
+
+const bye2 = hello.substring(-8, -4); <code class="comment">// не работает</code>
+console.log(bye2);                    <code class="comment">// </code></code></div>
+                    </li>
+                </ul>
+
+                <h4>substr</h4>
+
+                <p>
+                    Следует отметить, что еще есть метод <span class="b">substr()</span>. Этот метод не является частью стандарта и в целом не рекомендуется к использованию, 
+                    однако он все еще может поддерживаться браузерами, и его до сих пор можно встретить в различных программах. Он принимает два параметра:
+                </p>
+                <div class="code-block"><code>substr(startIndex, count)</code></div>
+
+                <ul>
+                    <li>Начальный индекс подстроки в строке. Обязательный параметр</li>
+                    <li>Количество выбираемых символов. Необязательный параметра - если он не указан, то выбирается вся остальная часть строки</li>
+                </ul>
+
+                <p>Применение:</p>
+                <div class="code-block"><code>const hello = "привет мир. пока мир";
+
+const world = hello.substr(7, 3);     <code class="comment">// с 7-го индекса 3 символа</code>
+console.log(world);                   <code class="comment">// мир</code>
+
+const bye = hello.substr(12);         <code class="comment">// с 12-го индекса до конца</code>
+console.log(bye);                     <code class="comment">// пока мир</code></code></div>
+
+                <h4>Еще пример:</h4>
+                <div class="code-block"><code>const url = "http://example.com";
+
+<code class="comment">// slice(start, end) - извлекает подстроку</code>
+const domain = url.slice(7);          <code class="comment">// "example.com"</code>
+const protocol = url.slice(0, 4);     <code class="comment">// "http"</code>
+
+<code class="comment">// substring(start, end) - аналог slice, но не принимает отрицательные индексы</code>
+const sub = url.substring(7, 14);     <code class="comment">// "example"</code>
+
+<code class="comment">// substr(start, length) - устарел</code>
+const old = url.substr(7, 7);         <code class="comment">// "example"</code></code></div>
+
+
+                <h3 id="ch7-register">📃 Изменение регистра</h3>
+
+                <p>Для изменения регистра символов имеются методы:</p>
+                <ul>
+                    <li><span class="b">toLowerCase()</span> - для перевода в нижний регистр</li>
+                    <li><span class="b">toUpperCase()</span> - для перевода в верхний регистр</li>
+                </ul>
+                <div class="code-block">
+                    <code>const str = "JavaScript";
+console.log(str.toLowerCase());       <code class="comment">// "javascript"</code>
+console.log(str.toUpperCase());       <code class="comment">// "JAVASCRIPT"</code></code></div>
+
+                <h3 id="ch7-charat">📃 Получение символа по индексу. charAt(), charCodeAt()</h3>
+
+                <p>
+                    Чтобы получить определенный символ в строке по индексу, можно применять синтаксис массивов. Но также JavaScript предоставляет методы <span class="b">charAt()</span> и <span class="b">charCodeAt()</span>. 
+                    Оба этих метода в качестве параметра принимают индекс символа:
+                </p>
+
+                <div class="code-block"><code>const hello = "Привет Том";
+console.log(hello.charAt(2));         <code class="comment">// и</code>
+console.log(hello.charCodeAt(2));     <code class="comment">// 1080</code></code></div>
+
+                <p>Но если в качестве результата метод <code>charAt()</code> возвращает сам символ, то метод <code>charCodeAt()</code> возвращает числовой код этого символа.</p>
+
+                <h3 id="ch7-trim">📃 Удаление пробелов</h3>
+
+                <p>Для удаления начальных и концевых пробелов в стоке используется метод <span class="b">trim()</span>:</p>
+                <div class="code-block"><code>let hello = "   Привет Том  ";
+ const beforeLength = hello.length;
+
+hello = hello.trim();
+const afterLength = hello.length;
+
+console.log("Длина строки до: ", beforeLength);     <code class="comment">// 15</code>
+console.log("Длина строки после: ", afterLength);   <code class="comment">// 10</code></code></div>
+
+                <p>Дополнительно есть <em>ряд методов, которые удаляют пробелы с определенной стороны строки:</em></p>
+                <ul>
+                    <li><span class="b">trimStart()</span> - удаляет пробел с начала строки (в зависимости от того, является ли письмо правостронним или левостронним, это может быть правый или левый край строки)</li>
+                    <li><span class="b">trimEnd()</span> - удаляет пробел с конца строки (в зависимости от того, является ли письмо правостронним или левостронним, это может быть правый или левый край строки)</li>
+                    <li><span class="b">trimLeft()</span> - удаляет пробел с левой части строки</li>
+                    <li><span class="b">trimRight()</span> - удаляет пробел с правой части строки</li>
+                </ul>
+
+                <div class="code-block"><code>const str = "  Hello World  ";
+
+console.log(str.trim());      <code class="comment">// "Hello World"</code>
+console.log(str.trimStart()); <code class="comment">// "Hello World  "</code>
+console.log(str.trimEnd());   <code class="comment">// "  Hello World"</code></code></div>
+
+                <h3 id="ch7-join-split">📃 Разделение и объединение строк</h3>
+
+                <p>Метод <span class="b">concat()</span> объединяет две строки:</p>
+                <div class="code-block"><code>let hello = "Привет ";
+ const world = "мир";
+
+hello = hello.concat(world);
+console.log(hello);            <code class="comment">//</code> Привет мир</code></div>
+
+                <h4>Разделение строки</h4>
+                <p>Метод <span class="b">split()</span> разбивает строку на массив подстрок по определенному разделителю. В качестве разделителя используется строка, которая передается в метод:</p>
+                <div class="code-block"><code>const message = "Сегодня была прекрасная погода";
+ const messageParts = message.split(" ");
+ console.log(messageParts);    <code class="comment">// ["Сегодня", "была", "прекрасная", "погода"]</code></code></div>
+                
+                <p>В данном случае строка разделяется по пробелу, то есть в итоге в массиве <code>messageParts</code> окажется четыре элемента.</p>
+
+                <div class="code-block"><code><code class="comment">// split() - строка в массив</code>
+const csv = "apple,banana,orange";
+const fruits = csv.split(","); <code class="comment">// ["apple", "banana", "orange"]</code>
+
+<code class="comment">// join() - массив в строку</code>
+const arr = ["Hello", "World"];
+const text = arr.join(" ");    <code class="comment">// "Hello World"</code></code></div>
+
+                <h3 id="ch7-replace">📃 Замена подстроки в строке</h3>
+
+                <p>Метод <span class="b">replace()</span> заменяет первое вхождение одной подстроки на другую:</p>
+                <div class="code-block"><code>let hello = "Добрый день";
+ hello = hello.replace("день", "вечер");
+ console.log(hello); <code class="comment">// Добрый вечер</code></code></div>
+
+                <ul>
+                    <li><strong>первый параметр</strong> метода указывает, <em>какую подстроку надо заменить</em></li>
+                    <li><strong>второй параметр</strong> - <em>на какую подстроку надо заменить</em></li>
+                </ul>
+
+                <p>В то же время у этого метода есть одна особенность - он заменяет <em>только первое вхождение</em> подстроки:</p>
+                <div class="code-block"><code>let menu = "Завтрак: каша, чай. Обед: суп, чай. Ужин: салат, чай.";
+ menu = menu.replace("чай", "кофе");
+
+ console.log(menu);  <code class="comment">// Завтрак: каша, кофе. Обед: суп, чай. Ужин: салат, чай.</code></code></div>
+
+                <p>Однако еще один метод - <span class="b">replaceAll()</span> позволяет заменить <em>все вхождения</em> подстроки:</p>
+                <div class="code-block"><code>let menu = "Завтрак: каша, чай. Обед: суп, чай. Ужин: салат, чай.";
+ menu = menu.replaceAll("чай", "кофе");
+ console.log(menu);  <code class="comment">// Завтрак: каша, кофе. Обед: суп, кофе. Ужин: салат, кофе.</code></code></div>
+
+                <div class="code-block"><code>const text = "Hello World";
+
+<code class="comment">// replace() - заменяет первое вхождение</code>
+console.log(text.replace("World", "JavaScript")); <code class="comment">// "Hello JavaScript"</code>
+
+<code class="comment">// replaceAll() - заменяет все вхождения (ES2021)</code>
+const str = "cat cat cat";
+console.log(str.replaceAll("cat", "dog"));        <code class="comment">// "dog dog dog"</code></code></div>
+
+                
+                <h3 id="ch7-startswith">📃 Проверка начала и окончания строки</h3>
+
+                <ul>
+                    <li>Метод <span class="b">startsWith()</span> возвращает <code>true</code>, если строка начинается с определенной подстроки</li>
+                    <li>метод <span class="b">endsWith()</span> возвращает <code>true</code>, если строка оканчивается на определенную подстроку</li>
+                </ul>
+                <div class="code-block"><code>const hello = "let me speak from my heart";
+
+console.log(hello.startsWith("let"));       <code class="comment">// true</code>
+console.log(hello.startsWith("Let"));       <code class="comment">// false</code>
+console.log(hello.startsWith("lets"));      <code class="comment">// false</code>
+ 
+console.log(hello.endsWith("heart"));       <code class="comment">// true</code>
+console.log(hello.startsWith("bart"));      <code class="comment">// false</code></code></div>
+
+                <p>При этом играет роль регистр символов, и из примера выше мы видим, что <code>"let"</code> не эквивалентно <code>"Let"</code> .</p>
+
+                <p>Дополнительный <strong>второй параметр</strong> позволяет указать <em>индекс</em> (для startsWith - индекс с начала, а для endsWith - индекс с конца строки), относительно которого будет производиться сравнение:</p>
+                <div class="code-block"><code>const hello = "let me speak from my heart";
+ console.log(hello.startsWith("me", 4));             <code class="comment">// true, "me" - 4 индекс с начала строки</code>
+ 
+ console.log(hello.endsWith("my", hello.length-8));  <code class="comment">// true, "my" - 8 индекс с конца</code></code></div>
+
+
+                <h3 id="ch7-pad">📃 Заполнение строки</h3>
+
+                <p>Методы <span class="b">padStart()</span> и <span class="b">padEnd()</span> позволяют растянуть строку на определенное количество символов и заполнить строку слева и справа соответственно.</p>
+                <div class="code-block"><code>let hello = "hello".padStart(8);  <code class="comment">// "   hello"</code>
+console.log(hello);
+
+hello = "hello".padEnd(8);         <code class="comment">// "hello   "</code>
+console.log(hello);</code></div>
+
+                <p>
+                    Вызов <code>"hello".padStart(8)</code> будет рястягивать строку <code>"hello"</code> на <code>8</code> символов. То есть изначально в строке <code>"hello"</code> 5 символов, значит, к ней будет добавлено 3 символа. При чем они будут добавлено в начале строки. 
+                    По умолчанию добавляемые символы представляют пробелы. Аналогично вызов <code>"hello".padEnd(8)</code> растянет строку на <code>8</code> символов, но оставшие символы в виде пробелов будут добавлены в конец строки.
+                </p>
+
+                <p>По умолчанию эти методы используют пробелы для заполнения, но в качестве <strong>второго параметра</strong> мы можем передать методам <em>значение, которым надо дополнить строку</em>:</p>
+                <div class="code-block"><code>let hello = "hello".padStart(17, "JavaScript, ");  <code class="comment">// "JavaScript, hello"</code>
+ hello = "hello".padEnd(12, " Eugene");             <code class="comment">// "hello Eugene"</code></code></div>
+
+                <p>Если добавляемое количество символов больше добавляемой строки, то добавляемая строка повторяется:</p>
+                <div class="code-block"><code>let hello = "123".padStart(6, "0");  <code class="comment">// "000123"</code>
+ hello = "123".padEnd(6, "0");        <code class="comment">// "123000"</code></code></div>
 
                 <h2>Регулярные выражения</h2>
                 
