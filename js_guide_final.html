@@ -652,6 +652,20 @@
                                 <li class="nav-subitem" data-target="ch7-replace">&emsp;📃 replace()</li>
                                 <li class="nav-subitem" data-target="ch7-startswith">&emsp;📃 startsWith(), endsWith()</li>
                                 <li class="nav-subitem" data-target="ch7-pad">&emsp;📃 padStart(), padEnd()</li>
+                                <li class="nav-subitem" data-target="ch7-templates">📜 Шаблоны строк</li>
+                                <li class="nav-subitem" data-target="ch7-html-templates">&emsp;📃 html-код в шаблонах</li>
+                                <li class="nav-subitem" data-target="ch7-dynamic">&emsp;📃 Динамические шаблоны</li>
+                                <li class="nav-subitem" data-target="ch7-tag-func">&emsp;📃 Тег-функции</li>
+                                <li class="nav-subitem" data-target="ch7-regexp">📜 RegExp. Регулярные выражения</li>
+                                <li class="nav-subitem" data-target="ch7-test">&emsp;📃 test. Проверка соответствия строки шаблону</li>
+                                <li class="nav-subitem" data-target="ch7-exec">&emsp;📃 Метод exec</li>
+                                <li class="nav-subitem" data-target="ch7-groups-char">&emsp;📃 Группы символов</li>
+                                <li class="nav-subitem" data-target="ch7-syntax">📜 Синтаксис регулярных выражений</li>
+                                <li class="nav-subitem" data-target="ch7-class">&emsp;📃 Определение классов символов</li>
+                                <li class="nav-subitem" data-target="ch7-metasymbol">&emsp;📃 Метасимволы</li>
+                                <li class="nav-subitem" data-target="ch7-limits">&emsp;📃 Ограничение применения RegExp</li>
+                                <li class="nav-subitem" data-target="ch7-flags">&emsp;📃 Флаги выражений</li>
+
                             </ul>
                         </li>
                         <li class="nav-item" data-target="ch8">Глава 8. Обработка ошибок</li>
@@ -11320,8 +11334,588 @@ console.log(hello);</code></div>
                 <div class="code-block"><code>let hello = "123".padStart(6, "0");  <code class="comment">// "000123"</code>
  hello = "123".padEnd(6, "0");        <code class="comment">// "123000"</code></code></div>
 
-                <h2>Регулярные выражения</h2>
-                
+
+                <h2 id="ch7-templates">📜 Шаблоны строк</h2>
+
+                <p>
+                    <strong>Шаблоны строк</strong> <em>(template strings / template literals)</em> позволяют вставлять в строку различные значения. Подобный прием еще называют <strong>интерполяцией</strong>. 
+                    Для этого строки заключаются в косые кавычки, а вставляемое значение предваряется символом <span class="b">$</span> и заключается в фигурные скобки:
+                </p>
+                <div class="code-block"><code>const name = "Tom";
+ const hello = `Hello ${name}`;
+ console.log(hello);                <code class="comment">// Hello Tom</code></code></div>
+
+                <p>Здесь на место <code>${name}</code> будет вставляться значение константы <code>name</code>. Таким образом, из шаблона <code>`Hello ${name}`</code> мы получим строку <code>Hello Tom</code>.</p>
+
+                <p>Подобным образом в строку можно вставлять сразу несколько значений:</p>
+                <div class="code-block"><code>const name = "Tom";
+ const age = 37;
+
+const userInfo = `${name} is ${age} years old`;
+console.log(userInfo);              <code class="comment">// Tom is 37 years old</code></code></div>
+
+                <p>Также вместо скалярных значений могут добавляться свойства <em>сложных объектов</em>:</p>
+                <div class="code-block"><code>const tom = {
+    name: "Tom",
+    age: 22
+}
+
+const tomInfo = `${tom.name} is ${tom.age} years old`;
+console.log(tomInfo);               <code class="comment">// Tom is 22 years old</code></code></div>
+
+                <p>Любо можно вставлять более сложные вычисляемые выражения:</p>
+                <div class="code-block"><code>function sum(x, y){
+    return x + y;
+}
+
+const a = 5;
+const b = 4;
+ 
+const result = `${a} + ${b} = ${sum(a, b)}`;
+console.log(result);                <code class="comment">// 5 + 4 = 9</code>
+ 
+ 
+const expression = `${a} * ${b} = ${ a * b}`;
+console.log(expression);            <code class="comment">// 5 * 4 = 20</code></code></div>
+
+                <p>Во втором случае в шаблоне выполняется операция умножения констант: <code>${ a * b}</code>.</p>
+
+                <h3 id="ch7-html-templates">📃 html-код в шаблонах</h3>
+
+                <p>Шаблоны также могут хранить <code>html-код</code>, который будет динамически формироваться.</p>
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+&lt;script>
+    const tom = {name: "Tom", age: 37};
+    const markup = `&lt;div>
+        &lt;p>&lt;b>Name&lt;/b>: ${tom.name}&lt;/p>
+        &lt;p>&lt;b>Age&lt;/b>: ${tom.age}&lt;/p>
+    &lt;/div>`;
+    
+    document.body.innerHTML = markup;
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="502" height="198" xml:space="preserve" version="1.1" viewBox="0 0 502 198">
+                    <image width="502" height="198" xlink:href="data:image/png;base64,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"/>
+                </svg>
+
+                <h3 id="ch7-dynamic">📃 Вложенные / динамические шаблоны</h3>
+
+                <p>Рассмотрим другой пример - создадим из элементов массива <code>список html</code>:</p>
+
+                <div class="code-block"><code>&lt;!DOCTYPE html>
+&lt;html>
+&lt;head>
+    &lt;meta charset="utf-8" />
+    &lt;title>METANIT.COM&lt;/title>
+&lt;/head>
+&lt;body>
+&lt;script>
+    const people = [{name: "Tom", age: 37}, {name:"Sam", age: 41}, {name: "Bob", age: 21}];
+    const markup = `&lt;ul>
+        ${people.map(person => `&lt;li>${person.name}&lt;/li>`)}
+    &lt;/ul>`;
+    
+    document.body.innerHTML = markup;
+&lt;/script>
+&lt;/body>
+&lt;/html></code></div>
+
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="502" height="222" xml:space="preserve" version="1.1" viewBox="0 0 502 222">
+                    <image width="502" height="222" xlink:href="data:image/png;base64,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"/>
+                </svg>
+
+                <p>В данном случае мы имеем дело с <strong>вложенным шаблоном</strong>. То есть вначале определяется общий <em>внешний шаблон</em>:</p>
+                <div class="code-block"><code>const markup = `&lt;ul>
+    ${.............}
+&lt;/ul>`;</code></div>
+
+                <p>А в динамически формируемом выражении применяется еще один шаблон:</p>
+                <div class="code-block"><code>${people.map(person => `&lt;li>${person.name}&lt;/li>`)}</code></div>
+
+                <p>
+                    В данном случае у массива <code>people</code> вызывается функция <strong>map()</strong>, которое определяет некоторое действие для каждого элемента массива. Это действие передается в 
+                    <strong>map()</strong> в виде функции. Здесь для упрощения в качестве такой функции применяется лямбда-выражение. Оно получает каждый элемент массива 
+                    через параметр <code>person</code> и для него формирует шаблон строки <code>`&lt;li&gt;${person.name}&lt;/li&gt;`</code>.
+                </p>
+
+                <h3 id="ch7-tag-func">📃 Тег-функции и передача шаблона строки в функцию</h3>
+
+                <p>
+                    JavaScript позволяет передать в функцию шаблон строки, причем не просто как строку, но и все ее динамчески вычисляемые фрагменты в виде отдельных параметров. 
+                    Для этого применяются <strong>тег-функции (tag function)</strong>. Подобная возможность может применяться, например, для предобработки шаблонов и их значений. Рассмотрим следующий пример:
+                </p>
+                <div class="code-block"><code>const person = "Tom";
+ 
+function check (parts, name){
+    console.log(parts);
+    return parts[0] + name + parts[1];
+}
+
+const checkedTemplate = check`Person: ${person}.`;
+console.log(checkedTemplate);</code></div>
+
+                <p>Здесь определена <em>tag-функция</em> <code>check()</code>, которая имеет два параметра: <code>parts</code> и <code>name</code></p>
+                <div class="code-block"><code>function check (parts, name){
+    console.log(parts);
+    return parts[0] + name + parts[1];
+}</code></div>
+
+                <p>
+                    <em>Параметр</em> <code>parts</code> - это массив частей шаблона, разделенных вставляемыми динамическими фрагментами. <em>Второй параметр</em> - <code>name</code> - это динамически 
+                    вычисляемый фрагмент шаблона. То есть в данном случае мы предполагаем, что шаблон строки, который передается в функцию <code>check()</code>, 
+                    будет иметь только один динамчески вычисляемый фрагмент. Соответственно в массиве <code>parts</code> будет два элемента: статическая часть шаблона, которая идет 
+                    до вычисляемого фрагмента, и часть шаблона, которая идет после.
+                </p>
+                <p>Чтобы было более ясно, о чем идет речь, в функции выводим на консоль эти элементы массива <code>parts</code>.</p>
+                <p>Функция возвращает <code>return parts[0] + name + parts[1]</code>, то есть по сути мы просто возвращаем ранее сформированный шаблон, ничего не меняя.</p>
+
+                <p>Обратите внимание, как мы передаем этой функции шаблон:</p>
+                <div class="code-block"><code>const checkedTemplate = check`Person: ${person}.`;</code></div>
+
+                <p>шаблон просто указывается после названия функции. Или иначе говоря, <em>tag-функция</em> указывается как префикс перед шаблоном.</p>
+
+                <p>Результат работы программы:</p>
+                <pre class="browser">Array(2)
+	0: "Person: "
+	1: "."
+	length: 2
+	raw: (2)&nbsp;['Person: ', '.']
+	[[Prototype]]: Array(0)
+Person: Tom.</pre>
+
+                <p>
+                    Из консольного вывода мы видим, что элементами массива <code>parts</code> являются подстроки <code>"Person: "</code> и <code>"."</code>. А в качестве значения параметра <code>name</code> передается строка <code>"Tom"</code>. Стоит отметить, 
+                    что даже если после динамически вычисляемого фрагмента больше не было бы никаких символов (например, <code>`Person: ${person}`</code>), то массив
+                    <code>parts</code> все равно имел бы два элемента, только вторым элементом тогда была бы пустая строка.
+                </p>
+
+                <p>Но в примере выше мы просто возвращали то же содержимое, которое было сформировано на основе шаблона. Однако мы можем выполнить некоторую обработку:</p>
+                <div class="code-block"><code>const tom = "Tom";
+const admin = "Admin";
+ 
+function check (parts, name){
+    if(name === "Admin") return "Пользователь не определен";
+    else return parts[0] + name + parts[1];
+}
+
+let checkedTemplate1 = check`Пользователь: ${tom}`;
+let checkedTemplate2 = check`Пользователь: ${admin}`;
+ 
+console.log(checkedTemplate1);
+console.log(checkedTemplate2);</code></div>
+
+                <p>В данном случае, если в шаблон передается значение <code>"Admin"</code>, то возвращаем один результат, иначе возвращаем, то, что было бы сформированно на основе шаблона.</p>
+                <pre class="browser">Пользователь: Tom
+Пользователь не определен</pre>
+
+                <p>Подобным образом можно обрабатывать шаблоны с большим количеством вычисляемых фрагментов:</p>
+                <div class="code-block"><code>const tom = {name: "Tom", age: 37};
+const bob = {name: "Bob", age: 11};
+ 
+function check (parts, name, age){
+    if(age &gt; 18) return `${parts[0]}${name}. Доступ открыт`;
+    else return `Для пользователя ${name} доступ закрыт. Возраст ${age} недействителен`;
+}
+
+let checkedTemplate1 = check`Пользователь: ${tom.name} ${tom.age}`;
+let checkedTemplate2 = check`Пользователь: ${bob.name} ${bob.age}`;
+ 
+console.log(checkedTemplate1);
+console.log(checkedTemplate2);</code></div>
+
+                <p>В данном случае шаблон содержит два динамческих фрагмента. Соответственно в массива <code>part</code> будет три элемента.</p>
+                <p>В функции <strong>check()</strong> в зависимости от значения второго динамического фрамегмента (условного возраста пользователя) возвращаем то или иное значение.</p>
+
+                <p>Консольный вывод:</p>
+                <pre class="browser">Пользователь:  Tom. Доступ открыт
+Для пользователя Bob доступ закрыт. Возраст 11 недействителен</pre>
+
+                <h2 id="ch7-regexp">📜 Объект RegExp. Регулярные выражения</h2>
+
+                <p>
+                    <span class="b">Регулярные выражения</span> представляют шаблон, который используется для поиска или модификации строки. Для работы со строками мы, конечно, 
+                    можем использовать стандартный набор методов типа String. Однако регулярные выражения предоставляют более гибкий инструмент.
+                </p>
+                <p>Для работы с регулярными выражениями в JavaScript определен объект <span class="b">RegExp</span>.</p>
+                <p>Определить регулярное выражение можно двумя способами:</p>
+
+                <div class="code-block"><code>const myExp1 = /hello/;
+ const myExp2 = new RegExp("hello");</code></div>
+
+                <p>Используемое здесь регулярное выражение довольно простое: оно состоит из одного слова <code>"hello"</code>.</p>
+
+                <ul>
+                    <li><strong>литеральная нотация</strong> - выражение помещается между двумя косыми чертами</li>
+                    <li>во втором случае используется конструктор <span class="b">RegExp</span>, в который выражение передается в виде строки</li>
+                </ul>
+
+                <p>
+                    Обычно, если регулярное выражение определяется <em>динамически</em> (например, с помощью ввода пользователя), то применяется <em>конструктор</em>. Если выражение <em>статическое</em>, неизменяемое, 
+                    то используется <em>литеральная нотация</em>, как в первом случае.
+                </p>
+
+                <p>После определения регулярного выражения для обработки строк мы можем использовать один из методов <span class="b">RegExp</span>:</p>
+                <ul>
+                    <li>
+                        <span class="b">test()</span>: проверяет, присутствует ли определенный шаблон в строке. Если строка соответствует шаблону, то этот метод 
+                        возвращает <span class="b">true</span>, иначе возвращается <span class="b">false</span>.</li>
+                    <li><span class="b">exec()</span>: ищет вхождения определенного шаблона в строку и возвращает эти вхождения в виде массива.</li>
+                </ul>
+
+                <p>Кроме того, дополнительно для работы с регулярными выражениями мы можем использовать ряд методов типа String:</p>
+                <ul>
+                    <li><span class="b">match()</span>: также ищет вхождения определенного шаблона в строку и возвращает эти вхождения в виде массива.</li>
+                    <li><span class="b">replace()</span>: заменяет вхождения определенного шаблона в строке.</li>
+                    <li><span class="b">search()</span>: ищет вхождения определенного шаблона в строку и возвращает индекс первого вхождения.</li>
+                    <li><span class="b">split()</span>: разделяет строку в соответствии с определенным шаблоном и возвращает индекс полученные части строки в виде массива.</li>
+                </ul>
+
+                <h3 id="ch7-test">📃 test. Проверка соответствия строки шаблону</h3>
+
+                <p>
+                    Для проверки встречается ли в строке текст, который соответствует регулярному выражению, применяется метод <span class="b">test()</span> объекта RegExp. Этот метод 
+                    возвращает <code>true</code>, если строка содержит текст, который соответствует регулярному выражению, и <code>false</code>, если не содержит.
+                </p>
+                <div class="code-block"><code>const initialText = "hello world!";     <code class="comment">// строка для поиска</code>
+const exp = /hello/;                    <code class="comment">// регулярное выражение</code>
+const result = exp.test(initialText);   <code class="comment">// проверяем наличие в строке выражения exp</code>
+console.log(result);                    <code class="comment">// true</code>
+   
+const initialText2 = "Hi all";
+const result2 = exp.test(initialText2);
+console.log(result2);                   <code class="comment">// false - в строке "Hi all" нет "hello"</code></code></div>
+
+                <p>
+                    В данном случае мы проверяем, есть ли в строках <code>initialText ("hello world!")</code> и <code>initialText2 ("Hi all")</code> выражение <code>exp (/hello/)</code>. Поскольку в первой строке такой текст 
+                    присутствует, то <code>exp.test(initialText)</code> возвращает <code>true</code>. В случае со второй строкой таой текст отсутствует, поэтому возвращается <code>false</code>.
+                </p>
+
+                <h3 id="ch7-exec">📃 Метод exec</h3>
+
+                <p>
+                    Аналогично работает метод <span class="b">exec</span> - он также проверяет, есть ли в строке текст, который удовлетворяет регулярному выражению. 
+                    При наличии такого текста метод возвращает ту часть строки, которая соответствует выражению. Если соответствий нет, то возвращается значение <span class="b">null</span>.
+                </p>
+                <div class="code-block"><code>const initialText = "hello world!";     <code class="comment">// строка для поиска</code>
+const exp = /hello/;                    <code class="comment">// регулярное выражение</code>
+const result = exp.exec(initialText);   <code class="comment">// проверяем наличие в строке выражения exp</code>
+console.log(result);        <code class="comment">// ['hello', index: 0, input: 'hello world!', groups: undefined]</code>
+   
+const initialText2 = "Hi all";
+const result2 = exp.exec(initialText2);
+console.log(result2);                   <code class="comment">// null - в строке "Hi all" нет "hello"</code></code></div>
+
+                <p>
+                    Так, в строке <code>"hello world!"</code> есть текст, который соответствует шаблону <code>/hello/</code>, поэтому вызов метода <code>exp.exec(initialText)</code> возвратит 
+                    вхождения текста, который соответствует выражению, в строку. И по консольному выводу мы видим, что это не просто текст, а массив значений:
+                </p>
+                <div class="code-block"><code>['hello', index: 0, input: 'hello world!', groups: undefined]</code></div>
+
+                <ul>
+                    <li><strong>Первый элемент</strong> массива - собственно текст, который соответствует выражению (в нашем случае "hello")</li>
+                    <li><strong>Второй элемент</strong> - индекс этого текста в строке (в нашем случае индекс 0 - начало строки)</li>
+                    <li><strong>Третий элемент</strong> - представляет входную строку</li>
+                    <li><strong>Четвертый элемент</strong> - представляет группу, которая в примере выше неопределена (группы мы разберем далее)</li>
+                </ul>
+
+                <h3 id="ch7-groups-char">📃 Группы символов</h3>
+
+                <p>
+                    Выше в качестве регулярного выражения применялась строка<code>"hello"</code>. И в реальности для проверки наличия этой подстроки в строке мы могли бы использовать и стандартные методы типа <code>String</code>. Однако 
+                    это не просто строка, а <em>шаблон</em>, который также может включать специальные элементы синтаксиса регулярных выражений. Рассмотрим самые базовые шаблоны:
+                </p>
+                <ul>
+                    <li><span class="b">.</span> (точка) соответствует любому символу</li>
+                    <li><span class="b">a</span> (одиночный символ) соответствует символу "a"</li>
+                    <li><span class="b">ab</span> (объединение символов) соответствует последовательности символов "ab"</li>
+                    <li><span class="b">a|b</span> соответствует либо символу "a",  либо символу "b" (символ | можно рассматривать как аналогию операции OR)</li>
+                </ul>
+
+                <p>Например, нам надо проверить длину пароля - что она не менее 8 символов:</p>
+                <div class="code-block"><code>const exp = /......../;            <code class="comment">// регулярное выражение - 8 символов</code>
+ 
+const password1 = "1234567890";
+const password2 = "qwery5";
+
+<code class="comment">// проверяем первый пароль</code>
+console.log(exp.test(password1));   <code class="comment">// true -  password1 соответствует выражению exp</code>
+
+<code class="comment">//</code> проверяем второй пароль
+console.log(exp.test(password2));   <code class="comment">// false -  password2 не соответствует выражению exp</code></code></div>
+
+                <p>Здесь регулярное выражение <code>"/......../"</code> имеет 8 точек . То есть для соответствия этому выражению строка должна иметь как минимум <code>8</code> символов.</p>
+
+                <p>Другой пример:</p>
+                <div class="code-block"><code>const exp = /word|work/;           <code class="comment">// соответствует либо "word", либо "work"</code>
+ 
+const str1 = "hello world";
+const str2 = "hello work";
+const str3 = "hello word";
+
+console.log(exp.test(str1));        <code class="comment">// false</code>
+console.log(exp.test(str2));        <code class="comment">// true</code>
+console.log(exp.test(str3));        <code class="comment">// true</code></code></div>
+
+                <p>
+                    Здесь выражение <code>"/word|work/"</code> соответствует тексту, который содержит либо <code>"word"</code>, либо <code>"work"</code>. Однако это выражение не оптимально - в обоих вариантах повторется
+                    группа символов <code>"wor"</code>. Общую группу символов мы можем взять в скобки: <code>"/(wor)d|k/"</code>. Результат будет тот же:
+                </p>
+                <div class="code-block"><code>const exp = /wor(d|k)/;            <code class="comment">// соответствует либо "word", либо "work"</code>
+ 
+const str1 = "hello world";
+const str2 = "hello work";
+const str3 = "hello word";
+
+console.log(exp.test(str1));        <code class="comment">// false</code>
+console.log(exp.test(str2));        <code class="comment">// true</code>
+console.log(exp.test(str3));        <code class="comment">// true</code></code></div>
+
+                <p><strong>Другой пример</strong> - проверим, принадлежит ли почтовый адрес "yandex.ru" или "mail.ru":</p>
+
+                <div class="code-block"><code>const exp = /@(yandex|mail).ru/;   <code class="comment">// соответствует либо "@yandex.ru" либо "@mail.ru"</code>
+ 
+const email1 = "tom@mail.ru";
+const email2 = "tom@gmail.ru";
+const email3 = "tom@yandex.ru";
+
+console.log(exp.test(email1));      <code class="comment">// true</code>
+console.log(exp.test(email2));      <code class="comment">// false</code>
+console.log(exp.test(email3));      <code class="comment">// true</code></code></div>
+
+
+                <h2 id="ch7-syntax">📜 Синтаксис регулярных выражений</h2>
+
+                <h3 id="ch7-class">📃 Определение классов символов</h3>
+
+                <p>Для определения регулярных выражений мы можем использовать <strong>классы символов</strong>. Для определения класса символов применяются квадратные скобки:</p>
+                <ul>
+                    <li><span class="b">[xyz]</span> (альтернативное соответствие): соответствует одному из символов: x, y или z (аналог <code>x|y|z</code>)</li>
+                    <li><span class="b">[^xyz]</span> (отрицание): соответствует тексту, который содержит любые символы <em>КРОМЕ</em> <code>x, y или z</code></li>
+                    <li><span class="b">[a-zA-Z]</span> (диапазон): соответствует любому символу из диапазона <code>a-z</code> или <code>A-Z</code></li>
+                </ul>
+
+                <p>Например, нам надо проверить, есть ли в тексте символы <code>"a", "b" или "c"</code>:</p>
+                <div class="code-block"><code>const exp = /[abc]/;                <code class="comment">// соответствует либо "a", либо "b", либо "c"</code>
+ 
+const str1 = "JavaScript";
+const str2 = "Pascal";
+const str3 = "Python";
+
+console.log(exp.test(str1));        <code class="comment">// true</code>
+console.log(exp.test(str2));        <code class="comment">// true</code>
+console.log(exp.test(str3));        <code class="comment">// false</code></code></div>
+
+                <p>Выражение <code>[abc]</code> указывает на то, что строка должна иметь одну из трех букв. Выражение <code>"[abc]"</code> также эквивалентно выражению <code>"a|b|c"</code>.</p>
+
+                <p>Возьмем более практический пример. Допустим, у нас есть 4-х символьные pin-коды, и нам надо проверить, что pin-код содержит только цифры:</p>
+                <div class="code-block"><code>const exp = /[0-9][0-9][0-9][0-9]/;  <code class="comment">// соответствует четырем цифрам подряд</code>
+ 
+const code1 = "1234";
+const code2 = "jav5";
+const code3 = "3452";
+
+console.log(exp.test(code1));       <code class="comment">// true</code>
+console.log(exp.test(code2));       <code class="comment">// false</code>
+console.log(exp.test(code3));       <code class="comment">// true</code></code></div>
+
+                <p>
+                    Выражение <code>[0-9][0-9][0-9][0-9]</code> соответствует любой последовательности из 4 цифр подряд. Например, такому шаблону соответствует строка "3452", но НЕ 
+                    соответствует строка <code>"jav5"</code> (здесь только одна цифра). Строка <code>"jav5"</code> соответстветствовала бы шаблону <code>"[a-z][a-z][a-z][0-9]"</code> (первые три алфафитных символа в нижнем регистре, за которыми идет цифра).
+                </p>
+                <p>Сразу стоит отметить, что выражение <code>[0-9][0-9][0-9][0-9]</code> не оптимально, и далее мы посмотрим, как его можно упростить.</p>
+
+                <p><strong>Еще один пример</strong> - применим <strong>отрицание</strong>:</p>
+                <div class="code-block"><code>const exp = /[^a-z]/;             <code class="comment">// соответствует любым символам, кроме символов из диапазона a-z</code>
+ 
+const code1 = "zorro";
+const code2 = "zorro5";
+const code3 = "34521";
+
+console.log(exp.test(code1));      <code class="comment">// false</code>
+console.log(exp.test(code2));      <code class="comment">// true</code>
+console.log(exp.test(code3));      <code class="comment">// true</code></code></div>
+
+                <p>
+                    Здесь строки проверяются на соответствие выражению <code>"[^a-z]"</code>, которое соответствует любым символам, кроме символов из диапазона <code>a-z</code>. 
+                    Например, строка <code>"zorro"</code> <em>НЕ соответствует</em> этому выражению. Однако ему <em>соответствует</em> строка <code>"zorro5"</code>, потому что в ней есть символ, не входящий в диапазон <code>"a-z"</code>.
+                </p>
+
+                <p>При необходимости мы можем собирать <strong>комбинации выражений</strong>:</p>
+                <div class="code-block"><code>const exp = /[дт]о[нм]/;          <code class="comment">// соответствует строкам "дом", "том", "дон", "тон"</code>
+ 
+const str1 = "дома";
+const str2 = "сома";
+const str3 = "тона";
+
+console.log(exp.test(str1));       <code class="comment">// true</code>
+console.log(exp.test(str2));       <code class="comment">// false</code>
+console.log(exp.test(str3));       <code class="comment">// true</code></code></div>
+
+                <p>Выражение <code>[дт]о[нм]</code> указывает на те строки, которые могут содержать подстроки <code>"дом", "том", "дон", "тон"</code>.</p>
+
+                <h3 id="ch7-metasymbol">📃 Метасимволы</h3>
+
+                <p>Вместо определения своих классов символов мы можем использовать встроенные, которые еще называют <strong>метасимволы</strong> - <em>символы, которые имеют определенный смысл</em>:</p>
+                <ul>
+                    <li><strong>\d</strong> : соответствует любой цифре от 0 до 9. Аналогичен выражению <code>[0-9]</code></li>
+                    <li><strong>\D</strong> : соответствует любому символу, который не является цифрой. Аналогичен выражению <code>[^0-9]</code></li>
+                    <li><strong>\w</strong> : соответствует любой букве, цифре или символу подчеркивания (диапазоны A–Z, a–z, 0–9). Аналогичен выражению <code>[a-zA-Z_0-9]</code></li>
+                    <li><strong>\W</strong> : соответствует любому символу, который не является буквой, цифрой или символом подчеркивания (то есть не находится в следующих диапазонах A–Z, a–z, 0–9). Аналогичен выражению <code>[^\w]</code></li>
+                    <li><strong>\s</strong> : соответствует пробелу. Аналогичен выражению <code>[\t\n\x0B\f\r]</code></li>
+                    <li><strong>\S</strong> : соответствует любому символу, который не является пробелом. Аналогичен выражению <code>[^\s]</code></li>
+                    <li><strong>.</strong> : соответствует любому символу</li>
+                </ul>
+
+                <p>Здесь надо заметить, что метасимвол <strong>\w</strong> применяется <em>только</em> для букв <em>латинского алфавита</em>, кириллические символы для него не подходят.</p>
+
+                <p>Так, выше для проверки, что код имеет только 4 цифры, использовалось выражение <code>/[0-9][0-9][0-9][0-9]/</code>. Мы его можем сократить, используя метасимвол <strong>"\d"</strong>:</p>
+                <div class="code-block"><code>const exp = /\d\d\d\d/;        <code class="comment">// соответствует четырем цифрам подряд</code>
+ 
+const code1 = "1234";
+const code2 = "jav5";
+const code3 = "3452";
+
+console.log(exp.test(code1));   <code class="comment">// true</code>
+console.log(exp.test(code2));   <code class="comment">// false</code>
+console.log(exp.test(code3));   <code class="comment">// true</code></code></div>
+
+                <p><Strong>Другой пример.</Strong> Допустим, нам надо найти строки, где определен <em>номер телефона</em>. Причем, номер телефона в формате <code>+х-ххх-ххх-хххх</code>:</p>
+                <div class="code-block"><code>const exp = /\+\d-\d\d\d-\d\d\d-\d\d\d\d/;
+const contact1 = "Email: mycomp@gmail.com";
+const contact2 = "Phone: +1-234-567-8901";
+
+console.log(exp.test(contact1));    <code class="comment">// false</code>
+console.log(exp.test(contact2));    <code class="comment">// true</code></code></div>
+
+                <p>Так, номеру телефона <code>+1-234-567-8901</code> соответствует <code>/\+\d-\d\d\d-\d\d\d-\d\d\d\d/</code>:</p>
+                <p>Обратите внимание на слеш перед плюсом <code>(\+)</code>. Поскольку плюс <code>+</code> имеет специальное значение, то, чтобы указать, что мы имеет ввиду именно плюс как символ строки, перед ним ставится слеш.</p>
+                <p>В результате в строке "Phone: +1-234-567-8901" метод <code>exp.test(contact2)</code> сопоставит с регулярным выражением подстроку <code>"+1-234-567-8901"</code></p>
+
+                <h3 id="ch7-limits">📃 Ограничение применения регулярных выражений</h3>
+
+                <p>Ряд специальных символов позволяют ограничить диапазон применения регулярных выражений:</p>
+                <ul>
+                    <li><span class="b">^</span> : соответствует началу строки. Например, <code>^h</code> соответствует строке <code>"home"</code>, но не <code>"ohma"</code>, так как <code>h</code> должен представлять начало строки</li>
+                    <li><span class="b">$</span> : соответствует концу строки. Например, <code>м$</code> соответствует строке <code>"дом"</code>, так как строка должна оканчиваться на букву <code>м</code></li>
+                    <li><span class="b">\b</span> : соответствует началу или концу слова.</li>
+                    <li><span class="b">\B</span> : не учитывает границы слова</li>
+                </ul>
+
+                <p>Например, нам нужно найти строки с номером телефона:</p>
+                <div class="code-block"><code>const exp = /\d\d\d\d\d\d\d\d\d\d/;    <code class="comment">// соответствует 10 цифрам подряд</code>
+ 
+const phone1 = "+12345678901";
+const phone2 = "42345678901";
+
+console.log(exp.test(phone1));          <code class="comment">// true</code>
+console.log(exp.test(phone2));          <code class="comment">// true</code></code></div>
+
+                <p>
+                    Шаблону <code>/\d\d\d\d\d\d\d\d\d\d/</code> соответствуют как строка <code>"+12345678901"</code>, так и строка <code></code>"42345678901". Но, допустим, нам надо найти номера телефонов, 
+                    которые не предваряются плюсом <code>+</code>. В этом случае мы можем использовать регулярное выражение <code>/^\d\d\d\d\d\d\d\d\d\d/</code>. Таким образом, строка будет соответствовать шаблону, 
+                    если она начинается с цифровых символов:
+                </p>
+                <div class="code-block"><code>const exp = /^\d\d\d\d\d\d\d\d\d\d/;    <code class="comment">// соответствует 10 цифрам подряд</code>
+ 
+const phone1 = "+12345678901";
+const phone2 = "42345678901";
+
+console.log(exp.test(phone1));          <code class="comment">// false</code>
+console.log(exp.test(phone2));          <code class="comment">// true</code></code></div>
+
+                <p><strong>Другой пример.</strong> Пусть нам надо проверить, есть ли в строке упонимание языка <code>"Java"</code>. Наивный подход состоял бы в использовании регулярного выражения <code>/Java/</code>:</p>
+                <div class="code-block"><code>const exp = /Java/;   
+ 
+const str1 = "Java is a high-level, object-oriented programming language";
+const str2 = "JavaScript is a programming language of the World Wide Web";
+
+console.log(exp.test(str1));            <code class="comment">// true</code>
+console.log(exp.test(str2));            <code class="comment">// true</code></code></div>
+
+                <p>
+                    Однако в реальности шаблон <code>"/Java/"</code> соответствует любой строке, которая содержит подстроку <code>"Java"</code>, в том числе строке <code>"JavaScript"</code>. Однако нам надо найти только те строки, 
+                    где речь идет именно о <code>Java</code>, а не о <code>JavaScript</code>. И в этом случае мы можем ограничить поиск границами слова с помощью <strong>"\b"</strong>:
+                </p>
+                <div class="code-block"><code>const exp = /Java\b/;
+ 
+const str1 = "Java is a high-level, object-oriented programming language";
+const str2 = "JavaScript is a programming language of the World Wide Web";
+
+console.log(exp.test(str1));            <code class="comment">// true</code>
+console.log(exp.test(str2));            <code class="comment">// false</code></code></div>
+
+                <p>Флаг <strong>"\B"</strong>, наоборот, указывает сопоставлять шаблон с подстроками, которые не являются словами:</p>
+                <div class="code-block"><code>const exp = /Java\B/;
+ 
+const str1 = "Java is a high-level, object-oriented programming language";
+const str2 = "JavaScript is a programming language of the World Wide Web";
+
+console.log(exp.test(str1));            <code class="comment">// false</code>
+console.log(exp.test(str2));            <code class="comment">// true</code></code></div>
+
+                <h3 id="ch7-flags">📃 Флаги выражений</h3>
+
+                <p><strong>Флаги</strong> позволяют настроить поведение регулярных выражений. Каждый флаг представляет отдельный символ, который ставится в конце регулярного выражения. В JavaScript применяются следующие флаги:</p>
+                <ul>
+                    <li><p>Флаг <span class="b">global</span> позволяет найти все подстроки, которые соответствуют регулярному выражению. По умолчанию 
+                    при поиске подстрок регулярное выражение выбирает первую попавшуюся подстроку из строки, которая соответствует выражению. Хотя в строке может быть 
+                    множество подстрок, которые также соответствуют выражению. Для этого применяется данный флаг в виде символа <span class="b">g</span> в выражениях</p></li>
+                    <li><p>Флаг <span class="b">ignoreCase</span> позволяет найти подстоки, которые соответствуют регулярному выражению, вне зависимости от регистра 
+                    символов в строке. Для этого в регулярных выражениях применяется символ <span class="b">i</span></p></li>
+                    <li><p>Флаг <span class="b">multiline</span> позволяет найти подстроки, которые соответствуют регулярному выражению, в многострочном тексте. 
+                    Для этого в регулярных выражениях применяется символ <span class="b">m</span></p></li>
+                    <li><p>Флаг <span class="b">dotAll</span> позволяет сопоставить точку в регулярном выражении с любым символом текста, в том числе с разделителем строки. 
+                    Для этого в регулярных выражениях применяется символ <span class="b">s</span></p></li>
+                </ul>
+
+                <h4>Флаг i. Регистр символов</h4>
+
+                <p>Рассмотрим следующий пример:</p>
+                <div class="code-block"><code>const str = "Hello World";
+ const exp = /world/;
+ console.log(exp.test(str)); <code class="comment">// false</code></code></div>
+
+                <p>Здесь совпадения строки с выражением нет, так как <code>"World"</code> отличается от <code>"world"</code> по регистру. В этом случае надо изменить регулярное выражение, добавив в него флаг <span class="b">i</span>:</p>
+                <div class="code-block"><code>const str = "Hello World";
+ const exp = /world/i;
+ console.log(exp.test(str)); <code class="comment">// true</code></code></div>
+
+                <p>Обратите внимание, где в регулярном выражении указывается флаг: <code>/world/<span class="b">i</span></code> - <em>в самом конце регулярного выражения</em>.</p>
+
+                <h4>Флаг s</h4>
+
+                <p>Флаг <span class="b">s</span>  позволяет сопоставить символ <span class="b">.</span> (точка) с любым символом, в том числе и с разделителем строки. Например, возьмем следующий пример:</p>
+                <div class="code-block"><code>const str = "hello\nworld";
+ const exp = /hello world/;
+ console.log(exp.test(str)); <code class="comment">// false</code></code></div>
+
+                <p>
+                    Здесь в строке <code>"hello\nworld"</code> слова <code>"hello"</code> и <code>"world"</code> разделены переносом строки (например, мы имеем дело с многострочным текстом). Однако, например, 
+                    мы хотим, чтобы JavaScript не учитывал перенос строки и чтобы данный текст соответствовал регулярному выражению <code>/hello world/</code>. В этом случае мы можем применить 
+                    флаг <span class="b">s</span>:
+                </p>
+                <div class="code-block"><code>const str = "hello\nworld";
+ const exp = /hello.world/s;
+ console.log(exp.test(str)); <code class="comment">// true</code></code></div>
+
+                <p>В выражении <code>/hello.world/s</code> точка означает произвольный символ. Однако без флага <span class="b">s</span> данное выражение не будет соответствовать многострочному тексту.</p>
+
+
+                <h4>Комбинация флагов</h4>
+
+                <p>Также можно использовать сразу несколько флагов:</p>
+                <div class="code-block"><code>const str = "hello\nWorld";
+ const exp = /hello.world/si;
+ console.log(exp.test(str)); <code class="comment">// true</code></code></div>
+
                 <h3>Таблица 16.1: Символы в регулярных выражениях</h3>
                 <div class="table-wrapper">
                     <table id="regexp-table">
