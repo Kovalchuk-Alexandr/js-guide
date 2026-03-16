@@ -642,7 +642,7 @@
                                 <li class="nav-subitem" data-target="ch7-intro">📜 Строки, объект String</li>
                                 <li class="nav-subitem" data-target="ch7-operation">📜 Работа со строками</li>
                                 <li class="nav-subitem" data-target="ch7-length">&emsp;📃 length, repeat</li>
-                                <li class="nav-subitem" data-target="ch7-search">&emsp;📃 Поиск (indexOf/lastIndexOf)</li>
+                                <li class="nav-subitem" data-target="ch7-indexof">&emsp;📃 Поиск (indexOf/lastIndexOf)</li>
                                 <li class="nav-subitem" data-target="ch7-includes">&emsp;📃 includes</li>
                                 <li class="nav-subitem" data-target="ch7-substring">&emsp;📃 Выбор подстроки</li>
                                 <li class="nav-subitem" data-target="ch7-register">&emsp;📃 Изменение регистра</li>
@@ -665,10 +665,32 @@
                                 <li class="nav-subitem" data-target="ch7-metasymbol">&emsp;📃 Метасимволы</li>
                                 <li class="nav-subitem" data-target="ch7-limits">&emsp;📃 Ограничение применения RegExp</li>
                                 <li class="nav-subitem" data-target="ch7-flags">&emsp;📃 Флаги выражений</li>
-
+                                <li class="nav-subitem" data-target="ch7-tab-symbol">&emsp;📃 Таб. Символы, квантификаторы</li>
+                                <li class="nav-subitem" data-target="ch7-quantifiers">📜 Квантификаторы</li>
+                                <li class="nav-subitem" data-target="ch7-search">📜 Поиск в строке</li>
+                                <li class="nav-subitem" data-target="ch7-groups">📜 Группы в RegEx</li>
+                                <li class="nav-subitem" data-target="ch7-groups-determ">&emsp;📃 Определение групп</li>
+                                <li class="nav-subitem" data-target="ch7-groups-named">&emsp;📃 Именнованные группы</li>
+                                <li class="nav-subitem" data-target="ch7-groups-assertions">&emsp;📃 Утверждения</li>
+                                <li class="nav-subitem" data-target="ch7-regex-methods">📜 RegEx в методах String</li>
+                                <li class="nav-subitem" data-target="ch7-creation-methods">&emsp;📃 Создание/методы</li>
+                                <li class="nav-subitem" data-target="ch7-ready-regexp">&emsp;📃 Готовые RegExp</li>
+                                <li class="nav-subitem" data-target="ch7-capture-groups">&emsp;📃 Группы захвата</li>
+                                <li class="nav-subitem" data-target="ch7-lookahead-behind">&emsp;📃 Lookahead и Lookbehind</li>
                             </ul>
                         </li>
-                        <li class="nav-item" data-target="ch8">Глава 8. Обработка ошибок</li>
+                        <li class="nav-item has-subitems" data-target="ch8"><span class="ch-emoj"></span> Глава 8. Обработка ошибок.
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch8-try-catch">📜 try...catch...finally</li>
+                                <li class="nav-subitem" data-target="ch8-throw">📜 Генерация ошибок и оператор throw</li>
+                                <li class="nav-subitem" data-target="ch8-error-types">📜 Типы ошибок</li>
+                                <li class="nav-subitem" data-target="ch8-use-errtypes">&emsp;📃 Применение типов ошибок</li>
+                                <li class="nav-subitem" data-target="ch8-check">📜 Проверка типа ошибки</li>
+                                <li class="nav-subitem" data-target="ch8-buildin-errtypes">📜 Встроенные типы ошибок</li>
+                                <li class="nav-subitem" data-target="ch8-custom-errtypes">📜 Создание своих типов ошибок</li>
+                             
+                            </ul>
+                        </li>
                         <li class="nav-item" data-target="ch9">Глава 9. Date и Number</li>
                         <li class="nav-item" data-target="ch10">Глава 10. Map и Set</li>
                     </ul>
@@ -11005,7 +11027,7 @@ console.log(str.repeat(3));  <code class="comment">// "HaHaHa"</code>
 <code class="comment">// Практический пример</code>
 const line = "=".repeat(50); <code class="comment">// 50 знаков равенства</code></code></div>
 
-                <h3 id="ch7-search">📃 Поиск в строке</h3>
+                <h3 id="ch7-indexof">📃 Поиск в строке</h3>
 
                 <h4>indexOf / lastIndexOf</h4>
 
@@ -11916,7 +11938,7 @@ console.log(exp.test(str2));            <code class="comment">// true</code></co
  const exp = /hello.world/si;
  console.log(exp.test(str)); <code class="comment">// true</code></code></div>
 
-                <h3>Таблица 16.1: Символы в регулярных выражениях</h3>
+                <h3 id="ch7-tab-symbol">📃 Таблица 16.1: Символы в регулярных выражениях</h3>
                 <div class="table-wrapper">
                     <table id="regexp-table">
                         <thead>
@@ -12046,14 +12068,474 @@ console.log(exp.test(str2));            <code class="comment">// true</code></co
                     </table>
                 </div>
 
-                <h3>Создание регулярных выражений</h3>
-                <div class="code-block"><code>// Способ 1: литерал
-const regex1 = /hello/i; // i - игнорировать регистр
+                <h2 id="ch7-quantifiers">📜 Квантификаторы в регулярных выражениях</h2>
 
-// Способ 2: конструктор
+                <p>
+                    Кроме рассмотренных в прошлых статьях специальных классов символов регулярных выражений 
+                    есть еще одна группа комбинаций, которая указывает, <em>как символы в строке будут повторяться</em>. 
+                    Такие комбинации еще называют квантификаторами:
+                </p>
+                <ul>
+                    <li><p><strong>*</strong> : соответствует любому количеству повторений или отсутствию последовательности символов</p></li>
+                    <li><p><strong>?</strong> : соответствует одному вхождению последовательности символов или ее отсутствию в строке. Например, <code>/h?ome/</code> соответствует подстрокам "home" и "ome".</p></li>
+                    <li><p><strong>+</strong> : соответствует одному и более повторений последовательности символов</p></li>
+                    <li><p><strong>{n}</strong> : соответствует n-ому количеству повторений предыдущего символа. Например, <code>h{3}</code> соответствует подстроке "hhh"</p></li>
+                    <li><p><strong>{n,}</strong> : соответствует n и более количеству повторений предыдущего символа. Например, <code>h{3,}</code> соответствует подстрокам "hhh", "hhhh", "hhhhh" и т.д.</p></li>
+                    <li><p><strong>{n,m}</strong> : соответствует от n до m повторений предыдущего символа. Например, <code>h{2, 4}</code> соответствует подстрокам "hh", "hhh", "hhhh".</p></li>
+                </ul>
+
+                <h4>Необязательные символы</h4>
+
+                <p>
+                    Номер телефона может иметь дефисы для разделения отдельных блоков цифр, например, <code>"+1-234-567-8901"</code>, а может не иметь разделителей, например, <code>"12345678901"</code>. 
+                    То есть в данном случае дефисы-разделители необязательны. И мы можем отразить это с помощью квантификатора <strong>?</strong>
+                </p>
+                <div class="code-block"><code>const exp = /\d-?\d\d\d-?\d\d\d-?\d\d\d\d/; 
+ 
+const phone1 = "+1-234-567-8901";
+const phone2 = "12345678901";
+const phone3 = "1-2345678901";
+
+console.log(exp.test(phone1));   <code class="comment">// true</code>
+console.log(exp.test(phone2));   <code class="comment">// true</code>
+console.log(exp.test(phone3));   <code class="comment">// true</code></code></div>
+
+                <p>Здесь <code>"-?"</code> отражает, что символ <code>"-"</code> <em>может быть необязательным, однако если он присутствует, то только один раз</em>.</p>
+
+                <h4>Произвольное количество символов</h4>
+
+                <p>Символ <span class="b">*</span> указывает, что <em>предыдущий символ может встречаться произвольное число раз (в том числе 0 раз)</em>. Например:</p>
+                <div class="code-block"><code>const exp = /;*/;    <code class="comment">// соответствует любому количеству символов ;</code>
+ 
+const str1 = "number1 = 3";
+const str2 = "number2 = 4;";
+const str3 = "number3 = 5;;;";
+
+console.log(exp.test(str1));     <code class="comment">// true</code>
+console.log(exp.test(str2));     <code class="comment">// true</code>
+console.log(exp.test(str3));     <code class="comment">// true</code></code></div>
+
+                <p>Регулярное выражение <code>/;*/</code> указывает, что точка с запятой <code>(;)</code> <em>может встречаться 1 и более раз, либо может вообще не встречаться</em>.</p>
+
+                <h4>Символ встречается как минимум один раз</h4>
+
+                <p>Квантификатор <span class="b">+</span> указывает, что <em>предыдущий символ может встречаться один или большее количество раз</em>. Например:</p>
+                <div class="code-block"><code>const exp = /;+/;    <code class="comment">// соответствует 1 и более символов ;</code>
+ 
+const str1 = "number1 = 3";
+const str2 = "number2 = 4;";
+const str3 = "number3 = 5;;;";
+
+console.log(exp.test(str1));     <code class="comment">// false</code>
+console.log(exp.test(str2));     <code class="comment">// true</code>
+console.log(exp.test(str3));     <code class="comment">// true</code></code></div>
+
+                <p>Регулярное выражение <code>/;+/</code> указывает, что точка с запятой <code>(;)</code> <em>может встречаться как минимум 1 раз (или большее количество раз)</em>.</p>
+
+                <h4>Точное количество вхождений</h4>
+
+                <p>
+                    Квантификатор <span class="b">{n}</span> позволяет определить <em>точное количество повторений предыдущего символа</em> через значение <code>n</code>. 
+                    Например, для определения телефонного номера может использоваться выражение <code>/\d\d\d\d\d\d\d\d\d\d\d/</code> - 11 цифр подряд. Однако оно неоптимально. И для его сокращения 
+                    мы можем использовать другое выражение: <code>/\d{11}/</code> - символ "\d" (цифровой символ) встречается 11 раз подряд. Например:
+                </p>
+                <div class="code-block"><code>const exp = /\d{11}/; 
+ 
+const phone1 = "+12345678901";
+const phone2 = "1-2345678901";
+const phone3 = "12345678901";
+
+console.log(exp.test(phone1));   <code class="comment">// true</code>
+console.log(exp.test(phone2));   <code class="comment">// false</code>
+console.log(exp.test(phone3));   <code class="comment">// true</code></code></div>
+
+                <p>
+                    Но что, если блоки цифр у нас разделены разделителем-дефисом типа <code>"+1-234-567-8901"</code>. В этот случае мы могли бы задать длину для каждого блока: 
+                    <code>/\d-\d{3}-\d{3}-\d{4}/</code>. Например:
+                </p>
+                <div class="code-block"><code>const exp = /\d-\d{3}-\d{3}-\d{4}/; 
+ 
+const phone1 = "+12345678901";
+const phone2 = "1-234-567-8901";
+const phone3 = "12345678901";
+
+console.log(exp.test(phone1));   <code class="comment">// false</code>
+console.log(exp.test(phone2));   <code class="comment">// true</code>
+console.log(exp.test(phone3));   <code class="comment">// false</code></code></div>
+
+                <p>Комбинируя с другими квантификаторами, можно сделать разделители-дефисы необязательными:</p>
+                <div class="code-block"><code>const exp = /\d-?\d{3}-?\d{3}-?\d{4}/; 
+ 
+const phone1 = "+12345678901";
+const phone2 = "1-234-567-8901";
+const phone3 = "1-2345678901";
+
+console.log(exp.test(phone1));   <code class="comment">// true</code>
+console.log(exp.test(phone2));   <code class="comment">// true</code>
+console.log(exp.test(phone3));   <code class="comment">// true</code></code></div>
+
+                <h4>Определение минимального количества вхождений</h4>
+
+                <p>Квантификатор <strong>{n,}</strong> позволяет задать через <code>n</code> <em>минимальное количество вхождений</em>. Допустим, у нас пароли должны иметь как минимум 8 символов:</p>
+                <div class="code-block"><code>const exp = /\w{8,}/; 
+ 
+const code1 = "1234567890";
+const code2 = "qwery5";
+const code3 = "password123";
+
+console.log(exp.test(code1));    <code class="comment">// true</code>
+console.log(exp.test(code2));    <code class="comment">// false</code>
+console.log(exp.test(code3));    <code class="comment">// true</code></code></div>
+
+                <p>
+                    Метасимвол <strong>"\w"</strong> соответствует любому цифровому и алфавитному символу или символу подчеркивания. Соответственно выражение <code>/\w{8,}/</code> соответствует 
+                    строкам, где есть подстрока из как минимум <code>8</code> таких символов.
+                </p>
+
+                <h4>Определение минимального и максимального количества вхождений</h4>
+
+                <p>
+                    Квантификатор <strong>{n,m}</strong> <em>позволяет определить одновременно минимальное</em> <code>(n)</code> и <em>максимальное</em> <code>(m)</code> количество повторений. Например, мы хотим, чтобы имена у нас были не слишком короткими, 
+                    скажем, не меньше 3 символов, и не слишком длинными (например, не больше 10 символов):
+                </p>
+                <div class="code-block"><code>const exp = /^[a-zA-Z]{3,10}$/; 
+ 
+const code1 = "Tom";
+const code2 = "Li";
+const code3 = "Maximilianus";
+
+console.log(exp.test(code1));    <code class="comment">// true</code>
+console.log(exp.test(code2));    <code class="comment">// false</code>
+console.log(exp.test(code3));    <code class="comment">// false</code></code></div>
+
+                <p>
+                    Выражение <code>/^[a-zA-Z]{3,10}$/</code> говорит, что любой символ из диапазонов <code>"a-z" и "A-Z"</code> должен повторяться не меньше 3 раз и не больше 10 раз. 
+                    Причем, здесь также указано, что это должно быть отдельное слово. Для этого вначале указывается символ <code>"^"</code>, а в конце символ <code>"$"</code>.
+                </p>
+
+                <h2 id="ch7-search">📜 Поиск в строке</h2>
+
+                <p>
+                    Для поиска в строке подстроки, которая соответствовует регулярному выражению, применяется метод <span class="b">exec()</span> объекта <code>RegExp</code>. 
+                    Этот метод принимает строку для поиска и возвращает результат в виде массива. Например:
+                </p>
+                <div class="code-block"><code>const contacts = "Email: mycomp@gmail.com  Phones: +1-234-567-8901 and +1-234-567-8902";
+const phonePattern = /\+\d-\d{3}-\d{3}-\d{4}/;
+const result = phonePattern.exec(contacts);
+
+console.log(result);     
+<code class="comment">// Консольный вывод</code>
+<code class="comment">// ['+1-234-567-8901', index: 32, input: 'Email: mycomp@gmail.com</code> ↩
+<code class="comment">// Phones: +1-234-567-8901 and +1-234-567-8902', groups: undefined]</code>
+</code></div>
+
+                <p>
+                    Здесь проверяем, есть ли в строке <code>contacts</code> текст, который соответствовует регулярному выражению <code>phonePattern</code> (то есть представляет номер телефона). В качестве результата 
+                    возвращается массив из следующих элементов:
+                </p>
+                <ul>
+                    <li><strong>Первый элемент</strong> массива - непосредственно тот текст, который соответствует регулярному выражению. Так, в примере выше это текст <code>"+1-234-567-8901"</code></li>
+                    <li><strong>Второй параметр</strong> - <code>index</code> - индекс найденного текста в строке</li>
+                    <li><strong>Третий параметр</strong> - <code>input</code> - входная строка</li>
+                    <li><strong>Последний элемент</strong> представляет отдельные группы</li>
+                </ul>
+
+                <p>Если в строке не найден текст, который соответствует регулярному выражению, то возвращается <span class="b">null</span></p>
+                <p>Получим отдельные элементы этого массива:</p>
+                <div class="code-block"><code>const contacts = "Email: mycomp@gmail.com Phones: +1-234-567-8901 and +1-234-567-8902";
+const phonePattern = /\+\d-\d{3}-\d{3}-\d{4}/;
+const result = phonePattern.exec(contacts);
+
+if(result){
+    console.log("Phone number:", result[0]);    <code class="comment">// +1-234-567-8901</code>
+    console.log("Index:", result.index);        <code class="comment">// 32</code>
+}</code></div>
+
+                <p>Однако в строке у нас два телефонных номера (может быть и больше). И мы хотим извлечь все эти номера, а не только первый номер. В этом случае нам надо воспользоваться флагом <span class="b">g</span></p>
+                <p>Так, изменим предыдущий пример, применив флаг <span class="b">g</span>:</p>
+
+                <div class="code-block"><code>const contacts = "Email: mycomp@gmail.com Phones: +1-234-567-8901 and +1-234-567-8902";
+const phonePattern = /\+\d-\d{3}-\d{3}-\d{4}/g;
+
+let result;
+while ((result = phonePattern.exec(contacts)) !== null){
+    console.log("Phone number:", result[0]);
+    console.log("Index: ", result.index);</code></div>
+
+                <p>В цикле <code>while</code> извлекаем все сопоставления шаблона с текстом в переменную <code>result</code>, пока не останется сопоставлений. Обратите внимание, где в регулярном выражении указывается флаг <span class="b">g</span>: <code>/\+\d-\d{3}-\d{3}-\d{4}/<span class="b">g</span></code>. Консольный вывод:</p>
+                <pre class="sh">Phone number: +1-234-567-8901
+Index:  32
+Phone number: +1-234-567-8902
+Index:  52
+</pre>
+
+                <h2 id="ch7-groups">📜 Группы в регулярных выражениях</h2>
+
+                <h3 id="ch7-groups-determ">📃 Определение групп в регулярных выражениях</h3>
+
+                <p>
+                    Для поиска в строке более сложных соответствий применяются <strong>группы</strong>. В регулярных выражениях <strong>группы</strong> заключаются в скобки. Например, нам надо получить дату в определенном формате. 
+                    С помощью метода <span class="b">exec()</span> объекта RegExp мы можем получить все совпадение полностью. Допустим, дата представлена в формате <code>"yyyy-mm-dd" (2021-09-06)</code> :
+                </p>
+                <div class="code-block"><code>const exp = /\d{4}-\d{2}-\d{2}/;
+const text = "Publication Date: 2021-09-06"
+const result = exp.exec(text);
+ 
+console.log(result[0]);         <code class="comment">// 2021-09-06</code></code></div>
+
+                <p>Из результата метода exec мы можем извлечь результат - нужную нам дату. Однако что, если мы хотим получить отдельные компоненты дат - год, месяц, день? В этом случае мы можем воспользоваться <em>группами</em>.</p>
+
+                <p>Каждая группа представляет некоторый сегмент регулярного выражения, который заключен в круглые скобки. Например:</p>
+                <div class="code-block"><code>const exp = /(\d{4})-(\d{2})-(\d{2})/;
+const text = "Publication Date: 2021-09-06"
+const result = exp.exec(text);
+ 
+console.log(result);    
+<code class="comment">// Консольный вывод </code>
+<code class="comment">// (4) ['2021-09-06', '2021', '09', '06', index: 18,</code> ↩
+<code class="comment">// input: 'Publication Date: 2021-09-06', groups: undefined] </code>
+</code></div>
+
+                <p>
+                    Здесь регулярное выражение <code>/(\d{4})-(\d{2})-(\d{2})/</code> содержит три группы:
+                    Первая группа - <code>(\d{4})</code> состоит из 4 цифр и представляет год. 
+                    Вторая группа - <code>(\d{2})</code> состоит из 2 цифр и представляет месяц. Третья группа также состоит из 2 цифр и представляет день. 
+                </p>
+                <ul>
+                    <li><em>Первая группа</em> - <code>(\d{4})</code> состоит из 4 цифр и представляет год.</li>
+                    <li><em>Вторая группа</em> - <code>(\d{2})</code> состоит из 2 цифр и представляет месяц.</li>
+                    <li><em>Третья группа</em> - также состоит из 2 цифр и представляет день.</li>
+                </ul>
+
+                <p>Здесь применяется регулярное выражение <code>"/(\d{4})-(\d{2})-(\d{2})/"</code>, где определены три группы:</p>
+                <ol>
+                    <li><em>Первая группа</em> <code>(\d{4})</code> соответствует числу из четырех цифр</li>
+                    <li><em>Вторая группа</em> <code>(\d{2})</code> соответствует числу из двух цифр</li>
+                    <li><em>Третья группа</em> аналогична второй</li>
+                </ol>
+
+                <p>И если мы посмотрим на результат метода <span class="b">exec()</span>, то мы увидим, что кроме собственно соответствия дате он содержит соответствия для каждой группы:</p>
+                <div class="code-block"><code>(4) ['2021-09-06', '2021', '09', '06', index: 18, ↩
+            input: 'Publication Date: 2021-09-06', groups: undefined]</code></div>
+
+                <p>
+                    Полученный результат представляет массив, где первый элемент <code>(с индексом 0)</code> всегда представляет подстроку, совпавшую с регулярным выражением. 
+                    Все последующие элементы этого массива представляют группы. То есть <em>первая группа</em> имеет <code>индекс 1</code>, <em>вторая</em> - <code>индекс 2</code> и так далее. Соответственно, применяя индексы, мы можем получить все соответствия группам из регулярного выражения:
+                </p>
+
+                <div class="code-block"><code>const exp = /(\d{4})-(\d{2})-(\d{2})/;
+const text = "Publication Date: 2021-09-06"
+const result = exp.exec(text);
+ 
+console.log(result[0]);     <code class="comment">// 2021-09-06 - все соответствие</code>
+console.log(result[1]);     <code class="comment">// 2021 - первая группа</code>
+console.log(result[2]);     <code class="comment">// 09 - вторая группа</code>
+console.log(result[3]);     <code class="comment">// 06 - третья группа</code></code></div>
+
+                <p>Получив значения отдельных групп, можно произвести с ними некоторые действия, например, преобразовать в другой формат даты:</p>
+                <div class="code-block"><code>console.log(`${result[3]}.${result[2]}.${result[1]}`); // 06.09.2021</code></div>
+
+                <p>
+                    Группировка упрощает создание более сложных регулярных выражений. К группам, как и к отдельным символам, можно применять квантификаторы. Например, выражение 
+                    <code>(la)+</code> представляет одно и более повторений строки "la"&amp;
+                </p>
+
+                <h3 id="ch7-groups-named">📃 Именнованные группы</h3>
+
+                <p>
+                    JavaScript позволяет назначить каждой группе в регулярных выражениях определенное имя. С помощью этого имени потом можно получить значение, которое соответствует этой группе. 
+                    Для установки имени групы внутри скобок, которые определяют группу, ставится знак вопроса, после которого в угловых скобках идет название группы:
+                </p>
+                <div class="code-block"><code>(?<название_группы> ... )</code></div>
+
+                <p><strong>Рассмотрим следующий пример:</strong></p>
+                <div class="code-block"><code>const exp = /(?&lt;year>\d{4})-(?&lt;month>\d{2})-(?&lt;day>\d{2})/u;
+const text = "Publication Date: 2021-09-06"
+const result = exp.exec(text);
+
+console.log(result.groups);         <code class="comment">// {year: "2021", month: "09", day: "06"}</code>
+console.log(result.groups.year);    <code class="comment">// 2021</code>
+console.log(result.groups.month);   <code class="comment">// 09</code>
+console.log(result.groups.day);     <code class="comment">// 06</code></code></div>
+
+                <p>
+                    Здесь регулярное выражение определяет три группы. Первая группа называется <code>"year"</code>, вторая - <code>"month"</code> и третья <code>"day"</code>. При получении результата 
+                    мы можем обаться к каждой группе через свойство <code>groups</code>. Это свойство представляет объект, в котором свойства называются так же, как и группы, и содержат значения для каждой группы:
+                </p>
+                <div class="code-block"><code>console.log(result.groups);         <code class="comment">// {year: "2021", month: "09", day: "06"}</code></code></div>
+
+                <p>Соответственно, с помощью названия группы мы можем получить значение для определенной группы.</p>
+
+
+                <h3 id="ch7-groups-assertions">📃 Утверждения</h3>
+
+                <p>Утверждения или <span class="b">assertions</span> позвляют получить подстроку, которая соответствует регулярному выражению и которая предваряется или, наоборот, не предваряется определенным выражением.</p>
+                <p><strong>Положительное утверждение</strong> <em>(когда подстрока должна предваряться другой подстрокой)</em> определяется с помощью выражения:</p>
+
+                <div class="code-block"><code>(?&lt;=...)</code></div>
+
+                <p>После знака равно = идет выражение, которым должна предваряться подстрока.</p>
+
+                <p><strong>Отрицательное утверждение</strong> <em>(когда подстрока НЕ должна предваряться другой подстрокой)</em> определяется с помощью выражения:</p>
+                <div class="code-block"><code>(?&lt;!...)</code></div>
+
+                <p>После восклицательного знака ! идет выражение, которым НЕ должна предваряться подстрока.</p>
+
+                <p>Возьмем простую задачу. Допустим у нас есть некоторая информация с какой-то суммой. Но эта сумма может быть определена в долларах, в евро, в рублях и так далее. Что-то наподобие:</p>
+                <div class="code-block"><code>const text1 = "All costs: $10.53";
+const text2 = "All costs: €10.53";
+ 
+const exp = /\d+(\.\d*)?/;
+const result1 = exp.exec(text1);
+console.log(result1[0]);    <code class="comment">// 10.53</code>
+ 
+const result2 = exp.exec(text2);
+console.log(result2[0]);     <code class="comment">// 10.53</code></code></div>
+
+                <p>
+                    Здесь мы видим, что и сумма в долларах () и сумма в евро соответствует нашему регулярному выражению. Но что, если мы хотим получить только сумму 
+                    в долларах. Для этого применим <em>положительное утверждение</em>:
+                </p>
+
+                <div class="code-block"><code>const text1 = "All costs: $10.53";
+const text2 = "All costs: €10.53";
+ 
+const exp = /(?&lt;=\$)\d+(\.\d*)?/;
+ 
+const result1 = exp.exec(text1);
+console.log(result1); <code class="comment">// ["10.53", ".53", index: 12, input: "All costs: $10.53", groups: undefined]</code>
+ 
+const result2 = exp.exec(text2);
+console.log(result2);  <code class="comment">// null</code></code></div>
+
+                <p>Группа <code>(?&lt;=\$)</code> укзывает, что перед строкой должен идти знак доллара <code>$</code>. Если его нет, то метод <code>exec()</code> не найдет соответствий и возвратит <code>null</code>.</p>
+
+
+                <h2 id="ch7-regex-methods">📜 Регулярные выражения в методах String</h2>
+
+                <p>Ряд методов объекта <strong>String</strong> могут использовать регулярные выражения в качестве параметра.</p>
+
+                <h3>Метод match</h3>
+
+                <p>Для поиска <em>всех соответствий в строке</em> применяется метод <span class="b">match()</span>:</p>
+                <div class="code-block"><code>const initialText = "Он пришел домой и сделал домашнюю работу";
+const exp = /дом[а-я]*/gi;
+const result = initialText.match(exp);
+result.forEach(value => console.log(value));
+
+<code class="comment">// или так</code>
+// console.log(result[0]);
+// console.log(result[1]);</code></div>
+
+                <p>Символ звездочки указывает на возможность наличия после строки <code>"дом"</code> неопределенного количества символов <code>от а до я</code>. В итоге в массиве <code>result</code> окажутся следующие слова:</p>
+                <pre class="browser">домой
+домашнюю</pre>
+
+                <p>С одной стороны, этот метод похож на метод <span class="b">exec()</span> объекта <code>RegExp</code> за тем исключением, что <span class="b">exec()</span> возвращает только первое вхождение:</p>
+                <div class="code-block"><code>const initialText = "Он пришел домой и сделал домашнюю работу";
+const exp = /дом[а-я]*/gi;
+const result2 = exp.exec(initialText);
+result2.forEach(value => console.log(value));</code></div>
+
+                <p>Консольный вывод браузера:</p>
+                <pre class="browser">домой</pre>
+
+                <h3>Разделение строки. Метод split</h3>
+
+                <p>Метод <strong>split</strong> может использовать регулярные выражения для разделения строк. Например, разделим приложение <em>по словам (а точнее по пробелам)</em> с помощью метасимвола <code>"\s"</code>:</p>
+                <div class="code-block"><code>const initialText = "Сегодня была прекрасная погода";
+const exp = /\s/;
+const result = initialText.split(exp);
+
+result.forEach(value => console.log(value));</code></div>
+
+                <p>Вывод браузера:</p>
+                <pre class="browser">Сегодня
+была
+прекрасная
+погода</pre>
+
+                <h3>Поиск в строке. Метод search</h3>
+
+                <p>Метод <strong>search</strong> <em>находит индекс первого включения соответствия в строке</em>:</p>
+                <div class="code-block"><code>const initialText = "hello world";
+const exp = /wor/;
+const result = initialText.search(exp);
+
+console.log(result);    <code class="comment">// 6</code></code></div>
+
+                <h3>Замена. Методы replace</h3>
+
+                <p>Метод <strong>replace</strong> позволяет заменить все соответствия регулярному выражению определенной строкой.</p>
+                <ul>
+                    <li><strong>Первый параметр</strong> метода - <em>регулярное выражение</em></li>
+                    <li><strong>второй</strong> - <em>на что заменяем совпадения</em></li>
+                </ul>
+
+                <p>Пример замены:</p>
+                <div class="code-block"><code>let menu = "Завтрак: каша, чай. Обед: суп, чай. Ужин: салат, чай.";
+const exp = /чай/gi;
+menu = menu.replace(exp, "кофе");
+
+console.log(menu);</code></div>
+
+                <p>Вывод браузера:</p>
+                <pre class="browser">Завтрак: каша, кофе. Обед: суп, кофе. Ужин: салат, кофе.</pre>
+
+                <p>
+                    <strong>Другая форма</strong> метода <em>в качестве второго параметра принимает функцию замены</em>. Эта функция принимает соответствие регулярному выражению и 
+                    возвращает строку, на которое заменяется соответствие. Например, заменим чай на кофе только для завтрака:
+                </p>
+
+                <div class="code-block"><code>let menu = "Завтрак: каша, чай. Обед: суп, чай. Ужин: салат, чай.";
+const exp = /чай/gi;
+
+let i = 0;
+menu = menu.replace(exp, function(tee){
+    if(i++ == 0) return "кофе";
+    else return tee;
+});
+
+console.log(menu);      <code class="comment">// Завтрак: каша, кофе. Обед: суп, чай. Ужин: салат, чай.</code></code></div>
+
+                <p>Для индикатора замены используем счетчик - переменную <code>i</code>. Если она равна <code>0</code>, то производим замену. В остальных случаях возвращаем соответствие - строку <code>"чай"</code>.</p>
+
+                <p><strong>Более сложный случай</strong>. Пусть у нас есть следующий текст:</p>
+                <pre class="sh">Publication Date: 2021-09-06
+Updated on: 2021-09-14</pre>
+
+                <p>Здесь у нас применяются даты в формате <code>yyyy-MM-dd</code>. Допустим, нам надо изменить формат дат на <code>"dd.MM.yyyy"</code>. Для этого определим следующую программу:</p>
+                <div class="code-block"><code>const exp = /\d{4}-\d{2}-\d{2}/g;
+let text = "Publication Date: 2021-09-06\nUpdated on: 2021-09-14"
+ 
+text = text.replace(exp, function(date){
+    const arr = date.split("-");
+    return `${arr[2]}.${arr[1]}.${arr[0]}`;
+});
+
+console.log(text);</code></div>
+
+                <p>
+                    Здесь мы извлекаем все соответствия регулярному выражению <code>/\d{4}-\d{2}-\d{2}/g</code>. В методе <code>replace</code> в функции обратного вызова получаем соответствие через параметр <code>date</code>, 
+                    с помощью функции <span class="b">split()</span> разбиваем его на три части по разделителю-дефису:
+                </p>
+                <div class="code-block"><code>const arr = date.split("-");</code></div>
+
+                <p>То есть, мы получаем массив из трех компонентов даты. И затем возвращаем дату в другом формате:</p>
+                <div class="code-block"><code>return `${arr[2]}.${arr[1]}.${arr[0]}`;</code></div>
+
+                <p>В итоге мы получим текст:</p>
+                <pre class="browser">Publication Date: 06.09.2021
+Updated on: 14.09.2021</pre>
+
+                <h3 id="ch7-creation-methods">📃 Создание регулярных выражений</h3>
+                <div class="code-block"><code><code class="comment">// Способ 1: литерал</code>
+const regex1 = /hello/i; <code class="comment">// i - игнорировать регистр</code>
+
+<code class="comment">// Способ 2: конструктор</code>
 const regex2 = new RegExp('hello', 'i');
 
-// Флаги:
+<code class="comment">// Флаги:</code>
 // i - игнорировать регистр
 // g - глобальный поиск (все вхождения)
 // m - многострочный режим
@@ -12065,26 +12547,27 @@ const regex2 = new RegExp('hello', 'i');
                 <div class="code-block"><code>const text = "JavaScript is awesome";
 const regex = /is/g;
 
-// test() - проверка совпадения (возвращает true/false)
-console.log(/awesome/.test(text)); // true
+<code class="comment">// test() - проверка совпадения (возвращает true/false)</code>
+console.log(/awesome/.test(text)); <code class="comment">// true</code>
 
-// exec() - поиск совпадения (возвращает массив или null)
+<code class="comment">// exec() - поиск совпадения (возвращает массив или null)</code>
 const result = /is/.exec(text);
-console.log(result); // ["is", index: 11, ...]
+console.log(result); <code class="comment">// ["is", index: 11, ...]</code>
 
-// match() - поиск в строке
-console.log(text.match(/a/g)); // ["a", "a", "a"]
+// Строковые методы
+<code class="comment">// match() - поиск в строке</code>
+console.log(text.match(/a/g)); <code class="comment">// ["a", "a", "a"]</code>
 
-// matchAll() - все совпадения с группами (ES2020)
+<code class="comment">// matchAll() - все совпадения с группами (ES2020)</code>
 const matches = [...text.matchAll(/a(\w)/g)];
 
-// search() - индекс первого совпадения
-console.log(text.search(/is/)); // 11
+<code class="comment">// search() - индекс первого совпадения</code>
+console.log(text.search(/is/)); <code class="comment">// 11</code>
 
-// replace() с RegExp
-console.log(text.replace(/is/g, "was")); // "JavaScript was awesome"</code></div>
+<code class="comment">// replace() с RegExp</code>
+console.log(text.replace(/is/g, "was")); <code class="comment">// "JavaScript was awesome"</code></code></div>
 
-                <h3>Готовые регулярные выражения</h3>
+                <h3 id="ch7-ready-regexp">📃 Готовые регулярные выражения</h3>
 
                 <div class="info-box success">
                     <div class="info-box-title">✅ Email</div>
@@ -12116,44 +12599,44 @@ console.log(text.replace(/is/g, "was")); // "JavaScript was awesome"</code></div
 // Пример: 123456</code></div>
                 </div>
 
-                <h3>Группы захвата</h3>
+                <h3 id="ch7-capture-groups">📃 Группы захвата</h3>
                 <div class="code-block"><code>const text = "2024-01-15";
 const regex = /(\d{4})-(\d{2})-(\d{2})/;
 
 const match = text.match(regex);
-console.log(match[0]); // "2024-01-15" - полное совпадение
-console.log(match[1]); // "2024" - первая группа
-console.log(match[2]); // "01"   - вторая группа
-console.log(match[3]); // "15"   - третья группа
+console.log(match[0]); <code class="comment">// "2024-01-15" - полное совпадение</code>
+console.log(match[1]); <code class="comment">// "2024" - первая группа</code>
+console.log(match[2]); <code class="comment">// "01"   - вторая группа</code>
+console.log(match[3]); <code class="comment">// "15"   - третья группа</code>
 
-// Именованные группы (ES2018)
-const regex2 = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/;
+<code class="comment">// Именованные группы (ES2018)</code>
+const regex2 = /(?&lt;year>\d{4})-(?&lt;month>\d{2})-(?&lt;day>\d{2})/;
 const match2 = text.match(regex2);
-console.log(match2.groups.year);  // "2024"
-console.log(match2.groups.month); // "01"
-console.log(match2.groups.day);   // "15"</code></div>
+console.log(match2.groups.year);  <code class="comment">// "2024"</code>
+console.log(match2.groups.month); <code class="comment">// "01"</code>
+console.log(match2.groups.day);   <code class="comment">// "15"</code></code></div>
  
-                <h3>Lookahead и Lookbehind</h3>
+                <h3 id="ch7-lookahead-behind">📃 Lookahead и Lookbehind</h3>
                 <div class="code-block">
-                    <code>// Positive lookahead (?=...)
-// Найти число, за которым следует "px"
+                    <code><code class="comment">// Positive lookahead (?=...)</code>
+<code class="comment">// Найти число, за которым следует "px"</code>
 const regex1 = /\d+(?=px)/;
-console.log("10px 20em".match(regex1)); // "10"
+console.log("10px 20em".match(regex1)); <code class="comment">// "10"</code>
                     
-// Negative lookahead (?!...)
-// Найти число, за которым НЕ следует "px"
+<code class="comment">// Negative lookahead (?!...)</code>
+<code class="comment">// Найти число, за которым НЕ следует "px"</code>
 const regex2 = /\d+(?!px)/;
-console.log("10px 20em".match(regex2)); // "20"
+console.log("10px 20em".match(regex2)); <code class="comment">// "20"</code>
 
-// Positive lookbehind (?<=...)
-// Найти число после "$"
+<code class="comment">// Positive lookbehind (?<=...)</code>
+<code class="comment">// Найти число после "$"</code>
 const regex3 = /(?&lt;=\$)\d+/;
-console.log("$100 €200".match(regex3)); // "100"
+console.log("$100 €200".match(regex3)); <code class="comment">// "100"</code>
 
-// Negative lookbehind (?&lt;!...)
-// Найти число НЕ после "$"
+<code class="comment">// Negative lookbehind (?&lt;!...)</code>
+<code class="comment">// Найти число НЕ после "$"</code>
 const regex4 = /(?&lt;!\$)\d+/;
-console.log("$100 €200".match(regex4)); // "200"</code>
+console.log("$100 €200".match(regex4)); <code class="comment">// "200"</code></code>
                 </div>
             </section> 
 
@@ -12161,46 +12644,176 @@ console.log("$100 €200".match(regex4)); // "200"</code>
             <section class="chapter" id="ch8">
                 <h1>Глава 8. Обработка ошибок</h1>
 
-                <h2>Типы ошибок</h2>
+                <h2 id="ch8-try-catch">📜 Конструкция try...catch...finally</h2>
 
-                <h3>SyntaxError - синтаксическая ошибка</h3>
-                <div class="code-block"><code>// Ошибка: пропущена закрывающая скобка
-// if (x > 0 {
-//     console.log('positive');
-// }</code></div>
+                <p>
+                    В процессе работы прогаммы могут возникать различные ошибки, которые нарушают привычный ход программы и даже заставляют ее прервать выполнение. 
+                    Язык JavaScript имеет инструменты для обаботки таких ситуаций.
+                </p>
+                <p>Простейшая ситуация - вызов функции, которой не существует:</p>
+                <div class="code-block"><code>callSomeFunc();
+ 
+ console.log("Остальные инструкции");</code></div>
 
-                <h3>ReferenceError - переменная не определена</h3>
-                <div class="code-block"><code>// console.log(unknownVariable); // ReferenceError</code></div>
+                <p>Здесь вызывается функция <code>callSomeFunc()</code>, которая нигде не определена. Соответственно при вызове этой функции мы столкнемся с ошибкой:</p>
+                <pre class="browser"><span style="color:red;">Uncaught ReferenceError: callSomeFunc is not defined</span></pre>
 
-                <h3>TypeError - неправильный тип</h3>
-                <div class="code-block"><code>// const num = 5;
-// num.toUpperCase(); // TypeError: num.toUpperCase is not a function</code></div>
+                <p>Все остальные инструкции, которые идут после строки, на которой возникла ошибка, не выполняется. Программа заканчивает свою работу.</p>
+                <p>
+                    Ситуация может показаться искуственной, поскольку мы знаем, что функция <code>callSomeFunc</code> нигде не определена. Однако когда мы имеем дело с большой программой, 
+                    различные куски которой определяли разные разработчики, становится сложнее контоллировать код. И таких ситуаций может быть много. Какие-то мы можем сами отследить и предупредить, а какие-то нет.
+                </p>
 
-                <h3>RangeError - значение вне допустимого диапазона</h3>
-                <div class="code-block"><code>// const arr = new Array(-1); // RangeError: Invalid array length</code></div>
+                <p>Для обработки подобных ситуаций JavaScript предоставляет конструкцию <span class="b">try...catch...finally</span>, которая имеет следующее формальное определение:</p>
+                <div class="code-block"><code>try {
+  инструкции блока try
+}
+catch (error) {
+  инструкции блока catch
+}
+finally {
+  инструкции блока finally
+}</code></div>
 
-                <h2>try...catch - обработка ошибок</h2>
+                <p>После оператора <span class="b">try</span> определяется блок кода. В этот блок помещаются инструкции, при выполнении которых может возникнуть потенциальная ошибка.</p>
+                <p>
+                    Затем идет оператор <span class="b">catch</span>. После этого оператора в круглых скобках указывается название объекта, который будет содержать информацию об ошибке. И далее идет 
+                    блок <code>catch</code>. Этот блок выполняется только при возникновении ошибки в блоке <code>try</code>.
+                </p>
+                <p>
+                    После блока <code>catch</code> идет оператор <span class="b">finally</span> со своим блоком инструкций. Этот блок выполняется в конце после блока <code>try</code> и <code>catch</code> вне 
+                    зависимости, возникла ошибка или нет.
+                </p>
+                <p>
+                    Стоит отметить, что только блок <span class="b">try</span> является обязательным. А один из остальных блоков - <span class="b">catch</span> или 
+                    <span class="b">finally</span> мы можем опустить. Однако один из этих блоков (не важно <code>catch</code> или <code>finally</code>) обязательно должен присуствовать. То есть мы можем использовать 
+                    следующие варианты этой конструкции:
+                </p>
+                <ul>
+                    <li>try...catch</li>
+                    <li>try...finally</li>
+                    <li>try...catch...finally</li>
+                </ul>
+
+                <p>Например, обработаем с помощью этой конструкцию предыдущую ситуацию с несуществующей функцией:</p>
+                <div class="code-block"><code>try{
+    callSomeFunc();
+    console.log("Конец блока try");
+}
+catch{
+    console.log("Возникла ошибка!");
+}
+console.log("Остальные инструкции");</code></div>
+
+                <p>
+                    Итак, сначала выполняется блок <span class="b">try</span>. Однако при выполнении первой же инструкции - вызова функции <code>callSomeFunc()</code> возникает ошибка. Это приведет к тому, что все последующие инструкции в 
+                    блоке <span class="b">try</span> НЕ будут выполняться. А управление перейдет к блоку <span class="b">catch</span>. В этом блоке выводится сообщение, что возникла ошибка. 
+                    После выполнения блока <span class="b">catch</span> выполняются остальные инструкции программы. Таким образом, программа не прерывает свою работу при возникновении ошибки и продолжает свою работу. 
+                    И в данном случае консольный вывод будет следующим:
+                </p>
+                <pre class="browser">Возникла ошибка!
+Остальные инструкции</pre>
+
+                <p><strong>Рассмотим другой пример:</strong></p>
+                <div class="code-block"><code>function callSomeFunc(){console.log("Функция callSomeFunc");}
+
+try{
+    callSomeFunc();
+    console.log("Конец блока try");
+}
+catch(error){
+    console.log("Возникла ошибка!");
+}
+ 
+console.log("Остальные инструкции");</code></div>
+
+                <p>
+                    Теперь функция <code>callSomeFunc()</code> определена в прогамме, поэтому при вызове функции ошибки не произойдет, и блок <span class="b">try</span> доработает до конца. А блок <span class="b">catch</span> при отсутствии ошибки 
+                    не будет выолняться. И консольный вывод будет следующим:
+                </p>
+                <pre class="browser">Функция callSomeFunc
+Конец блока try
+Остальные инструкции</pre>
+
+                <h3>Получение ошибки в блоке catch</h3>
+
+                <p>В качестве параметра в блок <code>catch</code> передается объект с информацией об ошибке:</p>
+                <div class="code-block"><code>try{
+    callSomeFunc();
+    console.log("Конец блока try");
+}
+catch(error){
+    console.log("Возникла ошибка!");
+    console.log(error);
+}</code></div>
+
+                <p>В этом случае мы получим консольный вывод на подобие следующего:</p>
+                <pre class="browser">Возникла ошибка!
+ReferenceError: callSomeFunc is not defined
+    at index.html:35</pre>
+
+                <h3>Блок finally</h3>
+
+                <p>
+                    Конструкция <span class="b">try</span> также может содержать блок <span class="b">finally</span>. Мы можем использовать этот блок вместе с блоком <span class="b">catch</span> или вместо него. 
+                    Блок <span class="b">finally</span> выполняется вне зависимости, произошла ошибка или нет. Например:
+                </p>
+                <div class="code-block"><code>try{
+    callSomeFunc();
+    console.log("Конец блока try");
+}
+catch{
+    console.log("Произошла ошибка");
+}
+finally{
+    console.log("Блок finally")
+}
+ 
+console.log("Остальные инструкции");</code></div>
+
+                <p>Консольный вывод программы:</p>
+                <pre class="browser">Произошла ошибка
+Блок finally
+Остальные инструкции</pre>
+
+                <p>
+                    Если мы уберем блок <span class="b">catch</span> и оставим только блок <span class="b">finally</span>, то ошибка не будет обработана, 
+                    и программа завершится ошибкой. Однако блок <span class="b">finally</span> все равно выполнится:
+                </p>
+                <div class="code-block"><code>try{
+    callSomeFunc();
+    console.log("Конец блока try");
+}
+finally{
+    console.log("Блок finally")
+}
+ 
+console.log("Остальные инструкции");</code></div>
+
+                <p>Консольный вывод программы:</p>
+                <pre class="browser">Блок finally
+<span style="color:red;">Uncaught ReferenceError: callSomeFunc is not defined</span></pre>
 
                 <h3>Базовый синтаксис</h3>
                 <div class="code-block"><code>try {
-    // Код, который может вызвать ошибку
+    <code class="comment">// Код, который может вызвать ошибку</code>
     const result = riskyOperation();
     console.log(result);
 } catch (error) {
-    // Обработка ошибки
+    <code class="comment">// Обработка ошибки</code>
     console.log('Произошла ошибка:', error.message);
 }</code></div>
 
                 <h3>Полный синтаксис с finally</h3>
                 <div class="code-block"><code>try {
-    // Попытка выполнить код
+    <code class="comment">// Попытка выполнить код</code>
     const data = JSON.parse(jsonString);
     console.log(data);
 } catch (error) {
-    // Обработка ошибки
+    <code class="comment">// Обработка ошибки</code>
     console.error('Ошибка парсинга JSON:', error.message);
 } finally {
-    // Выполняется ВСЕГДА (даже если была ошибка)
+    <code class="comment">// Выполняется ВСЕГДА (даже если была ошибка)</code>
     console.log('Очистка ресурсов...');
 }</code></div>
 
@@ -12209,16 +12822,170 @@ console.log("$100 €200".match(regex4)); // "200"</code>
                     <p>Блок <code>finally</code> выполняется всегда: и при успехе, и при ошибке. Используется для освобождения ресурсов (закрытие файлов, соединений и т.д.).</p>
                 </div>
 
-                <h3>Объект Error</h3>
-                <div class="code-block"><code>try {
-    throw new Error('Что-то пошло не так!');
-} catch (error) {
-    console.log(error.name);    // "Error"
-    console.log(error.message); // "Что-то пошло не так!"
-    console.log(error.stack);   // Стек вызовов (для отладки)
+
+
+                <h2 id="ch8-throw">📜 Генерация ошибок и оператор throw</h2>
+
+                <p>
+                    Интерпретатор JavaScript генерирует ошибки для ряда ситуаций, например, при вызове несуществующей функции, при повторном присвоении константе значения и т.д. 
+                    Но при необходимости мы сами можем генерировать ошибки и определить условия, когда будет генерироваться ошибка.
+                </p>
+                <p>Например, рассмотрим следующую ситуацию:</p>
+                <div class="code-block"><code>class Person{
+  
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
+    }
+    print(){ console.log(`Name: ${this.name}  Age: ${this.age}`);}
+}
+
+const tom = new Person("Tom", -123);
+tom.print();                 <code class="comment">// Name: Tom  Age: -123</code></code></div>
+
+                <p>
+                    Класс <strong>Person</strong> описывает человека. В конструкторе класс получает значения для свойств <code>name</code> (имя) и <code>age</code> (возраст). Исходя из здравого смысла мы понимаем, что 
+                    возраст не может быть отрицательным. Тем не менее пока, исходя из логики класса, ничего не мешает при создании объекта Person передать ему для возраста отрицательное значение. 
+                    С точки зрения интерпретатора JavaScript ошибки нет, однако с точки логики и здравого смысла - это ошибка. Как исправить эту ситуацию? Есть различные способы, и 
+                    один из них заключается в генерации исключения.
+                </p>
+
+                <p>Для генерации исключения применяется оператор <span class="b">throw</span>, после которого указывается информация об ошибке:</p>
+                <div class="code-block"><code>throw информация_об_ошибке;</code></div>
+
+                <p><em>Информация об ошибке может представлять любой объект</em>.</p>
+
+                <p>Так, сгенерируем исключение при передаче в конструктор <code>Person</code> отрицательного значения для свойства <code>age</code>:</p>
+                <div class="code-block"><code>class Person{
+  
+    constructor(name, age){
+        if(age &lt; 0) throw "Возраст должен быть положительным";
+        this.name = name;
+        this.age = age;
+    }
+    print(){ console.log(`Name: ${this.name}  Age: ${this.age}`);}
+}
+
+const tom = new Person("Tom", -123);    <code class="comment">// Uncaught Возраст должен быть положительным</code>
+tom.print();</code></div>
+
+                <p>
+                    В итоге при вызове конструктора <code>Person</code> будет сгенерировано исключение и программа завершится ошибкой. А на консоли браузера мы увидим информацию 
+                    об ошибке, которая указана после оператора <code>throw</code>:
+                </p>
+                <pre class="browser"><span style="color:red;">Uncaught Возраст должен быть положительным</span></pre>
+
+                <p>Как и в общем случае мы можем обработать эту ошибку с помощью блока <span class="b">try...catch</span>:</p>
+                <div class="code-block"><code>class Person{
+  
+    constructor(name, age){
+        if(age &lt; 0) throw "Возраст должен быть положительным";
+        this.name = name;
+        this.age = age;
+    }
+    print(){ console.log(`Name: ${this.name}  Age: ${this.age}`);}
+}
+     
+try{
+    const tom = new Person("Tom", -123);  <code class="comment">// Uncaught Возраст должен быть положительным</code>
+    tom.print();
+}
+catch(error){
+    console.log("Произошла ошибка");
+    console.log(error);                   <code class="comment">// Возраст должен быть положительным</code>
 }</code></div>
 
-                <h2>Генерация ошибок (throw)</h2>
+
+                <h3>throw в try..catch..finally</h3>
+
+                <p>Оператор <span class="b">throw</span> может вызываться в различных контекстах, например, в том же блоке <span class="b">try</span>:</p>
+                <div class="code-block"><code>try&#123;
+    throw "Непредвиденная ошибка!";
+}
+catch(error){
+    console.log(error);                   <code class="comment">// Непредвиденная ошибка!</code>
+}</code></div>
+
+                <p>
+                    Это может быть полезно по ряду причин. Во-первых, мы можем тут же обработать ошибку. Во-вторых, мы можем определить с помощью блока <code>finally</code> некоторые завершающие действия, которые будут выполняться, 
+                    даже если сгенерирована ошибка. Например:
+                </p>
+                <div class="code-block"><code><code class="comment">// класс условной базы данных</code>
+class Database{
+    constructor(){
+        this.data = ["Tom", "Sam", "Bob"];
+    }
+    <code class="comment">// получение данных</code>
+    getItem(index){ 
+        this.open();
+        if(index &gt; 0 && index &lt; this.data.length)
+            return this.data[index];
+        else
+            throw "Некорректный индекс";
+        this.close();   <code class="comment">// при генерации исключения эта строка не будет выполняться</code>
+    }
+    <code class="comment">//</code> открытие БД
+    open(){ console.log("Подключение к базе данных установлено"); }
+    <code class="comment">// закрытие БД</code>
+    close(){ console.log("Подключение к базе данных закрыто"); }
+}
+ 
+const db = new Database();
+try {
+    db.getItem(5);      <code class="comment">// возвращаем полученный элемент</code>
+} catch(err) {
+    console.error(err); <code class="comment">// если произошла ошибка обрабатываем ее </code>
+}</code></div>
+
+                <p>
+                    Здесь определен класс <strong>Database</strong> - класс условной базы данных. Все данные хранятся в массиве <code>data</code>. Для взаимодействия с базой данных определены три метода. Методы <code>open</code> и <code>close</code> условно 
+                    открывают и закрывают подключение к базе данных. Метод <code>getItem</code> получает по индексу элемент из массива <code>data</code>. Если же индекс некорректный, то генерируется ошибка. При этом до получения 
+                    элемента по индексу метод <code>getItem</code> должен открыть подключение методом <code>open</code>, а после получения - закрыть методом <code>close</code>. Однако в примере выше при генерации ошибки закрытия подключения не произойдет:
+                </p>
+                <div class="code-block"><code>else
+    throw "Некорректный индекс";
+this.close();           <code class="comment">// при генерации исключения эта строка не будет выполняться</code></code></div>
+
+                <p>В итоге при передаче в метод <code>getItem</code> некорректного индекса консольный вывод программы будет следующим:</p>
+                <pre class="browser">Подключение к базе данных установлено
+<span style="color:red;">Некорректный индекс</span></pre>
+
+                <p>Однако что делать, если нам все таки надо вызвать метод <code>close</code>? Мы можем поместить его вызов в блок <span class="b">finally</span>:</p>
+
+                <div class="code-block"><code>class Database{
+    constructor(){
+        this.data = ["Tom", "Sam", "Bob"];
+    }
+    <code class="comment">// получение данных</code>
+    getItem(index){ 
+        this.open();
+        try{
+             if(index > 0 && index < this.data.length)
+                return this.data[index];
+            else
+                throw "Некорректный индекс";
+        }
+        finally{            <code class="comment">// даже если сгенерирована ошибка, то этот блок выполняется</code>
+            this.close();   <code class="comment">// при генерации исключения эта строка также будет выполняться</code>
+        }
+    }
+    <code class="comment">// открытие бд</code>
+    open(){ console.log("Подключение к базе данных установлено"); }
+    <code class="comment">// закрытие бд</code>
+    close(){ console.log("Подключение к базе данных закрыто"); }
+}
+ 
+const db = new Database();
+try {
+    db.getItem(5);          <code class="comment">// возвращаем полученный элемент</code>
+} catch(err) {
+    console.error(err);     <code class="comment">// если произошла ошибка обрабатываем ее</code>
+}</code></div>
+
+                <p>И теперь консольный вызов будет иным:</p>
+                <pre class="browser">Подключение к базе данных установлено
+Подключение к базе данных закрыто
+<span style="color:red;">Некорректный индекс</span></pre>
 
                 <h3>throw с Error</h3>
                 <div class="code-block"><code>function divide(a, b) {
@@ -12232,7 +12999,7 @@ try {
     const result = divide(10, 0);
     console.log(result);
 } catch (error) {
-    console.log('Ошибка:', error.message); // "Деление на ноль!"
+    console.log('Ошибка:', error.message); <code class="comment">// "Деление на ноль!"</code>
 }</code></div>
 
                 <h3>Пользовательские типы ошибок</h3>
@@ -12244,10 +13011,10 @@ try {
 }
 
 function validateAge(age) {
-    if (age < 0) {
+    if (age &lt; 0) {
         throw new ValidationError('Возраст не может быть отрицательным');
     }
-    if (age > 150) {
+    if (age &gt; 150) {
         throw new ValidationError('Возраст слишком большой');
     }
     return true;
@@ -12263,9 +13030,204 @@ try {
     }
 }</code></div>
 
-                <h2>Проверка типа ошибки</h2>
+
+                <h2 id="ch8-error-types">📜 Типы ошибок</h2>
+
+                <p>
+                    В блоке <span class="b">catch</span> мы можем получить информацию об ошибке, которая представляет объект. Все ошибки, которые генерируются интерпретатором JavaScript, 
+                    предоставляют объект типа <span class="b">Error</span>, который имеет ряд свойств:
+                </p>
+
+                <ul>
+                    <li><span class="b">message</span>: сообщение об ошибке</li>
+                    <li><span class="b">name</span>: тип ошибки</li>
+                </ul>
+
+                <p>Стоит отметить, что отдельные браузеры поддерживают еще ряд свойств, но их поведение в зависимости от браузера может отличаться:</p>
+                <ul>
+                    <li><span class="b">fileName</span>: название файла с кодом JavaScript, где произошла ошибка</li>
+                    <li><span class="b">lineNumber</span>: строка в файле, где произошла ошибка</li>
+                    <li><span class="b">columnNumber</span>: столбец в строке, где произошла ошибка</li>
+                    <li><span class="b">stack</span>: стек ошибки</li>
+                </ul>
+
+                <p>Получим данные ошибки, например, при вызове несуществующей функции:</p>
+                <div class="code-block"><code>try{
+    callSomeFunc();
+}
+catch(error){
+    console.log("Тип ошибки:", error.name);
+    console.log("Ошибка:", error.message);
+}</code></div>
+
+                <p>Консольный вывод:</p>
+                <pre class="browser">Тип ошибки: ReferenceError
+Ошибка: callSomeFunc is not defined</pre>
+
+
+                <h3>Типы ошибок</h3>
+
+                <p>
+                    Выше мы рассмотрели, что генерируемая интерпретатором ошибка представляет тип <code>Error</code>, однако при вызове несуществующей функции 
+                    генерируется ошибка типа <span class="b">ReferenceError</span>. Дело в том, что тип <code>Error</code> представляет общий тип ошибок. В то же время есть <em>конкретные типы ошибок</em> для определенных ситуаций:
+                </p>
+
+                <ul>
+                    <li><span class="b">EvalError</span>: представляет ошибку, которая генерируется при выполнении глобальной функции <code>eval()</code></li>
+                    <li><span class="b">RangeError</span>: ошибка генерируется, если параметр или переменная, представляют число, которое находится вне некотоого допустимого диапазона</li>
+                    <li><span class="b">ReferenceError</span>: ошибка генерируется при обращении к несуществующей ссылке</li>
+                    <li><span class="b">SyntaxError</span>: представляет ошибку синтаксиса</li>
+                    <li><span class="b">TypeError</span>: ошибка генерируется, если значение переменной или параметра представляют некорректный тип или пр попытке изменить значение, которое нельзя изменять</li>
+                    <li><span class="b">URIError</span>: ошибка генерируется при передаче функциям <code>encodeURI()</code> и <code>decodeURI()</code> некорректных значений</li>
+                    <li><span class="b">AggregateError</span>: предоставляет ошибку, которая объединяет несколько возникших ошибок</li>
+                </ul>
+
+                <p>Например, при попытке присвоить константе второй раз значение, генерируется ошибка <code>TypeError</code>:</p>
+                <div class="code-block"><code>try{
+    const num = 9;
+    num = 7;
+}
+catch(error){
+    console.log(error.name);        <code class="comment">// TypeError</code>
+    console.log(error.message);     <code class="comment">// Assignment to constant variable.</code>
+}</code></div>
+
+                <h4>SyntaxError - синтаксическая ошибка</h4>
+                <div class="code-block"><code><code class="comment">// Ошибка: пропущена закрывающая скобка</code>
+// if (x > 0 {
+//     console.log('positive');
+// }</code></div>
+
+                <h4>ReferenceError - переменная не определена</h4>
+                <div class="code-block"><code>// console.log(unknownVariable); <code class="comment">// ReferenceError</code></code></div>
+
+                <h4>TypeError - неправильный тип</h4>
+                <div class="code-block"><code>// const num = 5;
+ // num.toUpperCase(); <code class="comment">// TypeError: num.toUpperCase is not a function</code></code></div>
+
+                <h4>RangeError - значение вне допустимого диапазона</h4>
+                <div class="code-block"><code>// const arr = new Array(-1); <code class="comment">// RangeError: Invalid array length</code></code></div>
+                
+                <h4>Объект Error</h4>
                 <div class="code-block"><code>try {
-    // некий код
+    throw new Error('Что-то пошло не так!');
+} catch (error) {
+    console.log(error.name);    <code class="comment">// "Error"</code>
+    console.log(error.message); <code class="comment">// "Что-то пошло не так!"</code>
+    console.log(error.stack);   <code class="comment">// Стек вызовов (для отладки)</code>
+}</code></div>
+
+                <h3 id="ch8-use-errtypes">📃 Применение типов ошибок</h3>
+
+                <p>При генерации ошибок мы можем использовать встроенные типы ошибок. Например:</p>
+                <div class="code-block"><code>class Person{
+    constructor(name, age){
+        if(age &lt; 0) throw new Error("Возраст должен быть положительным");
+        this.name = name;
+        this.age = age;
+    }
+    print(){ console.log(`Name: ${this.name}  Age: ${this.age}`);}
+}
+     
+try{
+    const tom = new Person("Tom", -45);
+    tom.print();
+}
+catch(error){   
+    console.log(error.message); <code class="comment">// Возраст должен быть положительным</code>
+}</code></div>
+
+                <p>
+                    Здесь конструктор класса <strong>Person</strong> принимает значения для <em>имени и возаста</em> человека. Если передан отрицательный возраст, то генерируем ошибку в виде объекта <code>Error</code>. В качестве параметра в 
+                    конструктор <code>Error</code> передается сообщение об ошибке:
+                </p>
+                <div class="code-block"><code>if(age &lt; 0) throw new Error("Возраст должен быть положительным");</code></div>
+
+                <p>В итоге при обработке исключения в блоке <code>catch</code> мы сможем получить переданное сообщение об ошибке.</p>
+                <p>Все остальные типы ошибок в качестве первого параметра в конструкторе также принимают сообщение об ошибке. Так, сгенерируем несколько типов ошибок:</p>
+
+                <div class="code-block"><code>class Person{
+    constructor(pName, pAge){
+        const age = parseInt(pAge);
+        if(isNaN(age))  throw new TypeError("Возраст должен представлять число");
+        if(age &lt; 0 || age > 120) throw new RangeError("Возраст должен быть больше 0 и меньше 120");
+        this.name = pName;
+        this.age = age;
+    }
+    print(){ console.log(`Name: ${this.name}  Age: ${this.age}`);}
+}</code></div>
+
+                <p>Поскольку для возраста можно передать не только число, но и вообще какое угодно значение, то вначале мы пытаемся преобразовать это значение в число с помощью функции <code>parseInt()</code>:</p>
+                <div class="code-block"><code>const age = parseInt(pAge);
+if(isNaN(age))  throw new TypeError("Возраст должен представлять число");</code></div>
+
+                <p>Далее с помощью функции <code>isNaN(age)</code> проверяем, является полученное число числом. Если age - НЕ число, то данная функция возвращает <code>true</code>. Поэтому 
+генерируется ошибка типа <code>TypeError</code>.</p>
+
+                <p>Затем проверяем, что полученное число входит в допустимый диапазон. Если же не входит, генерируем ошибку типа <code>RangeError</code>:</p>
+                <div class="code-block"><code>if(age &lt; 0 || age &gt; 120) throw new RangeError("Возраст должен быть больше 0 и меньше 120");</code></div>
+
+                <p>Проверим генерацию исключений:</p>
+                <div class="code-block"><code>try{
+    const tom = new Person("Tom", -45);
+}
+catch(error){   
+    console.log(error.message); <code class="comment">// Возраст должен быть больше 0 и меньше 120</code>
+}
+ 
+try{
+    const bob = new Person("Bob", "bla bla");
+}
+catch(error){   
+    console.log(error.message); <code class="comment">// Возраст должен представлять число</code>
+}
+ 
+try{
+    const sam = new Person("Sam", 23);
+    sam.print();                <code class="comment">// Name: Sam  Age: 23</code>
+}
+catch(error){   
+    console.log(error.message);
+}</code></div>
+
+                <p>Консольный вывод:</p>
+                <pre class="browser">Возраст должен быть больше 0 и меньше 120
+Возраст должен представлять число
+Name: Sam  Age: 23</pre>
+
+
+                <h2 id="ch8-check">📜 Обработка нескольких типов ошибок. Проверка типа ошибки</h2>
+
+                <p>
+                    При выполнении одного и то же кода могут генерироваться ошибки разных типов. И иногда бывает необходимо разграничить обработку разных типов. 
+                    В этом случае мы можем проверять тип возникшей ошибки. Например, пример выше с классом Person:
+                </p>
+                <div class="code-block"><code>class Person{
+      constructor(pName, pAge){
+        const age = parseInt(pAge);
+        if(isNaN(age))  throw new TypeError("Возраст должен представлять число");
+        if(age &lt; 0 || age &gt; 120) throw new RangeError("Возраст должен быть больше 0 и меньше 120");
+        this.name = pName;
+        this.age = age;
+    }
+    print(){ console.log(`Name: ${this.name}  Age: ${this.age}`);}
+}
+     
+try{
+    const tom = new Person("Tom", -45);
+    const bob = new Person("Bob", "bla bla");
+}
+catch(error){   
+    if (error instanceof TypeError) {
+        console.log("Некорректный тип данных.");
+    } else if (error instanceof RangeError) {
+        console.log("Недопустимое значение");
+    }
+    console.log(error.message);
+}</code></div>
+
+                <div class="code-block"><code>try {
+    <code class="comment">// некий код</code>
 } catch (error) {
     if (error instanceof TypeError) {
         console.log('Ошибка типа');
@@ -12277,6 +13239,87 @@ try {
         console.log('Другая ошибка:', error.message);
     }
 }</code></div>
+
+                <h2 id="ch8-buildin-errtypes">📜 Встроенные типы ошибок</h2>
+                <div class="code-block"><code><code class="comment">// Error - базовый тип</code>
+throw new Error('Общая ошибка');
+
+<code class="comment">// SyntaxError - синтаксическая ошибка</code>
+throw new SyntaxError('Неправильный синтаксис');
+
+<code class="comment">// ReferenceError - переменная не найдена</code>
+throw new ReferenceError('Переменная не определена');
+
+<code class="comment">// TypeError - неправильный тип</code>
+throw new TypeError('Неправильный тип данных');
+
+<code class="comment">// RangeError - выход за границы диапазона</code>
+throw new RangeError('Значение вне диапазона');
+
+<code class="comment">// URIError - ошибка URI</code>
+throw new URIError('Неправильный URI');
+
+<code class="comment">// EvalError - ошибка eval() (редко используется)</code>
+throw new EvalError('Ошибка eval');</code></div>
+
+
+                <h2 id="ch8-custom-errtypes">📜 Создание своих типов ошибок</h2>
+
+                <p>Мы не ограничены встроенными только встроенными типами ошибок и при необходимости можем создавать свои типы ошибок, предназначеные для каких-то конкретных ситуаций. Например:</p>
+                <div class="code-block"><code>class PersonError extends Error {
+  constructor(value, ...params) {
+    <code class="comment">// остальные параметры передаем в конструктор базового класса</code>
+    super(...params)
+    this.name = "PersonError"
+    this.argument = value;
+  }
+}
+ 
+class Person{
+    constructor(pName, pAge){
+        const age = parseInt(pAge);
+        if(isNaN(age))  throw new PersonError(pAge, "Возраст должен представлять число");
+        if(age &lt; 0 || age &gt; 120) 
+                        throw new PersonError(pAge, "Возраст должен быть больше 0 и меньше 120");
+        this.name = pName;
+        this.age = age;
+    }
+    print(){ console.log(`Name: ${this.name}  Age: ${this.age}`);}
+}
+     
+try{
+    <code class="comment">//const tom = new Person("Tom", -45);</code>
+    const bob = new Person("Bob", "bla bla");
+}
+catch(error){   
+    if (error instanceof PersonError) {
+        console.log("Ошибка типа Person. Некорректное значение:", error.argument);
+    }
+    console.log(error.message);
+}</code></div>
+
+                <p>Консольный вывод</p>
+                <pre class="browser">Ошибка типа Person. Некорректное значение: bla bla
+Возраст должен представлять число</pre>
+
+                <p>Для представления ошибки класса <strong>Person</strong> здесь определен тип <code>PersonError</code>, который наследуется от класса <code>Error</code>:</p>
+                <div class="code-block"><code>class PersonError extends Error {
+  constructor(value, ...params) {
+    <code class="comment">// остальные параметры передаем в конструктор базового класса</code>
+    super(...params)
+    this.name = "PersonError"
+    this.argument = value;
+  }
+}</code></div>
+
+                <p>
+                    В конструкторе мы определяем дополнительное свойство - <code>argument</code>. Оно будет хранить значение, которое вызвало ошибку. С помощью параметра <code>value</code> конструктора 
+                    получаем это значение. Кроме того, переопреляем имя типа с помощью свойства <code>this.name</code>.
+                </p>
+                <p>В классе <strong>Person</strong> используем этот тип, передавая в конструктор <code>PersonError</code> соответствующие значения:</p>
+                <div class="code-block"><code>if(isNaN(age))  throw new PersonError(pAge, "Возраст должен представлять число");
+ if(age &lt; 0 || age &gt; 120) throw new PersonError(pAge, "Возраст должен быть больше 0 и меньше 120");
+</code></div>
 
                 <h2>Обработка асинхронных ошибок</h2>
 
@@ -12303,28 +13346,7 @@ try {
 
 fetchData();</code></div>
 
-                <h2>Встроенные типы ошибок</h2>
-                <div class="code-block"><code>// Error - базовый тип
-throw new Error('Общая ошибка');
-
-// SyntaxError - синтаксическая ошибка
-throw new SyntaxError('Неправильный синтаксис');
-
-// ReferenceError - переменная не найдена
-throw new ReferenceError('Переменная не определена');
-
-// TypeError - неправильный тип
-throw new TypeError('Неправильный тип данных');
-
-// RangeError - выход за границы диапазона
-throw new RangeError('Значение вне диапазона');
-
-// URIError - ошибка URI
-throw new URIError('Неправильный URI');
-
-// EvalError - ошибка eval() (редко используется)
-throw new EvalError('Ошибка eval');</code></div>
-
+                
                 <h2>Лучшие практики</h2>
 
                 <div class="info-box success">
