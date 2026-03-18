@@ -688,10 +688,33 @@
                                 <li class="nav-subitem" data-target="ch8-check">📜 Проверка типа ошибки</li>
                                 <li class="nav-subitem" data-target="ch8-buildin-errtypes">📜 Встроенные типы ошибок</li>
                                 <li class="nav-subitem" data-target="ch8-custom-errtypes">📜 Создание своих типов ошибок</li>
-                             
+                                <li class="nav-subitem" data-target="ch8-call-stack">📜 Обработка ошибок и стек вызова функций</li>
+                                <li class="nav-subitem" data-target="ch8-propagation">&emsp;📃 Проброс ошибки вверх по стеку вызова функций</li>
+                                <li class="nav-subitem" data-target="ch8-isomorphic">📜 Изоморфная обработка ошибок</li>
+                                <li class="nav-subitem" data-target="ch8-var-args">&emsp;📃 Обработка функции с произвольным числом аргументов</li>
+                                <li class="nav-subitem" data-target="ch8-async-err">📜 Обработка асинхронных ошибок</li>
+                                <li class="nav-subitem" data-target="ch8-best-practices">📜 Лучшие практики</li>
+                                <li class="nav-subitem" data-target="ch8-global-err">📜 Глобальная обработка ошибок</li>
+                                <li class="nav-subitem" data-target="ch8-form-valid-examp">📜 Пример: валидация формы</li>
+                                <li class="nav-subitem" data-target="ch8-err-debug">📜 Отладка ошибок</li>
                             </ul>
                         </li>
-                        <li class="nav-item" data-target="ch9">Глава 9. Date и Number</li>
+                        <li class="nav-item has-subitems" data-target="ch9"><span class="ch-emoj"></span> Глава 9. Date,Math,Number.
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch9-date">📜 Объект Date. Работа с датами</li>
+                                <li class="nav-subitem" data-target="ch9-date-creation">&emsp;📃 Создание даты</li>
+                                <li class="nav-subitem" data-target="ch9-getting-date">&emsp;📃 Получение даты и времени</li>
+                                <li class="nav-subitem" data-target="ch9-set-date">&emsp;📃 Установка даты и времени</li>
+                                <li class="nav-subitem" data-target="ch9-date-methods">&emsp;📃 Таблица методов Date</li>
+                                <li class="nav-subitem" data-target="ch9-formatting">&emsp;📃 Форматирование</li>
+                                <li class="nav-subitem" data-target="ch9-math">📜 Объект Math. Математические операции</li>
+                                <li class="nav-subitem" data-target="ch9-number">📜 Объект Number</li>
+                                <li class="nav-subitem" data-target="ch9-bigint">📜 Работа с BigInt</li>
+                                <li class="nav-subitem" data-target="ch9-symbol">📜 Символы (Symbol)</li>
+                                <li class="nav-subitem" data-target="ch9-proxy-obj">📜 Proxy</li>
+                                <li class="nav-subitem" data-target="ch9-overriding-func">&emsp;📃 Переопределение функциональности объекта</li>
+                            </ul>
+                        </li>
                         <li class="nav-item" data-target="ch10">Глава 10. Map и Set</li>
                     </ul>
                 </div>
@@ -13321,7 +13344,480 @@ catch(error){
  if(age &lt; 0 || age &gt; 120) throw new PersonError(pAge, "Возраст должен быть больше 0 и меньше 120");
 </code></div>
 
-                <h2>Обработка асинхронных ошибок</h2>
+                <p>Затем при обработки исключения мы можем проверить тип, и если он представляет класс <code>PersonError</code>, то обратиться к его свойству <code>argument</code>:</p>
+                <div class="code-block"><code>catch(error){   
+    if (error instanceof PersonError) {
+        console.log("Ошибка типа Person. Некорректное значение:", error.argument);
+    }
+    console.log(error.message);
+}</code></div>
+
+
+                <h2 id="ch8-call-stack">📜 Обработка ошибок и стек вызова функций</h2>
+
+                <p>Если внутри функции возникает ошибка, которая не обрабатывается, то интерпретатор JavaScript выходит из этой функции во внешний код в поиске обработчика ошибки. Например:</p>
+                <div class="code-block"><code>function A(){
+    console.log("func A starts");
+    callSomeFunc();
+    console.log("func A ends");
+}
+console.log("program ends");</code></div>
+
+                <p>
+                    Здесь <code>функция A</code> вызывает неопределенную функцию <code>callSomeFunc()</code>. Поэтому, выполнении программы при вызове <code>функции A</code> прерывается. Интерпретатор выходит во внешний код в поиске обработчика 
+                    ошибки. Но во внешнем коде вокруг вызова <code>функции A</code> также не определена конструкция <strong>try..catch</strong>, поэтому выполнение всей программы аварийно завершится. 
+                    Консольный вывод:
+                </p>
+                <pre class="brower">func A starts
+Uncaught ReferenceError: callSomeFunc is not defined
+    at A (index.html:11:2)
+    at index.html:30:6</pre>
+
+                <p>
+                    То же самое касается вложенных вызовов функций. Если во вложенной функции произошла ошибка, и она не обработана, то интепретатор также выходит во внешний контекст - 
+                    внешнюю функцию. Если в ней ошибка также не обрабатывается, то интепретатор опять выходит во внешний контект, пока не найдет обработчик ошибки. 
+                    Если ошибка не обработана ни в одной функции, ни в глобальном коде, то программа завершается. Например:
+                </p>
+                <div class="code-block"><code>function A(){
+    console.log("func A starts");
+    callSomeFunc();
+    console.log("func A ends");
+}
+function B(){
+    console.log("func B starts");
+    A();
+    console.log("func B ends");
+}
+function C(){
+    console.log("func C starts");
+    B();
+    console.log("func C ends");
+}
+
+C();
+console.log("program ends");</code></div>
+
+                <p>
+                    Здесь вызывается <code>функция C</code>, которая вызывает <code>функцию В</code>, которая вызывает <code>функцию А</code>, а та - несуществующую функцию <code>callSomeFunc</code>. В итоге в <code>функции А</code> возникнет ошибка. Поскольку <code>функция
+                     А</code> не обработала ошибку, интерпретатор последовательно ищет обработчик ошибки в <code>функции В</code>, затем в <code>функции С</code> и в конце в глобальном контексте. Но так как нигде ошибка не обрабатывается, 
+                    то после возникновения ошибки, выполнение программы завершится:
+                </p>
+                <pre class="brower">func C starts
+func B starts
+func A starts
+Uncaught ReferenceError: callSomeFunc is not defined
+    at A (index.html:11:2)
+    at B (index.html:16:2)
+    at C (index.html:27:2)
+    at index.html:31:1</pre>
+
+                <p></p>
+                <p>Теперь определим в одной из функций обработчик ошибки, например, в <code>функции С</code>:</p>
+                <div class="code-block"><code>function A(){
+    console.log("func A starts");
+    callSomeFunc();
+    console.log("func A ends");
+}
+function B(){
+    console.log("func B starts");
+    A();
+    console.log("func B ends");
+}
+function C(){
+    console.log("func C starts");
+    try{
+        B();
+    }
+    catch{
+        console.log("Error occured");
+    }
+    console.log("func C ends");
+}
+ 
+C();
+console.log("program ends");</code></div>
+
+                <p>
+                    Опять же при возникновении ошибки интепретатор сначала ищет обработчик в <code>функции А</code>. Поскольку в ошибка не обрабатывается, интепретатор смотрит в окружающем коде в <code>функции В</code>, в ней тоже нет. Тогда поиск идет в 
+                    <code>функции С</code> - в ней ошибка обрабатывается, и программа продолжает свою работу:
+                </p>
+                <pre class="browser">func C starts
+func B starts
+func A starts
+Error occured
+func C ends
+program ends</pre>
+
+                <p>При этом поскольку функции А и В не обработали ошибку, то они дальше не выполняются.</p>
+
+                <h3 id="ch8-propagation">📃 Проброс ошибки вверх по стеку вызова функций</h3>
+
+                <p>Иногда ошибки обрабатываются где-то во вложенных вызовах других функций. Например, возьмем следующую ситуацию:</p>
+
+                <div class="code-block"><code><code class="comment">// класс условной базы данных</code>
+class Database{
+    constructor(){
+        this.data = ["Tom", "Sam", "Bob"];
+    }
+    <code class="comment">// получение данных</code>
+    getItem(index){ 
+        if(index &gt; 0 && index &lt; this.data.length)
+            return this.data[index];
+        else    <code class="comment">// если некорректный индекс - генерируем ошибку</code>
+            throw new RangeError("Invalid index");
+    }
+    <code class="comment">// открытие бд</code>
+    open(){
+        console.log("Database has opened");
+    }
+    <code class="comment">// закрытие бд</code>
+    close(){
+        console.log("Database has closed");
+    }
+}
+
+<code class="comment">// функция-обертка для получения объекта из базы данных по индексу</code>
+function get(index) {
+    const db = new Database();
+    db.open();                      <code class="comment">// условно открываем бд</code>
+    try {
+        return db.getItem(index);   <code class="comment">// возвращаем полученный элемент</code>
+    } catch(err) {
+        console.error(err);         <code class="comment">// если произошла ошибка обрабатываем ее </code>
+    }
+    db.close();                     <code class="comment">// условно закрываем бд</code>
+}
+
+<code class="comment">// вывод результата</code>
+function printResult(){
+    const item = get(5);            <code class="comment">// пытаемся получить элемент с индексом 5</code>
+    console.log("Got from database:",item); <code class="comment">// выводим полученный элемент на консоль</code>
+}
+
+printResult();</code></div>
+
+                <p>
+                    Здесь определен условный класс базы данных <code>Database</code>. Для взаимодействия с данными в нем определены три функции. Функции условного открытия и закрытия базы данных - функции <code>open</code> и <code>close</code> 
+                    соответственно и функция <code>getItem</code>, которая возвращает элемент по определенному индексу из массива <code>data</code>. Однако если переданный индекс некорректен - меньше <code>0</code> или больше допустимого индекса, то 
+                    генерируем ошибку <code>RangeError</code>.
+                </p>
+                <p>
+                    Стоит отметить отметить, что это не единственный подход к реализации подобного функционала. Часто применяется другой подход, когда, если некорректный <code>индекс/id</code>, то функция 
+                    возвращает <code>null</code>, что в определенных ситуациях может быть более предпочтительным. Но в данном случае для демонстрации остановимся на генерации исключения, если передан некорректный индекс.
+                </p>
+                <p>
+                    Условимся, что, чтобы взаимодействовать с базой данных, нам надо ее вначале условно <em>"открыть"</em> методом <code>open</code>, а после завершения работы с ней <em>"закрыть"</em> с помощью метода <code>close</code> - довольно распространенный подход 
+                    при работе с базами данных. Но чтобы абстрагироваться от всех этих деталей определяем дополнительную функцию <code>get</code>, которая принимает <code>id</code> и обращается к базе данных для получения элемента по <code>id</code>. 
+                    И поскольку при обращении к методу <strong>getItem</strong> может произойти ошибка, то обрабатываем ее в конструкции <strong>try..catch</strong>
+                </p>
+
+                <div class="code-block"><code>try {
+    return db.getItem(index);   <code class="comment">// возвращаем полученный элемент</code>
+} catch(err) {
+    console.error(err);         <code class="comment">// если произошла ошибка обрабатываем ее</code> 
+}</code></div>
+
+                <p>Далее эту функцию вызываем из другой функции <code>printResult</code>, которая отображает полученный результат:</p>
+                <div class="code-block"><code>function printResult(){
+    const item = get(5);                    <code class="comment">// пытаемся получить элемент с индексом 5</code>
+    console.log("Got from database:",item); <code class="comment">// выводим полученный элемент на консоль</code>
+}</code></div>
+
+                <p>Если мы посмотрим на вывод программы:</p>
+                <pre class="browser">Database has opened
+<p style="color:red;">RangeError: Invalid index
+    at Database.getItem (index.html:19:19)
+    at get (index.html:36:19)
+    at printResult (index.html:44:18)
+    at index.html:47:1
+get @ index.html:38
+printResult @ index.html:44
+(anonymous) @ index.html:47
+</p>
+Database has closed
+Got from database: undefined
+</pre>
+
+                <p>
+                    то увидим, что при передаче некорректного индекса, с одной стороны, ошибка обрабатывается, но с другой стороны, в функции <code>printResult</code> мы получаем 
+                    неопределенный результат <code>(значение undefined)</code> и вообще не в курсе, что произошло - это можно узнать только по консольному выводу во время выполнения. Но функция <code>get</code> необязательно 
+                    должна выводить ошибку на консоль, ошибка может обрабатываться каким-то другим образом. Соответственно возникает необходимость донести информацию об ошибке до более верхних уровней стека вызова функций (до функции 
+                    <code>printResult</code>).
+                </p>
+
+                <p>Для этого изменим код, выполнив проброс ошибки вверх по стеку вызова функций:</p>
+
+                <div class="code-block"><code>class Database{
+    constructor(){
+        this.data = ["Tom", "Sam", "Bob"];
+    }
+    getItem(index){ 
+        if(index &gt; 0 && index &lt; this.data.length)
+            return this.data[index];
+        else
+            throw new RangeError("Invalid index");
+    }
+    open(){
+        console.log("Database has opened");
+    }
+    close(){
+        console.log("Database has closed");
+    }
+}
+
+function get(index) {
+   
+    const db = new Database();
+    db.open();
+    try {
+        return db.getItem(index);
+    } catch(err) {
+        console.error(err);
+        throw new Error(err.message);  <code class="comment">// снова генерируем ту же ошибку</code>
+    }
+    finally{
+        db.close();
+    }
+}
+
+function printResult(){
+    try{
+        const item = get(5);
+        console.log("Got from database:",item);
+    }
+    catch(err){
+        console.log(err);              <code class="comment">// обрабатываем ошибку из функции get</code>
+    }
+}
+
+printResult();</code></div>
+
+                <p>Теперь в функции <code>get</code> после обработки ошибки повторно генерируем ошибку с помощью оператора <code>throw</code>:</p>
+                <div class="code-block"><code>try {
+    return db.getItem(index);
+} catch(err) {
+    console.error(err);
+    throw new Error(err.message);
+}
+finally{
+    db.close();
+}</code></div>
+
+                <p>Также стоит отметить, что вызов <code>db.close()</code>, который условно закрывает базу данных, помещается в блок <code>finally</code>. <em class="">Это гарантирует, что даже при генерации ошибки эта операция все равно будет выполнена.</em></p>
+
+                <p>Таким образом, если при вызове <code>db.getItem</code> произошла ошибка, то при вызове функции <code>get</code> тоже произойдет ошибка, соотвественно в функции <code>printResult</code> мы можем обработать эту ошибку:</p>
+                <div class="code-block"><code>function printResult(){
+    try{
+        const item = get(5);
+        console.log("Got from database:",item);
+    }
+    catch(err){
+        console.log(err);
+    }
+}</code></div>
+
+                <p>Этот код демонстрирует обёртку над функцией для безопасного выполнения с возвратом массива <code>[результат, ошибка]</code> вместо ручного использования <code>try/catch</code>.</p>
+
+                <p>Вначале определяется функция <code>tryCatch</code>:</p>
+                <div class="code-block"><code>function tryCatch (fn){
+  try{
+    return [fn(), null];
+  }
+  catch(err){
+    return [null, err];
+  }
+}</code></div>
+
+                <p><code>tryCatch</code> через параметр <code>fn</code> принимает другую функцию и вызывает ее внутри блока <code>try/catch</code>. В качестве результата возвращается массив с двумя элементами.</p>
+                <p>Если функция <code>fn</code> выполняется без ошибок, то возвращается массив <code>[результат, null]</code>.</p>
+                <p>Если происходит ошибка — возвращается <code>[null, ошибка]</code>.</p>
+
+                <p>Это делает вызовы функций более чистыми, особенно при работе с возможными исключениями.</p>
+                <p>Далее для примера определена обычная функция <code>sqrt</code>, которая вычисляет квадратный корень переданного в нее числа с помощью встроенной функции <code>Math.sqrt()</code> и которая генерирует ошибку при отрицательных значениях (так как нельзя вычислить квадратный корень для отрицательных чисел).</p>
+
+                <div class="code-block"><code>const sqrt = (x) => {
+  if (x &lt; 0) throw new Error(`Number ${x} is invalid`);
+  return Math.sqrt(x);
+};</code></div>
+
+                <p>Далее идут примеры вызова. В первом случае вызывается <code>sqrt(-4)</code>, что вызывает исключение:</p>
+                <div class="code-block"><code>const [res1, err1] = tryCatch(()=>sqrt(-4));</code></div>
+
+                <p>Здесь <code>tryCatch</code> ловит исключение и возвращает массив <code>[null, Error("Number -4 is invalid")]</code></p>
+                <p>Во втором случае вызов <code>sqrt(4)</code> возвращает 2, соответственно ошибки нет</p>
+                <div class="code-block"><code>const [res2, err2] = tryCatch(()=>sqrt(4));;</code></div>
+
+                <p>Фактически возвращается массив <code>[2, null]</code></p>
+
+                <p>В итоге мы получим следующий вывод в консоли браузера:</p>
+                <pre class="browser">Error: Number -4 is invalid
+sqrt(4): 2</pre>
+
+                <h4>Возьмем другой пример - создание объекта класса:</h4>
+
+                <div class="code-block"><code>class Person{
+    constructor(name, age){
+        if(age &lt; 0) throw `Недопустимый возраст ${age}. Минимальное значение: 1`;
+        if(name.length &lt; 2) throw `Недопустимое имя ${name}: минимальная длина имени - 2 символа`;
+        this.name = name;
+        this.age = age;
+    }
+    print(){ console.log(`Name: ${this.name}  Age: ${this.age}`);}
+}</code></div>
+
+                <p>
+                    В данном случае класс <strong>Person</strong> генерирует исключение, если в конструктор передан недопустимый возраст - меньше <code>0</code> или если длина переданного имени меньше <code>2</code> символов.
+                    Используем вышеопределенную функцию <code>tryCatch</code> для обработки исключений:
+                </p>
+
+                <div class="code-block"><code>function tryCatch (fn){
+  try{
+    return [fn(), null];
+  }
+  catch(err){
+    return [null, err];
+  }
+}
+ 
+class Person{
+    constructor(name, age){
+        if(age &lt; 0) throw `Недопустимый возраст ${age}. Минимальное значение: 1`;
+        if(name.length &lt; 2) throw `Недопустимое имя ${name}: минимальная длина имени - 2 символа`;
+        this.name = name;
+        this.age = age;
+    }
+    print(){ console.log(`Name: ${this.name}  Age: ${this.age}`);}
+}
+ 
+<code class="comment">// для примера пытаемся создать пару объектов</code>
+const [tom, err1] = tryCatch(() => new Person("Tom", -123));
+if(err1) console.error(err1);
+else tom.print();
+ 
+const [bob, err2] = tryCatch(() => new Person("Bob", 46));
+if(err2) console.error(err2);
+else bob.print();</code></div>
+
+                <p>
+                    Здесь для примера пытаемся создать два объекта <strong>Person</strong>, передавая в вызов <code>tryCatch</code> соответствующий вызов конструктора. И опять же мы получаем массив, где первый элемент - результат, а второй - информация об ошибке. Поскольку в первом случае в конструктор <code>Person</code> передаются заведомо некорректные данные, то 
+                    мы получим ошибку, а во втором случае - объект <strong>Person</strong>:
+                </p>
+                <pre class="browser">Недопустимый возраст -123. Минимальное значение: 1
+Name: Bob  Age: 46</pre>
+
+                <p>
+                    Стоит отметить, что выше представлена только одна из возможных реализаций. Некоторые особенности могут отличаться. Например, функция-обертка может дополнительно обрабатывать ошибку. Так, стандартный тип для ошибок в JavaScript - это тип <span class="b">Error</span>. 
+                    Однако в коде разработчики не всегда генерируют ошибки этого типа. Например, в коде выше в конструкторе класса <code>Person</code> ошибка по сути представляет простую строку:
+                </p>
+                <div class="code-block"><code>if(age &lt; 0) 
+  throw `Недопустимый возраст ${age}. Минимальное значение: 1`;  <code class="comment">// ошибка представляет строку</code></code></div>
+
+                <p>И функция-обертка может проверять тип и при необходимости обертывать ошибку в тип <code>Error</code>:</p>
+                <div class="code-block"><code>function tryCatch (fn){
+  try{
+    return [fn(), null];
+  }
+  catch(err){
+    <code class="comment">// проверяем, представляет ли ошибка err объект Error</code>
+    const error = err instanceof Error ? err : new Error(String(err))
+    return [null, error];
+  }
+}</code></div>
+
+                <h2 id="ch8-isomorphic">📜 Изоморфная обработка ошибок</h2>
+
+                <p>
+                    <strong>Изоморфная</strong> разработка в JavaScript <em>предполагает переход к универсальной системе управления исключениями, которая способна единообразно перехватывать, логировать и обрабатывать ошибки вне зависимости от 
+                    выполняемых функций (если эти функции следуют некоторому общему протоколу) и предполагает стандартизацию формата ошибок.</em>
+                </p>
+                <p><strong>Ее цель</strong> — <em>снизить дублирование кода, улучшить сопровождение и обеспечить предсказуемое поведение при возникновении сбоев.</em></p>
+                <p>
+                    Дело в том, что обработка ошибок с помощью конструкции <code>try...catch</code> может показаться громоздкой, особенно когда приходится писать вложенные блоки <code>try..catch</code>. С блоками <code>try...catch</code> 
+                    связан ряд проблем. Например, соответствующие блоки захватывают создаваемые в этих блоках значения, соответственно приходится выносить значения во внешние переменные. А глубокая вложенность функций, которые также могут генерировать исключения, усложняют и код, и понимание того, что он делает.
+                </p>
+
+                <p>Рассмотрим простейший пример:</p>
+                <div class="code-block"><code><code class="comment">// определение обертки для обработки ошибок</code>
+function tryCatch (fn){
+  try{
+    return [fn(), null];
+  }
+  catch(err){
+    return [null, err];
+  }
+}
+ 
+<code class="comment">// использование</code>
+const sqrt = (x) => {
+  if(x &lt; 0) throw new Error(`Number ${x} is invalid`);
+  return Math.sqrt(x);
+}
+ 
+<code class="comment">// пример получения ошибки</code>
+const [res1, err1] = tryCatch(()=&gt;sqrt(-4));
+ 
+if(err1) console.error(err1);
+else console.log("sqrt(-4):", res1);
+ 
+<code class="comment">// пример получения результата</code>
+const [res2, err2] = tryCatch(()=&gt;sqrt(4));
+ 
+if(err2) console.error(err2);
+else console.log("sqrt(4):", res2);</code></div>
+
+
+                <h3 id="ch8-var-args">📃 Обработка функции с произвольным числом аргументов</h3>
+                <p>Также сама <em>функция-обертка</em> <strong>может отличаться</strong>. Так, мы могли бы определить следующую функцию:</p>
+                <div class="code-block"><code>const tryWrap = (fn) => (...args) => {
+  try{
+    return [fn(...args), null];
+  }
+  catch(err){
+    return [null, err];
+  }
+}</code></div>
+
+                <p>
+                    <strong>tryWrap</strong> определена как стрелочная функция, которая через параметр <code>fn</code> принимает другую функцию и возвращает новую функцию. Возвращаемая функция вызывает функцию <code>fn</code> с переданными аргументами <code>(...args)</code>, 
+                    но делает это внутри блока <code>try/catch</code>. Обратите внимание, что через параметр <code>args</code> можно передать <em>произвольное количество аргументов</em>. В остальном логика та же самая, что и у выше определнной функции <code>tryCatch</code>: 
+                    если функция <code>fn</code> выполняется без ошибок, то возвращается массив <code>[результат, null]</code>. Если происходит ошибка, то возвращается массив <code>[null, ошибка]</code>.
+                </p>
+
+                <p>Пример использования:</p>
+                <div class="code-block"><code><code class="comment">// на примере функции sqrt</code>
+const [res1, err1] = tryWrap(sqrt)(-4);
+const [res2, err2] = tryWrap(sqrt)(4);
+ 
+<code class="comment">// на примере конструктора класса Person</code>
+const [tom, tomErr] = tryWrap((name, age)=>new Person(name, age))("Tom", -123);
+const [bob, bobErr] = tryWrap((name, age)=>new Person(name, age))("Bob", 46);</code></div>
+
+                <p>Можно в принципе не определять функцию-обертку, если используемые функции изначально поддерживают требуемые условия - возвращают информацию о результате функции и ошибке в требуемом формате. Например:</p>
+                <div class="code-block"><code><code class="comment">// функция возвращает данные в формате "[результат, ошибка]"</code>
+const sqrt = (x) => {
+  if(x &lt; 0) return [null, new Error(`Number ${x} is invalid`)];
+  return [Math.sqrt(x), null];
+}
+ 
+const [res1, err1] = sqrt(-4);
+if(err1) console.error(err1);
+else console.log("sqrt(-4):", res1);
+ 
+ 
+const [res2, err2] = sqrt(4);
+if(err2) console.error(err2);
+else console.log("sqrt(4):", res2);</code></div>
+
+                <p>
+                    Таким образом мы получили унифицированный способ для обработки ошибок, и нам не надо писать <code>try/catch</code> каждый раз при вызове отдельной функции, которая может сгенерировать ошибку. 
+                    Особенно данный подход упрощает написание кода  в функциональном стиле. Для асинхронных операций этот подход можно адаптировать в виде <code>async/await</code>-совместимого варианта.
+                </p>
+                <p>
+                    В итоге использование изоморфной обработки ошибок упрощается код, улучшается его отладка и мониторинг благодаря централизованной обработке ошибок, упрощается повторное использование код и 
+                    повышается надёжности приложения за счёт предсказуемой реакции на сбои.
+                </p>
+
+                <h2 id="ch8-async-err">📜 Обработка асинхронных ошибок</h2>
 
                 <h3>Promise с catch</h3>
                 <div class="code-block"><code>fetch('https://api.example.com/data')
@@ -13347,7 +13843,7 @@ catch(error){
 fetchData();</code></div>
 
                 
-                <h2>Лучшие практики</h2>
+                <h2 id="ch8-best-practices">📜 Лучшие практики</h2>
 
                 <div class="info-box success">
                     <div class="info-box-title">✅ Используйте try...catch для критичного кода</div>
@@ -13402,33 +13898,33 @@ throw new Error(`
 `);</code></div>
                 </div>
 
-                <h2>Глобальная обработка ошибок</h2>
+                <h2 id="ch8-global-err">📜 Глобальная обработка ошибок</h2>
 
                 <h3>В браузере</h3>
-                <div class="code-block"><code>// Перехват всех необработанных ошибок
+                <div class="code-block"><code><code class="comment">// Перехват всех необработанных ошибок</code>
 window.addEventListener('error', (event) => {
     console.error('Глобальная ошибка:', event.error);
-    // Отправить в систему логирования
+    <code class="comment">// Отправить в систему логирования</code>
 });
 
-// Перехват необработанных Promise rejection
+<code class="comment">// Перехват необработанных Promise rejection</code>
 window.addEventListener('unhandledrejection', (event) => {
     console.error('Необработанный Promise rejection:', event.reason);
 });</code></div>
 
                 <h3>В Node.js</h3>
-                <div class="code-block"><code>// Перехват необработанных ошибок
+                <div class="code-block"><code><code class="comment">// Перехват необработанных ошибок</code>
 process.on('uncaughtException', (error) => {
     console.error('Необработанная ошибка:', error);
-    process.exit(1); // Завершить процесс
+    process.exit(1); <code class="comment">// Завершить процесс</code>
 });
 
-// Перехват необработанных Promise rejection
+<code class="comment">// Перехват необработанных Promise rejection</code>
 process.on('unhandledRejection', (reason, promise) => {
     console.error('Необработанный Promise rejection:', reason);
 });</code></div>
 
-                <h2>Практический пример: валидация формы</h2>
+                <h2 id="ch8-form-valid-examp">📜 Практический пример: валидация формы</h2>
                 <div class="code-block"><code>class FormValidationError extends Error {
     constructor(field, message) {
         super(message);
@@ -13453,7 +13949,7 @@ function validateForm(data) {
     return true;
 }
 
-// Использование
+<code class="comment">// Использование</code>
 try {
     const formData = {
         email: 'test@example.com',
@@ -13466,14 +13962,14 @@ try {
 } catch (error) {
     if (error instanceof FormValidationError) {
         console.log(`Ошибка в поле "${error.field}": ${error.message}`);
-        // Подсветить поле с ошибкой в UI
+        <code class="comment">// Подсветить поле с ошибкой в UI</code>
     } else {
         console.error('Неизвестная ошибка:', error);
     }
 }</code></div>
 
-                <h2>Отладка ошибок</h2>
-                <div class="code-block"><code>// Вывод стека вызовов
+                <h2 id="ch8-err-debug">📜 Отладка ошибок</h2>
+                <div class="code-block"><code><code class="comment">//</code> Вывод стека вызовов
 try {
     throw new Error('Тестовая ошибка');
 } catch (error) {
@@ -13483,28 +13979,68 @@ try {
     console.log(error.stack);
 }
 
-// Использование debugger
+<code class="comment">// Использование debugger</code>
 function problematicFunction() {
-    debugger; // Остановка выполнения в DevTools
-    // код для отладки
+    debugger; <code class="comment">// Остановка выполнения в DevTools</code>
+    <code class="comment">// код для отладки</code>
 }
 
-// console.trace() - вывод стека вызовов
+<code class="comment">// console.trace() - вывод стека вызовов</code>
 function a() { b(); }
 function b() { c(); }
 function c() { console.trace(); }
-a(); // Выведет весь путь вызовов: a -> b -> c</code></div>
+a(); <code class="comment">// Выведет весь путь вызовов: a -> b -> c</code></code></div>
             </section>
 
             <!-- ГЛАВА 9: Встроенные объекты: Date и Number -->
             <section class="chapter" id="ch9">
-                <h1>Глава 9. Встроенные объекты: Date и Number</h1>
+                <h1>Глава 9. Встроенные объекты: Date, Math, Number, Symbol, Proxy</h1>
 
-                <h2>Объект Date</h2>
+                <h2 id="ch9-date">📜 Объект Date. Работа с датами</h2>
 
-                <h3>Создание даты</h3>
-                <div class="code-block"><code>const now = new Date();  // Текущая дата и время
-const specificDate = new Date(2024, 0, 1);  // 1 января 2024
+                <p>Объект <span class="b">Date</span> позволяет работать с датами и временем в JavaScript.</p>
+
+                <h3 id="ch9-date-creation">📃 Создание даты</h3>
+
+                <p>Существуют различные способы создания объекта Date:</p>
+                <ul>
+                    <li>
+                        С помошью пустого конструктора <span class="b">Date</span> без параметров. В этом случае созданный объект хранит текущие дату и время
+                        <div class="code-block"><code>const currentDate = new Date();
+ console.log(currentDate);   <code class="comment">// Thu Oct 26 2023 13:17:53 GMT+0100</code></code></div>
+                    </li>
+                    <li>
+                        В конструктор <code>Date</code> передается количества миллисекунд, которые прошли с начала эпохи <code>Unix, то есть с 1 января 1970 года 00:00:00 GMT</code>:
+                        <div class="code-block"><code>const myDate = new Date(1359270000000);
+ console.log(myDate);        <code class="comment">// Sun Jan 27 2013 11:00:00 GMT+0400 (Москва, стандартное время)</code></code></div>
+                    </li>
+
+                    <li>
+                        В конструктор <code>Date</code> передаются день, месяц и год:
+                        <div class="code-block"><code>const date1 = new Date("27 March 2008");
+console.log(date1);          <code class="comment">// Thu Mar 27 2008 00:00:00 GMT+0300 (Москва, стандартное время)</code>
+<code class="comment">// или так</code>
+const date2 = new Date("3/27/2008");
+console.log(date2);          <code class="comment">// Thu Mar 27 2008 00:00:00 GMT+0300 (Москва, стандартное время)</code>
+<code class="comment">// или так</code>
+const date3 = new Date("3 27 2008");
+console.log(date3);          <code class="comment">// Thu Mar 27 2008 00:00:00 GMT+0300 (Москва, стандартное время)</code>
+</code></div>
+                        Если мы используем полное название месяца, то оно пишется в по-английски, если используем сокращенный вариант, тогда используется формат <code>"месяц/день/год"</code> или <code>"месяц день год"</code>.
+                    </li>
+
+                    <li>
+                        Четвертый способ состоит в передаче в конструктор Date всех параметров даты и времени:
+                        <div class="code-block"><code>const myDate = new Date(2012,11,25,18,30,20,10); 
+ console.log(myDate);        <code class="comment">// Tue Dec 25 2012 18:30:20 GMT+0400 (Москва, стандартное время)</code></code></div>
+                        В данном случае используются по порядку следующие параметры:<br><code>new Date(год, месяц, число, час, минуты, секунды, миллисекунды)</code>.<br>
+                        При этом надо учитывать, что отсчет месяцев начинается с нуля, то есть <code>январь - 0</code>, а <code>декабрь - 11</code>.
+                    </li>
+
+                </ul>
+
+                <div class="code-block"><code>const now = new Date();                    <code class="comment">// Текущая дата и время</code>
+const specificDate = new Date(2024, 0, 1);  <code class="comment">// 1 января 2024</code>
 const fromString = new Date('2024-01-01');
 const fromTimestamp = new Date(1704067200000);</code></div>
 
@@ -13513,7 +14049,100 @@ const fromTimestamp = new Date(1704067200000);</code></div>
                     <p>В конструкторе Date месяцы нумеруются с 0 (январь = 0, декабрь = 11). Будьте внимательны!</p>
                 </div>
 
-                <h3>Таблица методов Date</h3>
+                <h3 id="ch9-getting-date">📃 Получение даты и времени</h3>
+
+                <p>Для получения различных компонентов даты применяется ряд методов:</p>
+
+                <ul>
+                    <li><span class="b">getDate()</span>: возвращает день месяца</li>
+                    <li><span class="b">getDay()</span>: возвращает день недели (отсчет начинается с 0 - воскресенье, и последний день - 6 - суббота)</li>
+                    <li><span class="b">getMonth()</span>: возвращает номер месяца (отсчет начинается с нуля, то есть месяц с номер 0 - январь)</li>
+                    <li><span class="b">getFullYear()</span>: возвращает год</li>
+                    <li><span class="b">toDateString()</span>: возвращает полную дату в виде строки</li>
+                    <li><span class="b">getHours()</span>: возвращает час (от 0 до 23)</li>
+                    <li><span class="b">getMinutes()</span>: возвращает минуты (от 0 до 59)</li>
+                    <li><span class="b">getSeconds()</span>: возвращает секунды (от 0 до 59)</li>
+                    <li><span class="b">getMilliseconds()</span>: возвращает миллисекунды (от 0 до 999)</li>
+                    <li><span class="b">toTimeString()</span>: возвращает полное время в виде строки</li>
+                </ul>
+
+                <p>Получим текущую дату:</p>
+                <div class="code-block"><code>const today = new Date(); 
+console.log(today.getDate());       <code class="comment">// 26</code>
+console.log(today.getDay());        <code class="comment">// 4</code>
+console.log(today.getMonth());      <code class="comment">// 9</code>
+console.log(today.getFullYear());   <code class="comment">// 2023</code></code></div>
+
+                <h4>Преобразуем данные в более читабельную форму:</h4>
+
+                <div class="code-block"><code>const days = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
+ const months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", 
+            "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+ 
+const today = new Date(); 
+console.log(`Сегодня: ${today.getDate()} ${months[today.getMonth()]} ↩
+                      ${today.getFullYear()}, ${days[today.getDay()]}`);
+<code class="comment">// Сегодня: 26 Октябрь 2023, Четверг</code></code></div>
+
+                <p>
+                    Перевести из числовых значений в более привычные названия для дней недели и месяцев используются массивы. Получив индекс дня недели (<code>today.getDay()</code>) 
+                    и индекс месяца (<code>today.getMonth()</code>) можно получить нужный элемент из массива.
+                </p>
+                
+                <p>Теперь получим текущее время:</p>
+                <div class="code-block"><code>var welcome;
+const myDate = new Date();
+const hour = myDate.getHours();
+const minute = myDate.getMinutes();
+const second = myDate.getSeconds();
+ 
+console.log(`Текущее время: ${hour}:${minute}:${second}`); <code class="comment">// Текущее время: 13:38:26</code>
+</code></div>
+
+
+                <h3 id="ch9-set-date">📃 Установка даты и времени</h3>
+
+                <p>Кроме задания параметров даты в конструкторе <em>для установки мы также можем использовать дополнительные методы</em> объекта <strong>Date</strong>:</p>
+
+                <ul>
+                    <li><span class="b">setDate()</span>: установка дня в дате</li>
+                    <li><span class="b">setMonth()</span>: уставовка месяца (отсчет начинается с нуля, то есть месяц с номер 0 - январь)</li>
+                    <li><span class="b">setFullYear()</span>: устанавливает год</li>
+                    <li><span class="b">setHours()</span>: установка часа</li>
+                    <li><span class="b">setMinutes()</span>: установка минут</li>
+                    <li><span class="b">setSeconds()</span>: установка секунд</li>
+                    <li><span class="b">setMilliseconds()</span>: установка миллисекунд</li>
+                </ul>
+
+                <p>Установим дату:</p>
+                <div class="code-block"><code>const myDate = new Date();
+myDate.setDate(14);
+myDate.setMonth(10);    <code class="comment">// ноябрь</code>
+myDate.setFullYear(2023); 
+console.log(myDate);    <code class="comment">// Tue Nov 14 2023 13:41:20 GMT+0300 (Москва, стандартное время)</code>
+</code></div>
+
+                <p>При установке значений мы можем передать величину, большую, чем максимальное допустимое значение. Например, установить для часа число 54:</p>
+                <div class="code-block"><code>myDate.setHours(54);</code></div>
+
+                <p>
+                    В этом случае значение часа будет равно <code>54 - 24 * 2 = 6</code>, а оставшиеся часы будут составлять <code>два дня (24 * 2)</code>, что прибавит к дате два дня. То же самое действует и 
+                    в отношении дней, минут, секунд, миллисекунд и месяцев.
+                </p>
+
+                <h4>Установка значений (set методы)</h4>
+                <div class="code-block"><code>const date = new Date();
+
+date.setFullYear(2025);
+date.setMonth(11);  <code class="comment">// Декабрь (помним про 0-индекс)</code>
+date.setDate(31);
+date.setHours(23);
+date.setMinutes(59);
+date.setSeconds(59);
+
+console.log(date);  <code class="comment">// 31 декабря 2025, 23:59:59</code></code></div>
+
+                <h3 id="ch9-date-methods">📃 Таблица методов Date</h3>
                 <div class="table-wrapper">
                     <table id="date-table">
                         <thead>
@@ -13587,39 +14216,29 @@ const fromTimestamp = new Date(1704067200000);</code></div>
                     </ul>
                 </div>
 
-                <h3>Установка значений (set методы)</h3>
+
+                <h3 id="ch9-formatting">📃 Форматирование даты</h3>
+
                 <div class="code-block"><code>const date = new Date();
 
-date.setFullYear(2025);
-date.setMonth(11);  // Декабрь (помним про 0-индекс)
-date.setDate(31);
-date.setHours(23);
-date.setMinutes(59);
-date.setSeconds(59);
-
-console.log(date); // 31 декабря 2025, 23:59:59</code></div>
-
-                <h3>Форматирование даты</h3>
-                <div class="code-block"><code>const date = new Date();
-
-// Форматирование в строку
+<code class="comment">// Форматирование в строку</code>
 const formatted = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
-console.log(formatted); // "07.11.2025"
+console.log(formatted); <code class="comment">//</code> "07.11.2025"
 
-// С добавлением нулей
+<code class="comment">// С добавлением нулей</code>
 function pad(num) {
     return String(num).padStart(2, '0');
 }
 
 const formatted2 = `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${date.getFullYear()}`;
-console.log(formatted2); // "07.11.2025"
+console.log(formatted2); <code class="comment">// "07.11.2025"</code>
 
-// Получение названия месяца
+<code class="comment">// Получение названия месяца</code>
 const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
                 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
 const monthName = months[date.getMonth()];
 
-// Получение названия дня недели
+<code class="comment">// Получение названия дня недели</code>
 const days = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 
               'Четверг', 'Пятница', 'Суббота'];
 const dayName = days[date.getDay()];</code></div>
@@ -13630,44 +14249,44 @@ const dayName = days[date.getDay()];</code></div>
     const minutes = String(date.getMinutes()).padStart(2, '0');
     const ampm = hours >= 12 ? 'PM' : 'AM';
     
-    hours = hours % 12 || 12; // 0 преобразуем в 12
+    hours = hours % 12 || 12; <code class="comment">// 0 преобразуем в 12</code>
     
     return `${hours}:${minutes} ${ampm}`;
 }
 
 const now = new Date();
-console.log(getTime12h(now)); // "2:30 PM"
+console.log(getTime12h(now)); <code class="comment">// "2:30 PM"</code>
 
-// 24-часовой формат
+<code class="comment">// 24-часовой формат</code>
 function getTime24h(date) {
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
     return `${hours}:${minutes}`;
 }
 
-console.log(getTime24h(now)); // "14:30"</code></div>
+console.log(getTime24h(now)); <code class="comment">// "14:30"</code></code></div>
 
                 <h3>Разница между датами</h3>
                 <div class="code-block"><code>const date1 = new Date('2024-01-01');
 const date2 = new Date('2024-12-31');
 
-// Разница в миллисекундах
+<code class="comment">// Разница в миллисекундах</code>
 const diff = date2 - date1;
 
-// Конвертация в дни (по шагам из "Макфарланда")
-const second = 1000;           // 1000 миллисекунд в секунде
-const minute = 60 * second;    // 60 секунд в минуте
-const hour = 60 * minute;      // 60 минут в часе
-const day = 24 * hour;         // 24 часа в сутках
-const totalDays = diff / day;  // общее количество дней
+<code class="comment">// Конвертация в дни (по шагам из "Макфарланда")</code>
+const second = 1000;           <code class="comment">// 1000 миллисекунд в секунде</code>
+const minute = 60 * second;    <code class="comment">// 60 секунд в минуте</code>
+const hour = 60 * minute;      <code class="comment">// 60 минут в часе</code>
+const day = 24 * hour;         <code class="comment">// 24 часа в сутках</code>
+const totalDays = diff / day;  <code class="comment">// общее количество дней</code>
 
-console.log(`Разница: ${totalDays} дней`); // 365 дней
+console.log(`Разница: ${totalDays} дней`); <code class="comment">// 365 дней</code>
 
-// Короткий вариант (всё в одну формулу)
+<code class="comment">// Короткий вариант (всё в одну формулу)</code>
 const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-console.log(`Разница: ${days} дней`); // 365 дней
+console.log(`Разница: ${days} дней`); <code class="comment">// 365 дней</code>
 
-// Функция для разницы с часами и минутами
+<code class="comment">// Функция для разницы с часами и минутами</code>
 function dateDiff(date1, date2) {
     const diff = Math.abs(date2 - date1);
     
@@ -13678,16 +14297,16 @@ function dateDiff(date1, date2) {
     return {days, hours, minutes};
 }
 
-console.log(dateDiff(date1, date2)); // {days: 365, hours: 0, minutes: 0}</code></div>
+console.log(dateDiff(date1, date2)); <code class="comment">// {days: 365, hours: 0, minutes: 0}</code></div></code>
 
                 <h3>Встроенные методы форматирования</h3>
                 <div class="code-block"><code>const date = new Date();
 
-console.log(date.toLocaleDateString('ru-RU')); // "07.11.2025"
-console.log(date.toLocaleTimeString('ru-RU')); // "14:30:45"
-console.log(date.toLocaleString('ru-RU'));     // "07.11.2025, 14:30:45"
+console.log(date.toLocaleDateString('ru-RU')); <code class="comment">// "07.11.2025"</code>
+console.log(date.toLocaleTimeString('ru-RU')); <code class="comment">// "14:30:45"</code>
+console.log(date.toLocaleString('ru-RU'));     <code class="comment">// "07.11.2025, 14:30:45"</code>
 
-// С опциями
+<code class="comment">// С опциями</code>
 const options = {
     year: 'numeric',
     month: 'long',
@@ -13695,145 +14314,650 @@ const options = {
     weekday: 'long'
 };
 console.log(date.toLocaleDateString('ru-RU', options));
-// "пятница, 7 ноября 2025 г."</code></div>
+<code class="comment">// "пятница, 7 ноября 2025 г."</code></code></div>
 
-                <h2>Объект Number</h2>
+
+                <h2 id="ch9-math">📜 Объект Math. Математические операции</h2>
+
+                <p>
+                    Объект <span class="b">Math</span> предоставляет ряд математических функций, которые можно использовать при вычислениях. 
+                    Рассмотрим основные математические функции.
+                </p>
+
+                <h3>abs()</h3>
+                <p>Функция <strong>abs()</strong> возвращает абсолютное значение числа:</p>
+                <div class="code-block"><code>const x = -25;
+console.log(Math.abs(x));      <code class="comment">// 25</code>
+const y = 34;
+console.log(Math.abs(y));      <code class="comment">// 34</code></code></div>
+
+                <h3>min() и max()</h3>
+
+                <p>Функции <strong>min()</strong> и <strong>max()</strong> возвращают соответственно минимальное и максимальное значение из набора чисел:</p>
+                <div class="code-block"><code>const max = Math.max(19, 45); <code class="comment">// 45</code>
+ const min = Math.min(33, 24); <code class="comment">// 24</code></code></div>
+
+                <p>Эти функции необязательно должны принимать два числа, в них можно передавать и большее количество чисел:</p>
+                <div class="code-block"><code>const max = Math.max(1, 2, 3, -9, 46, -23); <code class="comment">// 46</code></code></div>
+
+                <h3>ceil()</h3>
+
+                <p>Функция <strong>ceil()</strong> округляет число до следующего наибольшего целого числа:</p>
+                <div class="code-block"><code>const x = Math.ceil(9.2);     <code class="comment">// 10</code>
+ const y = Math.ceil(-5.9);    <code class="comment">// -5</code></code></div>
+
+                <p>Выражение <code>Math.ceil(9.2)</code> возвращает число <code>10</code>, так как число <code>10</code> следующее наибольшее целое число после <code>9.2</code>. И также 
+выражение <code>Math.ceil(-5.9)</code> возвращает <code>-5</code>, потому что число <code>-5</code> следующее наибольшее целое после <code>-5.9</code></p>
+
+
+                <h3>floor()</h3>
+
+                <p>Функция <strong>floor()</strong> округляет число до следующего наименьшего целого числа:</p>
+                <div class="code-block"><code>const x = Math.floor(9.2);    <code class="comment">// 9</code>
+ const y = Math.floor(-5.9);   <code class="comment">// -6</code></code></div>
+
+                <h3>round()</h3>
+
+                <p>
+                    Функция <strong>round()</strong> округляет число до следующего наименьшего целого числа, если его десятичная часть меньше <code>0.5</code>. Если же десятичная 
+                    часть равна или больше <code>0.5</code>, то округление идет до ближайшего наибольшего целого числа:
+                </p>
+                <div class="code-block"><code>const x = Math.round(5.5);    <code class="comment">// 6</code>
+const y = Math.round(5.4);     <code class="comment">// 5</code>
+const z = Math.round(-5.4);    <code class="comment">// -5</code>
+const n = Math.round(-5.5);    <code class="comment">// -5</code>
+const m = Math.round(-5.6);    <code class="comment">// -6</code>
+
+console.log(x);
+console.log(y);
+console.log(z);
+console.log(n);</code></div>
+
+                <h3>random()</h3>
+
+                <p>Функция <strong>random()</strong> возвращает случайное число с плавающей точкой из диапазона от 0 до 1:</p>
+                <div class="code-block"><code>const x = Math.random();</code></div>
+
+                <h3>pow()</h3>
+
+                <p>Функция <strong>pow()</strong> возвращает число в определенной степени. Например, возведем число 2 в степень 3:</p>
+                <div class="code-block"><code>const x = Math.pow(2, 3);     <code class="comment">// 8</code></code></div>
+
+                <h3>sqrt()</h3>
+
+                <p>Функция <strong>sqrt()</strong> возвращает квадратный корень числа:</p>
+                <div class="code-block"><code>const x = Math.sqrt(121);     <code class="comment">// 11</code>
+ const y = Math.sqrt(9);       <code class="comment">// 3</code>
+ const z = Math.sqrt(20);      <code class="comment">// 4.47213595499958</code></code></div>
+
+                <h3>log()</h3>
+
+                <p>Функция <strong>log()</strong> возвращает натуральный логарифм числа:</p>
+                <div class="code-block"><code>const x = Math.log(1);        <code class="comment">// 0</code>
+ const z = Math.log(10);       <code class="comment">// 2.302585092994046</code></code></div>
+
+                <h3>Тригонометрические функции</h3>
+
+                <p>Целый ряд функций представляют тригонометрические функции:</p>
+                
+                <ul>
+                    <li><strong>sin()</strong> - вычисляет синус угла</li>
+                    <li><strong>cos()</strong> - вычисляет косинус угла</li>
+                    <li><strong>tan()</strong> - вычисляет тангенс угла</li>
+                    <li><strong>asin()</strong> - вычисляет арксинус числа</li>
+                    <li><strong>atan()</strong> - вычисляет арктангенс числа</li>
+                </ul>
+
+                <div class="code-block"><code>const x = Math.sin(90);       <code class="comment">// 0.8939966636005579</code>
+const y = Math.cos(0);         <code class="comment">// 1</code>
+const z = Math.tan(45);        <code class="comment">// 1.6197751905438615</code>
+
+const x = Math.asin(0.9);      <code class="comment">// 1.1197695149986342</code>
+const y = Math.acos(1);        <code class="comment">// 1</code>
+const z = Math.atan(1);        <code class="comment">// 0.7853981633974483</code></code></div>
+
+                <h3>Константы</h3>
+
+                <p>Кроме методов объект <strong>Math</strong> также определяет набор встроенных <em>констант</em>, которые можно использовать в различных вычислениях:</p>
+                <ul>
+                    <li><strong>Math.PI</strong> - (число PI): 3.141592653589793</li>
+                    <li><strong>Math.SQRT2</strong> - (квадратный корень из двух): 1.4142135623730951</li>
+                    <li><strong>Math.SQRT1_2</strong> - (половина от квадратного корня из двух): 0.7071067811865476</li>
+                    <li><strong>Math.E</strong> - (число e или число Эйлера): 2.718281828459045</li>
+                    <li><strong>Math.LN2</strong> - (натуральный логарифм числа 2): 0.6931471805599453</li>
+                    <li><strong>Math.LN10</strong> - (натуральный логарифм числа 10): 2.302585092994046</li>
+                    <li><strong>Math.LOG2E</strong> - (двоичный логарифм числа e): 1.4426950408889634</li>
+                    <li><strong>Math.LOG10E</strong> - (десятичный логарифм числа e): 0.4342944819032518</li>
+                </ul>
+
+                <p>Используем константы в вычислениях:</p>
+                <div class="code-block"><code>const x = Math.log(Math.E);    <code class="comment">// 1</code>
+ const z = Math.tan(Math.PI/4); <code class="comment">// 0.9999999999999999</code></code></div>
+
+                <h2 id="ch9-number">📜 Объект Number</h2>
+
+                <p>Объект <strong>Number</strong> представляет числа. Чтобы создать число, надо передать в конструктор <code>Number</code> число или строку, представляющую число:</p>
+                <div class="code-block"><code>const x = new Number(34);
+ const y = new Number('34');
+ console.log(x+y);              <code class="comment">// 68</code></code></div>
+
+                <p>Определения <code>x и y</code> в данном случае будут практически аналогичны.</p>
+                <p>Однако создавать объект <code>Number</code> можно и просто присвоив переменной определенное число:</p>
+                <div class="code-block"><code>const z = 34;</code></div>
+
+                <p>Объект <code>Number</code> предоставляет ряд свойств и методов.</p>
+
+                <h4>Некоторые его свойства:</h4>
+
+                <ul>
+                    <li><strong>Number.MAX_VALUE</strong>: наибольшее возможное целое число. Приблизительно равно <code>1.79E+308</code>. Числа, которые больше этого значения, рассматриваются как <code>Infinity</code></li>
+                    <li><strong>Number.MIN_VALUE</strong>: наименьшее возможное положительное целое число. Приблизительно равно <code>5e-324</code> (где-то около нуля)</li>
+                    <li><strong>Number.NaN</strong>: специальное значение, которое указывает, что объект не является числом</li>
+                    <li><strong>Number.NEGATIVE_INFINITY</strong>: значение, которое обозначает отрицательную бесконечность и которое возникает при перелнении. Например, если мы складываем два отрицательных числа, которые по модулю равны <code>Number.MAX_VALUE</code>. Например:
+                        <div class="code-block"><code>const x = -1 * Number.MAX_VALUE
+const y = -1 * Number.MAX_VALUE
+const z = x + y;
+if(z === Number.NEGATIVE_INFINITY)
+    console.log("отрицательная бесконечность");
+else
+    console.log(z);</code></div>
+                    </li>
+                    <li><strong>Number.POSITIVE_INFINITY</strong>: положительная бесконечность. Также, как и отрицательная бесконечность, возникает при переполнении, только теперь в положительную сторону:
+                        <div class="code-block"><code>const x = Number.MAX_VALUE
+const y = Number.MAX_VALUE
+const z = x * y;
+if(z === Number.POSITIVE_INFINITY)
+    console.log("положительная бесконечность");
+else
+    console.log(z);</code></div>
+                    </li>
+                </ul>
+
+                <h4>Некоторые основные методы:</h4>
+
+                <ul>
+                    <li><strong>isNaN()</strong>: определяет, является ли объект числом. Если объект не является числом, то возвращается значение <code>true</code>:
+                        <div class="code-block"><code>const a = Number.isNaN(Number.NaN); <code class="comment">// true</code>
+const b = Number.isNaN(true);        <code class="comment">// false - new Number(true) = 1</code>
+const c = Number.isNaN(null);        <code class="comment">// false - new Number(null) = 0</code>
+const d = Number.isNaN(25);          <code class="comment">// false</code>
+const e = Number.isNaN("54");        <code class="comment">// false</code></code></div>
+                        <p>Но следующее выражение вернет false, хотя значение не является числом:</p>
+                        <div class="code-block"><code>const f = Number.isNaN("hello"); <code class="comment">// false</code></code></div>
+
+                        <p>Чтобы избежать подобных ситуаций, лучше применять глобальную функцию <span class="bb">isNaN</span>:</p>
+                        <div class="code-block"><code>const f = isNaN("hello");        <code class="comment">// true</code></code></div>
+                    </li>
+                    <li><strong>parseFloat()</strong>: преобразует строку в число с плавающей точкой. Например:
+                        <div class="code-block"><code>const a = Number.parseFloat("34.90");  <code class="comment">// 34.9</code>
+console.log(a);
+const b = Number.parseFloat("hello");   <code class="comment">// NaN</code>
+console.log(b);
+const c = Number.parseFloat("34hello"); <code class="comment">// 34</code>
+console.log(c);</code></div>
+                        
+                    </li>
+                    <li><strong>parseInt()</strong>: преобразует строку в целое число. Например:
+                        <div class="code-block"><code>const a = Number.parseInt("34.90");    <code class="comment">// 34</code>
+console.log(a);
+const b = Number.parseInt("hello");     <code class="comment">// NaN</code>
+console.log(b);
+const c = Number.parseInt("25hello");   <code class="comment">// 25</code>
+console.log(c);</code></div>
+                    </li>
+                    <li><strong>toFixed()</strong>: оставляет в числе с плавающей точкой определенное количество знаков в дробной части. Например:
+                        <div class="code-block"><code>const a =  10 / 1.44;
+console.log("До метода toFixed(): ", a, "&lt;br/>");
+a = a.toFixed(2); <code class="comment">// оставляем два знака после запятой</code>
+console.log("После метода toFixed(): ", a, "&lt;br/>");</code></div>
+                        <p>Вывод браузера:</p>
+                        <pre class="browser">До метода toFixed(): 6.944444444444445
+После метода toFixed(): 6.94</pre>
+                    </li>
+                </ul>
+
+                <h3>Преобразование в другую систему счисления</h3>
+
+                <p>
+                    Выше мы рассматривали перевод строк в числа в десятичной системе. Но мы можем с помощью второго параметра явно указать, 
+                    что хотим преобразовать строку в число в определенной системе. Например, преобразование в число в двоичной системе:
+                </p>
+                <div class="code-block"><code>const num1 = "110";
+ const num2 = parseInt(num1, 2);
+ console.log(num2);            <code class="comment">// 6</code></code></div>
+
+                <p>Здесь в функцию <code>parseInt</code> в качестве второго параметра передается число <code>2</code>, что указаывает, что первый параметр будет рассматриваться как число в двоичной системе. Результатом будет <code>6</code>, так как <code>110</code> в двоичной системе - это число <code>6</code> в десятичной.</p>
+
+                <h3>Из числа в строку, метод toString</h3>
+
+                <p>Для преобразования числа в строку у него можно вызвать специальный метод <strong>toString()</strong>:</p>
+                <div class="code-block"><code>const num = 10;
+console.log(num.toString());   <code class="comment">// "10"</code></code></div>
+
+                <p>
+                    Однако в данном случае нет смысла вызывать у числа num метод <code>toString()</code>, так как число можно вывести на консоль без всяких преобразований. Тем не менее метод 
+                    <code>toString()</code> может быть полезен - в качестве параметра он принимает основание системы счисления числа и может быть использован для вывода числа в определенной системе счисления:
+                </p>
+                <div class="code-block"><code>const num1 = 0b0110;
+<code class="comment">// выводим число в двоичной системе </code>
+console.log(num1.toString(2)); <code class="comment">// 110</code>
+ 
+const num2 = 0xFF;
+<code class="comment">// выводим число в шестнадцатеричной системе </code>
+console.log(num2.toString(16)); <code class="comment">// ff</code></code></div>
+
 
                 <h3>Преобразование строки в число</h3>
-                <div class="code-block"><code>// Способ 1: Number()
-const num1 = Number('123');     // 123
-const num2 = Number('12.5');    // 12.5
-const num3 = Number('abc');     // NaN
+                <div class="code-block"><code><code class="comment">// Способ 1: Number()</code>
+const num1 = Number('123');     <code class="comment">// 123</code>
+const num2 = Number('12.5');    <code class="comment">// 12.5</code>
+const num3 = Number('abc');     <code class="comment">// NaN</code>
 
-// Способ 2: parseInt() - только целые
-const int1 = parseInt('123');    // 123
-const int2 = parseInt('12.99');  // 12
-const int3 = parseInt('20 лет'); // 20
-const int4 = parseInt('FF', 16); // 255 (шестнадцатеричная)
+<code class="comment">// Способ 2: parseInt() - только целые</code>
+const int1 = parseInt('123');    <code class="comment">// 123</code>
+const int2 = parseInt('12.99');  <code class="comment">// 12</code>
+const int3 = parseInt('20 лет'); <code class="comment">// 20</code>
+const int4 = parseInt('FF', 16); <code class="comment">// 255 (шестнадцатеричная)</code>
 
-// Способ 3: parseFloat() - с дробной частью
-const float1 = parseFloat('12.99');   // 12.99
-const float2 = parseFloat('3.14px');  // 3.14
+<code class="comment">// Способ 3: parseFloat() - с дробной частью</code>
+const float1 = parseFloat('12.99');   <code class="comment">// 12.99</code>
+const float2 = parseFloat('3.14px');  <code class="comment">// 3.14</code>
 
-// Способ 4: унарный плюс
-const num4 = +'123';  // 123</code></div>
+<code class="comment">// Способ 4: унарный плюс</code>
+const num4 = +'123';  <code class="comment">// 123</code></code></div>
 
                 <h3>Проверка на число</h3>
-                <div class="code-block"><code>// isNaN() - проверка на NaN
-console.log(isNaN('abc'));    // true
-console.log(isNaN(123));      // false
+                <div class="code-block"><code><code class="comment">// isNaN() - проверка на NaN</code>
+console.log(isNaN('abc'));    <code class="comment">// true</code>
+console.log(isNaN(123));      <code class="comment">// false</code>
 
-// Number.isNaN() - строгая проверка
-console.log(Number.isNaN('abc'));  // false (строка, не NaN)
-console.log(Number.isNaN(NaN));    // true
+<code class="comment">// Number.isNaN() - строгая проверка</code>
+console.log(Number.isNaN('abc'));  <code class="comment">// false (строка, не NaN)</code>
+console.log(Number.isNaN(NaN));    <code class="comment">// true</code>
 
-// Number.isFinite() - проверка на конечное число
-console.log(Number.isFinite(123));      // true
-console.log(Number.isFinite(Infinity)); // false
-console.log(Number.isFinite('123'));    // false (строка)
+<code class="comment">// Number.isFinite() - проверка на конечное число</code>
+console.log(Number.isFinite(123));      <code class="comment">// true</code>
+console.log(Number.isFinite(Infinity)); <code class="comment">// false</code>
+console.log(Number.isFinite('123'));    <code class="comment">// false (строка)</code>
 
-// Number.isInteger() - проверка на целое число
-console.log(Number.isInteger(123));   // true
-console.log(Number.isInteger(12.5));  // false</code></div>
+<code class="comment">// Number.isInteger() - проверка на целое число</code>
+console.log(Number.isInteger(123));   <code class="comment">// true</code>
+console.log(Number.isInteger(12.5));  <code class="comment">// false</code></code></div>
 
                 <h3>Округление чисел</h3>
                 <div class="code-block"><code>const num = 4.567;
 
-// Math.round() - до ближайшего целого
-console.log(Math.round(num));     // 5
-console.log(Math.round(4.4));     // 4
+<code class="comment">// Math.round() - до ближайшего целого</code>
+console.log(Math.round(num));     <code class="comment">// 5</code>
+console.log(Math.round(4.4));     <code class="comment">// 4</code>
 
-// Math.ceil() - вверх
-console.log(Math.ceil(4.1));      // 5
+<code class="comment">// Math.ceil() - вверх</code>
+console.log(Math.ceil(4.1));      <code class="comment">// 5</code>
 
-// Math.floor() - вниз
-console.log(Math.floor(4.9));     // 4
+<code class="comment">// Math.floor() - вниз</code>
+console.log(Math.floor(4.9));     <code class="comment">// 4</code>
 
-// Math.trunc() - отбросить дробную часть
-console.log(Math.trunc(4.9));     // 4
+<code class="comment">// Math.trunc() - отбросить дробную часть</code>
+console.log(Math.trunc(4.9));     <code class="comment">// 4</code>
 
-// toFixed() - до N знаков после запятой
-console.log(num.toFixed(2));      // "4.57" (строка!)
-console.log(Number(num.toFixed(2))); // 4.57 (число)</code></div>
+<code class="comment">// toFixed() - до N знаков после запятой</code>
+console.log(num.toFixed(2));      <code class="comment">// "4.57" (строка!)</code>
+console.log(Number(num.toFixed(2))); <code class="comment">// 4.57 (число)</code></code></div>
 
                 <h3>Форматирование валюты</h3>
                 <div class="code-block"><code>const price = 1234.5;
 
-// toFixed() для валюты
-const formatted = price.toFixed(2); // "1234.50"
+<code class="comment">// toFixed() для валюты</code>
+const formatted = price.toFixed(2); <code class="comment">// "1234.50"</code>
 
-// Locale formatting
+<code class="comment">// Locale formatting</code>
 const ruPrice = price.toLocaleString('ru-RU', {
     style: 'currency',
     currency: 'RUB'
-}); // "1 234,50 ₽"
+}); <code class="comment">// "1 234,50 ₽"</code>
 
 const usPrice = price.toLocaleString('en-US', {
     style: 'currency',
     currency: 'USD'
-}); // "$1,234.50"</code></div>
+}); <code class="comment">// "$1,234.50"</code></code></div>
 
                 <h3>Случайные числа</h3>
-                <div class="code-block"><code>// Math.random() возвращает 0...1 (не включая 1)
-const random = Math.random(); // 0.123456...
+                <div class="code-block"><code><code class="comment">// Math.random() возвращает 0...1 (не включая 1)</code>
+const random = Math.random(); <code class="comment">// 0.123456...</code>
 
-// Случайное число от 0 до 10
+<code class="comment">// Случайное число от 0 до 10</code>
 const random10 = Math.floor(Math.random() * 10);
 
-// Случайное число от 1 до 6 (кубик)
+<code class="comment">// Случайное число от 1 до 6 (кубик)</code>
 const dice = Math.ceil(Math.random() * 6);
 
-// Функция для диапазона [min, max]
+<code class="comment">// Функция для диапазона [min, max]</code>
 function randomRange(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-console.log(randomRange(10, 20)); // например, 15</code></div>
+console.log(randomRange(10, 20)); <code class="comment">// например, 15</code></code></div>
 
                 <h3>Математические операции</h3>
-                <div class="code-block"><code>// Абсолютное значение
-console.log(Math.abs(-5));    // 5
+                <div class="code-block"><code><code class="comment">// Абсолютное значение</code>
+console.log(Math.abs(-5));    <code class="comment">// 5</code>
 
-// Степень
-console.log(Math.pow(2, 3));  // 8
-console.log(2 ** 3);          // 8 (ES2016)
+<code class="comment">// Степень</code>
+console.log(Math.pow(2, 3));  <code class="comment">// 8</code>
+console.log(2 ** 3);          <code class="comment">// 8 (ES2016)</code>
 
-// Квадратный корень
-console.log(Math.sqrt(16));   // 4
+<code class="comment">// Квадратный корень</code>
+console.log(Math.sqrt(16));   <code class="comment">// 4</code>
 
-// Максимум и минимум
-console.log(Math.max(1, 5, 3)); // 5
-console.log(Math.min(1, 5, 3)); // 1
+<code class="comment">//</code> Максимум и минимум
+console.log(Math.max(1, 5, 3)); <code class="comment">// 5</code>
+console.log(Math.min(1, 5, 3)); <code class="comment">// 1</code>
 
-// С массивом
+<code class="comment">// С массивом</code>
 const numbers = [1, 5, 3, 9, 2];
-console.log(Math.max(...numbers)); // 9
-console.log(Math.min(...numbers)); // 1</code></div>
+console.log(Math.max(...numbers)); <code class="comment">// 9</code>
+console.log(Math.min(...numbers)); <code class="comment">// 1</code></code></div>
 
                 <h3>Константы Math</h3>
-                <div class="code-block"><code>console.log(Math.PI);    // 3.141592653589793
-console.log(Math.E);     // 2.718281828459045 (число Эйлера)
-console.log(Math.SQRT2); // 1.4142135623730951 (√2)
-console.log(Math.LN2);   // 0.6931471805599453 (ln(2))
-console.log(Math.LN10);  // 2.302585092994046 (ln(10))</code></div>
+                <div class="code-block"><code>console.log(Math.PI);    <code class="comment">// 3.141592653589793</code>
+console.log(Math.E);     <code class="comment">// 2.718281828459045 (число Эйлера)</code>
+console.log(Math.SQRT2); <code class="comment">// 1.4142135623730951 (√2)</code>
+console.log(Math.LN2);   <code class="comment">// 0.6931471805599453 (ln(2))</code>
+console.log(Math.LN10);  <code class="comment">// 2.302585092994046 (ln(10))</code></code></div>
 
-                <h2>Работа с BigInt (ES2020)</h2>
-                <div class="code-block"><code>// BigInt для работы с очень большими числами
+                <h2 id="ch9-bigint">📜 Работа с BigInt (ES2020)</h2>
+                <div class="code-block"><code><code class="comment">// BigInt для работы с очень большими числами</code>
 const big1 = 1234567890123456789012345678901234567890n;
 const big2 = BigInt("9999999999999999999999999999");
 
-console.log(big1 + big2); // Работает!
+console.log(big1 + big2); <code class="comment">// Работает!</code>
 
-// Нельзя смешивать с обычными числами
-// console.log(big1 + 100); // Ошибка!
-console.log(big1 + 100n); // OK
+<code class="comment">// Нельзя смешивать с обычными числами</code>
+<code class="comment">//</code> console.log(big1 + 100); <code class="comment">// Ошибка!</code>
+console.log(big1 + 100n);    <code class="comment">// OK</code>
 
-// Преобразование
-console.log(Number(123n)); // 123
-console.log(BigInt(123));  // 123n</code></div>
+<code class="comment">// Преобразование</code>
+console.log(Number(123n));   <code class="comment">// 123</code>
+console.log(BigInt(123));    <code class="comment">// 123n</code></code></div>
+
+
+                <h2 id="ch9-symbol">📜 Символы (Symbol)</h2>
+
+                <p>Символ или тип <span class="b">Symbol</span> представляет некоторое уникальное значение.</p>
+                <p>Для определения символа применяется конструктор типа <span class="b">Symbol</span>. Например, создадим простейший символ:</p>
+                <div class="code-block"><code>const tom = Symbol("Tom");
+ console.log(tom);          <code class="comment">// Symbol(Tom)</code></code></div>
+
+
+                <p>Причем каждый символ <span class="b">уникален</span>. Так, попробуем создать два одинаковых символа:</p>
+                <div class="code-block"><code>const tom = Symbol("Tom");
+console.log(tom);           <code class="comment">// Symbol(Tom)</code>
+ 
+const tomas = Symbol("Tom");
+console.log(tomas);         <code class="comment">// Symbol(Tom)</code>
+ 
+console.log(tom == tomas);  <code class="comment">// false</code>
+console.log(tom === tomas); <code class="comment">// false</code></code></div>
+
+                <p>
+                    Несмотря на то, что оба создаваемых выше в примее символа инициализированы одним и тем же значением, но оба оператора - равенства и эквивалентности при 
+                    сравнению этих символа возвращают <code>false</code>. То есть символы всегда уникальны.
+                </p>
+
+                <h3>Символы как идентификаторы свойств объектов</h3>
+
+                <p>
+                    Основной областью применения символов являются определение <em>идентификаторов свойств объектов</em>. То есть, если вкратце, символы позволяют избежать ситуаций, когда 
+                    несколько свойств объекта имеют одинаковые названия. Возможно, данная ситуация может показаться искусственной: ну как мы можем определить в объекте два одинакоых свойства? 
+                    Однако если свойства добавляются динамически в довольно большой программе или даже где-то во внешнем коде, который мы не можем контролировать, то задача по контролю за идентификаторами свойств усложняется.
+                </p>
+                <p>
+                    Для примера возьмем следующую задачу: в комании работают три программиста, один из которых старший разработчик, а остальные два - младшие разработчики. Но при этом два из разработчиков имеют одинаковые имена. Скажем, один Том является старшим разработчиком,
+                    а Сэм и другой Том - младшие разработчики. Например, мы могли бы представить подобную компанию так:
+                </p>
+                <div class="code-block"><code>const company = { 
+    "Tom": "senior",
+    "Sam": "junior",
+    "Tom": "junior"
+}
+
+for(developer in company) {
+    console.log(`${developer} - ${company[developer]}`);
+}</code></div>
+
+                <p>Однако консольный вывод покажет, что в нашей компании только два разработчика, поскольку названия двух из них совпадают:</p>
+                <pre class="sh">Tom - junior
+Sam - junior</pre>
+
+                <p>Теперь применим символы:</p>
+                <div class="code-block"><code>const company = { 
+    [Symbol("Tom")]: "senior",
+    [Symbol("Sam")]: "junior",
+    [Symbol("Tom")]: "junior"
+}
+
+const developers = Object.getOwnPropertySymbols(company);
+for(developer of developers) {
+    console.log(`${developer.toString()} - ${company[developer]}`);
+}</code></div>
+
+                <p>
+                    Для получения всех символов из объекта применяется функция <span class="b">Object.getOwnPropertySymbols()</span>, в которую передается объект. Возвращает эта функция набор символов, 
+                    которые мы можем перебрать в цикле. Для получения текстового представления символов можно применять метод <code>toString()</code> символа. А для получения 
+                    значения, как и в общем случае, применяется синтаксис массивов: <code>company[developer]</code>. В итоге мы получим следующий консольный вывод:
+                </p>
+                <pre class="sh">Symbol(Tom) - senior
+Symbol(Sam) - junior
+Symbol(Tom) - junior</pre>
+
+                <p>Также можно динамически добавлять свойства с символьными идентификаторами в объект:</p>
+                <div class="code-block"><code>const company = { };
+company[Symbol("Tom")]= "senior";
+company[Symbol("Sam")]= "junior";
+company[Symbol("Tom")]= "junior";</code></div>
+
+                <h2 id="ch9-proxy-obj">📜 Proxy</h2>
+
+                <p>
+                    <span class="b">Прокси (Proxy)</span> представляет объект, который позволяет перехватывать выполнение операций по отношению к некоторому другому 
+                    объекту и может переопределять его поведение.
+                </p>
+                <p>Для создания объекта <code>Proxy</code> применяется конструктор <span class="b">Proxy()</span>:</p>
+                <div class="code-block"><code>const proxy = new Proxy(target, handler);</code></div>
+
+                <p><em>Конструктор Proxy</em> принимает два параметра:</p>
+                <ul>
+                    <li><strong>target</strong> - цель создания прокси, это может быть любой объект, к которому применяется <code>Proxy</code></li>
+                    <li><strong>handler</strong> - другой объект, который определяет, какие именно операции объекта <code>target</code> будут перехватываться и переопределяться и как именно.</li>
+                </ul>
+
+                <p>Рассмотрим простейший пример:</p>
+                <div class="code-block"><code><code class="comment">// объект, к которому применяется прокси</code>
+const target = {name: "Tom"};
+<code class="comment">// объект, который определяет, как будет переопределяться target</code>
+const handler = {};
+<code class="comment">// объект прокси</code>
+const proxy = new Proxy(target, handler);
+ 
+console.log(proxy.name);    <code class="comment">// Tom</code></code></div>
+
+                <p>Итак, в примере выше <code>target</code> - это объект, к которому будет применяться проксирование. В данном случае этот объект имеет свойство <code>name</code>.</p>
+                <div class="code-block"><code>const target = {name: "Tom"};</code></div>
+
+                <p>Далее создается пустой обработчик <code>handler</code>:</p>
+                <div class="code-block"><code>const handler = {};</code></div>
+
+                <p>В принципе этот объект должен определять, как будет переопределяться объект <code>target</code>. Но пока оставим его пустым.</p>
+                <p>Затем создаем объект <strong>Proxy</strong>, передавая в его конструктор объекты <code>target</code> и <code>handler</code>.</p>
+                <div class="code-block"><code>const proxy = new Proxy(target, handler);</code></div>
+
+                <p>
+                    <em>Проксирование объекта</em> (в данном случае объекта <code>target</code>) означает, что через прокси мы можем обращаться к функциональности этого объекта. И в данном случае 
+                    через объект <code>proxy</code> мы можем обратиться к свойству <code>name</code> проксированного объекта <code>target</code>:
+                </p>
+                <div class="code-block"><code>console.log(proxy.name);    <code class="comment">// Tom</code></code></div>
+
+                <p>И поскольку мы использовали пустой <code>handler</code>, который ничего не переопределяет, то по сути прокси ведет себя как оригинальный объект <code>target</code>.</p>
+
+                <h3 id="ch9-overriding-func">📃 Переопределение функциональности объекта</h3>
+
+                <p>
+                    Выше мы выполнили проксирование объекта, но пока никак не переопределяли его поведение. Ключевым в данном случае является определение обработчика <span class="b">handler</span>, 
+                    который может перехватывать обращения к свойствам проксированного объекта. Этот обработчик может определять два метода: <span class="b">get</span> 
+                    и <span class="b">set</span>.
+                </p>
+
+                <h4>Метод get и получение свойств объекта</h4>
+
+                <p>Метод <span class="b">get</span> перехватывает обращения к свойству при получении его значения и возвращает для этого свойства некоторое значение:</p>
+
+                <div class="code-block"><code>const handler = {
+  get: function(target, prop, receiver) {
+    return некоторое_значение;
+  }
+};</code></div>
+
+                <p>Метод <span class="b">get</span> имеет три параметра:</p>
+                <ul>
+                    <li><strong>target</strong>: сам проксированный объект. Благодаря этому параметру мы можем обратиться к функциональности оригинального объекта</li>
+                    <li><strong>prop</strong>: название свойства, к которому идет обращение</li>
+                    <li><strong>receiver</strong>: объект <code>Proxy</code>, через который выполняется проксирование</li>
+                </ul>
+
+                <p>Возьмем следующий пример:</p>
+                <div class="code-block"><code>const target = {name: "Tom"};
+const handler = {
+  get: function(target, prop, receiver) {
+    return "Tomas Smith";
+  }
+};
+
+const proxy = new Proxy(target, handler);
+console.log(proxy.name);    <code class="comment">// Tomas Smith</code></code></div>
+
+                <p>Здесь в обработчике <code>handler</code> в методе <code>get</code> возвращается строка <code>"Tomas Smith"</code>:</p>
+                <div class="code-block"><code>get: function(target, prop, receiver) {
+    return "Tomas Smith";
+}</code></div>
+
+                <p>Это приведет к тому, что при обращение к любому свойству прокси-объекта будет возвращаться данная строка:</p>
+                <div class="code-block"><code>console.log(proxy.name);    <code class="comment">// Tomas Smith</code></code></div>
+
+                <p>Так, мы выполнили перехват обращения к свойству и простейшее переопределение. При этом мы можем обащаться и к оригинальному объекту, который проксируется:</p>
+                <div class="code-block"><code>const target = {name: "Tom"};
+const handler = {
+  get: function(target, prop) {
+    return "Name: " + target.name;
+  }
+};
+
+const proxy = new Proxy(target, handler);
+console.log(proxy.name);    <code class="comment">// Name: Tom</code></code></div>
+
+                <p>
+                    Здесь обработчик возвращает строку <code>"Name: " + target.name</code>, где <code>target.name</code> представляет обращение к свойству <code>name</code> оригинального объекта. 
+                    Естественно логика возвращение значения свойства может более сложной.
+                </p>
+
+                <p>Но возьмем более сложный объект - с двумя свойствами:</p>
+                <div class="code-block"><code>const target = {name: "Tom", age: 37};
+const handler = {
+  get: function(target, prop) {
+    return target[prop];
+  }
+};
+
+const proxy = new Proxy(target, handler);
+console.log(proxy.name);    <code class="comment">// Tom</code>
+console.log(proxy.age);     <code class="comment">// 37</code></code></div>
+
+                <p>Здесь целевой объект имеет два свойства: <code>name</code> и <code>age</code>. В обработчике мы перехватываем обращение к ним, но никак его не переопределяем, а просто возвращаем значения свойств оригинального объекта:</p>
+                <div class="code-block"><code>return target[prop];</code></div>
+
+                <p>Для обращения к свойствам целевого объекта применяется синтаксис массивов.</p>
+
+                <p>Но также мы можем проверить, к какому именно свойству идет обращение, и выполнить некоторое переопределение:</p>
+                <div class="code-block"><code>const target = {name: "Tom", age: 37};
+const handler = {
+  get: function(target, prop) {
+    if(prop==="name")
+        return target.name.toUpperCase();
+    else
+        return target[prop];
+  }
+};
+
+const proxy = new Proxy(target, handler);
+console.log(proxy.name);    <code class="comment">// TOM</code>
+console.log(proxy.age);     <code class="comment">// 37</code></code></div>
+
+                <p>В данном случае, если обращение идет к свойству <code>name</code>, то есть к свойству, которое хранит строку, то вызываем у этой строки метод <code>toUpperCase()</code> и переводим ее в верхний регистр.</p>
+
+                <h4>Установка свойства и метод set</h4>
+
+                <p>Метод <span class="b">set</span> перехватывает обращения к свойству при установке его значения:</p>
+                <div class="code-block"><code>const handler = {
+  set: function(target, property, value, receiver) {
+     
+  }
+};</code></div>
+
+                <p>Метод <span class="b">set</span> имеет четыре параметра:</p>
+                <ul>
+                    <li><strong>target</strong>: оригинальный объект, к которому идет проксирование</li>
+                    <li><strong>property</strong>: название свойства, к которому идет обращение</li>
+                    <li><strong>value</strong>: устанавливаемое значение</li>
+                    <li><strong>receiver</strong>: объект Proxy, через который выполняется проксирование</li>
+                </ul>
+
+                <p>Рассмотрим на примере:</p>
+                <div class="code-block"><code>const target = {name: "Tom", age: 37};
+const handler = {
+  set: function(target, prop, value) {
+        console.log(value);
+        target[prop] = value;
+  }
+};
+
+const proxy = new Proxy(target, handler);
+proxy.name = "Tomas";
+console.log(proxy.name);    <code class="comment">// Tomas</code>
+proxy.age = 22;             
+console.log(proxy.age);     <code class="comment">// 22</code></code></div>
+
+                <p>В данном примере в методе <code>set</code> сначала логирруем передаваеемое свойству значение, затем устанавливаем свойство:</p>
+                <div class="code-block"><code>target[prop] = value;</code></div>
+
+                <p>Немного изменим пример:</p>
+                <div class="code-block"><code>const target = {name: "Tom", age: 37};
+const handler = {
+  set: function(target, prop, value) {
+    if(prop==="age" && value &lt; 1)
+        console.log("Некорректный возраст");
+    else
+        return target[prop] = value;
+  }
+};
+
+const proxy = new Proxy(target, handler);
+proxy.name = "Tomas";
+console.log(proxy.name);    <code class="comment">// Tomas</code>
+proxy.age = -199;           <code class="comment">// Некорректный возраст</code>
+console.log(proxy.age);     <code class="comment">// 37</code>
+proxy.age = 22;             
+console.log(proxy.age);     <code class="comment">// 22</code></code></div>
+
+                <p>Здесь в методе <code>set</code> обработчика проверяем, если идет установка свойства <code>age</code> и значение меньше <code>1</code>, то просто выводим сообщение о некорректности данных</p>
+                <div class="code-block"><code>if(prop==="age" && value < 1)
+    console.log("Некорректный возраст");</code></div>
+
+                <p>Иначе передаем значение свойству оригинального объекта:</p>
+                <div class="code-block"><code>else
+    return target[prop] = value;</code></div>
+
             </section>
 
-            <!-- ГЛАВА 10: Map и Setr -->
+            <!-- ГЛАВА 10: Map и Set -->
             <section class="chapter" id="ch10">
                 <h1>Глава 10. Map и Set</h1>
 
@@ -13841,7 +14965,7 @@ console.log(BigInt(123));  // 123n</code></div>
                 <p>Map — это коллекция для хранения данных в формате ключ-значение. В отличие от обычных объектов, ключами в Map могут быть любые значения (включая объекты и функции).</p>
 
                 <h3>Создание Map</h3>
-                <div class="code-block"><code>// Пустой Map
+                <div class="code-block"><code><code class="comment">// Пустой Map</code>
 const map = new Map();
 
 // Map из массива пар
