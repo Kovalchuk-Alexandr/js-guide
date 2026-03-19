@@ -715,7 +715,20 @@
                                 <li class="nav-subitem" data-target="ch9-overriding-func">&emsp;📃 Переопределение функциональности объекта</li>
                             </ul>
                         </li>
-                        <li class="nav-item" data-target="ch10">Глава 10. Map и Set</li>
+                        <li class="nav-item has-subitems" data-target="ch10"><span class="ch-emoj"></span> Глава 10. Коллекции и итераторы
+                            <ul class="nav-sublist">
+                                <li class="nav-subitem" data-target="ch10-iterators">📜 Итераторы</li>
+                                <li class="nav-subitem" data-target="ch10-iter-next">&emsp;📃 Метод next итераторов</li>
+                                <li class="nav-subitem" data-target="ch10-custom-iter">&emsp;📃 Создание своего итератора</li>
+                                <li class="nav-subitem" data-target="ch10-iter-obj-create">&emsp;📃 Создание итерируемых объектов</li>
+                                <li class="nav-subitem" data-target="ch10-generators">📜 Генераторы</li>
+                                <li class="nav-subitem" data-target="ch10-generat-return">&emsp;📃 Возвращение из генератора и функция return</li>
+                                <li class="nav-subitem" data-target="ch10-loop-get">&emsp;📃 Получение значений генератора в цикле</li>
+                                <li class="nav-subitem" data-target="ch10-data-pass">&emsp;📃 Передача данных в генератор</li>
+                                <li class="nav-subitem" data-target="ch10-err-handle">&emsp;📃 Обработка ошибок генератора</li>
+
+                            </ul>
+                        </li>
                     </ul>
                 </div>
 
@@ -14957,9 +14970,650 @@ console.log(proxy.age);     <code class="comment">// 22</code></code></div>
 
             </section>
 
-            <!-- ГЛАВА 10: Map и Set -->
+            <!-- ГЛАВА 10: Map и Set. Коллекции и итераторы -->
+            <!-- <h1>Глава 10. Map и Set</h1> -->
             <section class="chapter" id="ch10">
-                <h1>Глава 10. Map и Set</h1>
+                <h1>Глава 10. Коллекции и итераторы</h1>
+
+                <h2 id="ch10-iterators">📜 Итераторы</h2>
+
+                <p>
+                    Итераторы представляют абстракцию для перебора наборов данных и применяются для организации последовательного доступа к элементам 
+                    наборов данных - <em>массивам, объектам Set, Map, строкам и т.д..</em>Так, благодаря итераторам мы можем 
+                    перебрать набор данных (например, массив) с помощью цикла <span class="b">for-of</span>:
+                </p>
+                <div class="code-block"><code>const people = ["Tom", "Bob", "Sam"];
+for(const person of people){
+    console.log(person);
+}</code></div>
+
+                <p>
+                    В цикле <span class="b">for-of</span> справа от оператора <span class="b">of</span> указывается набор данных или перебираемый объект (то, что назвается 
+                    <span class="b">Iterable</span>), из которого в цикле мы можем получить отдельные элементы. Но эта возможность перебора некоторого объекта, как, например, массива в примере выше, реализуются благодаря тому, что эти объекты
+                    применяют <strong>итераторы</strong>. Рассмотрим подробнее, что представляют итераторы и как можно создать свой итератор.
+                </p>
+
+                <h3>Получение итератора</h3>
+
+                <p>Любой итерируемый объект <em>(например, массив, Map, Set и т.д.)</em> хранит в свойстве <code>Symbol.iterator</code> функцию, которая возвращает связанный с объектом итератор:</p>
+                <div class="code-block"><code>const people = ["Tom", "Bob", "Sam"];
+<code class="comment">// получаем итератор массива</code>
+const iterator = people[Symbol.iterator]();
+console.log(iterator);  <code class="comment">// Array Iterator {}</code></code></div>
+
+                <p>Здесь получаем итератор массива, поэтому на консоль будет выведено что-то наподобие <code>Array Iterator&nbsp;{}</code></p>
+
+                <p><strong>Другой пример</strong> - строка тоже представляет перебираемый объект, которую можно перебрать посимвольно:</p>
+                <div class="code-block"><code>const username = "Tom";
+for(char of username){
+    console.log(char);
+}</code></div>
+
+                <p>Соответственно для строки мы тоже можем получить итератор:</p>
+                <div class="code-block"><code>const username = "Tom";
+<code class="comment">// получаем итератор строки</code>
+const iterator = username[Symbol.iterator]();
+console.log(iterator);  <code class="comment">// StringIterator {}</code></code></div>
+
+                <p>Итератор строки представляет тип <code>StringIterator</code>. Аналогичным образом можно получать итераторы и для других типов перебираемых объектов.</p>
+                <p>Стоит отметить, что у различных типов могут быть различные дополнительные методы для получения итератора. Например, у массивов есть метод <span class="b">entries()</span>, который также возвращает итератор массива:</p>
+                <div class="code-block"><code>const people = ["Tom", "Bob", "Sam"];
+ console.log(people.entries()); <code class="comment">// Array Iterator {}</code></code></div>
+
+                <h3 id="ch10-iter-next">📃 Метод next итераторов</h3>
+
+                <p>Итераторы предоставляют метод <span class="b">next()</span>, который возвращает объект с двумя свойствами: <span class="b">value</span> и <span class="b">done</span></p>
+                <div class="code-block"><code>{value, done}</code></div>
+
+                <p>
+                    Свойство <span class="b">value</span> хранит собственно значение текущего перебираемого элемента. А свойство <span class="b">done</span> 
+                    указывает, есть ли еще в коллекции объекты, доступные для перебора.  Если в наборе еще есть элементы, то свойство <code>done</code> равно <code>false</code> 
+                    Если же доступных элементов для перебора больше нет, то это свойство равно <span class="b">true</span>, а метод <code>next()</code> возвращает объект
+                </p>
+                <div class="code-block"><code>{done: true}</code></div>
+
+                <p>Например:</p>
+                <div class="code-block"><code>const people = ["Tom", "Bob", "Sam"];
+const iter = people[Symbol.iterator]();
+const result = iter.next();
+console.log(result);    <code class="comment">// {value: "Tom", done: false}</code></code></div>
+
+                <p>В данном случае вызываем метод <code>next()</code> и получаем из итератора первыый результат:</p>
+                <pre class="sh">{value: "Tom", done: false}</pre>
+
+                <p>Здесь мы видим, что текущий объект представляет строку <code>"Tom"</code>, а значение <code>done: false</code> указывает, что в массиве еще есть элементы для перебора.</p>
+                <p>Мы можем последовательно несколько раз вызвать метод <code>next()</code> для получения других элементов массива:</p>
+                <div class="code-block"><code>const people = ["Tom", "Bob", "Sam"];
+const iter = people[Symbol.iterator]();
+console.log(iter.next());    <code class="comment">// {value: "Tom", done: false}</code>
+console.log(iter.next());    <code class="comment">// {value: "Bob", done: false}</code>
+console.log(iter.next());    <code class="comment">// {value: "Sam", done: false}</code>
+console.log(iter.next());    <code class="comment">// {value: undefined, done: true}</code></code></div>
+
+                <p>Консольный вывод программы:</p>
+                <pre class="sh">{value: "Tom", done: false}
+{value: "Bob", done: false}
+{value: "Sam", done: false}
+{value: undefined, done: true}</pre>
+
+                <p>
+                    Здесь мы видим, что при каждом новом вызове метода <code>next()</code>  мы получаем из массива следующий объект. А когда объектов для перебора 
+                    больше не останется, то свойство <code>done</code> будет равно <code>true</code>.
+                </p>
+
+                <p>Используя метод <code>next()</code>, мы сами можем перебрать все объекты массива:</p>
+                <div class="code-block"><code>const people = ["Tom", "Bob", "Sam"];
+const iter = people[Symbol.iterator]();
+while(!(item = iter.next()).done){
+    console.log(item.value);
+}</code></div>
+
+                <p>Здесь в цикле <code>while</code> из метода <code>next()</code> итератора получаем текущий объект в переменную <code>item</code>: <code>item = items.next()</code></p>
+                <p>И смотрим на ее свойство <code>done</code> - если оно равно <code>false</code> (то есть в наборе еще есть элементы), то продолжаем цикл</p>
+                <div class="code-block"><code>while(!(item = iter.next()).done){</code></div>
+
+                <p>В цикле обращаемся к свойству <code>value</code> полученного объекта</p>
+                <div class="code-block"><code>console.log(item.value);</code></div>
+
+                <p>Консольный вывод:</p>
+                <pre class="sh">Tom
+Bob
+Sam</pre>
+
+                <p>
+                    Но в этом нет смысла, поскольку все коллекции, которые возвращают итераторы, поддерживают перебор с помощью цикла <span class="b">for...of</span>, 
+                    который как раз и использует итератор для получения элементов.
+                </p>
+
+
+                <h3 id="ch10-custom-iter">📃 Создание своего итератора</h3>
+
+                <p>Для примера реализуем итератор, который перебирает массив с конца:</p>
+
+                <div class="code-block"><code>const people = ["Tom", "Bob", "Sam"];
+ 
+function reverseArrayIterator(array) {  
+    let count = array.length; 
+    return {    
+        next: function(){      
+            if (count > 0) {   
+                return {          
+                    value: array[--count],          
+                    done: false       
+                };     
+            } 
+            else {       
+                return {          
+                    value: undefined,           
+                    done: true       
+                };           
+            }    
+        }  
+    }
+};
+
+const iter = reverseArrayIterator(people);
+while(!(item = iter.next()).done){
+    console.log(item.value);
+}</code></div>
+
+                <p>Здесь сначала инициализируется переменная <code>count</code>, которая определяет количество перебранных элементов массива. Первоначально переменная имеет значение, равное длине массива.</p>
+                <p>
+                    Далее функция возвращает объект итератора. Его метод <code>next()</code> реализует поведение итерации: если счетчик <code>count</code> 
+                    больше <code>0</code> (то есть имеются еще элементы для перебора), то <code>next()</code > возвращает объект, свойство <code>done</code> которого имеет значение <code>false</code> 
+                    (поскольку итератор еще не достиг конца или точнее начала массива), а свойство <code>value</code> содержит соответствующий элемент из массива, на который указывает 
+                    переменная <code>count</code> после декремента.
+                </p>
+                <p>
+                    Когда переменная <code>count</code> станет равна <code>0</code> (т. е. итератор достиг конца), <code>next()</code> возвращает объект, у которого 
+                    свойство <code>done</code> имеет значение <code>true</code>, а свойство <code>value</code> имеет значение <code>undefined</code>.
+                </p>
+                <p>Таким образом, мы получим итератор, который перебирает объекты массива с конца. Консольный вывод:</p>
+                <pre class="sh">Sam
+Bob
+Tom</pre>
+
+                <p>
+                    Однако при выполнении цикла <span class="b">for..of</span> элементы массива по прежнему перебираются с начала. <strong>Применим наш итератор глобально</strong>, чтобы он также использовался 
+                    в цикле <span class="b">for..of</span>:
+                </p>
+                <div class="code-block"><code>const people = ["Tom", "Bob", "Sam"];
+ 
+function reverseArrayIterator() { 
+    const array = this;
+    let count = array.length; 
+    return {    
+        next: function(){      
+            if (count > 0) {   
+                return {          
+                    value: array[--count],          
+                    done: false       
+                };     
+            } 
+            else {       
+                return {          
+                    value: undefined,           
+                    done: true       
+                };           
+            }    
+        }  
+    }
+};
+
+<code class="comment">// меняем итератор для массива people</code>
+people[Symbol.iterator]=reverseArrayIterator;
+for(person of people){
+    console.log(person);
+}</code></div>
+
+                <p>Здесь сделано два ключевых изменения:</p>
+                
+                <ul>
+                    <li>
+                        <em>Во-первых</em>, нам надо внутри итератора получить текущий объект через <span class="b">this</span>:
+                        <div class="code-block"><code>const array = this;</code></div>
+                    </li>
+                    <li>
+                        Созданную функцию итератора надо присвоить свойству <code>Symbol.iterator</code>:
+                        <div class="code-block"><code>people[Symbol.iterator]=reverseArrayIterator;</code></div>
+                    </li>
+                </ul>
+
+
+                <h3 id="ch10-iter-obj-create">📃 Создание итерируемых объектов</h3>
+
+                <p>Разные объекты могут иметь свою собственную реализацию итератора. И при необходимости мы можем определить объект со своим итератором. Применение итераторов предоставляет нам способ создать объект, который будет вести себя как коллекция элементов</p>
+
+                <p>Для создания перебираемого объекта нам надо определить в объекта метод <span class="b">[Symbol.iterator]()</span>. Этот метод собственно и будет представлять итератор:</p>
+                <div class="code-block"><code>const iterable = {
+  [Symbol.iterator]() {
+    return {
+      next() {
+            <code class="comment">// если еще есть элементы</code>
+            return { value: ..., done: false };
+            <code class="comment">// если больше нет элементов</code>
+            return { value: undefined, done: true };
+      }
+    };
+  }
+};</code></div>
+
+                <p>Метод <span class="b">[Symbol.iterator]()</span> возвращает объект, который имеет метод <span class="b">next()</span>. Этот метод возвращает объект с двумя свойствами <code>value</code> и <code>done</code>.</p>
+                <p>Если в нашем объекте есть элементы, то свойство <code>value</code> содержит собственно значение элемента, а свойство <code>done</code> равно <code>false</code>.</p>
+                <p>Если доступных элементов больше нет, то свойство <code>done</code> равно <code>true</code>.</p>
+
+                <p>Например, реализуем простейший объект с итератором, который возвращает некоторый набор чисел:</p>
+                <div class="code-block"><code>const iterable = {
+  [Symbol.iterator]() {
+    return {
+      current: 1,
+      end: 3,
+      next() {
+        if (this.current <= this.end) {
+          return { value: this.current++, done: false };
+        }
+        return { done: true };
+      }
+    };
+  }
+};</code></div>
+
+                <p>Здесь итератор фактически возвращает числе от 1 до 3. Для отслеживания текущего элемента в объекте, который возвращается методом <code></code>, определены два свойства:</p>
+                <div class="code-block"><code>current: 1,
+ end: 3,</code></div>
+
+                <p>Свойство <code>current</code> собственно хранит значение текущего элемента. А свойство <code>end</code> задает предел. То есть в данном случае итератор возвращает числа <code>от 1 до 3</code>.</p>
+
+                <p>В методе <code>next()</code>, если текущее значение меньше или равно предельному значению, возвращаем объект</p>
+                <div class="code-block"><code>return { value: this.current++, done: false };</code></div>
+
+                <p>Инкремент <code>this.current++</code> приведет к тому, что при следующем вызове метода <code>next</code> значение <code>current</code> будет на единицу больше.</p>
+                <p>Если достигнут предел, то возвращаем объект</p>
+                <div class="code-block"><code>return { done: true };</code></div>
+
+                <p>Это будет указывать, что объектов больше нет.</p>
+
+                <p>Получим из итератора возвращаемые им элементы:</p>
+                <div class="code-block"><code>const myIterator = iterable[Symbol.iterator](); <code class="comment">// получаем итератор</code>
+console.log(myIterator.next()); <code class="comment">// {value: 1, done: false}</code>
+console.log(myIterator.next()); <code class="comment">// {value: 2, done: false}</code>
+console.log(myIterator.next()); <code class="comment">// {value: 3, done: false}</code>
+console.log(myIterator.next()); <code class="comment">// {done: true}</code></code></div>
+
+                <p>
+                    Здесь сначала получаем итератор в константу <code>myIterator</code>. Затем при обращении к ее методу <code>next()</code> последовательно получаем 
+                    все элементы. При четвертом вызове метода <code>next</code> условный перебор элементов в итераторе закончен, и метод возвращает объект <code>{done: true}</code>.
+                </p>
+                <p>
+                    Однако, если мы хотим перебрать наш объект и получить из него его элементы, то нам не надо обращаться к методу <code>next()</code>. Поскольку объект iterable реализует 
+                    итератор, то его можно перебрать с помощью цикла <span class="b">for-of</span>:
+                </p>
+                <div class="code-block"><code>const iterable = {
+  [Symbol.iterator]() {
+    return {
+      current: 1,
+      end: 3,
+      next() {
+        if (this.current <= this.end) {
+          return { value: this.current++, done: false };
+        }
+        return { done: true };
+      }
+    };
+  }
+};
+
+for (const value of iterable) {
+  console.log(value);
+}</code></div>
+
+                <p>Консольный вывод:</p>
+                <pre class="browser">1
+2
+3</pre>
+
+                <p>Цикл <code>for-of</code> автоматически обращается к методу <code>next()</code> и извлекает значение.</p>
+
+                <h4>Рассмотрим еще один пример:</h4>
+
+                <div class="code-block"><code><code class="comment">// объект-компания</code>
+const company = {
+    <code class="comment">// массив работников</code>
+    employees: [
+        {name: "Tom", age: 39, position: "Senior Developer"},
+        {name: "Bob", age: 43, position: "Middle Developer"},
+        {name: "Sam", age: 28, position: "Junior Developer"},
+    ]
+};
+
+<code class="comment">// устанавливаем итератор</code>
+company[Symbol.iterator] = function() {
+    const array = this.employees; <code class="comment">// получаем массив работников</code>
+    let current = 0;
+    return {
+      next() {
+        if (current &lt; array.length) {
+          return { value: array[current++].name, done: false };
+        }
+        return { value:undefined, done: true };
+      }
+    };
+  };
+
+for (const employee of company) {
+  console.log(employee);
+}</code></div>
+
+                <p>
+                    Здесь объект <code>company</code> представляет условную компанию, в которой есть массив работников - массив employee. Допустим, с помощью итератора мы хотим получать 
+                    имя каждого работника. Для этого для объекта <code>company</code> устанавливаем функцию итератора, которая перебирает все элементы из массива <code>employees</code>. Консольный 
+                    вывод программы:
+                </p>
+                <pre class="sh">Tom
+Bob
+Sam</pre>
+
+                <h2 id="ch10-generators">📜 Генераторы</h2>
+
+                <p>
+                    <strong>Генераторы</strong> представляют <em>особый тип функции, которые используются для генерации значений</em>. Для определения генераторов применяется символ звездочки *, который ставится после ключевого слова 
+                    <code>function</code>. Например, определим простейший генератор:
+                </p>
+                <div class="code-block"><code>function* getNumber(){
+    yield 5;
+}
+
+const numberGenerator = getNumber();
+const result = numberGenerator.next();
+console.log(result);    <code class="comment">// {value: 5, done: false}</code></code></div>
+
+                <p>Здесь функция <code>getNumber()</code> представляет <span class="b">генератор</span>. Основные моменты создания и применения генератора:</p>
+
+                <ul>
+                    <li>
+                        Генератор определяется как функция с помощью оператора <span class="b">function*</span> (символ звездочки после слова <code>function</code>)
+                        <div class="code-block"><code>function* getNumber(){ .... }</code></div>
+                        Функция генератора возвращает итератор.
+                    </li>
+                    <li>
+                        Для возвращения значения из генератора, как и вообще в итераторах, применяется оператор <span class="b">yield</span>, после которого указывается возвращаемое значение
+                        <div class="code-block"><code>yield 5;</code></div>
+                        То есть фактически в данном случае генератор <code>getNumber()</code> генерирует число 5.
+                    </li>
+                    <li>
+                        Для получения значения из генератора применяется метод <span class="b">next()</span>
+                        <div class="code-block"><code>const result = numberGenerator.next();</code></div>
+                        Так, в примере с помощью вызова функции <code>getNumber()</code> создается объект итератора в виде константы <code>numberGenerator</code>. Используя этот объект, мы можем получать из генератора значения.
+                    </li>
+                </ul>
+
+                <p>И если мы посмотрим на консольный вывод, то мы увидим, что данный метод возвращает следующие данные:</p>
+                <pre class="browser">{value: 5, done: false}</pre>
+
+                <p>То есть по сути возвращается объект, свойство <span class="b">value</span> которого содержит собственно сгенерированное значение. А свойство <span class="b">done</span> указывает, достигли ли мы конца генератора.</p>
+                <p>Можно заметить, что генераторы похожи на итераторы, но по сути <strong>генераторы</strong> - <em>это особая форма итераторов</em>.</p>
+
+                <p>Теперь изменим код:</p>
+                <div class="code-block"><code>function* getNumber(){
+    yield 5;
+}
+
+const numberGenerator = getNumber();
+
+let next = numberGenerator.next();
+console.log(next);
+
+next = numberGenerator.next();
+console.log(next);</code></div>
+
+                <p>Здесь обращение к методу <code>next()</code> происходит два раза:</p>
+                <pre class="browser">{value: 5, done: false}
+{value: undefined, done: true}</pre>
+
+                <p>
+                    Но функция генератора <strong>getNumber</strong> генерирует только одно значение - число 5. Поэтому при повторном вызове свойство <code>value</code> будет иметь значение <code></code>undefined, 
+                    а свойство <code>done - true</code>, то есть работа генератора завершена.
+                </p>
+
+                <h4>Генератор может создавать/генерировать множество значений:</h4>
+
+                <div class="code-block"><code>function* getNumber(){
+    yield 5;
+    yield 25;
+    yield 125;
+}
+
+const numberGenerator = getNumber();
+console.log(numberGenerator.next());
+console.log(numberGenerator.next());
+console.log(numberGenerator.next());
+console.log(numberGenerator.next());</code></div>
+
+                <p>Консольный вывод:</p>
+                <pre class="browser">{value: 5, done: false}
+{value: 25, done: false}
+{value: 125, done: false}
+{value: undefined, done: true}</pre>
+
+                <p>
+                    То есть при первом вызове метода <code>next()</code> из итератора извлекается значение, которое идет после первого оператора <code>yield</code>, при втором вызове 
+                    метода <code>next()</code> - значение после второго оператора <code>yield</code> и так далее.
+                </p>
+
+                <p>Для упрощения мы можем возвращать в генераторе элементы из массива:</p>
+                <div class="code-block"><code>const numbers = [5, 25, 125, 625];
+function* getNumber(){
+    for(const n of numbers){
+        yield n;
+    }
+}
+
+const numberGenerator = getNumber();
+console.log(numberGenerator.next().value);      <code class="comment">// 5</code>
+console.log(numberGenerator.next().value);      <code class="comment">// 25</code></code></div>
+
+                <p>
+                    При этом важно понимать, что между двумя последовательными вызовами <code>next()</code> может пройти некоторое неопределенное время, между ними могут располагаться какие-то другие действия, 
+                    и все равно генератор будет возвращать свое следующее значение.
+                </p>
+                <div class="code-block"><code>const numberGenerator = getNumber();
+console.log(numberGenerator.next().value);      <code class="comment">// 5</code>
+<code class="comment">// ряд других действий</code>
+ 
+console.log(numberGenerator.next().value);      <code class="comment">// 25</code></code></div>
+
+                <p>Генератор необязательно содержит только определение операторов <code>yield</code>. <strong>Он также может содержать более сложную логику</strong>.</p>
+
+                <p>С помощью генераторов удобно создавать бесконечные последовательности:</p>
+                <div class="code-block"><code>function* points(){
+    let x = 0;
+    let y = 0;
+    while(true){
+        yield {x:x, y:y};
+        x += 2;
+        y += 1;
+    }
+}
+
+let pointGenerator = points();
+ 
+console.log(pointGenerator.next().value);
+console.log(pointGenerator.next().value);
+console.log(pointGenerator.next().value);</code></div>
+
+<p>Консольный вывод:</p>
+<pre class="browser">    {x: 0, y: 0}
+    {x: 2, y: 1}
+    {x: 4, y: 2}</pre>
+    
+                <h3 id="ch10-generat-return">📃 Возвращение из генератора и функция return</h3>
+
+                <p>
+                    Как выше мы увидели, каждый последующий вызов <code>next()</code> возвращает следующее значение генератора, однако мы можем завершить работу генератора с помощью 
+                    метода <span class="b">return()</span>:
+                </p>
+                <div class="code-block"><code>function* getNumber(){
+    yield 5;
+    yield 25;
+    yield 125;
+}
+
+const numberGenerator = getNumber();
+console.log(numberGenerator.next());    <code class="comment">// {value: 5, done: false}</code>
+numberGenerator.return();               <code class="comment">// завершаем работу генератора</code>
+console.log(numberGenerator.next());    <code class="comment">// {value: undefined, done: true}</code></code></div>
+
+                <h3 id="ch10-loop-get">📃 Получение значений генератора в цикле</h3>
+
+                <p>Поскольку для получения значений применяется итератор, то мы можем использовать цикл <span class="b">for...of</span>:</p>
+                <div class="code-block"><code>function* getNumber(){
+    yield 5;
+    yield 25;
+    yield 125;
+}
+
+const numberGenerator = getNumber();
+ 
+for(const num of numberGenerator){
+    console.log(num);
+}</code></div>
+
+                <p>Консольный вывод:</p>
+                <pre class="browser">5
+25
+125</pre>
+
+                <p>Также мы можем применять и другие типы циклов, например, цикл <span class="b">while</span>:</p>
+                <div class="code-block"><code>function* getNumber(){
+    yield 5;
+    yield 25;
+    yield 125;
+}
+
+const numberGenerator = getNumber();
+ 
+while(!(item = numberGenerator.next()).done){
+    console.log(item.value);
+}</code></div>
+
+                <h3 id="ch10-data-pass">📃 Передача данных в генератор</h3>
+
+                <h4>Инициализация генератора</h4>
+
+                <p>Функция генератора, как и любая другая функция, может <strong>принимать параметры</strong>. Соответственно через параметры мы можем передать в генератор некоторые данные. Например:</p>
+                <div class="code-block"><code>function* getNumber(start, end, step){
+    for(let n = start; n &lt;= end; n +=step){
+        yield n;
+    }
+}
+
+const numberGenerator = getNumber(0, 8, 2);
+ 
+for(num of numberGenerator){
+    console.log(num);
+}</code></div>
+
+                <p>Здесь в функцию генератора передается <em>начальное конечное значения и шаг</em> приращенния чисел. Консольный вывод:</p>
+                <pre class="browser">0
+2
+4
+6
+8</pre>
+
+                <p><strong>Другой пример</strong> - определим генератор, который возвращет данные из массива:</p>
+                <div class="code-block"><code>function* generateFromArray(items){
+    for(item of items) 
+        yield item;
+}
+
+const people = ["Tom", "Bob", "Sam"];
+const personGenerator = generateFromArray(people);
+for(person of personGenerator)
+    console.log(person);</code></div>
+
+                <p>В данном случае в генератор передается массив, который используется для генерации значений. Консольный вывод:</p>
+                <pre class="browser">Tom
+Bob
+Sam</pre>
+
+                <h4>Передача данных в метод next</h4>
+
+                <p>С помощью <code>next()</code> можно передать в генератор данные. Переданные в этот метод данные можно получить в функции генератора через предыдущий вызов оператора <span class="b">yield</span>:</p>
+                <div class="code-block"><code>function* getNumber(){
+    const n = yield 5;      <code class="comment">// получаем значение numberGenerator.next(2).value</code>
+    console.log("n:", n);
+    const m = yield 5 * n;  <code class="comment">// получаем значение numberGenerator.next(3).value</code>
+    console.log("m:", m);
+    yield 5 * m;
+}
+
+const numberGenerator = getNumber();
+ 
+console.log(numberGenerator.next().value);      <code class="comment">// 5</code>
+console.log(numberGenerator.next(2).value);     <code class="comment">// 10</code>
+console.log(numberGenerator.next(3).value);     <code class="comment">// 15</code></code></div>
+
+                <p>Консольный вывод:</p>
+                <pre class="browser">5
+n: 2
+10
+m: 3
+15</pre>
+
+                <p>При втором вызове метода <code>next()</code>:</p>
+                <div class="code-block"><code>numberGenerator.next(2).value</code></div>
+
+                <p>Мы можем получить переданные через него данные, присвоив результат <span class="b">первого</span> вызова оператора <code>yield</code>:</p>
+                <div class="code-block"><code>const n = yield 5;</code></div>
+
+                <p>То есть здесь константа <code>n</code> будет равна <code>2</code>, так как в метод <code>next()</code> передается число <code>2</code>.</p>
+                <p>Далее мы можем использовать это значение, например, для генерации нового значения:</p>
+                <div class="code-block"><code>const m = yield 5 * n;</code></div>
+
+                <p>Соответственно, константа <code>m</code> получит значение, переданное через третий вызов метода <code>next()</code>, то есть число <code>3</code>.</p>
+
+                <h3 id="ch10-err-handle">📃 Обработка ошибок генератора</h3>
+
+                <p>
+                    С помощью функции <span class="b">throw()</span> мы можем сгенерировать в генераторе исключение. В качестве параметра в эту функцию передается произвольное 
+                    значение, которое представляет информацию об ошибке:
+                </p>
+
+                <div class="code-block"><code>function* generateData(){
+    try {
+        yield "Tom";
+        yield "Bob";
+        yield "Hello Work";
+    }
+    catch(error) {
+        console.log("Error:", error);
+    }
+} 
+
+const personGenerator = generateData();
+console.log(personGenerator.next());        <code class="comment">// {value: "Tom", done: false}</code>
+personGenerator.throw("Something wrong");   <code class="comment">// Error: Something wrong</code>
+console.log(personGenerator.next());        <code class="comment">// {value: undefined, done: true}</code></code></div>
+
+                <p>
+                    Прежде всего в функции генератора для обработки возможного исключения используем конструкцию <span class="b">try..catch</span>. В блоке <span class="b">catch</span> с помощью 
+                    параметра <code>error</code> мы можем получить информацию об ошибке, которая передается в функцию <span class="b">throw()</span>.
+                </p>
+                <p>Далее при использовании генератора мы можем вызвать эту функцию, передавая в нее произвольную информацию об ошибке (в данном случае это просто некоторое строковое сообщения)</p>
+                <div class="code-block"><code>personGenerator.throw("Something wrong");</code></div>
+
+                <p>В итоге этот вызов приведет к генерации исключения в функции генератора, и управление перейдет к блоку <span class="b">catch</span>, который выводит информацию об ошибке на консоль:</p>
+                <div class="code-block"><code>catch(error) {
+    console.log("Error:", error);
+}</code></div>
+
+                <p>Консольный вывод программы:</p>
+                <pre class="browser">{value: "Tom", done: false}
+Error: Something wrong
+{value: undefined, done: true}</pre>
+
+                <p>Стоит отметить, что после вызова функции <code>throw()</code> генератор завершает работу, а далее при вызове метода <code>next()</code> мы получим результат <code>{value: undefined, done: true}</code></p>
+
 
                 <h2>Map - коллекция пар ключ-значение</h2>
                 <p>Map — это коллекция для хранения данных в формате ключ-значение. В отличие от обычных объектов, ключами в Map могут быть любые значения (включая объекты и функции).</p>
