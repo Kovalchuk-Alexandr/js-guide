@@ -726,6 +726,8 @@
                                 <li class="nav-subitem" data-target="ch10-loop-get">&emsp;📃 Получение значений генератора в цикле</li>
                                 <li class="nav-subitem" data-target="ch10-data-pass">&emsp;📃 Передача данных в генератор</li>
                                 <li class="nav-subitem" data-target="ch10-err-handle">&emsp;📃 Обработка ошибок генератора</li>
+                                <li class="nav-subitem" data-target="ch10-set">📜 Set - коллекция уникальных значений</li>
+                                <li class="nav-subitem" data-target="ch10-weakset">📜 WeakSet</li>
 
                             </ul>
                         </li>
@@ -15615,6 +15617,375 @@ Error: Something wrong
                 <p>Стоит отметить, что после вызова функции <code>throw()</code> генератор завершает работу, а далее при вызове метода <code>next()</code> мы получим результат <code>{value: undefined, done: true}</code></p>
 
 
+                <h2 id="ch10-set">📜 Set - коллекция уникальных значений</h2>
+
+                <p>
+                    <strong>Set</strong> — это коллекция, которая хранит только уникальные значения. Дубликаты автоматически игнорируются.
+                    В JavaScript функционал множества опредляет объект <strong>Set</strong>.
+                </p>
+                
+                <h3>Создание Set</h3>
+
+                <p>Для создания множества применяется конструктор этого объекта:</p>
+                <div class="code-block"><code>const mySet = new Set();</code></div>
+
+                <p>Также можно передать в конструктор массив значений, которыми будет инициализировано множество:</p>
+                <div class="code-block"><code>const arr = [1, 1, 2, 3, 4, 5, 2, 4];
+ const numbers = new Set(arr);
+ console.log(numbers);       <code class="comment">// Set(5) {1, 2, 3, 4, 5}</code></code></div>
+
+                <p>
+                    В данном случае в множество передаются данные из массива. Однако поскольку множество может хранить только уникальные значения, то при его создании повторяющиеся значения, 
+                    которые есть в массиве, удаляются.
+                </p>
+                <p>Для упрощения создания набора мы можем сразу передать массив в конструктор <code>Set</code>:</p>
+                <div class="code-block"><code>const numbers = new Set([1, 2, 3, 4, 5]);
+ console.log(numbers);       <code class="comment">// Set(5) {1, 2, 3, 4, 5}</code></code></div>
+
+                <h3>Размер набора</h3>
+
+                <p>Для проверки количества элементов можно использовать свойство <span class="b">size</span>.</p>
+                <div class="code-block"><code>const numbers = new Set([1, 1, 2, 3, 4, 5, 2, 4]);
+ console.log(numbers.size);  <code class="comment">// 5</code></code></div>
+
+                <h3>Добавление</h3>
+
+                <p>Для добавления применяется метод <span class="b">add()</span>. Его результатом является измененное множество:</p>
+                <div class="code-block"><code>const numbers = new Set();
+numbers.add(1);
+numbers.add(3);
+numbers.add(5);
+numbers.add(3);              <code class="comment">// не добавляется</code>
+numbers.add(1);              <code class="comment">// не добавляется</code>
+console.log(numbers);        <code class="comment">// Set(3) {1, 3, 5}</code></code></div>
+
+                <p>При этом, поскольку множество хранит только уникальные значения, то добавление элементов, которые уже в нем есть, не имеет смысла.</p>
+                <p>Так как метод <code>add</code> возвращает ссылку на это же множество, то мы можем вызывать методы по цепочке:</p>
+
+                <div class="code-block"><code>const numbers = new Set();
+ numbers.add(1).add(3).add(5);
+ console.log(numbers);       <code class="comment">// Set(3) {1, 3, 5}</code></code></div>
+
+                <h3>Удаление</h3>
+
+                <p>Для удаления элементов применяется метод <span class="b">delete()</span>:</p>
+                <div class="code-block"><code>const numbers = new Set([1, 3, 5]);
+ numbers.delete(3);
+ console.log(numbers);       <code class="comment">// Set(2) {1, 5}</code></code></div>
+
+                <p>Причем данный метод возвращает булевое значение: <code>true</code> - если элемент удален и <code>false</code> - если удаление не произошло (например, когда удаляемого элемента нет в множестве):</p>
+                <div class="code-block"><code>const numbers = new Set([1, 3, 5]);
+ 
+let isDeleted = numbers.delete(3);
+console.log(isDeleted);      <code class="comment">// true</code>
+isDeleted = numbers.delete(54);
+console.log(isDeleted);      <code class="comment">// false</code></code></div>
+
+                <p>Если необходимо удалить вообще все элементы из множества, то применяется метод <span class="b">clear()</span>:</p>
+                <div class="code-block"><code>let numbers = new Set();
+const numbers = new Set([1, 3, 5]);
+numbers.clear();
+console.log(numbers);        <code class="comment">// Set(0) {}</code></code></div>
+
+                <h3>Проверка наличия элемента</h3>
+
+                <p>Если нужно проверить, если ли элемент в множестве, то используется метод <span class="b">has()</span>. Если элемент есть, то метод возвращает <code>true</code>, иначе возвращает <code>false</code>:</p>
+                <div class="code-block"><code>const numbers = new Set([1, 3, 5]);
+ console.log(numbers.has(3));    <code class="comment">// true</code>
+ console.log(numbers.has(32));   <code class="comment">// false</code></code></div>
+
+                <h3>Перебор множества</h3>
+
+                <p>Для перебора элементов множества применяется метод <span class="b">forEach()</span>:</p>
+                <div class="code-block"><code>const numbers = new Set([1, 2, 3, 5]);
+ 
+numbers.forEach(function(value1, value2, set){
+    console.log(value1);
+})</code></div>
+
+                <p>
+                    Для совместимости с массивами, которые тоже имеют метод <code>forEach</code>, в данный метод передается функция обратного вызова, которая принимает три параметра. 
+                    Непосредственно для множества <em>первый и второй</em> параметры представляют текущий перебираемый элемент, а <em>третий</em> параметр - перебираемое множество. В данном случае применяется только первый параметр.
+                </p>
+
+                <p>Также для перебора множества можно использовать цикл <code>for...of</code>:</p>
+                <div class="code-block"><code>const numbers = new Set([1, 2, 3, 5]);
+ 
+for(n of numbers){
+    console.log(n);
+}</code></div>
+
+                <h3>Получение итератора</h3>
+
+                <p>
+                    Также у объекта <span class="b">Set</span> есть ряд методов, которые возвращают итератор, а точнее объект <span class="b">SetIterator</span>. Это методы 
+                    <code>values()</code>, <code>keys()</code>, <code>entries()</code>:
+                </p>
+
+                <div class="code-block"><code>const numbers = new Set([1, 2, 3, 5]);
+ 
+console.log(numbers.values());  <code class="comment">// SetIterator {1, 2, 3, 5}</code>
+console.log(numbers.keys());    <code class="comment">// SetIterator {1, 2, 3, 5}</code>
+console.log(numbers.entries()); <code class="comment">// SetIterator {1 => 1, 2 => 2, 3 => 3, 5 => 5}</code></code></div>
+
+                <p>Соответственно возвращаемый итератор мы можем использовать для получения объектов множества:</p>
+                <div class="code-block"><code>const people = new Set(["Tom", "Bob", "Sam"]);
+ 
+const iterator = people.values();   
+ 
+console.log(iterator.next());   <code class="comment">// {value: "Tom", done: false}</code>
+console.log(iterator.next());   <code class="comment">// {value: "Bob", done: false}</code>
+console.log(iterator.next());   <code class="comment">// {value: "Sam", done: false}</code>
+console.log(iterator.next());   <code class="comment">// {value: undefined, done: true}</code></code></div>
+
+                <h3>Удаление из массива повторяющихся элементов</h3>
+
+                <p>Ограничения объекта <code>Set</code> - хранения уникальных значений позволяет эффективно его применять в ряде операций. Например, удаление из массива повторяющихся элементов:</p>
+                <div class="code-block"><code>const peopleArray = ["Tom", "Bob", "Sam", "Alice", "Sam", "Kate", "Tom"];
+const peopleSet = new Set(peopleArray);
+const newPeopleArray = Array.from(peopleSet);
+ 
+console.log(newPeopleArray);    <code class="comment">// ["Tom", "Bob", "Sam", "Alice", "Kate"]</code></code></div>
+
+                <p>Здесь для создания нового массива с неповторяющимися элементами применяется функция <span class="b">Array.from()</span>, которая в качестве аргумента получает объект <code>Set</code>.</p>
+
+                <div class="code-block"><code><code class="comment">// Пустой Set</code>
+const set = new Set();
+
+<code class="comment">// Set из массива</code>
+const set2 = new Set([1, 2, 3, 4, 5]);
+
+<code class="comment">// Set автоматически удаляет дубликаты</code>
+const set3 = new Set([1, 2, 2, 3, 3, 4]);
+console.log(set3); <code class="comment">// Set(4) {1, 2, 3, 4}</code>
+
+<code class="comment">// Set из строки</code>
+const set4 = new Set('hello');
+console.log(set4); <code class="comment">// Set(4) {'h', 'e', 'l', 'o'}</code></code></div>
+
+                <h3>Основные методы Set</h3>
+                <div class="code-block"><code>const set = new Set();
+
+<code class="comment">// add(value) - добавить элемент</code>
+set.add(1);
+set.add(2);
+set.add(2); <code class="comment">// Игнорируется (дубликат)</code>
+set.add(3);
+
+<code class="comment">// has(value) - проверка наличия</code>
+console.log(set.has(2)); <code class="comment">// true</code>
+console.log(set.has(5)); <code class="comment">// false</code>
+
+<code class="comment">// delete(value) - удалить элемент</code>
+set.delete(2);
+console.log(set.has(2)); <code class="comment">// false</code>
+
+<code class="comment">// size - количество элементов</code>
+console.log(set.size);   <code class="comment">// 2</code>
+
+<code class="comment">// clear() - очистить Set</code>
+set.clear();
+console.log(set.size);   <code class="comment">// 0</code></code></div>
+
+                <h3>Разбор примера: удаление дубликатов массива</h3>
+                <div class="code-block"><code>const arr = [1, 2, 2, 3, 3, 4];
+
+<code class="comment">// Пошаговый разбор:</code>
+
+<code class="comment">// Шаг 1: new Set(arr)</code>
+<code class="comment">// Создаёт Set из массива, автоматически удаляя дубликаты</code>
+const uniqueSet = new Set(arr); 
+console.log(uniqueSet); <code class="comment">// Set(4) {1, 2, 3, 4}</code>
+
+<code class="comment">// Шаг 2: ...uniqueSet</code>
+// Spread оператор разворачивает Set в отдельные элементы
+// Результат: 1, 2, 3, 4 (просто значения, не массив)
+
+<code class="comment">// Шаг 3: [...uniqueSet]</code>
+// Квадратные скобки собирают развёрнутые элементы обратно в массив
+const unique = [...uniqueSet];
+console.log(unique); // [1, 2, 3, 4]
+
+<code class="comment">// Всё вместе в одну строку:</code>
+const unique2 = [...new Set(arr)]; // [1, 2, 3, 4]
+
+<code class="comment">// Альтернатива с Array.from():</code>
+const unique3 = Array.from(new Set(arr)); // [1, 2, 3, 4]</code></div>
+
+                <h3>Перебор Set</h3>
+                <div class="code-block"><code>const set = new Set(['apple', 'banana', 'orange']);
+
+<code class="comment">// forEach</code>
+set.forEach(value => {
+    console.log(value);
+});
+
+<code class="comment">// for...of</code>
+for (let value of set) {
+    console.log(value);
+}
+
+<code class="comment">// keys() и values() возвращают одно и то же (для совместимости с Map)</code>
+for (let value of set.keys()) {
+    console.log(value);
+}
+
+for (let value of set.values()) {
+    console.log(value);
+}
+
+<code class="comment">// entries() возвращает [value, value]</code>
+for (let entry of set.entries()) {
+    console.log(entry); <code class="comment">// ['apple', 'apple']</code>
+}</code></div>
+
+                <h3>Цепочка вызовов</h3>
+                <div class="code-block"><code>const set = new Set();
+
+<code class="comment">// add() возвращает сам Set</code>
+set.add(1)
+   .add(2)
+   .add(3);
+
+console.log(set); <code class="comment">// Set(3) {1, 2, 3}</code></code></div>
+
+                <h2 id="ch10-weakset">📜 WeakSet - слабый Set</h2>
+                <p>WeakSet похож на Set, но может содержать только объекты, и они хранятся "слабо".</p>
+                <p>
+                    Объект <span class="b">WeakSet</span> во многом похож на обычное множество. Он также может хранить только уникальные значения, 
+                    но каждый его элемент должен представлять объект.
+                </p>
+
+                <p>Для создания объекта <code>WeakSet</code> используется его конструктор, в который можно передать начальные значения:</p>
+                <div class="code-block"><code><code class="comment">// пустой WeakSet</code>
+const weakSet1 = new WeakSet();
+
+<code class="comment">// инициализация начальными значениями</code>
+const weakSet2 = new WeakSet([{name:"Tom", age: 37}, {name:"Alice", age: 34}]);</code></div>
+
+                <p>Для инициализации как в случае с объектом <code>Set</code> в конструктор передается массив, но данный массив содержит именно объекты, а не скалярные значения, типа чисел или строк.</p>
+
+                <h4>Для добавления данных в WeakSet применяется метод <span class="b">add()</span>:</h4>
+
+                <div class="code-block"><code>const weakSet = new WeakSet();
+weakSet.add({lang: "JavaScript"});
+weakSet.add({lang: "TypeScript"});
+
+// weakSet.add(34);     <code class="comment">// так нельзя - 34 - число, а не объект</code>
+console.log(weakSet);   <code class="comment">// &#123;&#123;lang: "JavaScript"&#125;, &#123;lang: "TypeScript"&#125;&#125;</code></code></div>
+
+                <p>Причем опять же добавить мы можем только объект, а не скалярные значения типа чисел или строк.</p>
+
+                <p><strong>Для удаления</strong> применяется метод <span class="b">delete()</span>, в который передается ссылка на удаляемый объект:</p>
+
+                <div class="code-block"><code>const weakSet = new WeakSet();
+const js = {lang: "JavaScript"};
+const ts = {lang: "TypeScript"};
+weakSet.add(js);
+weakSet.add(ts);
+ 
+weakSet.delete(js);
+ 
+console.log(weakSet);   <code class="comment">// &#123;&#123;lang: "TypeScript"&#125;&#125;</code></code></div>
+
+                <p><strong>Если надо проверить, имеется ли объект в WeakSet</strong>, то можно использовать метод <span class="b">has()</span>, который возвращает <code>true</code> при наличии объекта:</p>
+                <div class="code-block"><code>const js = {lang: "JavaScript"};
+const ts = {lang: "TypeScript"};
+const java = {lang: "Java"};
+
+const weakSet = new WeakSet([js, ts]);
+
+console.log(weakSet.has(ts));       <code class="comment">// true</code>
+console.log(weakSet.has(java));     <code class="comment">//  false</code></code></div>
+
+                <h4>Перебор WeakSet</h4>
+
+                <p>
+                    Стоит отметить, что <code>WeakSet</code> не поддерживает перебор ни с помощью метода <code>ForEach</code>, которого у <code>WeakSet</code> нет, ни с помощью цикла <code>for</code>. Например. если мы 
+                    попробуем перебрать <code>WeakSet</code> через цикл <code>for..of</code>:
+                </p>
+                <div class="code-block"><code>const weakSet = new WeakSet([
+    {lang: "JavaScript"}, 
+    {lang: "TypeScript"}, 
+    {lang: "Java"}
+]);
+ 
+ 
+for(item of weakSet){
+    console.log(item);
+}</code></div>
+
+                <p>То мы получим ошибку:</p>
+                <pre class="browser">Uncaught TypeError: weakSet is not iterable</pre>
+
+                <h4>Слабые ссылки</h4>
+
+                <p>
+                    Объекты передаются в  <code>WeakSet</code> по ссылке. И отличительной особенностью <code>WeakSet</code> является то, что когда объект перестает существовать в силу различных причин, 
+                    он удаляется из <code>WeakSet</code>. Так, рассмотрим следующий пример:
+                </p>
+                <div class="code-block"><code>let js = {lang: "JavaScript"};
+let ts = {lang: "TypeScript"};
+const weakSet = new WeakSet([js, ts]);
+ 
+js = null;
+ 
+console.log(weakSet);       <code class="comment">// &#123;&#123;lang: "JavaScript"&#125;, &#123;lang: "TypeScript"&#125;&#125;</code>
+console.log("Некоторая работа");
+const timerId = setTimeout(function(){
+    console.log(weakSet);   <code class="comment">// &#123;&#123;lang: "TypeScript"&#125;&#125;</code>
+    clearTimeout(timerId);
+}, 20000);</code></div>
+
+                <p>В данном случае сначала объект <code>WeakSet</code> хранит ссылки на два объекта: <code>js</code> и <code>ts</code>. Далее мы устанавливаем значение для переменной <code>js</code> в <code>null</code>.</p>
+                <p>Это приведет к тому, что спустя некоторое время начальное значение этой переменной будет удалено сборщиком мусора JavaScript.</p>
+                <div class="code-block"><code>js = null;</code></div>
+
+                <p>
+                    Причем, если сразу после этого мы посмотрим на содержимое <code>weakSet</code>, то увидим, что объект <code>js</code> в нем еще присутствует. Однако спустя некоторое время ссылка будет удалена из <code>weakSet</code>. Для эмуляции прошествия времени 
+                    здесь используется функция <code>setTimeout</code>, которая выводит на консоль содержимое <code>weakSet</code> через <code>9000 секунд</code> (конкретный период времени, через который сборщик мусора удалит значение, может отличаться)
+                </p>
+                <p>Теперь сравним с тем, что произойдет, если вместо <code>WeakSet</code> использовать <span class="b">Set</span>:</p>
+
+                <div class="code-block"><code>let js = {lang: "JavaScript"};
+let ts = {lang: "TypeScript"};
+const set = new Set([js, ts]);
+ 
+js = null;
+ 
+console.log(set);       <code class="comment">// Set(2) &#123;&#123;lang: "JavaScript"}, &#123;lang: "TypeScript"&#125;&#125;</code>
+console.log("Некоторая работа");
+const timerId = setTimeout(function()&#123;
+    console.log(set);   <code class="comment">// Set(2)&#123;&#123;lang: "JavaScript"&#125;, {lang: "TypeScript"&#125;&#125;</code>
+    clearTimeout(timerId);
+}, 20000);</code></div>
+
+                <p>В случае с <code>Set</code> даже спустя некоторое время мы увидим, что в объекте <code>Set</code> до сих пор присутствует объект, для которого было установлено значение <code>null</code></p>
+
+
+                <div class="code-block"><code>const weakSet = new WeakSet();
+let user1 = {name: 'Alice'};
+let user2 = {name: 'Bob'};
+
+<code class="comment">// Добавление объектов</code>
+weakSet.add(user1);
+weakSet.add(user2);
+
+console.log(weakSet.has(user1)); <code class="comment">// true</code>
+
+<code class="comment">// Когда объект больше не нужен</code>
+user1 = null; <code class="comment">// Будет удалён из WeakSet автоматически</code></code></div>
+
+                <div class="info-box warning">
+                    <div class="info-box-title">⚠️ Ограничения WeakSet</div>
+                    <ul>
+                        <li>Только объекты (не примитивы)</li>
+                        <li>Нельзя перебирать</li>
+                        <li>Нет свойства size</li>
+                        <li>Нет метода clear()</li>
+                    </ul>
+                </div>
+
                 <h2>Map - коллекция пар ключ-значение</h2>
                 <p>Map — это коллекция для хранения данных в формате ключ-значение. В отличие от обычных объектов, ключами в Map могут быть любые значения (включая объекты и функции).</p>
 
@@ -15769,136 +16140,6 @@ user = null; // Объект будет удалён из WeakMap автомат
                     </ul>
                 </div>
 
-                <h2>Set - коллекция уникальных значений</h2>
-                <p>Set — это коллекция, которая хранит только уникальные значения. Дубликаты автоматически игнорируются.</p>
-
-                <h3>Создание Set</h3>
-                <div class="code-block"><code>// Пустой Set
-const set = new Set();
-
-// Set из массива
-const set2 = new Set([1, 2, 3, 4, 5]);
-
-// Set автоматически удаляет дубликаты
-const set3 = new Set([1, 2, 2, 3, 3, 4]);
-console.log(set3); // Set(4) {1, 2, 3, 4}
-
-// Set из строки
-const set4 = new Set('hello');
-console.log(set4); // Set(4) {'h', 'e', 'l', 'o'}</code></div>
-
-                <h3>Основные методы Set</h3>
-                <div class="code-block"><code>const set = new Set();
-
-// add(value) - добавить элемент
-set.add(1);
-set.add(2);
-set.add(2); // Игнорируется (дубликат)
-set.add(3);
-
-// has(value) - проверка наличия
-console.log(set.has(2)); // true
-console.log(set.has(5)); // false
-
-// delete(value) - удалить элемент
-set.delete(2);
-console.log(set.has(2)); // false
-
-// size - количество элементов
-console.log(set.size); // 2
-
-// clear() - очистить Set
-set.clear();
-console.log(set.size); // 0</code></div>
-
-                <h3>Разбор примера: удаление дубликатов массива</h3>
-                <div class="code-block"><code>const arr = [1, 2, 2, 3, 3, 4];
-
-// Пошаговый разбор:
-
-// Шаг 1: new Set(arr)
-// Создаёт Set из массива, автоматически удаляя дубликаты
-const uniqueSet = new Set(arr); 
-console.log(uniqueSet); // Set(4) {1, 2, 3, 4}
-
-// Шаг 2: ...uniqueSet
-// Spread оператор разворачивает Set в отдельные элементы
-// Результат: 1, 2, 3, 4 (просто значения, не массив)
-
-// Шаг 3: [...uniqueSet]
-// Квадратные скобки собирают развёрнутые элементы обратно в массив
-const unique = [...uniqueSet];
-console.log(unique); // [1, 2, 3, 4]
-
-// Всё вместе в одну строку:
-const unique2 = [...new Set(arr)]; // [1, 2, 3, 4]
-
-// Альтернатива с Array.from():
-const unique3 = Array.from(new Set(arr)); // [1, 2, 3, 4]</code></div>
-
-                <h3>Перебор Set</h3>
-                <div class="code-block"><code>const set = new Set(['apple', 'banana', 'orange']);
-
-// forEach
-set.forEach(value => {
-    console.log(value);
-});
-
-// for...of
-for (let value of set) {
-    console.log(value);
-}
-
-// keys() и values() возвращают одно и то же (для совместимости с Map)
-for (let value of set.keys()) {
-    console.log(value);
-}
-
-for (let value of set.values()) {
-    console.log(value);
-}
-
-// entries() возвращает [value, value]
-for (let entry of set.entries()) {
-    console.log(entry); // ['apple', 'apple']
-}</code></div>
-
-                <h3>Цепочка вызовов</h3>
-                <div class="code-block"><code>const set = new Set();
-
-// add() возвращает сам Set
-set.add(1)
-   .add(2)
-   .add(3);
-
-console.log(set); // Set(3) {1, 2, 3}</code></div>
-
-                <h2>WeakSet - слабый Set</h2>
-                <p>WeakSet похож на Set, но может содержать только объекты, и они хранятся "слабо".</p>
-
-                <div class="code-block"><code>const weakSet = new WeakSet();
-
-let user1 = {name: 'Alice'};
-let user2 = {name: 'Bob'};
-
-// Добавление объектов
-weakSet.add(user1);
-weakSet.add(user2);
-
-console.log(weakSet.has(user1)); // true
-
-// Когда объект больше не нужен
-user1 = null; // Будет удалён из WeakSet автоматически</code></div>
-
-                <div class="info-box warning">
-                    <div class="info-box-title">⚠️ Ограничения WeakSet</div>
-                    <ul>
-                        <li>Только объекты (не примитивы)</li>
-                        <li>Нельзя перебирать</li>
-                        <li>Нет свойства size</li>
-                        <li>Нет метода clear()</li>
-                    </ul>
-                </div>
 
                 <h2>Практические примеры</h2>
 
