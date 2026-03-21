@@ -728,7 +728,17 @@
                                 <li class="nav-subitem" data-target="ch10-err-handle">&emsp;📃 Обработка ошибок генератора</li>
                                 <li class="nav-subitem" data-target="ch10-set">📜 Set - коллекция уникальных значений</li>
                                 <li class="nav-subitem" data-target="ch10-weakset">📜 WeakSet</li>
-
+                                <li class="nav-subitem" data-target="ch10-map">📜 Map - коллекция пар ключ-значение</li>
+                                <li class="nav-subitem" data-target="ch10-map-methods">&emsp;📃 Основные методы Map</li>
+                                <li class="nav-subitem" data-target="ch10-map-key-obj">&emsp;📃 Map с объектами в качестве ключей</li>
+                                <li class="nav-subitem" data-target="ch10-iterating">&emsp;📃 Перебор Map</li>
+                                <li class="nav-subitem" data-target="ch10-chaining-conversion">&emsp;📃 Chaining/Conversion Map ⇄ Obj</li>
+                                <li class="nav-subitem" data-target="ch10-weakmap">📜 WeakMap - слабая Map</li>
+                                <li class="nav-subitem" data-target="ch10-examples">📜 Практические примеры</li>
+                                <li class="nav-subitem" data-target="ch10-elem-count">&emsp;📃 Подсчёт частоты элементов (Map)</li>
+                                <li class="nav-subitem" data-target="ch10-unique-values">&emsp;📃 Уникальные значения в массиве объектов (Set)</li>
+                                <li class="nav-subitem" data-target="ch10-caching-results">&emsp;📃 Кэширование результатов функций (WeakMap)</li>
+                                <li class="nav-subitem" data-target="ch10-multiple-oper">&emsp;📃 Множественные операции (Set)</li>
                             </ul>
                         </li>
                     </ul>
@@ -742,6 +752,7 @@
                             <ul class="nav-sublist">
                                 <li class="nav-subitem" data-target="ch11-intro">📜 Что такое DOM?</li>
                                 <li class="nav-subitem" data-target="ch11-search">📜 Поиск элементов</li>
+                                <li class="nav-subitem" data-target="ch11-css-selectors">&emsp;📃 Селекторы CSS</li>
                                 <li class="nav-subitem" data-target="ch11-content">📜 Изменение содержимого</li>
                                 <li class="nav-subitem" data-target="ch11-attributes">📜 Работа с атрибутами</li>
                                 <li class="nav-subitem" data-target="ch11-classes">📜 Работа с классами</li>
@@ -15986,67 +15997,195 @@ user1 = null; <code class="comment">// Будет удалён из WeakSet ав
                     </ul>
                 </div>
 
-                <h2>Map - коллекция пар ключ-значение</h2>
+                <h2 id="ch10-map">Map - коллекция пар ключ-значение</h2>
+
                 <p>Map — это коллекция для хранения данных в формате ключ-значение. В отличие от обычных объектов, ключами в Map могут быть любые значения (включая объекты и функции).</p>
+                <p>
+                    Объект <span class="b">Map</span> или словарь представляет структуру данных, где каждый элемент имеет ключ и значение. Ключи в рамках словаря являются уникальными, то есть 
+                    с одним ключом может быть сопоставлен только один элемент.
+                </p>
 
                 <h3>Создание Map</h3>
+
+                <p>Для создания словаря применяется конструктор объекта <span class="b">Map</span>:</p>
+                <div class="code-block"><code>const myMap = new Map();</code></div>
+
+                <p>
+                    Также можно инициализировать словарь начальными значениями. Для этого в конструктор передается массив, элементы которого представляют массивы из двух элементов - первый элемент 
+                    будет выступать в качестве ключа, а второй - в качестве значения:
+                </p>
+                <div class="code-block"><code>const myMap = new Map([[1, "a"], [2, "b"], [3, "c"]]);
+ console.log(myMap);     <code class="comment">// Map(3){1 => "a", 2 => "b", 3 => "c"}</code></code></div>
+
+                <p>В данном случае <code>числа 1, 2, 3</code> являются <em>ключами</em>, а строки <code>"a", "b", "c"</code> - <em>значениями</em>.</p>
+                <p>При этом ключи и значения необзательно должны быть одного типа. Тип ключей и значений может совпадать:</p>
+                <div class="code-block"><code>const dict = new Map([["red", "красный"], ["green", "зеленый"], ["blue", "синий"]]);
+ console.log(dict);      <code class="comment">// Map(3) {"red" =>"красный", "green"=> "зеленый", "blue"=>"синий"}</code></code></div>
+
                 <div class="code-block"><code><code class="comment">// Пустой Map</code>
 const map = new Map();
 
-// Map из массива пар
+<code class="comment">// Map из массива пар</code>
 const map2 = new Map([
     ['name', 'Alice'],
     ['age', 25],
     ['city', 'Moscow']
 ]);
 
-// Из объекта
+<code class="comment">// Из объекта</code>
 const obj = {name: 'Bob', age: 30};
 const map3 = new Map(Object.entries(obj));</code></div>
 
-                <h3>Основные методы Map</h3>
+                <h3>Размер словаря</h3>
+
+                <p>С помощью свойства <span class="b">size</span> можно проверить количество элементов в <code>Map</code>:</p>
+                <div class="code-block"><code>const dict = new Map([["red", "красный"], ["green", "зеленый"], ["blue", "синий"]]);
+ console.log(dict.size);     <code class="comment">// 3</code></code></div>
+
+                <h3>Добавление и изменение элементов</h3>
+
+                <p>Для установки значения применяется метод <span class="b">set()</span>:</p>
+                <div class="code-block"><code>const dict = new Map([["red", "красный"], ["green", "зеленый"], ["blue", "синий"]]);
+dict.set("yellow", "желтый");       <code class="comment">// добавление элемента</code>
+dict.set("red", "червонный");       <code class="comment">// изменение элемента</code>
+console.log(dict);                  <code class="comment">// Map(4) {"red" => "червонный", "green" => "зеленый", ↩</code>
+                                    <code class="comment">// "blue" => "синий", "yellow" => "желтый"}</code>
+</code></div>
+
+                <p>
+                    <strong>Первый параметр</strong> метода <code>set()</code> представляет <em>ключ</em>, а <strong>второй параметр</strong> - <em>значение элемента</em>. Если по такому ключу нет элементов, то добавляется 
+                    новый элемент. Если ключ уже есть, то уже имеющийся элемент изменяет свое значение.
+                </p>
+                
+                <h3>Получение элементов</h3>
+                
+                <p>Для получения элемента по ключу применяется метод <span class="b">get()</span>, в который передается ключ элемента:</p>
+                <div class="code-block"><code>const dict = new Map([["red", "красный"], ["green", "зеленый"], ["blue", "синий"]]);
+ console.log(dict.get("red"));       <code class="comment">// красный</code>
+ console.log(dict.get("violet"));    <code class="comment">// undefined</code></code></div>
+
+                <p>Если map не содержит элемента по заданному ключу, то метод возвращает <code>undefined</code>.</p>
+                <p>
+                    Чтобы избежать возвращения <code>undefined</code> мы можем проверить наличие элемента по ключу с помощью метода <span class="b">has()</span>. 
+                    Если элемент по ключу имеется, то метод возвращает <code>true</code>, иначе возвращается <code>false</code>:
+                </p>
+
+                <div class="code-block"><code>const dict = new Map([["red", "красный"], ["green", "зеленый"], ["blue", "синий"]]);
+ console.log(dict.has("red"));       <code class="comment">// true</code>
+ console.log(dict.has("violet"));    <code class="comment">//  false</code>
+ 
+ if(dict.has("red")) console.log(dict.get("red"));   <code class="comment">// красный</code></code></div>
+
+
+                <h3>Удаление элементов</h3>
+
+                <p>Для удаления одного элемента по ключу применяется метод <span class="b">delete()</span>:</p>
+                <div class="code-block"><code>const dict = new Map([["red", "красный"], ["green", "зеленый"], ["blue", "синий"]]);
+ dict.delete("red");  
+ console.log(dict);  <code class="comment">// Map(2){"green" => "зеленый", "blue" => "синий"}</code></code></div>
+
+                <p>Для удаления всех элементов используется метод <span class="b">clear()</span>:</p>
+                <div class="code-block"><code>const dict = new Map([["red", "красный"], ["green", "зеленый"], ["blue", "синий"]]);
+ dict.clear(); 
+ console.log(dict);  <code class="comment">// Map(0){}</code></code></div>
+
+                <h3>Перебор элементов</h3>
+
+                <p>Для перебора элементов используется метод <span class="b">forEach</span>:</p>
+                <div class="code-block"><code>const dict = new Map([["red", "красный"], ["green", "зеленый"], ["blue", "синий"]]);
+dict.forEach(function(value, key, map){
+    console.log(key, ":", value);
+})</code></div>
+
+                <p>Метод <code>forEach</code> в качестве параметра получает функцию обратного вызова, которая имеет три параметра:</p>
+
+                <ul>
+                    <li><strong>Первый параметр</strong> - значение</li>
+                    <li><strong>Второй параметр</strong> - ключ</li>
+                    <li><strong>Третий параметр</strong> - перебираемый объект <code>Map</code></li>
+                </ul>
+
+                <p>Консольный вывод данного примера:</p>
+                <pre class="browser">red : красный
+green : зеленый
+blue : синий</pre>
+
+                <p>Также для перебора объекта <code>Map</code> можно использовать циклы, например, цикл <code>for...of</code>:</p>
+                <div class="code-block"><code>const dict = new Map([["red", "красный"], ["green", "зеленый"], ["blue", "синий"]]);
+ 
+for(item of dict){
+    console.log(item[0], ":", item[1]);
+}</code></div>
+
+                <p>Каждый элемент из <code>Map</code> помещается в переменную <code>item</code>, которая в свою очередь представляет массив. <em>Первый элемент</em> этого массива - <code>ключ</code>, а <em>второй элемент</em> - <code>значение</code> элемента.</p>
+
+                <p>
+                    Также объект <code>Map</code> имеет два дополнительных метода: <span class="b">keys()</span> позволяет перебрать только ключи и <span class="b">values()</span> 
+                    позволяет перебирать значения элементов. Оба метода возвращают итераторы, поэтому для перебора ключей и значений по отдельности также можно использовать 
+                    цикл <strong>for...of</strong>:
+                </p>
+
+                <div class="code-block"><code>const dict = new Map([["red", "красный"], ["green", "зеленый"], ["blue", "синий"]]);
+ 
+for(item of dict.keys()){
+    console.log(item);
+}
+<code class="comment">// Консольный вывод:</code>
+// red
+// green
+// blue
+
+for(item of dict.values()){
+    console.log(item);
+}
+<code class="comment">// Консольный вывод:</code>
+// красный
+// зеленый
+// синий</code></div>
+
+                <h3 id="ch10-map-methods">📃 Основные методы Map</h3>
                 <div class="code-block"><code>const map = new Map();
 
-// set(key, value) - добавить/обновить элемент
+<code class="comment">// set(key, value) - добавить/обновить элемент</code>
 map.set('name', 'Alice');
 map.set('age', 25);
 map.set(1, 'число как ключ');
 map.set(true, 'boolean как ключ');
 
-// get(key) - получить значение
-console.log(map.get('name')); // "Alice"
-console.log(map.get('age'));  // 25
+<code class="comment">// get(key) - получить значение</code>
+console.log(map.get('name')); <code class="comment">// "Alice"</code>
+console.log(map.get('age'));  <code class="comment">// 25</code>
 
-// has(key) - проверка наличия ключа
-console.log(map.has('name')); // true
-console.log(map.has('city')); // false
+<code class="comment">// has(key) - проверка наличия ключа</code>
+console.log(map.has('name')); <code class="comment">// true</code>
+console.log(map.has('city')); <code class="comment">// false</code>
 
-// delete(key) - удалить элемент
+<code class="comment">// delete(key) - удалить элемент</code>
 map.delete('age');
-console.log(map.has('age')); // false
+console.log(map.has('age')); <code class="comment">// false</code>
 
-// size - количество элементов
-console.log(map.size); // 3
+<code class="comment">// size - количество элементов</code>
+console.log(map.size); <code class="comment">// 3</code>
 
-// clear() - очистить Map
+<code class="comment">// clear() - очистить Map</code>
 map.clear();
-console.log(map.size); // 0</code></div>
+console.log(map.size); <code class="comment">// 0</code></code></div>
 
-                <h3>Map с объектами в качестве ключей</h3>
+                <h3 id="ch10-map-key-obj">📃 Map с объектами в качестве ключей</h3>
                 <div class="code-block"><code>const map = new Map();
 
-// Объект как ключ
+<code class="comment">// Объект как ключ</code>
 const user1 = {name: 'Alice'};
 const user2 = {name: 'Bob'};
 
 map.set(user1, 'администратор');
 map.set(user2, 'пользователь');
 
-console.log(map.get(user1)); // "администратор"
-console.log(map.get(user2)); // "пользователь"
+console.log(map.get(user1)); <code class="comment">// "администратор"</code>
+console.log(map.get(user2)); <code class="comment">// "пользователь"</code>
 
-// Это работает, потому что ключи — это ссылки на объекты
-console.log(map.get({name: 'Alice'})); // undefined (новый объект!)</code></div>
+<code class="comment">// Это работает, потому что ключи — это ссылки на объекты</code>
+console.log(map.get({name: 'Alice'})); <code class="comment">// undefined (новый объект!)</code></code></div>
 
                 <div class="info-box note">
                     <div class="info-box-title">💡 Map vs Object</div>
@@ -16058,77 +16197,191 @@ console.log(map.get({name: 'Alice'})); // undefined (новый объект!)</
                     </ul>
                 </div>
 
-                <h3>Перебор Map</h3>
+                <h3 id="ch10-iterating">📃 Перебор Map</h3>
                 <div class="code-block"><code>const map = new Map([
     ['name', 'Alice'],
     ['age', 25],
     ['city', 'Moscow']
 ]);
 
-// forEach
+<code class="comment">// forEach</code>
 map.forEach((value, key) => {
     console.log(`${key}: ${value}`);
 });
 
-// for...of
+<code class="comment">// for...of</code>
 for (let [key, value] of map) {
     console.log(`${key}: ${value}`);
 }
 
-// Только ключи
+<code class="comment">// Только ключи</code>
 for (let key of map.keys()) {
     console.log(key);
 }
 
-// Только значения
+<code class="comment">// Только значения</code>
 for (let value of map.values()) {
     console.log(value);
 }
 
-// Пары ключ-значение
+<code class="comment">// Пары ключ-значение</code>
 for (let entry of map.entries()) {
-    console.log(entry); // ['name', 'Alice']
+    console.log(entry); <code class="comment">// ['name', 'Alice']</code>
 }</code></div>
 
-                <h3>Цепочка вызовов (Chaining)</h3>
+                <h3 id="ch10-chaining-conversion">📃 Цепочка вызовов (Chaining)</h3>
                 <div class="code-block"><code>const map = new Map();
 
-// set() возвращает сам Map, поэтому можно делать цепочку
+<code class="comment">// set() возвращает сам Map, поэтому можно делать цепочку</code>
 map.set('name', 'Alice')
    .set('age', 25)
    .set('city', 'Moscow');
 
-console.log(map.size); // 3</code></div>
+console.log(map.size); <code class="comment">// 3</code></code></div>
 
                 <h3>Преобразование Map в Object и обратно</h3>
-                <div class="code-block"><code>// Map → Object
+                <div class="code-block"><code><code class="comment">// Map → Object</code>
 const map = new Map([
     ['name', 'Alice'],
     ['age', 25]
 ]);
 
 const obj = Object.fromEntries(map);
-console.log(obj); // {name: 'Alice', age: 25}
+console.log(obj);      <code class="comment">// {name: 'Alice', age: 25}</code>
 
-// Object → Map
+<code class="comment">// Object → Map</code>
 const user = {name: 'Bob', age: 30};
 const map2 = new Map(Object.entries(user));
-console.log(map2); // Map(2) {'name' => 'Bob', 'age' => 30}</code></div>
+console.log(map2);     <code class="comment">// Map(2) {'name' => 'Bob', 'age' => 30}</code></code></div>
 
-                <h2>WeakMap - слабая Map</h2>
-                <p>WeakMap похож на Map, но ключами могут быть только объекты, и они хранятся "слабо" (могут быть удалены сборщиком мусора).</p>
+                <h2 id="ch10-weakmap">📜 WeakMap - слабая Map</h2>
+
+                <p><strong>WeakMap</strong> похож на <code>Map</code>, но ключами могут быть только объекты, и они хранятся "слабо" (могут быть удалены сборщиком мусора).</p>
+
+                <h4>Создание WeakMap:</h4>
+
+                <div class="code-block"><code><code class="comment">// пустой WeakMap</code>
+const weakMap1 = new WeakMap();
+ 
+<code class="comment">// WeakMap с инициализацией данными</code>
+let key1 = {key:1};
+let key2 = {key:2};
+let value1 = {name: "Tom"};
+let value2 = {name: "Sam"};
+ 
+const weakMap2 = new WeakMap([[key1, value1], [key2, value2]]);
+<code class="comment">// или так</code>
+<code class="comment">// const weakMap2 = new WeakMap([[{key:1}, {name: "Tom"}], [{key:2}, {name: "Sam"}]]);</code>
+</code></div>
+
+                <p>Стоит отметить, что объект WeakMap не поддерживает перебор.</p>
+
+                <h4>Для добавления новых объектов или изменения старых применяется метод <code class="b">set()</code>:</h4>
+
+                <div class="code-block"><code>let key1 = {key:1};
+let key2 = {key:2};
+let value1 = {name: "Tom"};
+let value2 = {name: "Sam"};
+ 
+const weakMap2 = new WeakMap([[key1, value1]]);
+weakMap2.set(key2, value2);
+weakMap2.set(key1, {name: "Kate"});
+
+console.log(weakMap2.get(key1));    <code class="comment">// {name: "Kate"}</code>
+console.log(weakMap2.get(key2));    <code class="comment">// {name: "Sam"}</code></code></div>
+
+                <h4>Для получения объектов по ключу из WeakMap применяется метод <code class="b">get()</code>:</h4>
+
+                <div class="code-block"><code>let key1 = {key:1};
+let key2 = {key:2};
+let value1 = {name: "Tom"};
+let value2 = {name: "Sam"};
+ 
+const weakMap2 = new WeakMap([[key1, value1], [key2, value2]]);
+console.log(weakMap2.get(key1));    <code class="comment">// {name: "Tom"}</code></code></div>
+
+                <p><strong>Чтобы проверить наличие элемента по определенному ключу</strong>, применяется метод <span class="b">has()</span>, который возвращает <code>true</code> при наличии элемента:</p>
+                <div class="code-block"><code>let key1 = {key:1},
+    key2 = {key:2};
+let value1 = {name: "Tom"},
+    value2 = {name: "Sam"};
+ 
+const weakMap2 = new WeakMap([[key1, value1]]);
+console.log(weakMap2.has(key1));    <code class="comment">// true</code>
+console.log(weakMap2.has(key2));    <code class="comment">// false</code></code></div>
+
+                <h4>Для удаления элемента по ключу применяется метод <code class="b">delete()</code>:</h4>
+
+                <div class="code-block"><code>let key1 = {key:1},
+    key2 = {key:2};
+let value1 = {name: "Tom"},
+    value2 = {name: "Sam"};
+ 
+const weakMap2 = new WeakMap([[key1, value1], [key2, value2]]);
+console.log(weakMap2.has(key1));    <code class="comment">// true</code>
+
+weakMap2.delete(key1);
+console.log(weakMap2.has(key1));    <code class="comment">// false</code></code></div>
+
+                <h4>Слабые ссылки</h4>
+
+                <p>Объекты передаются в <code>WeakMap</code> по ссылке. И отличительной особенностью  <code>WeakMap</code> является то, что когда объект перестает существовать в силу различных причин, он удаляется из <code>WeakMap</code>. Рассмотрим следующий пример:</p>
+                <div class="code-block"><code>let jsCode = {code: "js"},
+    tsCode = {code: "ts"};
+let js = {lang: "JavaScript"},
+    ts = {lang: "TypeScript"};
+const weakMap = new WeakMap([[jsCode, js], [tsCode, ts]]);
+ 
+jsCode = null;
+ 
+console.log(weakMap);       <code class="comment">// WeakMap &#123;&#123;code: "js"&#125; => &#123;lang: "JavaScript"&#125;,</code>  ↩
+                            <code class="comment">// &#123;code: "ts"} => &#123;lang: "TypeScript"&#125;&#125;</code>
+console.log("Некоторая работа");
+const timerId = setTimeout(function(){
+    console.log(weakMap);   <code class="comment">// WeakMap &#123;&#123;code: "ts"&#125; => &#123;lang: "TypeScript"&#125;&#125;</code>
+    clearTimeout(timerId);
+&#125;, 30000);</code></div>
+
+                <p>В данном случае сначала объект <code>WeakMap</code> хранит ссылки на два элемента с ключами <code>jsCode</code> и <code>tsCode</code>. Далее для переменной <code>jsCode</code> устанавливается значение <code>null</code>.</p>
+                <div class="code-block"><code>jsCode = null;</code></div>
+
+                <p>Это приведет к тому, что спустя некоторое время начальное значение этой переменной будет удалено сборщиком мусора JavaScript.</p>
+                <p>
+                    Причем если сразу после этого мы посмотрим на содержимое <code>weakMap</code>, то увидим, что объект с ключом <code>jsCode</code> в нем еще присутствует. Однако спустя некоторое время ссылка будет удалена из <code>weakSet</code>. Для эмуляции прошествия времени 
+                    здесь используется функция <code>setTimeout</code>, которая выводит на консоль содержимое <code>weakSet</code> через <code>10000 секунд</code> (конкретный период времени, через который сборщик мусора удалит значение, может отличаться)
+                </p>
+
+                <p>Теперь сравним с тем, что произойдет, если вместо <code>WeakMap</code> использовать <span class="b">Map</span>:</p>
+                <div class="code-block"><code>let jsCode = {code: "js"},
+    tsCode = {code: "ts"};
+let js = {lang: "JavaScript"},
+    ts = {lang: "TypeScript"};
+const map = new Map([[jsCode, js], [tsCode, ts]]);
+ 
+jsCode = null;
+ 
+console.log(map);       <code class="comment">// Map(2) &#123;&#123;code: "js"&#125; => &#123;lang: "JavaScript"&#125;,</code> ↩
+                        <code class="comment">// &#123;code: "ts"&#125; => &#123;lang: "TypeScript"&#125;&#125;</code>
+console.log("Некоторая работа");
+const timerId = setTimeout(function(){
+    console.log(map);   <code class="comment">// Map(2) &#123;&#123;code: "js"} => &#123;lang: "JavaScript"&#125;,</code> ↩
+                        <code class="comment">// &#123;code: "ts"&#125; => &#123;lang: "TypeScript"&#125;&#125;</code>
+    clearTimeout(timerId);
+&#125;, 30000);</code></div>
+
+                <p>В случае с <code>Map</code> даже спустя некоторое время мы увидим, что в объекте <code>Map</code> до сих пор присутствует объект, для которого было установлено значение <code>null</code></p>
 
                 <div class="code-block"><code>const weakMap = new WeakMap();
 
 let user = {name: 'Alice'};
 
-// Добавление
+<code class="comment">// Добавление</code>
 weakMap.set(user, 'данные о пользователе');
 
-console.log(weakMap.get(user)); // "данные о пользователе"
+console.log(weakMap.get(user)); <code class="comment">// "данные о пользователе"</code>
 
-// Когда user больше не нужен
-user = null; // Объект будет удалён из WeakMap автоматически</code></div>
+<code class="comment">// Когда user больше не нужен</code>
+user = null; <code class="comment">// Объект будет удалён из WeakMap автоматически</code></code></div>
 
                 <div class="info-box warning">
                     <div class="info-box-title">⚠️ Ограничения WeakMap</div>
@@ -16141,9 +16394,9 @@ user = null; // Объект будет удалён из WeakMap автомат
                 </div>
 
 
-                <h2>Практические примеры</h2>
+                <h2 id="ch10-examples">📜 Практические примеры</h2>
 
-                <h3>Подсчёт частоты элементов (Map)</h3>
+                <h3 id="ch10-elem-count">📃 Подсчёт частоты элементов (Map)</h3>
                 <div class="code-block"><code>const fruits = ['apple', 'banana', 'apple', 'orange', 'banana', 'apple'];
 
 const frequency = new Map();
@@ -16153,65 +16406,65 @@ fruits.forEach(fruit => {
 });
 
 console.log(frequency);
-// Map(3) {'apple' => 3, 'banana' => 2, 'orange' => 1}</code></div>
+<code class="comment">// Map(3) {'apple' => 3, 'banana' => 2, 'orange' => 1}</code></code></div>
 
-                <h3>Уникальные значения в массиве объектов (Set)</h3>
+                <h3 id="ch10-unique-values">📃 Уникальные значения в массиве объектов (Set)</h3>
                 <div class="code-block"><code>const users = [
     {id: 1, name: 'Alice'},
     {id: 2, name: 'Bob'},
-    {id: 1, name: 'Alice'}, // Дубликат
+    {id: 1, name: 'Alice'}, <code class="comment">// Дубликат</code>
     {id: 3, name: 'Charlie'}
 ];
 
-// Получить уникальные ID
+<code class="comment">// Получить уникальные ID</code>
 const uniqueIds = [...new Set(users.map(u => u.id))];
-console.log(uniqueIds); // [1, 2, 3]</code></div>
+console.log(uniqueIds); <code class="comment">// [1, 2, 3]</code></code></div>
 
-                <h3>Кэширование результатов функций (WeakMap)</h3>
+                <h3 id="ch10-caching-results">📃 Кэширование результатов функций (WeakMap)</h3>
                 <div class="code-block"><code>const cache = new WeakMap();
 
 function process(obj) {
-    // Проверяем кэш
+    <code class="comment">// Проверяем кэш</code>
     if (cache.has(obj)) {
         console.log('Из кэша');
         return cache.get(obj);
     }
     
-    // Вычисляем результат
+    <code class="comment">// Вычисляем результат</code>
     const result = obj.value * 2;
     
-    // Сохраняем в кэш
+    <code class="comment">// Сохраняем в кэш</code>
     cache.set(obj, result);
     
     return result;
 }
 
 const data = {value: 10};
-console.log(process(data)); // Вычисляется: 20
-console.log(process(data)); // Из кэша: 20</code></div>
+console.log(process(data)); <code class="comment">// Вычисляется: 20</code>
+console.log(process(data)); <code class="comment">// Из кэша: 20</code></code></div>
 
-                <h3>Множественные операции (Set)</h3>
+                <h3 id="ch10-multiple-oper">📃 Множественные операции (Set)</h3>
                 <div class="code-block"><code>const setA = new Set([1, 2, 3, 4]);
 const setB = new Set([3, 4, 5, 6]);
 
-// Объединение (union)
+<code class="comment">// Объединение (union)</code>
 const union = new Set([...setA, ...setB]);
-console.log(union); // Set(6) {1, 2, 3, 4, 5, 6}
+console.log(union); <code class="comment">// Set(6) {1, 2, 3, 4, 5, 6}</code>
 
-// Пересечение (intersection)
+<code class="comment">// Пересечение (intersection)</code>
 const intersection = new Set([...setA].filter(x => setB.has(x)));
-console.log(intersection); // Set(2) {3, 4}
+console.log(intersection); <code class="comment">//</code> Set(2) {3, 4}
 
-// Разность (difference)
+<code class="comment">// Разность (difference)</code>
 const difference = new Set([...setA].filter(x => !setB.has(x)));
-console.log(difference); // Set(2) {1, 2}</code></div>
+console.log(difference); <code class="comment">// Set(2) {1, 2}</code></code></div>
             </section>
 
             <!-- ГЛАВА 11: DOM (Document Object Model) -->
             <section class="chapter" id="ch11">
                 <h1>Глава 11. DOM (Document Object Model)</h1>
 
-                <h2 id="ch11-intro">Что такое DOM?</h2>
+                <h2 id="ch11-intro">📜 Что такое DOM?</h2>
                 <p>DOM (Document Object Model) — это программный интерфейс для HTML и XML документов. Он представляет структуру документа в виде дерева объектов, которыми можно манипулировать с помощью JavaScript.</p>
 
                 <div class="info-box note">
@@ -16219,7 +16472,7 @@ console.log(difference); // Set(2) {1, 2}</code></div>
                     <p>Каждый HTML-элемент в DOM представлен объектом (узлом). Документ имеет иерархическую структуру: родители, потомки, соседние элементы.</p>
                 </div>
 
-                <h2 id="ch11-search">Поиск элементов</h2>
+                <h2 id="ch11-search">📜 Поиск элементов</h2>
 
                 <ul>
                     <li><p><span class="b">getElementById(value)</span>: выбирает элемент, у которого атрибут <code>id</code> равен value</p>. Если элемента с таким идентификатором нет, то возвращается null</li>
@@ -16300,7 +16553,7 @@ const itemsArray2 = Array.from(items);</code></div>
                 <div class="code-block"><code>&lt;p class="text"&gt;Page Text 1&lt;/p&gt;
  &lt;p class="text"&gt;Page Text 2&lt;/p&gt;</code></div>
                     
-                <h3>Селекторы CSS</h3>
+                <h3 id="ch11-css-selectors">📃 Селекторы CSS</h3>
                 <p>Список базовых CSS-селекторов, которые мы можем применять для поиска элементов:</p>
 
                 <ul>
@@ -16365,7 +16618,7 @@ const itemsArray2 = Array.from(items);</code></div>
 могут не сразу изменяться.</p>
                 </div>
 
-                <h2 id="ch11-content">Изменение содержимого</h2>
+                <h2 id="ch11-content">📜 Изменение содержимого</h2>
 
                 <h3>textContent</h3>
                 <div class="code-block"><code>const div = document.querySelector('#content');
@@ -16403,7 +16656,7 @@ console.log(div.outerHTML); <code class="comment">// &lt;div id="content"&gt;...
 <code class="comment">// Заменить элемент полностью</code>
 div.outerHTML = '&lt;section&gt;Новый элемент&lt;/section&gt;';</code></div>
 
-                <h2 id="ch11-attributes">Работа с атрибутами</h2>
+                <h2 id="ch11-attributes">📜 Работа с атрибутами</h2>
 
                 <h3>getAttribute / setAttribute</h3>
                 <div class="code-block"><code>const link = document.querySelector('a');
@@ -16449,7 +16702,7 @@ console.log(div.dataset.role);<code class="comment">   // "admin"</code>
 div.dataset.status = 'active';
 <code class="comment">// HTML станет: data-status="active"</code></code></div>
 
-                <h2 id="ch11-classes">Работа с классами</h2>
+                <h2 id="ch11-classes">📜 Работа с классами</h2>
 
                 <h3>className</h3>
                 <div class="code-block"><code>const div = document.querySelector('div');
@@ -16484,7 +16737,7 @@ if (div.classList.contains('active')) {
 <code class="comment">// Заменить класс</code>
 div.classList.replace('old-class', 'new-class');</code></div>
 
-                <h2 id="ch11-styles">Работа со стилями</h2>
+                <h2 id="ch11-styles">📜 Работа со стилями</h2>
 
                 <h3>Инлайн-стили (style)</h3>
                 <div class="code-block"><code>const div = document.querySelector('div');
@@ -16517,7 +16770,7 @@ console.log(styles.width);<code class="comment">           // Вычисленн
 const beforeStyles = getComputedStyle(div, '::before');
 console.log(beforeStyles.content);</code></div>
 
-                <h2 id="ch11-navigation">Объект Node. Навигация по DOM</h2>
+                <h2 id="ch11-navigation">📜 Объект Node. Навигация по DOM</h2>
 
                 <p>Каждый отдельный узел, будь то html-элемент, его атрибут или текст, в структуре DOM представлен объектом <span class="b">Node</span>. 
                     Может возникнуть вопрос: как связаны элементы веб-страницы и узлы веб-страницы? И тут надо отметить, что любой элемент веб-страницы является узлом, но не любой узел является 
@@ -16727,7 +16980,7 @@ const prev = element.previousElementSibling;</code></div>
 const form = button.closest('form');
 const container = button.closest('.container');</code></div>
 
-                <h2 id="ch11-elements">Элементы</h2>
+                <h2 id="ch11-elements">📜 Элементы</h2>
 
                 <p>
                     Для работы с элементами на веб-странице мы можем использовать как функциональность типа Node, который представляет любой узел веб-страницы, 
@@ -16850,7 +17103,7 @@ const container = button.closest('.container');</code></div>
                 </ul>
 
                 <p>
-                    Одним из ключевых свойств объекта Element является свойство <span class="b">tagName</span>, которое возвращает тег элемента:
+                    Одним из ключевых свойств объекта <code>Element</code> является свойство <span class="b">tagName</span>, которое возвращает тег элемента:
                 </p>
                 
                 <div class="code-block"><code>&lt;body>
@@ -16866,7 +17119,6 @@ const container = button.closest('.container');</code></div>
                 <p>
                     Свойство <span class="b">textContent</span> позволяет получить или изменить текстовое содержимое элемента:
                 </p>
-
 
                 <div class="code-block"><code>&lt;body>
     &lt;h1 id="header">Home Page&lt;/h1>
@@ -16928,7 +17180,7 @@ const container = button.closest('.container');</code></div>
     &lt;/script>
 &lt;/body></code></div>
 
-                <h2 id="ch11-create">Создание, добавление, замена и удаление элементов</h2>
+                <h2 id="ch11-create">📜 Создание, добавление, замена и удаление элементов</h2>
 
                 <p>
                     JavaScript предоставляет ряд методов для управления элементами на веб-страницы. В частности, мы можем создавать и добавлять новые элементы 
@@ -17059,7 +17311,7 @@ div.insertAdjacentHTML('beforeend', '&lt;p&gt;В конец&lt;/p&gt;');
 div.insertAdjacentHTML('afterend', '&lt;p&gt;После элемента&lt;/p&gt;');</code></div>
 
 
-                <h2 id="ch11-copy">Копирование элемента</h2>
+                <h2 id="ch11-copy">📜 Копирование элемента</h2>
 
                 <p>
                     Иногда элементы бывают довольно сложными по составу, и гораздо проще их скопировать, чем с помощью отдельных вызовов создавать их содержимое. 
@@ -17091,7 +17343,7 @@ div.insertAdjacentHTML('afterend', '&lt;p&gt;После элемента&lt;/p&g
                     содержимым и потом добавляем в конец элемента c id="article".
                 </p>
 
-                <h2 id="ch11-replace">Замена элемента</h2>
+                <h2 id="ch11-replace">📜 Замена элемента</h2>
 
                 <p>
                     Для замены элемента применяется метод <span class="b">replaceChild(newNode, oldNode)</span> объекта Node. Этот метод 
@@ -17182,7 +17434,7 @@ container.after(newDiv);
 <code class="comment">// insertBefore - вставить перед определённым потомком</code>
 container.insertBefore(newDiv, container.firstChild);</code></div>
 
-                <h2 id="ch11-remove">Удаление элементов</h2>
+                <h2 id="ch11-remove">📜 Удаление элементов</h2>
                 <div class="code-block"><code>const element = document.querySelector('.item');
 
 <code class="comment">// remove() - удалить элемент</code>
@@ -17200,7 +17452,7 @@ while (parent.firstChild) {
     parent.removeChild(parent.firstChild);
 }</code></div>
 
-                <h2 id="ch11-clone">Клонирование элементов</h2>
+                <h2 id="ch11-clone">📜 Клонирование элементов</h2>
                 <div class="code-block"><code>const original = document.querySelector('.item');
 
 <code class="comment">// Поверхностное клонирование (без потомков)</code>
@@ -17212,7 +17464,7 @@ const clone2 = original.cloneNode(true);
 <code class="comment">// Вставить клон</code>
 document.body.appendChild(clone2);</code></div>
 
-                <h2 id="ch11-sizes">Размеры и позиция элемента</h2>
+                <h2 id="ch11-sizes">📜 Размеры и позиция элемента</h2>
                 <div class="code-block"><code>const div = document.querySelector('div');
 
 <code class="comment">// Размеры (включая padding, но без border)</code>
@@ -17240,7 +17492,7 @@ console.log(rect.left);   // Расстояние от левого края о�
 console.log(rect.width);  // Ширина
 console.log(rect.height); // Высота</code></div>
 
-                <h2 id="ch11-attr-manage">Управление атрибутами элементов</h2>
+                <h2 id="ch11-attr-manage">📜 Управление атрибутами элементов</h2>
 
                 <p>Для управления атрибутами элементов JavaScript предоставляет ряд методов:</p>
 
@@ -17352,7 +17604,7 @@ element.setAttributeNode(attribute);
     element.removeAttribute("style");
 &lt;/script></code></div>
 
-                <h2 id="ch11-style-manage">Изменение стиля элементов</h2>
+                <h2 id="ch11-style-manage">📜 Изменение стиля элементов</h2>
 
                 <p>
                     Для работы со стилевыми свойствами элементов в JavaScript применяются, главным образом, два подхода:
@@ -17497,7 +17749,7 @@ for(headerClass of header.classList){
 }
 console.log(header.classList[0]);<code class="comment">   // первый установленный класс</code></code></div>
 
-                <h2 id="ch11-custom">Создание своего элемента HTML</h2>
+                <h2 id="ch11-custom">📜 Создание своего элемента HTML</h2>
 
                 <p>
                     По умолчанию HTML предоставляет ряд встроенных элементов, из которых мы можем составить структуру веб-страницы. Однако мы не ограничены 
