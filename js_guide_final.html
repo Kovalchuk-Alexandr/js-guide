@@ -776,6 +776,7 @@
                                 <li class="nav-subitem" data-target="ch12-assigning">📜 Способы назначения обработчиков событий</li>
                                 <li class="nav-subitem" data-target="ch12-event-obj">📜 Объект события (Event)</li>
                                 <li class="nav-subitem" data-target="ch12-mouse-event">📜 События мыши</li>
+                                <li class="nav-subitem" data-target="ch12-mouseevents">&emsp;📃 Объект MouseEvent</li>
                                 <li class="nav-subitem" data-target="ch12-kb-event">📜 События клавиатуры</li>
                                 <li class="nav-subitem" data-target="ch12-form-event">📜 События форм</li>
                                 <li class="nav-subitem" data-target="ch12-doc-win-event">📜 События документа и окна</li>
@@ -788,6 +789,7 @@
                                 <li class="nav-subitem" data-target="ch12-dispatch-event">📜 Программный вызов событий</li>
                                 <li class="nav-subitem" data-target="ch12-custom-events">📜 Пользовательские события</li>
                                 <li class="nav-subitem" data-target="ch12-practical-examp">📜 Практические примеры</li>
+                                <li class="nav-subitem" data-target="ch12-optimisation">📜 Практические примеры</li>
                             </ul>
                         </li>
                         <li class="nav-item has-subitems" data-target="ch13"><span class="ch-emoj"></span> Глава 13. Формы
@@ -803,6 +805,7 @@
                                 <li class="nav-subitem" data-target="ch13-validation-management">📜 Управление валидацией форм</li>
                                 <li class="nav-subitem" data-target="ch13-files-validation">📜 Работа с файлами</li>
                                 <li class="nav-subitem" data-target="ch13-form-ajax">📜 Отправка формы через AJAX</li>
+                                <li class="nav-subitem" data-target="ch13-autosave-form">📜 Отправка формы через AJAX</li>
                             </ul>
                         </li>
                     </ul>
@@ -843,11 +846,20 @@
                             <ul class="nav-sublist">
                                 <li class="nav-subitem" data-target="ch16-store-methods">📜 Способы хранения данных в браузере</li>
                                 <li class="nav-subitem" data-target="ch16-cookies">📜 Cookies (Куки)</li>
+                                <li class="nav-subitem" data-target="ch16-param-setting">&emsp;📃 Установка параметров куки</li>
+                                <li class="nav-subitem" data-target="ch16-get-cookies">&emsp;📃 Чтение/получение cookies</li>
+                                <li class="nav-subitem" data-target="ch16-create-change">&emsp;📃 Создание/изменение cookie</li>
+                                <li class="nav-subitem" data-target="ch16-delete">&emsp;📃 Удаление cookie</li>
+                                <li class="nav-subitem" data-target="ch16-cookies-func">&emsp;📃 Вспомогательные функции</li>
+                                <li class="nav-subitem" data-target="ch16-examp-theme">&emsp;📃 Пример: Запоминание темы</li>
                                 <li class="nav-subitem" data-target="ch16-server">📜 Простой web-сервер</li>
                                 <li class="nav-subitem" data-target="ch16-web-storage">📜 Web Storage API</li>
                                 <li class="nav-subitem" data-target="ch16-localstorage">📜 localStorage</li>
+                                <li class="nav-subitem" data-target="ch16-examp-shoppingcart">&emsp;📃 Пример: Корзина товаров</li>
                                 <li class="nav-subitem" data-target="cgh16-sessionstorage">📜 sessionStorage</li>
+                                <li class="nav-subitem" data-target="ch16-examp-form">&emsp;📃 Пример: Сохранение состояния формы</li>
                                 <li class="nav-subitem" data-target="ch16-storage-events">📜 События Storage</li>
+                                <li class="nav-subitem" data-target="ch16-examp-tab-synch">&emsp;📃 Пример: Синхронизация вкладок</li>
                                 <li class="nav-subitem" data-target="ch16-storage-compare">📜 Сравнение способов хранения</li>
                                 <li class="nav-subitem" data-target="ch16-limits-secure">📜 Ограничения и безопасность</li>
                                 <li class="nav-subitem" data-target="ch16-access-limits">📜 Проверка доступности и лимитов</li>
@@ -18065,7 +18077,7 @@ customElements.define("hello-metanit", HelloMetanit);
             <section class="chapter" id="ch12">
                 <h1>Глава 12. События в JavaScript</h1>
 
-                <h2 id="ch12-intro">Что такое события?</h2>
+                <h2 id="ch12-intro">📜 Что такое события?</h2>
                 <p>События — это действия, которые происходят в браузере: клики мышью, нажатия клавиш, загрузка страницы и т.д. JavaScript позволяет реагировать на эти события и выполнять код в ответ на действия пользователя.</p>
 
                 <div class="info-box note">
@@ -18081,7 +18093,7 @@ customElements.define("hello-metanit", HelloMetanit);
                     </ul>
                 </div>
 
-                <h2 id="ch12-assigning">Способы назначения обработчиков событий</h2>
+                <h2 id="ch12-assigning">📜 Способы назначения обработчиков событий</h2>
 
                 <h3>1. HTML-атрибуты (не рекомендуется)</h3>
                 <div class="code-block"><code>&lt;button onclick="alert('Clicked!')"&gt;Нажми меня&lt;/button&gt;
@@ -18154,7 +18166,7 @@ button.removeEventListener('click', handleClick);</code></div>
                     </ul>
                 </div>
 
-                <h2 id="ch12-event-obj">Объект события (Event)</h2>
+                <h2 id="ch12-event-obj">📜 Объект события (Event)</h2>
                 <div class="code-block"><code>button.addEventListener('click', function(event) {
     <code class="comment">//</code> event (или e) - объект события
     
@@ -18206,7 +18218,7 @@ button.removeEventListener('click', handleClick);</code></div>
                     </table>
                 </div>
 
-                <h2 id="ch12-mouse-event">События мыши</h2>
+                <h2 id="ch12-mouse-event">📜 События мыши</h2>
 
                 <div class="table-wrapper">
                     <table>
@@ -18272,7 +18284,7 @@ button.removeEventListener('click', handleClick);</code></div>
 
                 <p>Теперь при наведении указателя мыши на блок blueRect он будет окрашиваться в красный цвет, а при уходе указателя мыши - блок будет обратно окрашиваться в синий цвет.</p>
 
-                <h3>MouseEvent</h3>
+                <h3 id="ch12-mouseevents">📃 Объект MouseEvent</h3>
 
                 <p>
                     Объект Event является общим для всех событий. Однако для разных типов событий существуют также свои объекты событий, которые добавляют ряд своих свойств. 
@@ -18391,7 +18403,7 @@ box.addEventListener('contextmenu', (e) => {
     }
 });</code></div>
 
-                <h2 id="ch12-kb-event">События клавиатуры</h2>
+                <h2 id="ch12-kb-event">📜 События клавиатуры</h2>
 
                 <div class="table-wrapper">
                     <table>
@@ -18602,8 +18614,8 @@ function init(){
 window.addEventListener("load", init);</code></div>
 
                 <p>
-                    Теперь координаты blueRect хранятся в массиве position, где первое значение - это отступ слева, а второе значение - отступ сверху. Чтобы по этим координатам 
-                    установить реальную позицию blueRect на странице определена функция setPosition.
+                    Теперь координаты <code>blueRect</code> хранятся в массиве <code>position</code>, где первое значение - это отступ слева, а второе значение - отступ сверху. Чтобы по этим координатам 
+                    установить реальную позицию <code>blueRect</code> на странице определена функция <strong>setPosition</strong>.
                 </p>
 
                 <div class="code-block"><code>const position = [20, 20];<code class="comment">  // позиция blueRect</code>
@@ -18614,17 +18626,17 @@ function setPosition() {
     blueRect.style.marginTop = position[1] + "px";   
 }</code></div>
 
-                <p>Прикрепляем к событию загрузки окна - <span class="b">load</span> обработчик - функцию init:</p>
+                <p>Прикрепляем к событию загрузки окна - <span class="b">load</span> обработчик - функцию <code>init</code>:</p>
 
                 <div class="code-block"><code>window.addEventListener("load", init);</code></div>
 
                 <p>В функции init определяем правый и нижний край для перемещения blueRect, а также устанавливаем его начальную позицию:</p>
 
-                <div class="code-block"><code>const rightLimit = document.documentElement.clientWidth - 100;<code class="comment">  // правый край</code>
+                <div class="code-block"><code>const rightLimit = document.documentElement.clientWidth - 100;<code class="comment">     // правый край</code>
 const bottomLimit = document.documentElement.clientHeight - 100;<code class="comment">    // нижний край</code>
 setPosition();<code class="comment">  // устанавливаем начальную позицию для blueRect</code></code></div>
 
-                <p>Далее определяем обработчик moveRect, в котором изменяем значения в массиве position:</p>
+                <p>Далее определяем обработчик <code>moveRect</code>, в котором изменяем значения в массиве <code>position</code>:</p>
 
                 <div class="code-block"><code>function moveRect(e){
     switch(e.key){
@@ -18638,10 +18650,10 @@ setPosition();<code class="comment">  // устанавливаем началь
     setPosition();
 }</code></div>
 
-                <p>И после всех изменений переустанавливаем позицию с помощью функции setPosition.</p>
+                <p>И после всех изменений переустанавливаем позицию с помощью функции <code>setPosition</code>.</p>
                 <p>В конце прикрепляем обработчик к нажатию клавиши клавиатуры:</p>
 
-                <h2 id="ch12-form-event">События форм</h2>
+                <h2 id="ch12-form-event">📜 События форм</h2>
 
                 <h3>События элементов форм</h3>
 
@@ -18722,7 +18734,7 @@ select.addEventListener('change', (e) => {
     console.log('Выбрано:', e.target.value);
 });</code></div>
 
-                <h2 id="ch12-doc-win-event">События документа и окна</h2>
+                <h2 id="ch12-doc-win-event">📜 События документа и окна</h2>
 
                 <h3>Общие события интерфейса:</h3>
 
@@ -18802,7 +18814,7 @@ window.addEventListener('scroll', () => {
     console.log(`Прокручено: ${window.scrollY}px`);
 });</code></div>
 
-                <h2 id="ch12-event-handlers">Обработчики событий</h2>
+                <h2 id="ch12-event-handlers">📜 Обработчики событий</h2>
 
                 <p>
                     Если в коде JavaScript возникает событие, то его обрабатывает связанный с этим событием обработчик. Рассмотрим, как определять обработчики событий.
@@ -18937,7 +18949,7 @@ window.addEventListener('scroll', () => {
     &lt;/script>
 &lt;/body></code></div>
 
-                <h2 id="ch12-event-object">Передача данных в обработчик события. Объект Event</h2>
+                <h2 id="ch12-event-object">📜 Передача данных в обработчик события. Объект Event</h2>
 
                 <p>
                     Иногда возникает необходимость передать в обработчик некоторые данные. Если обработчики событий устанавливаются с помощью атрибутов элементов, то
@@ -19164,7 +19176,7 @@ window.addEventListener('scroll', () => {
 }</code></div>
 
 
-                <h2 id="ch12-events-spread">Распространение (всплытие и погружение) событий</h2>
+                <h2 id="ch12-events-spread">📜 Распространение (всплытие и погружение) событий</h2>
 
                 <p>
                     Когда мы нажимаем на какой-либо элемент на станице и генерируется событие нажатия, то это событие может распространяться от элемента к элементу. 
@@ -19331,7 +19343,7 @@ outer.addEventListener('click', () => {
 <code class="comment">// target: button (на чём кликнули)</code>
 <code class="comment">// currentTarget: outer (где висит обработчик)</code></code></div>
 
-                <h2 id="ch12-stop-bubbling">Остановка всплытия</h2>
+                <h2 id="ch12-stop-bubbling">📜 Остановка всплытия</h2>
                 <div class="code-block"><code>button.addEventListener('click', (e) => {
     e.stopPropagation();<code class="comment"> // Остановить всплытие</code>
     console.log('Button clicked');
@@ -19353,7 +19365,7 @@ button.addEventListener('click', (e) => {
                     <p>Остановка всплытия может сломать аналитику, модальные окна и другие системы, которые слушают события на document. Используйте только когда точно понимаете, что делаете.</p>
                 </div>
 
-                <h2 id="ch12-cansel-default">Отмена действия по умолчанию</h2>
+                <h2 id="ch12-cansel-default">📜 Отмена действия по умолчанию</h2>
                 <div class="code-block"><code><code class="comment">// Отменить переход по ссылке</code>
 const link = document.querySelector('a');
 link.addEventListener('click', (e) => {
@@ -19379,7 +19391,7 @@ element.addEventListener('click', (e) => {
     }
 });</code></div>
 
-                <h2 id="ch12-delegation">Делегирование событий</h2>
+                <h2 id="ch12-delegation">📜 Делегирование событий</h2>
                 <p>Вместо назначения обработчика каждому элементу, назначаем один обработчик родителю и используем <code>event.target</code>.</p>
 
                 <div class="code-block"><code>&lt;ul id="menu"&gt;
@@ -19442,7 +19454,7 @@ container.addEventListener('click', (e) => {
 });
 &lt;/script&gt;</code></div>
 
-                <h2 id="ch12-dispatch-event">Программный вызов событий</h2>
+                <h2 id="ch12-dispatch-event">📜 Программный вызов событий</h2>
 
                 <p>События могут возникать не только в следствие действий пользователя на веб-странице. События также можно генерировать программно.</p>
                 <p>
@@ -19506,7 +19518,7 @@ element.dispatchEvent(event);<code class="comment">        // вызываем �
                 </p>
 
                 
-                <h2 id="ch12-custom-events">Пользовательские события</h2>
+                <h2 id="ch12-custom-events">📜 Пользовательские события</h2>
 
                 <p>Возможность программной генерации событий открывает нам путь к созданию кастомных событий - мы можем определять и вызывать произвольные события.</p>
                 <p>Например, у нас есть функция-конструктор Account, которая принимает коичество денег и создает условный денежный счет:</p>
@@ -19754,7 +19766,7 @@ const cart = new ShoppingCart();
 cart.addItem('Ноутбук');<code class="comment">  // Событие сработает</code>
 cart.addItem('Мышь');<code class="comment">     // Событие сработает</code></code></div>
 
-                <h2 id="ch12-practical-examp">Практические примеры</h2>
+                <h2 id="ch12-practical-examp">📜 Практические примеры</h2>
 
                 <h3>Модальное окно</h3>
                 <div class="code-block"><code>const modal = document.querySelector('.modal');
@@ -19833,7 +19845,7 @@ async function loadMoreContent() {
     loading = false;
 }</code></div>
 
-                <h2>Оптимизация обработчиков</h2>
+                <h2 id="ch12-optimisation">📜 Оптимизация обработчиков</h2>
 
                 <h3>Debounce (задержка)</h3>
                 <div class="code-block"><code><code class="comment">// Функция будет вызвана только через 300мс после последнего события</code>
@@ -19895,7 +19907,7 @@ window.addEventListener('scroll', throttle(() => {
 
                 <p>В JavaScript форма представлена объектом <span class="b">HtmlFormElement</span>. И после создания формы мы можем к ней обратиться различными способами.</p>
 
-                <h2 id="ch13-forms&elements">Доступ к формам и элементам</h2>
+                <h2 id="ch13-forms&elements">📜 Доступ к формам и элементам</h2>
 
                 <h3>Доступ к форме</h3>
 
@@ -19935,7 +19947,8 @@ const form = document.querySelector('form');</code></div>
     &lt;/form>
     &lt;script>
         const form = document.getElementById("search");
-        console.log(form.elements); <code class="comment">// HTMLFormControlsCollection(2) [input, input, q: input, send: input]</code>
+        console.log(form.elements); <code class="comment">// HTMLFormControlsCollection(2)</code> ↩
+                                    <code class="comment">// [input, input, q: input, send: input]</code>
         console.log(form.length);   <code class="comment">// 2</code>
         console.log(form.name);     <code class="comment">// search</code>
         console.log(form.action);   <code class="comment">// https://google.com/search</code>
@@ -20051,7 +20064,7 @@ console.log(keyField.type);<code class="comment"> // text</code></code></div>
 const keyField = searchForm.elements["key"];
 keyField.focus();</code></div>
 
-                <h2 id="ch13-buttons">Кнопки</h2>
+                <h2 id="ch13-buttons">📜 Кнопки</h2>
 
                 <p>Для отправки введенных данных на форме используются кнопки. Для создания кнопки используется либо элемент <code>button</code>:</p>
 
@@ -20176,7 +20189,7 @@ sendButton.addEventListener("click", sendForm);
                 
                 <p>При нажатии на кнопку получаем введенный в текстовое поле текст, создаем новый элемент параграфа для этого текста и добавляем параграф в элемент printBlock.</p>
 
-                <h2 id="ch13-textarea">Текстовые поля</h2>
+                <h2 id="ch13-textarea">📜 Текстовые поля</h2>
 
                 <p>Для ввода простейшей текстовой информации предназначены элементы <code>&lt;input type="text"</code>:</p>
                 <div class="code-block"><code>&lt;input type="text" name="kye" size="10" maxlength="15" value="hello world" /></code></div>
@@ -20204,19 +20217,19 @@ sendButton.addEventListener("click", sendForm);
 &lt;script>
     const keyBox = document.search.key;
     
-    // обработчик изменения текста
+    <code class="comment">// обработчик изменения текста</code>
     function onchange(e){
-        // получаем элемент printBlock
+        <code class="comment">// получаем элемент printBlock</code>
         const printBlock = document.getElementById("printBlock");
-        // получаем новое значение
+        <code class="comment">// получаем новое значение</code>
         const val = e.target.value;
-        // установка значения
+        <code class="comment">// установка значения</code>
         printBlock.textContent = val;
     }
 
-    // обработка потери фокуса
+    <code class="comment">// обработка потери фокуса</code>
     function onblur(e){
-        // получаем его значение и обрезаем все пробелы
+        <code class="comment">// получаем его значение и обрезаем все пробелы</code>
         const text = keyBox.value.trim();
         if(text==="")
             keyBox.style.borderColor = "red";
@@ -20224,9 +20237,9 @@ sendButton.addEventListener("click", sendForm);
             keyBox.style.borderColor = "green";
     }
 
-    // получение фокуса
+    <code class="comment">// получение фокуса</code>
     function onfocus(e){
-        // установка цвета границ поля
+        <code class="comment">//</code> установка цвета границ поля
         keyBox.style.borderColor = "blue";
     }
 
@@ -20254,13 +20267,13 @@ sendButton.addEventListener("click", sendForm);
 
                 <div class="code-block"><code>const keyBox = document.search.key;
   
-// обработчик изменения текста
+<code class="comment">// обработчик изменения текста</code>
 function oninput(e){
-    // получаем элемент printBlock
+    <code class="comment">// получаем элемент printBlock</code>
     const printBlock = document.getElementById("printBlock");
-    // получаем новое значение
+    <code class="comment">// получаем новое значение</code>
     const val = e.target.value;
-    // установка значения
+    <code class="comment">// установка значения</code>
     printBlock.textContent = val;
 }
  
@@ -20285,11 +20298,11 @@ keyBox.addEventListener("input", oninput);</code></div>
 &lt;script>
     const passwordBox = document.loginForm.password;
     
-    // обработчик изменения текста
+    <code class="comment">// обработчик изменения текста</code>
     function oninput(e){
-        // получаем элемент printBlock
+        <code class="comment">// получаем элемент printBlock</code>
         const printBlock = document.getElementById("printBlock");
-        // получаем новое значение
+        <code class="comment">// получаем новое значение</code>
         printBlock.textContent = e.target.value;
     } 
     passwordBox.addEventListener("input", oninput); 
@@ -20318,23 +20331,23 @@ keyBox.addEventListener("input", oninput);</code></div>
 &lt;script>
 const messageBox = document.search.message;
     
-    // обработчик ввода символа
+    <code class="comment">// обработчик ввода символа</code>
     function onkeypress(e){
-        // получаем элемент printBlock
+        <code class="comment">// получаем элемент printBlock</code>
         const printBlock = document.getElementById("printBlock");
-        // получаем введенный символ
+        <code class="comment">// получаем введенный символ</code>
         const val = String.fromCharCode(e.keyCode);
-        // добавление символа
+        <code class="comment">// добавление символа</code>
         printBlock.textContent += val;
     }
     
     function onkeydown(e){
-        if(e.keyCode===8){ // если нажат Backspace
+        if(e.keyCode===8){ <code class="comment">// если нажат Backspace</code>
         
-            // получаем элемент printBlock
+            <code class="comment">// получаем элемент printBlock</code>
             const printBlock = document.getElementById("printBlock"), 
                 length = printBlock.textContent.length;
-            // обрезаем строку по последнему символу
+            <code class="comment">// обрезаем строку по последнему символу</code>
             printBlock.textContent = printBlock.textContent.substring(0, length-1);
         }
     }
@@ -20357,7 +20370,7 @@ const messageBox = document.search.message;
                     Backspace, которая удаляет последний символ. И для ее отслеживания также обрабатываем событие keydown. В обработчике keydown удаляем из строки в блоке printBlock последний символ.
                 </p>
                 
-                <h2 id="ch13-flags-radios">Флажки (чекбоксы) и радиокнопки</h2>
+                <h2 id="ch13-flags-radios">📜 Флажки (чекбоксы) и радиокнопки</h2>
 
                 <p>Особую группу элементов ввода составляют флажки (чекбоксы) и радиокнопки.</p>
 
@@ -20426,7 +20439,7 @@ const messageBox = document.search.message;
 
                 <div class="code-block"><code>myForm.languages[myForm.languages.length-1].checked = true;</code></div>
 
-                <h2 id="ch13-select">Список select</h2>
+                <h2 id="ch13-select">📜 Список select</h2>
                 <p>
                     Для создания списка используется html-элемент select. Причем с его помощью можно создавать как выпадающие списки, так и обычные с ординарным или 
                     множественным выбором.<br>Например, стандартный список:
@@ -20626,7 +20639,7 @@ languagesSelect.remove(selectedIndex);</code></div>
                     элемент div, который, в свою очередь, помещаем в элемент selection на веб-странице.
                 </p>
 
-                <h2 id="ch13-get-set-value">Получение и установка значений</h2>
+                <h2 id="ch13-get-set-value">📜 Получение и установка значений</h2>
 
                 <h3>Текстовые поля (input, textarea)</h3>
                 <div class="code-block"><code>const input = document.querySelector('input[name="username"]');
@@ -20734,7 +20747,7 @@ Array.from(select.options).forEach(option => {
     }
 });</code></div>
 
-    <h2 id="ch13-form-submission">Отправка формы</h2>
+    <h2 id="ch13-form-submission">📜 Отправка формы</h2>
 
     <h3>Событие submit</h3>
     <div class="code-block"><code>const form = document.querySelector('form');
@@ -20789,7 +20802,7 @@ function getFormData(form) {
 
 console.log(getFormData(form));</code></div>
 
-    <h2 id="ch13-validation">Validation API. Валидация элементов формы</h2>
+    <h2 id="ch13-validation">📜 Validation API. Валидация элементов формы</h2>
 
     <h3>HTML5 валидация</h3>
 
@@ -20836,8 +20849,8 @@ console.log(getFormData(form));</code></div>
 &lt;/html></code></div>
 
     <p>
-        Здесь на форме определено поле username для ввода условного имени пользователя. Причем это имя должно иметь не меньше 3 и не больше 20 символов. Поля для ввода имени и email 
-        обязательны для заполнения (имеют атрибут <code>required</code>). Также для поля age, которое предназначено для ввода условного возраста, установлено минимальное и максимальное допустимые 
+        Здесь на форме определено поле <code>username</code> для ввода условного имени пользователя. Причем это имя должно иметь не меньше 3 и не больше 20 символов. Поля для ввода имени и <code>email</code> 
+        обязательны для заполнения (имеют атрибут <code>required</code>). Также для поля <code>age</code>, которое предназначено для ввода условного возраста, установлено минимальное и максимальное допустимые 
         значения - 1 и 110 соответственно.
     </p>
     <p>
@@ -21094,7 +21107,7 @@ input.addEventListener('input', () => {
     input.setCustomValidity(''); <code class="comment">// Сбросить сообщение при вводе</code>
 });</code></div>
 
-    <h2 id="ch13-validation-management">Управление валидацией форм</h2>
+    <h2 id="ch13-validation-management">📜 Управление валидацией форм</h2>
 
     <h3>Методы валидации</h3>
 
@@ -21271,7 +21284,7 @@ function validate(){
 &lt;/body>
 &lt;/html></code></div>
 
-    <h2 id="ch13-files-validation">Работа с файлами</h2>
+    <h2 id="ch13-files-validation">📜 Работа с файлами</h2>
 
     <h3>Загрузка файла</h3>
     <div class="code-block"><code>const fileInput = document.querySelector('input[type="file"]');
@@ -21357,7 +21370,7 @@ fileInput.addEventListener('change', (e) => {
     }
 });</code></div>
 
-    <h2 id="ch13-form-ajax">Отправка формы через AJAX</h2>
+    <h2 id="ch13-form-ajax">📜 Отправка формы через AJAX</h2>
 
     <h3>С использованием Fetch API</h3>
     <div class="code-block"><code>const form = document.querySelector('form');
@@ -21410,7 +21423,7 @@ form.addEventListener('submit', async (e) => {
     }
 });</code></div>
 
-    <h2>Автосохранение формы</h2>
+    <h2 id="ch13-autosave-form">📜 Автосохранение формы</h2>
     <div class="code-block"><code>const form = document.querySelector('form');
 
 <code class="comment">// Загрузить сохранённые данные</code>
@@ -21471,7 +21484,7 @@ form.addEventListener('submit', (e) => {
             <section class="chapter" id="ch14">
                 <h1>Глава 14. Работа с браузером и BOM (Browser Object Model)</h1>
 
-                <h2 id="ch14-intro">Что такое BOM?</h2>
+                <h2 id="ch14-intro">📜 Что такое BOM?</h2>
                 <p>BOM (Browser Object Model) — это набор объектов, предоставляемых браузером для работы с окном браузера и его компонентами. В отличие от DOM (работа с документом), BOM позволяет управлять самим браузером.</p>
 
                 <div class="info-box note">
@@ -21491,7 +21504,7 @@ form.addEventListener('submit', (e) => {
                     в браузере.
                 </p>
 
-                <h2 id="ch14-window-object">Объект window</h2>
+                <h2 id="ch14-window-object">📜 Объект window</h2>
                 <p>Объект <span class="b">window</span> представляет собой окно веб-браузера, в котором размещаются веб-страницы. <span class="b">window</span> является глобальным объектом, 
                     поэтому при доступе к его свойствам и методам необязательно использовать его имя. Например, объект <span class="b">window</span> имеет метод 
                     <span class="b">alert()</span>, который отображает окно сообщения. 
@@ -21613,7 +21626,7 @@ window.scrollTo({
 
                 <p>Свойство возвратит объект <code>BarProp</code>, в котором свойство <code>visible</code> собственно и указывает, отображается панель или нет.</p>
 
-                <h2 id="ch14-screen">Объект screen</h2>
+                <h2 id="ch14-screen">📜 Объект screen</h2>
                 <p>screen содержит информацию об экране пользователя.</p>
 
                 <h3>Свойство screen</h3>
@@ -21649,27 +21662,27 @@ console.log(screen.height);<code class="comment">         // 800</code>
 console.log(screen.pixelDepth);<code class="comment">     // 24</code>
 console.log(screen.colorDepth);<code class="comment">     // 24</code></code></div>
 
-                <div class="code-block"><code>// Разрешение экрана
-console.log(screen.width);  // Ширина экрана в пикселях
-console.log(screen.height); // Высота экрана в пикселях
+                <div class="code-block"><code><code class="comment">// Разрешение экрана</code>
+console.log(screen.width);  <code class="comment">// Ширина экрана в пикселях</code>
+console.log(screen.height); <code class="comment">// Высота экрана в пикселях</code>
 
-// Доступная область (без панелей ОС)
+<code class="comment">// Доступная область (без панелей ОС)</code>
 console.log(screen.availWidth);
 console.log(screen.availHeight);
 
-// Глубина цвета
-console.log(screen.colorDepth); // Бит на пиксель (обычно 24)
+<code class="comment">// Глубина цвета</code>
+console.log(screen.colorDepth); <code class="comment">// Бит на пиксель (обычно 24)</code>
 
-// Ориентация экрана
-console.log(screen.orientation.type); // "landscape-primary" или "portrait-primary"
+<code class="comment">// Ориентация экрана</code>
+console.log(screen.orientation.type); <code class="comment">// "landscape-primary" или "portrait-primary"</code>
 
-// Отслеживание изменения ориентации
+<code class="comment">// Отслеживание изменения ориентации</code>
 screen.orientation.addEventListener('change', () => {
     console.log('Новая ориентация:', screen.orientation.type);
 });</code></div>
 
 
-                <h2 id="ch14-dialog-search">Диалоговые окна и поиск на странице</h2>
+                <h2 id="ch14-dialog-search">📜 Диалоговые окна и поиск на странице</h2>
 
                 <p>Для взаимодействия с пользователем в объекте <span class="b">window</span> определен ряд методов, которые позволяют создавать диалоговые окна или взаимодействуют с содержимым окна:</p>
 
@@ -21690,7 +21703,7 @@ screen.orientation.addEventListener('change', () => {
 &lt;script>
     const btn = document.getElementById("btn");
     btn.addEventListener("click", ()=>{
-        alert("Hello METANIT.COM");<code class="comment">  // отображаем всплывающее окно при нажати на кнопку</code>
+        alert("Hello METANIT.COM");<code class="comment">  <code class="comment">// отображаем всплывающее окно при нажати на кнопку</code></code>
     });
 &lt;/script>
 &lt;/body></code></div>
@@ -21868,7 +21881,7 @@ if (name !== null) {
                     </ul>
                 </div>
                 
-                <h2 id="ch14-open-close">Открытие, закрытие и позиционирование окон</h2>
+                <h2 id="ch14-open-close">📜 Открытие, закрытие и позиционирование окон</h2>
 
                 <p>
                     Язык JavaScript позволят программно управлять окнами веб-браузера. Для этого объект <span class="b">window</span> 
@@ -22048,7 +22061,7 @@ window.scrollTo(100, 200);</code></div>
                     левого верхнего угла экрана.
                 </p>
 
-                <h2 id="ch14-history">История браузера. History API</h2>
+                <h2 id="ch14-history">📜 История браузера. History API</h2>
 
                 <p>
                     При навигации между страницами браузер сохраняет всю историю о переходах в специальном стеке, который называется <span class="b">history stack</span>. 
@@ -22366,7 +22379,7 @@ document.querySelectorAll('a').forEach(link => {
     });
 });</code></div>
 
-                <h2 id="ch14-location">Объект location</h2>
+                <h2 id="ch14-location">📜 Объект location</h2>
 
                 <p>
                     Объект <span class="b">location</span> содержит информацию о расположении текущей веб-страницы: URL, информацию о сервере, номер порта, протокол. С помощью 
@@ -22518,7 +22531,7 @@ params.delete('age');
 const newUrl = location.pathname + '?' + params.toString();
 history.pushState(null, '', newUrl);</code></div>
 
-                <h2 id="ch14-navigator">Объект navigator</h2>
+                <h2 id="ch14-navigator">📜 Объект navigator</h2>
 
                 <p>
                     С помощью свойства <span class="b">navigator</span> объекта <code>window</code> можно получить информацию о браузере и операционной системе, в которой браузер запущен. Это свойство представляет объект типа 
@@ -22605,7 +22618,7 @@ navigator.clipboard.writeText('Текст для копирования')
     .then(() => console.log('Скопировано!'))
     .catch(err => console.error('Ошибка:', err));</code></div>
 
-                <h2 id="ch14-timers">Таймеры</h2>
+                <h2 id="ch14-timers">📜 Таймеры</h2>
 
                 <p>
                     Для выполнения действий через определенные промежутки времени в объекте <span class="b">window</span> предусмотрены функции таймеров. Есть два типа таймеров: 
@@ -22784,7 +22797,7 @@ function repeat() {
 setTimeout(repeat, 1000);</code></div>
 
 
-                <h2 id="ch14-fullscreen">Полноэкранный режим (Fullscreen API)</h2>
+                <h2 id="ch14-fullscreen">📜 Полноэкранный режим (Fullscreen API)</h2>
                 <div class="code-block"><code>const element = document.documentElement; <code class="comment">// или любой элемент</code>
 
 <code class="comment">// Войти в полноэкранный режим</code>
@@ -22810,7 +22823,7 @@ document.addEventListener('fullscreenchange', () => {
     }
 });</code></div>
 
-                <h2 id="ch14-best-practice">Практические примеры</h2>
+                <h2 id="ch14-best-practice">📜 Практические примеры</h2>
 
                 <h3>Определение мобильного устройства</h3>
                 <div class="code-block"><code>function isMobile() {
@@ -22864,7 +22877,7 @@ window.addEventListener('load', () => {
             <section class="chapter" id="ch15">
                 <h1>Глава 15. Форматы JSON и XML</h1>
                 
-                <h2 id="ch15-intro">Что такое JSON?</h2>
+                <h2 id="ch15-intro">📜 Что такое JSON?</h2>
                 <p><strong>JSON (JavaScript Object Notation)</strong> представляет легковесный формат хранения данных. JSON описывает структуру и организацию данных JavaScript. Простота JSON привела к тому, что в настоящий момент он является наиболее популярным форматом передачи данных в среде web, вытеснив другой некогда популярный формат XML.</p>
 
                 <div class="info-box note">
@@ -22872,7 +22885,7 @@ window.addEventListener('load', () => {
                     <p>Объекты JSON очень похожи на объекты JavaScript, тем более что JSON является подмножеством JavaScript. В то же время важно их различать: JavaScript является языком программирования, а JSON является форматом данных.</p>
                 </div>
 
-                <h2 id="ch15-data-type">Типы данных в JSON</h2>
+                <h2 id="ch15-data-type">📜 Типы данных в JSON</h2>
                 <p>JSON поддерживает три типа данных:</p>
                 <ul>
                     <li><strong>Примитивные значения</strong> — стандартные строки, числа, значение null, логические значения true и false</li>
@@ -22920,7 +22933,7 @@ window.addEventListener('load', () => {
     { "name": "Alice", "married": false, "age": 23 }
 ]</code></div>
 
-                <h2 id="ch15-management">Работа с JSON в JavaScript</h2>
+                <h2 id="ch15-management">📜 Работа с JSON в JavaScript</h2>
                 <p>Для работы с форматом JSON в языке JavaScript предназначен объект <strong>JSON</strong>. Он позволяет преобразовать объект JavaScript в формат JSON и наоборот.</p>
 
                 <h3>JSON.stringify() - Сериализация</h3>
@@ -23022,7 +23035,7 @@ console.log(formatted);
 }
 */</code></div>
 
-                <h2 id="ch15-xml">Работа с XML</h2>
+                <h2 id="ch15-xml">📜 Работа с XML</h2>
                 <p><strong>XML (eXtensible Markup Language)</strong> — один из популярных форматов описания данных. Язык JavaScript предоставляет инструментарий для работы с XML.</p>
 
                 <h3>DOMParser - Парсинг XML</h3>
@@ -23163,7 +23176,7 @@ const header = document.querySelector('header');
 const headerString = xmlSerializer.serializeToString(header);
 console.log(headerString);</code></div>
 
-                <h2 id="ch15-comparison">JSON vs XML: Сравнение</h2>
+                <h2 id="ch15-comparison">📜 JSON vs XML: Сравнение</h2>
                 
                 <table>
                     <thead>
@@ -23272,7 +23285,7 @@ console.log(headerString);</code></div>
                     </ul>
                 </div>
 
-                <h2 id="ch15-best-practice">Практические примеры</h2>
+                <h2 id="ch15-best-practice">📜 Практические примеры</h2>
 
                 <h3>Пример 1: Загрузка данных с сервера (JSON)</h3>
                 <div class="code-block"><code><code class="comment">// Получаем данные с API</code>
@@ -23349,7 +23362,7 @@ items.forEach(item => {
             <section class="chapter" id="ch16">
                 <h1>Глава 16. Хранение данных</h1>
                 
-                <h2 id="ch16-store-methods">Способы хранения данных в браузере</h2>
+                <h2 id="ch16-store-methods">📜 Способы хранения данных в браузере</h2>
                 <p>JavaScript предоставляет несколько способов хранения данных на стороне клиента:</p>
                 <ul>
                     <li><strong>Cookies (Куки)</strong> — классический способ, данные отправляются с каждым HTTP-запросом</li>
@@ -23358,7 +23371,7 @@ items.forEach(item => {
                     <li><strong>IndexedDB</strong> — полноценная база данных в браузере (см. главу 24)</li>
                 </ul>
 
-                <h2 id="ch16-cookies">Cookies (Куки)</h2>
+                <h2 id="ch16-cookies">📜 Cookies (Куки)</h2>
                 <p><strong>Cookies</strong> — это небольшие фрагменты данных, которые веб-сервер отправляет браузеру, а браузер сохраняет их и отправляет обратно серверу с каждым последующим запросом.</p>
                 <p>
                     Каждый раз, когда мы обращаемся к веб-странице в интернете, то веб-сервер вместе с этой страницей 
@@ -23387,7 +23400,7 @@ items.forEach(item => {
                     </ul>
                 </div>
 
-                <h3>Установка параметров куки</h3>
+                <h3 id="ch16-param-setting">📃 Установка параметров куки</h3>
 
                 <p>Строка куки принимает до шести различных параметров:</p>
 
@@ -23483,7 +23496,7 @@ document.cookie = "login=tom32;expires=" + expire.toUTCString() + ";";</code></d
                 </div>
 
 
-                <h3>Чтение/получение cookies</h3>
+                <h3 id="ch16-get-cookies">📃 Чтение/получение cookies</h3>
 
                 <p>Для простейшего извлечения куки из браузера достаточно обратиться к свойству <span class="b">document.cookie</span>:</p>
 
@@ -23516,7 +23529,7 @@ for(cookie of cookies){
     console.log("Значение:", parts[1],"\n\n");
 }</code></div>
 
-                <h3>Создание/изменение cookie</h3>
+                <h3 id="ch16-create-change">📃 Создание/изменение cookie</h3>
                 <div class="code-block"><code><code class="comment">// Простая установка cookie</code>
 document.cookie = "username=Alice";
 
@@ -23534,14 +23547,14 @@ document.cookie = "token=abc123; secure; path=/";
 <code class="comment">// HttpOnly cookie (только для сервера, JS не может читать)</code>
 <code class="comment">// Устанавливается только сервером!</code></code></div>
 
-                <h3>Удаление cookie</h3>
+                <h3 id="ch16-delete">📃 Удаление cookie</h3>
                 <div class="code-block"><code><code class="comment">// Устанавливаем expires в прошлое</code>
 document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
 
 <code class="comment">// Или используем max-age=0</code>
 document.cookie = "theme=; max-age=0; path=/";</code></div>
 
-                <h3>Вспомогательные функции для работы с cookies</h3>
+                <h3 id="ch16-cookies-func">📃 Вспомогательные функции для работы с cookies</h3>
                 <div class="code-block"><code><code class="comment">// Функция для установки cookie</code>
 function setCookie(name, value, days) {
     const date = new Date();
@@ -23574,8 +23587,8 @@ setCookie('username', 'Alice', 7);        <code class="comment">// Устано�
 console.log(getCookie('username'));       <code class="comment">// "Alice"</code>
 deleteCookie('username');                 <code class="comment">// Удалить</code></code></div>
 
-    <h3>Практический пример: Запоминание темы</h3>
-    <div class="code-block"><code><code class="comment">// Сохраняем выбор темы</code>
+                <h3 id="ch16-examp-theme">📃 Практический пример: Запоминание темы</h3>
+                <div class="code-block"><code><code class="comment">// Сохраняем выбор темы</code>
 function saveTheme(theme) {
     setCookie('theme', theme, 365); <code class="comment">// На год</code>
     applyTheme(theme);
@@ -23606,7 +23619,7 @@ document.getElementById('themeToggle').addEventListener('click', () => {
                     Кроме того, файлы cookie, отправляемые по протоколу HTTP (а не по безопасному протоколу HTTPS), передаются в незашифрованном виде, что представляет угрозу безопасности в зависимости от типа передаваемой информации. Еще одним ограничением файлов cookie является разрешенный размер памяти в 4 КБ.
                 </p>
 
-                <h2 id="ch16-server">Простой web-сервер для использования cookies</h2>
+                <h2 id="ch16-server">📜 Простой web-сервер для использования cookies</h2>
 
                 <p>
                     Работа с куками может различаться от того, какой браузер используется, и как запускается веб-страница: как локальный файл или как файл на веб-сервере. 
@@ -23691,7 +23704,7 @@ const fs = require("fs");       <code class="comment">// для чтения с 
                     левой части пункт <span class="b">Storage</span> -&gt; <span class="b">Cookies</span>:
                 </p>
 
-                <h2 id="ch16-web-storage">Web Storage API</h2>
+                <h2 id="ch16-web-storage">📜 Web Storage API</h2>
                 <p>
                     Для хранения данных в HTML5 применяется специальный API - <span class="b">Web Storage API</span>, который обеспечивает доступ к внутреннему хранилищу браузера (web storage). 
                     Данное хранилище состоит из двух компонентов: 
@@ -23761,7 +23774,7 @@ const fs = require("fs");       <code class="comment">// для чтения с 
                     </tbody>
                 </table>
 
-                <h2 id="ch16-localstorage">localStorage</h2>
+                <h2 id="ch16-localstorage">📜 localStorage</h2>
 
                 <p><code>localStorage</code> — постоянное хранилище данных в браузере. Данные сохраняются даже после закрытия браузера.</p>
 
@@ -23832,7 +23845,7 @@ Object.keys(localStorage).forEach(key => {
     console.log(`${key}: ${localStorage[key]}`);
 });</code></div>
 
-                <h3>Практический пример: Корзина товаров</h3>
+                <h3 id="ch16-examp-shoppingcart">📃 Практический пример: Корзина товаров</h3>
                 <div class="code-block"><code><code class="comment">// Класс для работы с корзиной</code>
 class ShoppingCart {
     constructor() {
@@ -23896,7 +23909,7 @@ console.log('Итого:', cart.getTotal(), 'руб.');
 
 <code class="comment">// Корзина сохранится и после перезагрузки страницы!</code></code></div>
 
-                <h2 id="cgh16-sessionstorage">sessionStorage</h2>
+                <h2 id="cgh16-sessionstorage">📜 sessionStorage</h2>
                 <p><code>sessionStorage</code> работает аналогично <code>localStorage</code>, но данные удаляются при закрытии вкладки/окна браузера.</p>
 
                 <h3>Основные методы (такие же, как у localStorage)</h3>
@@ -23920,7 +23933,7 @@ sessionStorage.clear();</code></div>
                     <li><strong>Одноразовые токены</strong> — данные, которые не должны сохраняться надолго</li>
                 </ul>
 
-                <h3>Пример: Сохранение состояния формы</h3>
+                <h3 id="ch16-examp-form">📃 Пример: Сохранение состояния формы</h3>
                 <div class="code-block"><code><code class="comment">// Автосохранение данных формы</code>
 const form = document.getElementById('myForm');
 const inputs = form.querySelectorAll('input, textarea, select');
@@ -23945,7 +23958,7 @@ form.addEventListener('submit', () => {
     });
 });</code></div>
 
-                <h2 id="ch16-storage-events">События Storage</h2>
+                <h2 id="ch16-storage-events">📜 События Storage</h2>
                 <p>Событие <code>storage</code> срабатывает, когда localStorage/sessionStorage изменяется <strong>в другой вкладке/окне</strong> того же домена.</p>
 
                 <div class="code-block"><code><code class="comment">// Отслеживаем изменения в других вкладках</code>
@@ -23962,7 +23975,7 @@ window.addEventListener('storage', (e) => {
     }
 });</code></div>
 
-                <h3>Практический пример: Синхронизация между вкладками</h3>
+                <h3 id="ch16-examp-tab-synch">📃 Практический пример: Синхронизация между вкладками</h3>
                 <div class="code-block"><code><code class="comment">// В первой вкладке</code>
 function updateStatus(status) {
     localStorage.setItem('userStatus', status);
@@ -23978,7 +23991,7 @@ window.addEventListener('storage', (e) => {
     }
 });</code></div>
 
-                <h2 id="ch16-storage-compare">Сравнение способов хранения</h2>
+                <h2 id="ch16-storage-compare">📜 Сравнение способов хранения</h2>
 
                 <div class="info-box success">
                     <div class="info-box-title">✅ Когда использовать localStorage</div>
@@ -24011,7 +24024,7 @@ window.addEventListener('storage', (e) => {
                     </ul>
                 </div>
 
-                <h2 id="ch16-limits-secure">Ограничения и безопасность</h2>
+                <h2 id="ch16-limits-secure">📜 Ограничения и безопасность</h2>
 
                 <div class="info-box danger">
                     <div class="info-box-title">🔒 Важные моменты безопасности</div>
@@ -24035,8 +24048,8 @@ localStorage.setItem('authToken', 'secret123');
 <code class="comment">//</code> Для refresh-токенов можно использовать localStorage с осторожностью
 <code class="comment">//</code> Но access-токен всегда в HttpOnly cookie!</code></div>
 
-    <h2 id="ch16-access-limits">Проверка доступности и лимитов</h2>
-    <div class="code-block"><code><code class="comment">// Проверка поддержки localStorage</code>
+                <h2 id="ch16-access-limits">📜 Проверка доступности и лимитов</h2>
+                <div class="code-block"><code><code class="comment">// Проверка поддержки localStorage</code>
 function storageAvailable(type) {
     try {
         const storage = window[type];
@@ -24068,7 +24081,7 @@ function getStorageSize() {
 
 console.log('Использовано:', getStorageSize());</code></div>
 
-                <h2 id="ch16-useful-utilities">Полезные утилиты</h2>
+                <h2 id="ch16-useful-utilities">📜 Полезные утилиты</h2>
                 <div class="code-block"><code><code class="comment">// Обёртка для работы с localStorage с автоматическим JSON</code>
 const storage = {
 set(key, value) {
@@ -24104,10 +24117,10 @@ has(key) {
 }
 };
 
-<code class="comment">//</code> Использование
+<code class="comment">// Использование</code>
 storage.set('user', { name: 'Alice', age: 25 });
 const user = storage.get('user');
-console.log(user.name); <code class="comment">//</code> "Alice"
+console.log(user.name); <code class="comment">// "Alice"</code>
 
 if (storage.has('user')) {
     console.log('Пользователь найден');
@@ -24252,7 +24265,7 @@ function callbackFunc() {
 }
 asyncFunction(callbackFunc);</code></div>
 
-                <p>Здесь функция asyncFunction (условно асинхронная функция) принимает функцию обратного вызова - callback и вызывает ее в коде.</p>
+                <p>Здесь функция <code>asyncFunction</code> (условно асинхронная функция) принимает функцию обратного вызова - <code>callback</code> и вызывает ее в коде.</p>
 
                 <p>Например, используем коллбек для получения и обработки результата и ошибки асинхронной функции:</p>
                 <div class="code-block"><code>function handleResult(error, result){    
@@ -24279,7 +24292,7 @@ function asyncFunction(callback) {
 }
 asyncFunction(handleResult);</code></div>
 
-                <p>В качестве коллбека в асинхронную функцию asyncFunction передается функция handleResult</p>
+                <p>В качестве коллбека в асинхронную функцию <code>asyncFunction</code> передается функция <code>handleResult</code></p>
 
                 <div class="code-block"><code>asyncFunction(handleResult);</code></div>
 
@@ -24287,7 +24300,7 @@ asyncFunction(handleResult);</code></div>
 
                 <div class="code-block"><code>let result = Math.floor(Math.random() * 100) + 1;</code></div>
 
-                <p>Если сгенерированное число меньше 50, то устанавливаем первый параметр функции handleResult, который представляет ошибку:</p>
+                <p>Если сгенерированное число меньше 50, то устанавливаем первый параметр функции <code>handleResult</code>, который представляет ошибку:</p>
 
                 <div class="code-block"><code>if(result &lt; 50) { 
     <code class="comment">// если меньше 50, устанавливаем ошибку</code>
@@ -24442,26 +24455,28 @@ const myPromise = new Promise(function(resolve) {
 console.log("Promise создан");</code></div>
 
                 <h3>resolve и reject</h3>
-                <p>Как правило, функция, которая передается в конструктор Promise, принимает два параметра:</p>
+                <p>Как правило, функция, которая передается в конструктор <code>Promise</code>, принимает <em>два параметра</em>:</p>
 
                 <div class="code-block"><code>const myPromise = new Promise(function(resolve, reject){
     console.log("Выполнение асинхронной операции");
 });</code></div>
 
-                <p>Оба этих параметра - <code class="b">resolve</code> и <code class="b">reject</code> также представляют функции. И каждая из этих функций принимает параметр любого типа.</p>
-                <p>
-                    Первый параметр - функция <code class="b">resolve</code> вызывается в случае успешного выполнения. Мы можем в нее передать значение, которое мы можем получить в результате 
-                    успешного выполнения.
-                </p>
-                <p>
-                    Второй параметр - функция <code class="b">reject</code> вызывается, если выполнение операции завершилось с ошибкой. Мы можем в нее передать значение, 
-                    которое представит некоторую информацию об ошибке.
-                </p>
+                <p>Оба этих параметра - <strong>resolve</strong> и <strong>reject</strong> также представляют функции. И каждая из этих функций принимает параметр любого типа.</p>
+                
+                <ul>
+                    <li>
+                        <em>Первый параметр</em> - функция <code class="b">resolve</code> вызывается в случае успешного выполнения. Мы можем в нее передать значение, которое мы можем получить в результате успешного выполнения.
+                    </li>
+                    <li>
+                        <em>Второй параметр</em> - функция <code class="b">reject</code> вызывается, если выполнение операции завершилось с ошибкой. Мы можем в нее передать значение, 
+                        которое представит некоторую информацию об ошибке.
+                    </li>
+                </ul>
 
                 <h3>Успешное выполнение промиса</h3>
 
                 <p>
-                    Итак, первый параметр функции в конструкторе Promise - функция <code>resolve</code> выполняется при успешном выполненим. В эту функцию обычно передается значение, которое 
+                    Итак, первый параметр функции в конструкторе <strong>Promise</strong> - функция <code>resolve</code> выполняется при успешном выполнении. В эту функцию обычно передается значение, которое 
                     представляет результат операции при успешном выполнении. Это значение может представлять любой объект. Например, передадим в эту функцию строку:
                 </p>
                 <div class="code-block"><code>const myPromise = new Promise(function(resolve){
