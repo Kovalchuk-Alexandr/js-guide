@@ -474,6 +474,25 @@
         body.dark-theme .info-box.danger {
             background: #5f1e1e;
         }
+
+        @media (max-width: 1080px) {
+            .main-content {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .header, .sidebar, .footer {
+                display: none;
+            }
+            .main-content {
+                /* padding: 0.5rem; */
+                max-width: 100%;
+            }
+            .chapter h1 {
+                /* font-size: 2rem; */
+            }
+        }
         
         @media (max-width: 768px) {
             .container {
